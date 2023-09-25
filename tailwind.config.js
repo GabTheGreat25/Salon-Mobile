@@ -7,9 +7,6 @@ module.exports = {
   mode: "jit",
   theme: {
     extend: {
-      fontFamily: {
-        inter: ["Inter", "sans-serif"],
-      },
       colors: {
         primary: {
           default: "#FDA7DF",
@@ -30,6 +27,8 @@ module.exports = {
           t5: "#F9DDFF",
         },
         neutral: {
+          light: "#ffffff",
+          dark: "#000000",
           primary: "#212B36",
           secondary: "#5E738A",
           800: "#333F4D",
