@@ -1,22 +1,23 @@
-import { TouchableOpacity, Text, View } from "react-native";
-import { useColorScheme } from "nativewind";
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { Home, BecomeCustomer, BecomeEmployee } from "./src/screens";
 
-export default function App() {
-  const { colorScheme, toggleColorScheme } = useColorScheme();
+const Stack = createStackNavigator();
 
+export default function () {
   return (
-    <View
-      className={`items-center justify-center flex-1 ${
-        colorScheme === "dark" ? "bg-dark-default" : "bg-light-default"
-      }`}
-    >
-      <View className="flex items-center justify-center w-full gap-5">
-        <TouchableOpacity onPress={toggleColorScheme}>
-          <Text selectable={false} className="text-4xl">
-            {`${colorScheme === "dark" ? "🌙" : "🌞"}`}
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName="Home"
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="BecomeEmployee" component={BecomeEmployee} />
+        <Stack.Screen name="BecomeCustomer" component={BecomeCustomer} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
