@@ -8,6 +8,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
+import { changeColor } from "../../utils";
 
 export default function ({
   title,
@@ -21,9 +22,9 @@ export default function ({
   logo,
   dimensionLayout,
 }) {
-  const commonContainerStyle = dimensionLayout
-    ? styles.portraitContainer
-    : styles.landscapeContainer;
+  const commonContainerClasses = dimensionLayout
+    ? "flex flex-col"
+    : "flex flex-row";
   const commonGridStyle = dimensionLayout
     ? styles.portraitGrid
     : styles.landscapeGrid;
@@ -34,26 +35,31 @@ export default function ({
   const textPosition = dimensionLayout
     ? styles.textPortraitContainer
     : styles.textLandscapeContainer;
+  const { backgroundColor, textColor } = changeColor();
 
   return (
     <>
-      <View style={[styles.container, commonContainerStyle]}>
-        <View style={commonGridStyle}>
+      <View style={[styles.container, { backgroundColor }]}>
+        <View style={[commonGridStyle]}>
           <View style={[styles.textContainer, textPosition]}>
             {leftArrow && (
               <TouchableOpacity
                 style={[styles.arrowLeftContainer, arrowLeftPosition]}
                 onPress={navigateLeft}
               >
-                <Feather name="chevron-left" size={50} />
+                <Feather name="chevron-left" size={50} color={textColor} />
               </TouchableOpacity>
             )}
-            <Text style={styles.title}>{title}</Text>
-            <Text style={styles.description}>{description}</Text>
+            <Text style={[styles.title, { color: textColor }]}>{title}</Text>
+            <Text style={[styles.description, { color: textColor }]}>
+              {description}
+            </Text>
             <TouchableOpacity onPress={navigateTo}>
               <View style={styles.buttonContainer}>
                 <View style={styles.button}>
-                  <Text style={styles.buttonText}>{buttonTitle}</Text>
+                  <Text style={[styles.buttonText, { color: textColor }]}>
+                    {buttonTitle}
+                  </Text>
                 </View>
               </View>
             </TouchableOpacity>
@@ -62,7 +68,7 @@ export default function ({
                 style={[styles.arrowRightContainer, arrowRightPosition]}
                 onPress={navigateRight}
               >
-                <Feather name="chevron-right" size={50} />
+                <Feather name="chevron-right" size={50} color={textColor} />
               </TouchableOpacity>
             )}
           </View>
@@ -180,5 +186,14 @@ const styles = StyleSheet.create({
   },
   landscapeLeftArrow: {
     top: "45%",
+  },
+  moonIconContainer: {
+    position: "absolute",
+    top: 35,
+    right: 15,
+    zIndex: 1,
+  },
+  moonIcon: {
+    fontSize: 24,
   },
 });
