@@ -3,7 +3,7 @@ module.exports = {
   important: true,
   prefix: "",
   darkMode: "class",
-  content: ["./App.{js,jsx,ts,tsx}", "./components/**/**.{js,jsx,ts,tsx}"],
+  content: ["./App.{js,jsx,ts,tsx}", "./src/**/**/**.{js,jsx,ts,tsx}"],
   mode: "jit",
   theme: {
     extend: {
@@ -11,19 +11,6 @@ module.exports = {
         inter: ["Inter", "sans-serif"],
       },
       colors: {
-        card: {
-          shadow: "#00000025",
-          input: "#00000000",
-        },
-        light: {
-          default: "#e5e5e5",
-          variant: "#ffffff",
-        },
-        dark: {
-          default: "#212B36",
-          shadow: "#00000075",
-          variant: "#000000",
-        },
         primary: {
           default: "#FDA7DF",
           variant: "#FDB9E5",
