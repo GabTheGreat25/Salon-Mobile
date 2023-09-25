@@ -1,20 +1,22 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { TouchableOpacity, Text, View } from "react-native";
+import { useColorScheme } from "nativewind";
 
 export default function App() {
+  const { colorScheme, toggleColorScheme } = useColorScheme();
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+    <View
+      className={`items-center justify-center flex-1 ${
+        colorScheme === "dark" ? "bg-dark-default" : "bg-light-default"
+      }`}
+    >
+      <View className="flex items-center justify-center w-full gap-5">
+        <TouchableOpacity onPress={toggleColorScheme}>
+          <Text selectable={false} className="text-4xl">
+            {`${colorScheme === "dark" ? "🌙" : "🌞"}`}
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
