@@ -15,7 +15,7 @@ export default function () {
   return (
     <>
       <Welcome
-        title="Looking for a salon?"
+        title={`Looking for a \nsalon?`}
         description={`Lorem ipsum dolor sit amet \nconsectetur adipisicing elit.`}
         buttonTitle="Learn More"
         leftArrow={false}
