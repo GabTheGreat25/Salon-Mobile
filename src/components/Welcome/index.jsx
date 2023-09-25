@@ -8,7 +8,6 @@ import {
   StyleSheet,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { useTheme } from "../../../ThemeContent";
 
 export default function ({
   title,
@@ -93,8 +92,6 @@ export default function ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.backgroundColor,
-    color: theme.textColor,
   },
   portraitContainer: {
     flexDirection: "column",
