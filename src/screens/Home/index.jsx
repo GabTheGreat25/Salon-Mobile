@@ -1,7 +1,7 @@
 import React from "react";
-import { Welcome } from "../../components";
-import { dimensionLayout } from "../../utils";
-import logo1 from "../../../assets/logo-1.png";
+import { Welcome } from "@components";
+import { dimensionLayout } from "@utils";
+import logo1 from "@assets/logo-1.png";
 import { useNavigation } from "@react-navigation/native";
 
 export default function () {

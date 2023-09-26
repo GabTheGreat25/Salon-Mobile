@@ -1,9 +1,10 @@
 import React from "react";
+import { Text, TouchableOpacity, StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Home, BecomeCustomer, BecomeEmployee } from "./src/screens";
-import { changeColor } from "./src/utils";
-import { Text, TouchableOpacity, StyleSheet } from "react-native";
+import { Home, BecomeCustomer, BecomeEmployee } from "@screens";
+import { changeColor } from "@utils";
+
 const Stack = createStackNavigator();
 
 export default function () {

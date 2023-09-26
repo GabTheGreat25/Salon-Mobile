@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { changeColor } from "../../utils";
+import { changeColor } from "@utils";
 
 export default function ({
   title,
