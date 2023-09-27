@@ -7,4 +7,8 @@ export const Colors = {
     backgroundColor: "#e5e5e5",
     textColor: "#212B36",
   },
+  light2: {
+    backgroundColor: "#F78FB3",
+    textColor: "#e5e5e5",
+  },
 };
