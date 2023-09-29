@@ -1,14 +1,22 @@
 import React from "react";
-import { Text, TouchableOpacity, StatusBar, StyleSheet } from "react-native";
+import { Text, TouchableOpacity, StatusBar } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Home, BecomeCustomer, BecomeEmployee, UserPick } from "@screens";
+import {
+  Home,
+  BecomeCustomer,
+  BecomeEmployee,
+  UserPick,
+  ChooseRole,
+} from "@screens";
 import { changeColor } from "@utils";
+import { Feather } from "@expo/vector-icons";
 
 const Stack = createStackNavigator();
 
 export default function () {
-  const { backgroundColor, colorScheme, toggleColorScheme } = changeColor();
+  const { backgroundColor, textColor, colorScheme, toggleColorScheme } =
+    changeColor();
   return (
     <>
       <StatusBar
@@ -17,37 +25,30 @@ export default function () {
       />
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="UserPick"
+          initialRouteName="UserHomePick"
           screenOptions={{
             headerShown: false,
           }}
         >
-          <Stack.Screen name="UserPick" component={UserPick} />
           <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="BecomeEmployee" component={BecomeEmployee} />
           <Stack.Screen name="BecomeCustomer" component={BecomeCustomer} />
+          <Stack.Screen name="UserPick" component={UserPick} />
+          <Stack.Screen name="ChooseRole" component={ChooseRole} />
         </Stack.Navigator>
         <TouchableOpacity
-          style={styles.moonIconContainer}
+          className="absolute z-10 right-5 top-5"
           onPress={toggleColorScheme}
         >
-          <Text selectable={false} style={styles.moonIcon}>
-            {`${colorScheme === "dark" ? "🌞" : "🌙"}`}
+          <Text selectable={false}>
+            <Feather
+              name={`${colorScheme === "dark" ? "sun" : "moon"}`}
+              size={35}
+              color={textColor}
+            />
           </Text>
         </TouchableOpacity>
       </NavigationContainer>
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  moonIconContainer: {
-    position: "absolute",
-    top: 35,
-    right: 15,
-    zIndex: 1,
-  },
-  moonIcon: {
-    fontSize: 24,
-  },
-});
