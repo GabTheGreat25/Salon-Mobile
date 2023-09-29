@@ -1,23 +1,24 @@
 import React from "react";
-import salonLogo from "@assets/salon-logo.png";
-import salonLogoWhite from "@assets/salon-logo-white.png";
-import {
-  Image,
-  View,
-  SafeAreaView,
-  Text,
-  TouchableOpacity,
-} from "react-native";
-import { changeColor } from "@utils";
+import { Opening } from "@components";
+import { dimensionLayout } from "@utils";
+import { useNavigation } from "@react-navigation/native";
 
 export default function () {
-  const { backgroundColor, textColor } = changeColor();
+  const navigation = useNavigation();
+  const isDimensionLayout = dimensionLayout();
   return (
     <>
-      <SafeAreaView
-        style={{ backgroundColor }}
-        className="flex-1 bg-primary-accent flex-column"
-      ></SafeAreaView>
+      <Opening
+        title="Are you?"
+        showTitle={true}
+        showName={false}
+        navigateBack={() => navigation.goBack()}
+        firstButton="Employee"
+        navigateFirstButton={() => navigation.navigate("Employee")}
+        secondButton="Customer"
+        navigateSecondButton={() => navigation.navigate("Customer")}
+        dimensionLayout={isDimensionLayout}
+      />
     </>
   );
 }
