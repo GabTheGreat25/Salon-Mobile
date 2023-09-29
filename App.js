@@ -8,6 +8,8 @@ import {
   BecomeEmployee,
   UserPick,
   ChooseRole,
+  SignUpCustomer,
+  SignUpEmployee,
 } from "@screens";
 import { changeColor } from "@utils";
 import { Feather } from "@expo/vector-icons";
@@ -35,6 +37,8 @@ export default function () {
           <Stack.Screen name="BecomeCustomer" component={BecomeCustomer} />
           <Stack.Screen name="UserPick" component={UserPick} />
           <Stack.Screen name="ChooseRole" component={ChooseRole} />
+          <Stack.Screen name="SignUpCustomer" component={SignUpCustomer} />
+          <Stack.Screen name="SignUpEmployee" component={SignUpEmployee} />
         </Stack.Navigator>
         <TouchableOpacity
           className="absolute z-10 right-5 top-5"
