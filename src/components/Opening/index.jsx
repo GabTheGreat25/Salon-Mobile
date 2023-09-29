@@ -31,14 +31,11 @@ export default function ({
         style={{ backgroundColor }}
         className={`flex-1 ${dimensionLayout ? "flex-col" : "flex-row"}`}
       >
-        <TouchableOpacity
-          className={`absolute w-full ${
-            dimensionLayout ? "top-[2%]" : "top-[4.5%]"
-          }`}
-          onPress={navigateBack}
-        >
-          <Feather name="chevron-left" size={50} color={textColor} />
-        </TouchableOpacity>
+        <View className={`pt-4`}>
+          <TouchableOpacity onPress={navigateBack}>
+            <Feather name="chevron-left" size={50} color={textColor} />
+          </TouchableOpacity>
+        </View>
         <View
           className={`flex-1 ${
             dimensionLayout
@@ -46,7 +43,13 @@ export default function ({
               : "justify-start items-end"
           }`}
         >
-          <Image source={imageSource} resizeMode="cover" />
+          <Image
+            source={imageSource}
+            className={`flex-1 w-full h-full ${
+              dimensionLayout ? "mb-0" : "mb-5"
+            }`}
+            resizeMode="contain"
+          />
         </View>
         <View
           className={`items-center ${
@@ -56,8 +59,8 @@ export default function ({
           {showTitle && (
             <Text
               style={{ color: textColor }}
-              className={`font-base mb-2 ${
-                dimensionLayout ? "text-2xl mt-6" : "text-3xl mt-0"
+              className={`font-base mb-2 text-2xl ${
+                dimensionLayout ? "mt-6" : "mt-0"
               }`}
             >
               {title}
@@ -66,31 +69,26 @@ export default function ({
           {showName && (
             <Text
               style={{ color: textColor }}
-              className={`font-semibold ${
-                dimensionLayout ? "text-[28px] " : "text-[32px]"
-              }`}
+              className={`font-semibold text-[28px]`}
             >
               {name}
             </Text>
           )}
           <View className={`flex`}>
-            <TouchableOpacity className={`mt-10`} onPress={navigateFirstButton}>
+            <TouchableOpacity className={`mt-5`} onPress={navigateFirstButton}>
               <View className={`px-12 py-2 rounded-3xl bg-primary-accent`}>
                 <Text
-                  className={`text-neutral-light font-semibold text-center text-2xl`}
+                  className={`text-neutral-light font-semibold text-center text-lg`}
                   style={{ color: textColor }}
                 >
                   {firstButton}
                 </Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity
-              className={`mt-10`}
-              onPress={navigateSecondButton}
-            >
+            <TouchableOpacity className={`mt-8`} onPress={navigateSecondButton}>
               <View className={`px-12 py-2 rounded-3xl bg-primary-accent`}>
                 <Text
-                  className={`text-neutral-light font-semibold text-center text-2xl`}
+                  className={`text-neutral-light font-semibold text-center text-lg`}
                   style={{ color: textColor }}
                 >
                   {secondButton}
