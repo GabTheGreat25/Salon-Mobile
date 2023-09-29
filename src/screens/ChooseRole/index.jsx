@@ -14,9 +14,9 @@ export default function () {
         showName={false}
         navigateBack={() => navigation.goBack()}
         firstButton="Employee"
-        navigateFirstButton={() => navigation.navigate("Employee")}
+        navigateFirstButton={() => navigation.navigate("SignUpEmployee")}
         secondButton="Customer"
-        navigateSecondButton={() => navigation.navigate("Customer")}
+        navigateSecondButton={() => navigation.navigate("SignUpCustomer")}
         dimensionLayout={isDimensionLayout}
       />
     </>
