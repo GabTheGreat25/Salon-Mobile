@@ -8,10 +8,6 @@ export default function () {
   const navigation = useNavigation();
   const isDimensionLayout = dimensionLayout();
 
-  const handleButtonClick = () => {
-    alert("Button clicked!");
-  };
-
   return (
     <>
       <Welcome
@@ -21,7 +17,7 @@ export default function () {
         leftArrow={false}
         rightArrow={true}
         navigateRight={() => navigation.navigate("BecomeEmployee")}
-        navigateTo={handleButtonClick}
+        navigateTo={() => navigation.navigate("UserPick")}
         logo={logo1}
         dimensionLayout={isDimensionLayout}
       />
