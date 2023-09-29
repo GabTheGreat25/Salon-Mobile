@@ -29,22 +29,36 @@ export default function ({
     <>
       <SafeAreaView
         style={{ backgroundColor }}
-        className={`flex-1 flex-column`}
+        className={`flex-1 ${dimensionLayout ? "flex-col" : "flex-row"}`}
       >
         <TouchableOpacity
-          className={`absolute ${dimensionLayout ? "top-[2%]" : "top-[2%]"}`}
+          className={`absolute w-full ${
+            dimensionLayout ? "top-[2%]" : "top-[4.5%]"
+          }`}
           onPress={navigateBack}
         >
           <Feather name="chevron-left" size={50} color={textColor} />
         </TouchableOpacity>
-        <View className={`items-center justify-end flex-1`}>
+        <View
+          className={`flex-1 ${
+            dimensionLayout
+              ? "justify-end items-center"
+              : "justify-start items-end"
+          }`}
+        >
           <Image source={imageSource} resizeMode="cover" />
         </View>
-        <View className={`items-center justify-start flex-1`}>
+        <View
+          className={`items-center ${
+            dimensionLayout ? "justify-start" : "justify-center"
+          } flex-1`}
+        >
           {showTitle && (
             <Text
               style={{ color: textColor }}
-              className={`text-2xl font-base mt-6 mb-2`}
+              className={`font-base mb-2 ${
+                dimensionLayout ? "text-2xl mt-6" : "text-3xl mt-0"
+              }`}
             >
               {title}
             </Text>
@@ -52,7 +66,9 @@ export default function ({
           {showName && (
             <Text
               style={{ color: textColor }}
-              className={`text-[28px] font-semibold`}
+              className={`font-semibold ${
+                dimensionLayout ? "text-[28px] " : "text-[32px]"
+              }`}
             >
               {name}
             </Text>
@@ -61,7 +77,7 @@ export default function ({
             <TouchableOpacity className={`mt-10`} onPress={navigateFirstButton}>
               <View className={`px-12 py-2 rounded-3xl bg-primary-accent`}>
                 <Text
-                  className={`text-neutral-light font-semibold text-center text-lg`}
+                  className={`text-neutral-light font-semibold text-center text-2xl`}
                   style={{ color: textColor }}
                 >
                   {firstButton}
@@ -74,7 +90,7 @@ export default function ({
             >
               <View className={`px-12 py-2 rounded-3xl bg-primary-accent`}>
                 <Text
-                  className={`text-neutral-light font-semibold text-center text-lg`}
+                  className={`text-neutral-light font-semibold text-center text-2xl`}
                   style={{ color: textColor }}
                 >
                   {secondButton}
