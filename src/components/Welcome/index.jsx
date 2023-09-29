@@ -30,8 +30,8 @@ export default function ({
           >
             {leftArrow && (
               <TouchableOpacity
-                className={`absolute top-[85%] ${
-                  dimensionLayout ? "" : "top-[45%]"
+                className={`absolute ${
+                  dimensionLayout ? "top-[85%]" : "top-[45%]"
                 }`}
                 onPress={navigateLeft}
               >
