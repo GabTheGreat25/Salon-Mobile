@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import salonLogo from "@assets/salon-logo.png";
-import salonLogoWhite from "@assets/salon-logo-white.png";
 import {
   Image,
   View,
@@ -14,10 +12,15 @@ import {
   Keyboard,
   BackHandler,
 } from "react-native";
-import { changeColor } from "@utils";
 import { Feather } from "@expo/vector-icons";
+import { changeColor } from "@utils";
+import salonLogo from "@assets/salon-logo.png";
+import salonLogoWhite from "@assets/salon-logo-white.png";
 
-export default function ({
+const INITIAL_SCROLLVIEW_HEIGHT = 500;
+const KEYBOARD_OPEN_SCROLLVIEW_HEIGHT = 100;
+
+export default function MyComponent({
   initialState,
   title,
   description,
@@ -33,15 +36,25 @@ export default function ({
   const borderColor =
     colorScheme === "dark" ? "border-neutral-light" : "border-neutral-dark";
 
-  const [isTextInputFocused, setIsTextInputFocused] = useState(false);
-  const [formData, setFormData] = useState(initialState);
+  const [formData, setFormData] = useState({
+    ...initialState,
+    textColor,
+    placeholderColor: textColor,
+  });
   const [keyboardOpen, setKeyboardOpen] = useState(false);
-  const [scrollViewHeight, setScrollViewHeight] = useState(500);
+  const [scrollViewHeight, setScrollViewHeight] = useState(
+    INITIAL_SCROLLVIEW_HEIGHT
+  );
+  const [isTextInputFocused, setIsTextInputFocused] = useState(false);
+
+  const handleInputChange = (field, text) =>
+    setFormData({ ...formData, [field]: text });
 
   const handleTextInputFocus = () => {
     setIsTextInputFocused(true);
-
-    setScrollViewHeight(keyboardOpen ? 100 : 500);
+    setScrollViewHeight(
+      keyboardOpen ? KEYBOARD_OPEN_SCROLLVIEW_HEIGHT : INITIAL_SCROLLVIEW_HEIGHT
+    );
   };
 
   const handleTextInputBlur = () => {
@@ -49,18 +62,10 @@ export default function ({
   };
 
   useEffect(() => {
-    setFormData({
-      ...formData,
-      textColor: textColor,
-      placeholderColor: textColor,
-    });
-  }, [colorScheme, textColor]);
-
-  useEffect(() => {
     const backHandler = BackHandler.addEventListener(
       "hardwareBackPress",
       () => {
-        setScrollViewHeight(500);
+        setScrollViewHeight(INITIAL_SCROLLVIEW_HEIGHT);
         return true;
       }
     );
@@ -72,16 +77,14 @@ export default function ({
       "keyboardDidShow",
       () => {
         setKeyboardOpen(true);
-
-        setScrollViewHeight(100);
+        setScrollViewHeight(KEYBOARD_OPEN_SCROLLVIEW_HEIGHT);
       }
     );
     const keyboardDidHideListener = Keyboard.addListener(
       "keyboardDidHide",
       () => {
         setKeyboardOpen(false);
-
-        setScrollViewHeight(500);
+        setScrollViewHeight(INITIAL_SCROLLVIEW_HEIGHT);
       }
     );
 
@@ -90,10 +93,6 @@ export default function ({
       keyboardDidHideListener.remove();
     };
   }, []);
-
-  const handleButtonClick = () => {
-    setScrollViewHeight(keyboardOpen ? 100 : 500);
-  };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -111,7 +110,7 @@ export default function ({
           <Image
             source={imageSource}
             className={`${
-              dimensionLayout ? "w-[60%] h-[60%]" : "w-[40%] h-[55%]"
+              dimensionLayout ? "w-[60%] h-[60%]" : "ml-10 w-[40%] h-[55%]"
             }`}
             resizeMode="contain"
           />
@@ -145,12 +144,8 @@ export default function ({
                     placeholder={`Enter your ${field}`}
                     placeholderTextColor={formData.placeholderColor}
                     autoCapitalize="none"
-                    onFocus={() => {
-                      handleTextInputFocus();
-                    }}
-                    onBlur={() => {
-                      handleTextInputBlur();
-                    }}
+                    onFocus={handleTextInputFocus}
+                    onBlur={handleTextInputBlur}
                     onChangeText={(text) => handleInputChange(field, text)}
                     value={formData[field]}
                     secureTextEntry={field === "password"}
