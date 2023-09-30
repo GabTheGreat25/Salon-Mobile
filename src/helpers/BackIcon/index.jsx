@@ -1,15 +1,18 @@
 import React from "react";
 import { View, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
-
-const BUTTON_SIZE = 50;
+import { RESOURCE } from "@constants";
 
 export default function ({ navigateBack, textColor }) {
   return (
     <>
       <View className={`absolute top-4 z-[1000]`}>
         <TouchableOpacity onPress={navigateBack}>
-          <Feather name="chevron-left" size={BUTTON_SIZE} color={textColor} />
+          <Feather
+            name="chevron-left"
+            size={RESOURCE.NUMBER.FIFTY}
+            color={textColor}
+          />
         </TouchableOpacity>
       </View>
     </>

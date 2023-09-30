@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { changeColor } from "@utils";
+import { RESOURCE } from "@constants";
 
 export default function ({
   title,
@@ -35,7 +36,11 @@ export default function ({
                 }`}
                 onPress={navigateLeft}
               >
-                <Feather name="chevron-left" size={50} color={textColor} />
+                <Feather
+                  name="chevron-left"
+                  size={RESOURCE.NUMBER.FIFTY}
+                  color={textColor}
+                />
               </TouchableOpacity>
             )}
             <Text
@@ -68,7 +73,11 @@ export default function ({
                 }`}
                 onPress={navigateRight}
               >
-                <Feather name="chevron-right" size={50} color={textColor} />
+                <Feather
+                  name="chevron-right"
+                  size={RESOURCE.NUMBER.FIFTY}
+                  color={textColor}
+                />
               </TouchableOpacity>
             )}
           </View>
@@ -81,7 +90,10 @@ export default function ({
               />
             ) : (
               <ScrollView
-                contentContainerStyle={{ flexGrow: 1, alignItems: "center" }}
+                contentContainerStyle={{
+                  flexGrow: RESOURCE.NUMBER.ONE,
+                  alignItems: "center",
+                }}
                 horizontal
                 showsHorizontalScrollIndicator={false}
               >

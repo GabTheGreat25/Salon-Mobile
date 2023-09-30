@@ -15,11 +15,9 @@ import { changeColor } from "@utils";
 import { BackIcon, FormInputs } from "@helpers";
 import salonLogo from "@assets/salon-logo.png";
 import salonLogoWhite from "@assets/salon-logo-white.png";
+import { RESOURCE } from "@constants";
 
-const INITIAL_SCROLLVIEW_HEIGHT = 500;
-const KEYBOARD_OPEN_SCROLLVIEW_HEIGHT = 100;
-
-export default function MyComponent({
+export default function ({
   initialState,
   title,
   description,
@@ -42,7 +40,7 @@ export default function MyComponent({
   });
   const [keyboardOpen, setKeyboardOpen] = useState(false);
   const [scrollViewHeight, setScrollViewHeight] = useState(
-    INITIAL_SCROLLVIEW_HEIGHT
+    RESOURCE.NUMBER.FIVE_HUNDRED
   );
 
   const handleInputChange = (field, text) =>
@@ -50,7 +48,7 @@ export default function MyComponent({
 
   const handleTextInputFocus = () => {
     setScrollViewHeight(
-      keyboardOpen ? KEYBOARD_OPEN_SCROLLVIEW_HEIGHT : INITIAL_SCROLLVIEW_HEIGHT
+      keyboardOpen ? RESOURCE.NUMBER.HUNDRED : RESOURCE.NUMBER.FIVE_HUNDRED
     );
   };
 
@@ -58,7 +56,7 @@ export default function MyComponent({
     const backHandler = BackHandler.addEventListener(
       "hardwareBackPress",
       () => {
-        setScrollViewHeight(INITIAL_SCROLLVIEW_HEIGHT);
+        setScrollViewHeight(RESOURCE.NUMBER.FIVE_HUNDRED);
         return true;
       }
     );
@@ -70,14 +68,14 @@ export default function MyComponent({
       "keyboardDidShow",
       () => {
         setKeyboardOpen(true);
-        setScrollViewHeight(KEYBOARD_OPEN_SCROLLVIEW_HEIGHT);
+        setScrollViewHeight(RESOURCE.NUMBER.HUNDRED);
       }
     );
     const keyboardDidHideListener = Keyboard.addListener(
       "keyboardDidHide",
       () => {
         setKeyboardOpen(false);
-        setScrollViewHeight(INITIAL_SCROLLVIEW_HEIGHT);
+        setScrollViewHeight(RESOURCE.NUMBER.FIVE_HUNDRED);
       }
     );
 
