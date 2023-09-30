@@ -24,6 +24,7 @@ export default function ({
   navigateTo,
   navigateBack,
   buttonTitle,
+  footerShow,
   footerTitle,
   footerLinkTitle,
   dimensionLayout,
@@ -101,14 +102,14 @@ export default function ({
             <Text
               style={{ color: textColor }}
               className={`font-semibold ${
-                dimensionLayout ? "my-2 text-3xl" : "my-1 text-xl"
+                dimensionLayout ? "my-[9px] text-3xl" : "my-1 text-xl"
               }`}
             >
               {title}
             </Text>
             <Text
               style={{ color: textColor }}
-              className={`mb-2 text-sm font-base`}
+              className={`mb-2 text-sm font-base text-center`}
             >
               {description}
             </Text>
@@ -146,16 +147,21 @@ export default function ({
                       </View>
                     </View>
                   </TouchableOpacity>
-                  <View className={`gap-x-2 flex-row`}>
-                    <Text style={{ color: textColor }} className={`text-base`}>
-                      {footerTitle}
-                    </Text>
-                    <TouchableOpacity>
-                      <Text className={`text-primary-accent text-base`}>
-                        {footerLinkTitle}
+                  {footerShow && (
+                    <View className={`gap-x-2 flex-row`}>
+                      <Text
+                        style={{ color: textColor }}
+                        className={`text-base`}
+                      >
+                        {footerTitle}
                       </Text>
-                    </TouchableOpacity>
-                  </View>
+                      <TouchableOpacity>
+                        <Text className={`text-primary-accent text-base`}>
+                          {footerLinkTitle}
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  )}
                 </View>
               </ScrollView>
             </KeyboardAvoidingView>

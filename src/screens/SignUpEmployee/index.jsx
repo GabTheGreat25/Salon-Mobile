@@ -21,6 +21,7 @@ export default function () {
         title={`Sign up as Employee`}
         description={`Create your account`}
         buttonTitle={`Sign up`}
+        footerShow={true}
         footerTitle={`Already have an account?`}
         footerLinkTitle={`Sign in`}
         navigateBack={() => navigation.goBack()}
