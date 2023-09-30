@@ -5,6 +5,7 @@ import UserPick from "./UserPick";
 import ChooseRole from "./ChooseRole";
 import SignUpCustomer from "./SignUpCustomer";
 import SignUpEmployee from "./SignUpEmployee";
+import ForgetPassword from "./ForgetPassword";
 
 export {
   Home,
@@ -14,4 +15,5 @@ export {
   ChooseRole,
   SignUpCustomer,
   SignUpEmployee,
+  ForgetPassword,
 };
