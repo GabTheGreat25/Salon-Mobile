@@ -33,11 +33,7 @@ export default function ({
   const borderColor =
     colorScheme === "dark" ? "border-neutral-light" : "border-neutral-dark";
 
-  const [formData, setFormData] = useState({
-    ...initialState,
-    textColor,
-    placeholderColor: textColor,
-  });
+  const [formData, setFormData] = useState({ ...initialState });
   const [keyboardOpen, setKeyboardOpen] = useState(false);
   const [scrollViewHeight, setScrollViewHeight] = useState(
     RESOURCE.NUMBER.FIVE_HUNDRED
@@ -103,7 +99,7 @@ export default function ({
           />
           <View className={`flex-1 items-center justify-start`}>
             <Text
-              style={{ color: formData.textColor }}
+              style={{ color: textColor }}
               className={`font-semibold ${
                 dimensionLayout ? "my-2 text-3xl" : "my-1 text-xl"
               }`}
@@ -111,7 +107,7 @@ export default function ({
               {title}
             </Text>
             <Text
-              style={{ color: formData.textColor }}
+              style={{ color: textColor }}
               className={`mb-2 text-sm font-base`}
             >
               {description}

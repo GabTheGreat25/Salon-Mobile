@@ -1,5 +1,6 @@
 import React from "react";
 import { TextInput } from "react-native";
+import { changeColor } from "@utils";
 
 export default function ({
   initialState,
@@ -10,17 +11,18 @@ export default function ({
   borderColor,
   dimensionLayout,
 }) {
+  const { textColor } = changeColor();
   return (
     <>
       {Object.keys(initialState).map((field) => (
         <TextInput
           key={field}
-          style={{ color: formData.textColor }}
+          style={{ color: textColor }}
           className={`border-b ${
             dimensionLayout ? "mb-6" : "mb-3"
           } ${borderColor}`}
           placeholder={`Enter your ${field}`}
-          placeholderTextColor={formData.placeholderColor}
+          placeholderTextColor={textColor}
           autoCapitalize="none"
           onFocus={handleTextInputFocus}
           onBlur={handleTextInputBlur}
