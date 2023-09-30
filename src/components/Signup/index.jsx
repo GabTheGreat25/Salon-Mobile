@@ -12,8 +12,9 @@ import {
   Keyboard,
   BackHandler,
 } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import { changeColor } from "@utils";
+import { BackIcon } from "@helpers";
 import salonLogo from "@assets/salon-logo.png";
 import salonLogoWhite from "@assets/salon-logo-white.png";
 
@@ -24,13 +25,14 @@ export default function MyComponent({
   initialState,
   title,
   description,
-  navigateBack,
   navigateTo,
+  navigateBack,
   buttonTitle,
   footerTitle,
   footerLinkTitle,
   dimensionLayout,
 }) {
+  const navigation = useNavigation();
   const { backgroundColor, textColor, colorScheme } = changeColor();
   const imageSource = colorScheme === "dark" ? salonLogoWhite : salonLogo;
   const borderColor =
@@ -97,11 +99,7 @@ export default function MyComponent({
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={{ backgroundColor }} className={`relative flex-1`}>
-        <View className={`absolute top-3 z-[1000]`}>
-          <TouchableOpacity onPress={navigateBack}>
-            <Feather name="chevron-left" size={50} color={textColor} />
-          </TouchableOpacity>
-        </View>
+        <BackIcon navigateBack={navigateBack} textColor={textColor} />
         <View
           className={`justify-start ${
             dimensionLayout ? "flex-col items-center" : "flex-row items-start"

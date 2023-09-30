@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { changeColor } from "@utils";
 import { Feather } from "@expo/vector-icons";
+import { BackIcon } from "@helpers";
 
 export default function ({
   title,
@@ -33,11 +34,7 @@ export default function ({
           dimensionLayout ? "flex-col" : "flex-row"
         }`}
       >
-        <View className={`absolute top-3 z-[1000]`}>
-          <TouchableOpacity onPress={navigateBack}>
-            <Feather name="chevron-left" size={50} color={textColor} />
-          </TouchableOpacity>
-        </View>
+        <BackIcon navigateBack={navigateBack} textColor={textColor} />
         <View
           className={`flex-1 ${
             dimensionLayout
