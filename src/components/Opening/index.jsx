@@ -29,9 +29,11 @@ export default function ({
     <>
       <SafeAreaView
         style={{ backgroundColor }}
-        className={`flex-1 ${dimensionLayout ? "flex-col" : "flex-row"}`}
+        className={`relative flex-1 ${
+          dimensionLayout ? "flex-col" : "flex-row"
+        }`}
       >
-        <View className={`pt-4`}>
+        <View className={`absolute top-3 z-[1000]`}>
           <TouchableOpacity onPress={navigateBack}>
             <Feather name="chevron-left" size={50} color={textColor} />
           </TouchableOpacity>
