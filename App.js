@@ -15,7 +15,7 @@ import {
 } from "@screens";
 import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
-import { Feather } from "@expo/vector-icons";
+import { DarkMode } from "@helpers";
 
 const Stack = createStackNavigator();
 
@@ -23,6 +23,8 @@ export default function () {
   const { backgroundColor, textColor, colorScheme, toggleColorScheme } =
     changeColor();
   const [isLoading, setIsLoading] = useState(true);
+  const icon = colorScheme === "dark" ? "sun" : "moon";
+  const barStyle = colorScheme === "dark" ? "light-content" : "dark-content";
 
   useEffect(() => {
     setTimeout(() => {
@@ -38,10 +40,7 @@ export default function () {
         </>
       ) : (
         <>
-          <StatusBar
-            barStyle={colorScheme === "dark" ? "light-content" : "dark-content"}
-            backgroundColor={backgroundColor}
-          />
+          <StatusBar barStyle={barStyle} backgroundColor={backgroundColor} />
           <NavigationContainer>
             <Stack.Navigator
               initialRouteName="Home"
@@ -59,19 +58,8 @@ export default function () {
               <Stack.Screen name="SignUpEmployee" component={SignUpEmployee} />
               <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
             </Stack.Navigator>
-            <TouchableOpacity
-              className="absolute z-10 right-5 top-5"
-              onPress={toggleColorScheme}
-            >
-              <Text selectable={false}>
-                <Feather
-                  name={`${colorScheme === "dark" ? "sun" : "moon"}`}
-                  size={35}
-                  color={textColor}
-                />
-              </Text>
-            </TouchableOpacity>
           </NavigationContainer>
+          <DarkMode toggle={toggleColorScheme} name={icon} color={textColor} />
         </>
       )}
     </>
