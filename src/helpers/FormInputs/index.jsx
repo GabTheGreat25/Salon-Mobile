@@ -19,7 +19,7 @@ export default function ({
           key={field}
           style={{ color: textColor }}
           className={`border-b ${
-            dimensionLayout ? "mb-6" : "mb-3"
+            dimensionLayout ? "mb-4" : "mb-3"
           } ${borderColor}`}
           placeholder={`Enter your ${field}`}
           placeholderTextColor={textColor}
