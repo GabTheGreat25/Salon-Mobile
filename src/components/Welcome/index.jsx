@@ -1,5 +1,12 @@
 import React from "react";
-import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
+import {
+  View,
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+} from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { changeColor } from "@utils";
 import { RESOURCE } from "@constants";
@@ -19,7 +26,7 @@ export default function ({
   const { backgroundColor, textColor } = changeColor();
   return (
     <>
-      <View
+      <SafeAreaView
         className={`flex-1 ${dimensionLayout ? "flex-col" : "flex-row"}`}
         style={{ backgroundColor }}
       >
@@ -106,7 +113,7 @@ export default function ({
             )}
           </View>
         </View>
-      </View>
+      </SafeAreaView>
     </>
   );
 }
