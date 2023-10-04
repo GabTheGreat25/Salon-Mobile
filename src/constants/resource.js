@@ -2,7 +2,11 @@ export default {
   NUMBER: {
     NEGATIVE_ONE: -1,
     ZERO: 0,
+    POINT_FIVE: 0.5,
+    POINT_SEVENTY_FIVE: 0.75,
     ONE: 1,
+    TWENTY: 20,
+    THIRTY: 30,
     FORTY: 40,
     FIFTY: 50,
     HUNDRED: 100,
