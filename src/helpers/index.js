@@ -1,4 +1,5 @@
 import BackIcon from "./BackIcon";
 import FormInputs from "./FormInputs";
+import DarkMode from "./DarkMode";
 
-export { BackIcon, FormInputs };
+export { BackIcon, FormInputs, DarkMode };
