@@ -15,9 +15,9 @@ export default function () {
         showName={true}
         navigateBack={() => navigation.goBack()}
         firstButton="Login"
-        navigateFirstButton={() => navigation.navigate("Login")}
+        navigateFirstButton={() => navigation.navigate("LoginUser")}
         secondButton="Signin"
-        navigateSecondButton={() => navigation.navigate("Signin")}
+        navigateSecondButton={() => navigation.navigate("ChooseRole")}
         dimensionLayout={isDimensionLayout}
       />
     </>

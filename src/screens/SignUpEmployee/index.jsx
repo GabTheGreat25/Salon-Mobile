@@ -25,7 +25,7 @@ export default function () {
         footerTitle={`Already have an account?`}
         footerLinkTitle={`Sign in`}
         navigateBack={() => navigation.goBack()}
-        navigateTo={() => navigation.navigate("Login")}
+        navigateTo={() => navigation.navigate("LoginUser")}
         dimensionLayout={isDimensionLayout}
       />
     </>
