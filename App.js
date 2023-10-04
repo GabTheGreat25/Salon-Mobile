@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, TouchableOpacity, StatusBar } from "react-native";
+import { StatusBar } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import {
@@ -16,6 +16,7 @@ import {
 import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
 import { DarkMode } from "@helpers";
+import { Drawer } from "@routes";
 
 const Stack = createStackNavigator();
 
@@ -43,7 +44,7 @@ export default function () {
           <StatusBar barStyle={barStyle} backgroundColor={backgroundColor} />
           <NavigationContainer>
             <Stack.Navigator
-              initialRouteName="Home"
+              initialRouteName="Drawer"
               screenOptions={{
                 headerShown: false,
               }}
@@ -57,6 +58,7 @@ export default function () {
               <Stack.Screen name="SignUpCustomer" component={SignUpCustomer} />
               <Stack.Screen name="SignUpEmployee" component={SignUpEmployee} />
               <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
+              <Stack.Screen name="Drawer" component={Drawer} />
             </Stack.Navigator>
           </NavigationContainer>
           <DarkMode toggle={toggleColorScheme} name={icon} color={textColor} />
