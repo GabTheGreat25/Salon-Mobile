@@ -101,7 +101,7 @@ export default function ({
           <View className={`flex-1 items-center justify-start`}>
             <Text
               style={{ color: textColor }}
-              className={`font-semibold ${
+              className={`font-semibold text-center ${
                 dimensionLayout ? "my-[9px] text-3xl" : "my-1 text-xl"
               }`}
             >
@@ -139,7 +139,7 @@ export default function ({
                         }`}
                       >
                         <Text
-                          className={`text-neutral-light font-semibold text-center text-lg`}
+                          className={` font-semibold text-center text-lg`}
                           style={{ color: textColor }}
                         >
                           {buttonTitle}
@@ -155,7 +155,7 @@ export default function ({
                       >
                         {footerTitle}
                       </Text>
-                      <TouchableOpacity>
+                      <TouchableOpacity onPress={navigateTo}>
                         <Text className={`text-primary-accent text-base`}>
                           {footerLinkTitle}
                         </Text>
