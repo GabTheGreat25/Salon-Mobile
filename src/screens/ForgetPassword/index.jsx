@@ -1,27 +1,25 @@
 import React from "react";
-import { Signup } from "@components";
-import { useNavigation } from "@react-navigation/native";
 import { dimensionLayout } from "@utils";
+import { Login } from "@components";
+import { useNavigation } from "@react-navigation/native";
 
 export default function () {
   const navigation = useNavigation();
   const isDimensionLayout = dimensionLayout();
   const initialState = {
-    userName: "",
+    email: "",
   };
 
   return (
     <>
-      <Signup
+      <Login
         initialState={initialState}
-        title={`Forgot Your Password?`}
-        description={`We got you covered! Enter your email address \nand we will send you a link to reset your password.`}
+        title={`Forget Password?`}
+        description={`Please enter your email to reset you password.`}
         buttonTitle={`Continue`}
-        footerShow={true}
-        footerTitle={`Remember your pass?`}
-        footerLinkTitle={`Sign in`}
         navigateBack={() => navigation.goBack()}
-        navigateTo={() => navigation.navigate("Login")}
+        navigateTo={() => navigation.navigate("LoginUser")}
+        showComponent={false}
         dimensionLayout={isDimensionLayout}
       />
     </>
