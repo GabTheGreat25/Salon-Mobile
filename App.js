@@ -11,6 +11,7 @@ import {
   SignUpCustomer,
   SignUpEmployee,
   ForgetPassword,
+  LoginUser,
 } from "@screens";
 import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
@@ -53,6 +54,7 @@ export default function () {
               <Stack.Screen name="BecomeCustomer" component={BecomeCustomer} />
               <Stack.Screen name="UserPick" component={UserPick} />
               <Stack.Screen name="ChooseRole" component={ChooseRole} />
+              <Stack.Screen name="LoginUser" component={LoginUser} />
               <Stack.Screen name="SignUpCustomer" component={SignUpCustomer} />
               <Stack.Screen name="SignUpEmployee" component={SignUpEmployee} />
               <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
