@@ -6,7 +6,6 @@ export default function ({
   initialState,
   formData,
   handleTextInputFocus,
-  handleTextInputBlur,
   handleInputChange,
   borderColor,
   dimensionLayout,
@@ -25,7 +24,6 @@ export default function ({
           placeholderTextColor={textColor}
           autoCapitalize="none"
           onFocus={handleTextInputFocus}
-          onBlur={handleTextInputBlur}
           onChangeText={(text) => handleInputChange(field, text)}
           value={formData[field]}
           secureTextEntry={field === "password"}
