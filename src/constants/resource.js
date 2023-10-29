@@ -1,4 +1,5 @@
 export default {
+  PRODUCTION: "production",
   NUMBER: {
     NEGATIVE_ONE: -1,
     ZERO: 0,
