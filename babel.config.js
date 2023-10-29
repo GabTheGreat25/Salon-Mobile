@@ -18,6 +18,8 @@ module.exports = function (api) {
             "@helpers": "./src/helpers",
             "@constants": "./src/constants",
             "@routes": "./src/routes",
+            "@env": "./src/env",
+            "@constants": "./src/constants",
           },
         },
       ],
