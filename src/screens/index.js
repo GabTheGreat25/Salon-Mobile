@@ -7,6 +7,10 @@ import SignUpCustomer from "./SignUpCustomer";
 import SignUpEmployee from "./SignUpEmployee";
 import ForgetPassword from "./ForgetPassword";
 import LoginUser from "./LoginUser";
+import Test from "./Test";
+import TestGetById from "./Test/TestGetById";
+import CreateTest from "./Test/CreateTest";
+import EditTest from "./Test/EditTest";
 
 export {
   Home,
@@ -18,4 +22,8 @@ export {
   SignUpEmployee,
   ForgetPassword,
   LoginUser,
+  Test,
+  TestGetById,
+  CreateTest,
+  EditTest,
 };
