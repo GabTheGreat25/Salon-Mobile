@@ -5,7 +5,8 @@ import { useNavigation } from "@react-navigation/native";
 
 export default function () {
   const { data, isLoading, isError } = useGetTestsQuery();
-  const [deleteTest] = useDeleteTestMutation();
+  const [deleteTest, { isLoading: isDeleting, isError: isDeleteError }] =
+    useDeleteTestMutation();
   const navigation = useNavigation();
 
   const goToTestDetails = (id) => {
@@ -53,9 +54,9 @@ export default function () {
         <Text>Create Test</Text>
       </TouchableOpacity>
 
-      {isLoading ? (
+      {isLoading || isDeleting ? (
         <Text>Loading...</Text>
-      ) : isError ? (
+      ) : isError || isDeleteError ? (
         <Text>Error occurred while fetching data.</Text>
       ) : (
         data.details.map((item, index) => (
