@@ -1,12 +1,12 @@
-import { BackIcon } from "@helpers";
+import React, { useState } from "react";
+import { View, Text, TextInput, TouchableOpacity, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useFormik } from "formik";
 import * as ImageManipulator from "expo-image-manipulator";
 import * as ImagePicker from "expo-image-picker";
-import { useFormik } from "formik";
-import React, { useState } from "react";
-import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useAddTestMutation } from "../../state/api/reducer";
 import { createTestValidation } from "../../validation";
+import { BackIcon } from "@helpers";
 
 export default function () {
   const [addTest, { isLoading, isError }] = useAddTestMutation();
@@ -46,6 +46,37 @@ export default function () {
       }
     },
   });
+
+  const takePicture = async () => {
+    const result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      aspect: [3, 2],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      const newImage = result.assets[0];
+
+      const manipulatorOptions = {
+        compress: 0.5,
+        format: ImageManipulator.SaveFormat.JPEG,
+      };
+
+      try {
+        const manipulatedImage = await ImageManipulator.manipulateAsync(
+          newImage.uri,
+          [],
+          manipulatorOptions
+        );
+
+        if (manipulatedImage) {
+          setSelectedImages([...selectedImages, manipulatedImage]);
+        }
+      } catch (error) {
+        console.error("Image manipulation error:", error);
+      }
+    }
+  };
 
   const selectImages = async () => {
     let results = await ImagePicker.launchImageLibraryAsync({
@@ -123,6 +154,11 @@ export default function () {
             disabled={!formik.isValid}
           >
             <Text style={{ color: "white" }}>Create Test</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={takePicture}>
+            <Text>
+              Take a Picture
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={selectImages}>
             <Text>Select Images</Text>
