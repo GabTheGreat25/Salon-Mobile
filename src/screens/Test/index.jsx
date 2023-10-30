@@ -1,6 +1,16 @@
 import React from "react";
-import { View, Text, TouchableOpacity, Alert } from "react-native";
-import { useGetTestsQuery, useDeleteTestMutation } from "../../state/api/reducer";
+import {
+  View,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  Alert,
+  Image,
+} from "react-native";
+import {
+  useGetTestsQuery,
+  useDeleteTestMutation,
+} from "../../state/api/reducer";
 import { useNavigation } from "@react-navigation/native";
 
 export default function () {
@@ -22,29 +32,25 @@ export default function () {
   };
 
   const handleDelete = (id) => {
-    Alert.alert(
-      "Delete Test",
-      "Are you sure you want to delete this test?",
-      [
-        {
-          text: "Cancel",
-          style: "cancel",
+    Alert.alert("Delete Test", "Are you sure you want to delete this test?", [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "Delete",
+        onPress: () => {
+          deleteTest(id)
+            .unwrap()
+            .then((response) => {
+              console.log("Test deleted:", response);
+            })
+            .catch((error) => {
+              console.error("Error occurred while deleting the test:", error);
+            });
         },
-        {
-          text: "Delete",
-          onPress: () => {
-            deleteTest(id)
-              .unwrap()
-              .then((response) => {
-                console.log("Test deleted:", response);
-              })
-              .catch((error) => {
-                console.error("Error occurred while deleting the test:", error);
-              });
-          },
-        },
-      ]
-    );
+      },
+    ]);
   };
 
   return (
@@ -65,7 +71,13 @@ export default function () {
               <Text>ID: {item?._id}</Text>
             </TouchableOpacity>
             <Text>Test Name: {item?.test}</Text>
-
+            {item.image?.map((image) => (
+              <Image
+                key={image?.public_id}
+                source={{ uri: image?.url }}
+                style={{ width: 75, height: 60 }}
+              />
+            ))}
             <TouchableOpacity onPress={() => navigateToTestUpdate(item?._id)}>
               <Text>Edit</Text>
             </TouchableOpacity>
