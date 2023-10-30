@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, Image } from "react-native";
 import { useGetTestByIdQuery } from "../../state/api/reducer";
 import { BackIcon } from "@helpers";
 import { useNavigation } from "@react-navigation/native";
@@ -21,6 +21,13 @@ export default function ({ route }) {
         <View>
           <Text>ID: {data.details?._id}</Text>
           <Text>Test Name: {data.details?.test}</Text>
+          {data.details?.image?.map((image) => (
+              <Image
+                key={image?.public_id}
+                source={{ uri: image?.url }}
+                style={{ width: 75, height: 60 }}
+              />
+            ))}
         </View>
       )}
     </View>
