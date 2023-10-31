@@ -1,10 +1,21 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { API_URL } from "@env";
 import TestAPI from "./routes/tests";
-import { API, TAGS } from "@constants";
+import AuthAPI from "./routes/auth";
+import { RESOURCE, API, TAGS } from "@constants";
+
+const prepareHeaders = (headers, { getState }) => {
+  if (getState()?.auth?.authenticated)
+  headers.set("authorization", `Bearer ${getState()?.auth?.token || ""}`);
+
+  headers.set("accept", `application/json`);
+  return headers;
+};
 
 const baseQuery = fetchBaseQuery({
   baseUrl: API_URL,
+  credentials: RESOURCE.INCLUDE,
+  prepareHeaders,
 });
 
 export const api = createApi({
@@ -17,6 +28,8 @@ export const api = createApi({
     addTest: TestAPI.add(builder),
     updateTest: TestAPI.updateById(builder),
     deleteTest: TestAPI.deleteById(builder),
+    login: AuthAPI.login(builder),
+    logout: AuthAPI.logout(builder),
   }),
 });
 
@@ -26,4 +39,6 @@ export const {
   useAddTestMutation,
   useUpdateTestMutation,
   useDeleteTestMutation,
+  useLoginMutation,
+  useLogoutMutation,
 } = api;
