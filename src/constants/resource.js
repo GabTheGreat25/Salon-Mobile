@@ -1,5 +1,6 @@
 export default {
   PRODUCTION: "production",
+  INCLUDE: "include",
   NUMBER: {
     NEGATIVE_ONE: -1,
     ZERO: 0,
