@@ -9,18 +9,20 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   BackHandler,
+  TextInput,
 } from "react-native";
 import { changeColor } from "@utils";
-import { BackIcon, FormInputs } from "@helpers";
+import { BackIcon } from "@helpers";
 import salonLogo from "@assets/salon-logo.png";
 import salonLogoWhite from "@assets/salon-logo-white.png";
+import { useLoginMutation } from "../../state/api/reducer";
+import { useFormik } from "formik";
+import { useNavigation } from "@react-navigation/native";
 
 export default function ({
-  initialState,
   title,
   description,
   socialMediaIcons,
-  navigateTo,
   navigateBack,
   buttonTitle,
   linkNavigateTo,
@@ -36,8 +38,28 @@ export default function ({
   const imageSource = colorScheme === "dark" ? salonLogoWhite : salonLogo;
   const borderColor =
     colorScheme === "dark" ? "border-neutral-light" : "border-neutral-dark";
-  const [formData, setFormData] = useState({ ...initialState });
   const [keyboardOpen, setKeyboardOpen] = useState(false);
+
+  const [login, { isError, isLoading }] = useLoginMutation();
+  const navigation = useNavigation();
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    onSubmit: (values) => {
+      login(values)
+        .unwrap()
+        .then((response) => {
+          console.log("Response from API:", response);
+          navigation.navigate("Test");
+          formik.resetForm();
+        })
+        .catch((error) => {
+          console.error("Error occurred while adding the test:", error);
+        });
+    },
+  });
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
@@ -68,9 +90,6 @@ export default function ({
       keyboardDidHideListener.remove();
     };
   }, []);
-
-  const handleInputChange = (field, text) =>
-    setFormData({ ...formData, [field]: text });
 
   const handleTextInputFocus = () => {
     if (keyboardOpen) {
@@ -106,14 +125,39 @@ export default function ({
               {description}
             </Text>
             <View className={`${dimensionLayout ? "w-[300px]" : "w-[375px]"}`}>
-              <FormInputs
-                initialState={initialState}
-                formData={formData}
-                dimensionLayout={dimensionLayout}
+              <TextInput
+                style={{ color: textColor }}
+                className={`border-b ${
+                  dimensionLayout ? "mb-4" : "mb-3"
+                } ${borderColor}`}
+                placeholder="Enter your email"
+                placeholderTextColor={textColor}
+                autoCapitalize="none"
                 handleTextInputFocus={handleTextInputFocus}
-                handleInputChange={handleInputChange}
-                borderColor={borderColor}
+                onChangeText={formik.handleChange("email")}
+                onBlur={formik.handleBlur("email")}
+                value={formik.values.email}
               />
+              {formik.touched.email && formik.errors.email && (
+                <Text style={{ color: "red" }}>{formik.errors.email}</Text>
+              )}
+              <TextInput
+                style={{ color: textColor }}
+                className={`border-b ${
+                  dimensionLayout ? "mb-4" : "mb-3"
+                } ${borderColor}`}
+                placeholder="Enter your password"
+                placeholderTextColor={textColor}
+                autoCapitalize="none"
+                handleTextInputFocus={handleTextInputFocus}
+                onChangeText={formik.handleChange("password")}
+                onBlur={formik.handleBlur("password")}
+                value={formik.values.password}
+                secureTextEntry
+              />
+              {formik.touched.password && formik.errors.password && (
+                <Text style={{ color: "red" }}>{formik.errors.password}</Text>
+              )}
               <View
                 className={`items-center ${
                   dimensionLayout
@@ -121,7 +165,10 @@ export default function ({
                     : "flex-row gap-x-6 justify-center"
                 }`}
               >
-                <TouchableOpacity onPress={navigateTo}>
+                <TouchableOpacity
+                  onPress={formik.handleSubmit}
+                  disabled={!formik.isValid}
+                >
                   <View
                     className={`w-full mb-1 ${
                       dimensionLayout ? "mt-0" : "mt-2"
