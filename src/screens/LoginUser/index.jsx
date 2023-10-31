@@ -10,10 +10,6 @@ import { useNavigation } from "@react-navigation/native";
 export default function () {
   const navigation = useNavigation();
   const isDimensionLayout = dimensionLayout();
-  const initialState = {
-    email: "",
-    password: "",
-  };
   const socialMediaIcons = [
     { source: Facebook, key: "facebook" },
     { source: Google, key: "google" },
@@ -24,13 +20,11 @@ export default function () {
   return (
     <>
       <Login
-        initialState={initialState}
         socialMediaIcons={socialMediaIcons}
         title={`Welcome back!`}
         description={`Log in to your account`}
         buttonTitle={`Login`}
         navigateBack={() => navigation.goBack()}
-        navigateTo={() => navigation.navigate("Home")}
         showComponent={true}
         linkNavigateTo={() => navigation.navigate("ForgetPassword")}
         linkTitle={`Forgot password?`}
