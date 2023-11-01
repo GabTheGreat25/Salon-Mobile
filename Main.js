@@ -49,7 +49,7 @@ export default function () {
           <StatusBar barStyle={barStyle} backgroundColor={backgroundColor} />
           <NavigationContainer>
             <Stack.Navigator
-              initialRouteName="Test"
+              initialRouteName="LoginUser"
               screenOptions={{
                 headerShown: false,
               }}

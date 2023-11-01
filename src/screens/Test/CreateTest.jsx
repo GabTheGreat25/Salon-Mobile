@@ -7,6 +7,7 @@ import * as ImagePicker from "expo-image-picker";
 import { useAddTestMutation } from "../../state/api/reducer";
 import { createTestValidation } from "../../validation";
 import { BackIcon } from "@helpers";
+import { LoadingScreen } from "@components";
 
 export default function () {
   const [addTest, { isLoading, isError }] = useAddTestMutation();
@@ -117,53 +118,56 @@ export default function () {
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <View
+      style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+      className={`bg-primary-default`}
+    >
       <BackIcon navigateBack={navigation.goBack} />
-      <Text>Test Details:</Text>
       {isLoading ? (
-        <Text>Loading...</Text>
+        <LoadingScreen />
       ) : isError ? (
         <Text>Error occurred while fetching data.</Text>
       ) : (
-        <View>
-          {selectedImages?.map((image, index) => (
-            <Image
-              key={index}
-              source={{ uri: image.uri }}
-              style={{ width: 200, height: 200, marginBottom: 10 }}
+        <>
+          <Text>Test Details:</Text>
+          <View>
+            {selectedImages?.map((image, index) => (
+              <Image
+                key={index}
+                source={{ uri: image.uri }}
+                style={{ width: 200, height: 200, marginBottom: 10 }}
+              />
+            ))}
+            <Text>Test Name:</Text>
+            <TextInput
+              placeholder="Enter test details"
+              onChangeText={formik.handleChange("test")}
+              onBlur={formik.handleBlur("test")}
+              value={formik.values.test}
             />
-          ))}
-          <Text>Test Name:</Text>
-          <TextInput
-            placeholder="Enter test details"
-            onChangeText={formik.handleChange("test")}
-            onBlur={formik.handleBlur("test")}
-            value={formik.values.test}
-          />
-          {formik.touched.test && formik.errors.test && (
-            <Text style={{ color: "red" }}>{formik.errors.test}</Text>
-          )}
-          <TouchableOpacity
-            style={{
-              backgroundColor: "blue",
-              padding: 10,
-              borderRadius: 5,
-              marginTop: 10,
-            }}
-            onPress={formik.handleSubmit}
-            disabled={!formik.isValid}
-          >
-            <Text style={{ color: "white" }}>Create Test</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={takePicture}>
-            <Text>
-              Take a Picture
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={selectImages}>
-            <Text>Select Images</Text>
-          </TouchableOpacity>
-        </View>
+            {formik.touched.test && formik.errors.test && (
+              <Text style={{ color: "red" }}>{formik.errors.test}</Text>
+            )}
+            <TouchableOpacity
+              style={{
+                backgroundColor: "blue",
+                padding: 10,
+                borderRadius: 5,
+                marginTop: 10,
+              }}
+              onPress={formik.handleSubmit}
+              disabled={!formik.isValid}
+            >
+              <Text style={{ color: "white" }}>Create Test</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={takePicture}>
+              <Text>Take a Picture</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={selectImages}>
+              <Text>Select Images</Text>
+            </TouchableOpacity>
+          </View>
+        </>
       )}
     </View>
   );
