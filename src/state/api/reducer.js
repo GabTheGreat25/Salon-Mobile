@@ -7,7 +7,6 @@ import { RESOURCE, API, TAGS } from "@constants";
 const prepareHeaders = (headers, { getState }) => {
   if (getState()?.auth?.authenticated)
   headers.set("authorization", `Bearer ${getState()?.auth?.token || ""}`);
-
   headers.set("accept", `application/json`);
   return headers;
 };
