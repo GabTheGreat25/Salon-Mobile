@@ -18,7 +18,8 @@ import salonLogoWhite from "@assets/salon-logo-white.png";
 import { useLoginMutation } from "../../state/api/reducer";
 import { useFormik } from "formik";
 import { useNavigation } from "@react-navigation/native";
-import Toast from 'react-native-toast-message';
+import Toast from "react-native-toast-message";
+import { Feather } from "@expo/vector-icons";
 
 export default function ({
   title,
@@ -40,6 +41,7 @@ export default function ({
   const borderColor =
     colorScheme === "dark" ? "border-neutral-light" : "border-neutral-dark";
   const [keyboardOpen, setKeyboardOpen] = useState(false);
+  const [isPasswordVisible, setPasswordVisibility] = useState(false);
 
   const [login, { isError, isLoading }] = useLoginMutation();
   const navigation = useNavigation();
@@ -56,9 +58,9 @@ export default function ({
           navigation.navigate("Test");
           formik.resetForm();
           Toast.show({
-            type: 'success',
-            position: 'top',
-            text1: 'Login Successful',
+            type: "success",
+            position: "top",
+            text1: "Login Successful",
             text2: `${response?.message}`,
             visibilityTime: 3000,
             autoHide: true,
@@ -66,9 +68,9 @@ export default function ({
         })
         .catch((error) => {
           Toast.show({
-            type: 'error',
-            position: 'top',
-            text1: 'Error Logging In',
+            type: "error",
+            position: "top",
+            text1: "Error Logging In",
             text2: `${error?.data?.error?.message}`,
             visibilityTime: 3000,
             autoHide: true,
@@ -112,6 +114,10 @@ export default function ({
       return;
     }
     setKeyboardOpen(true);
+  };
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisibility(!isPasswordVisible);
   };
 
   return (
@@ -169,8 +175,18 @@ export default function ({
                 onChangeText={formik.handleChange("password")}
                 onBlur={formik.handleBlur("password")}
                 value={formik.values.password}
-                secureTextEntry
+                secureTextEntry={!isPasswordVisible}
               />
+              <TouchableOpacity
+                style={{ position: "absolute", top: 40, right: 15 }}
+                onPress={togglePasswordVisibility}
+              >
+                <Feather
+                  name={isPasswordVisible ? "eye" : "eye-off"}
+                  size={24}
+                  color={textColor}
+                />
+              </TouchableOpacity>
               {formik.touched.password && formik.errors.password && (
                 <Text style={{ color: "red" }}>{formik.errors.password}</Text>
               )}
@@ -205,7 +221,10 @@ export default function ({
                   </View>
                 </TouchableOpacity>
                 {showComponent && (
-                  <TouchableOpacity onPress={linkNavigateTo} disabled={!formik.isValid}>
+                  <TouchableOpacity
+                    onPress={linkNavigateTo}
+                    disabled={!formik.isValid}
+                  >
                     <Text
                       className={`mt-1 text-base underline`}
                       style={{ color: textColor }}
