@@ -18,6 +18,7 @@ import salonLogoWhite from "@assets/salon-logo-white.png";
 import { useLoginMutation } from "../../state/api/reducer";
 import { useFormik } from "formik";
 import { useNavigation } from "@react-navigation/native";
+import Toast from 'react-native-toast-message';
 
 export default function ({
   title,
@@ -54,9 +55,24 @@ export default function ({
           console.log("Response from API:", response);
           navigation.navigate("Test");
           formik.resetForm();
+          Toast.show({
+            type: 'success',
+            position: 'top',
+            text1: 'Login Successful',
+            text2: `${response?.message}`,
+            visibilityTime: 3000,
+            autoHide: true,
+          });
         })
         .catch((error) => {
-          console.error("Error occurred while adding the test:", error);
+          Toast.show({
+            type: 'error',
+            position: 'top',
+            text1: 'Error Logging In',
+            text2: `${error?.data?.error?.message}`,
+            visibilityTime: 3000,
+            autoHide: true,
+          });
         });
     },
   });
@@ -189,7 +205,7 @@ export default function ({
                   </View>
                 </TouchableOpacity>
                 {showComponent && (
-                  <TouchableOpacity onPress={linkNavigateTo}>
+                  <TouchableOpacity onPress={linkNavigateTo} disabled={!formik.isValid}>
                     <Text
                       className={`mt-1 text-base underline`}
                       style={{ color: textColor }}

@@ -54,21 +54,27 @@ export default function () {
             {authenticated ? (
               userRoles.includes("Customer") ? (
                 <Stack.Navigator
-                  initialRouteName="Drawer"
+                  initialRouteName="Test"
                   screenOptions={{
                     headerShown: false,
                   }}
                 >
-                  <Stack.Screen name="Drawer" component={Drawer} />
+                <Stack.Screen name="Test" component={Test} />
+                <Stack.Screen name="TestGetById" component={TestGetById} />
+                <Stack.Screen name="CreateTest" component={CreateTest} />
+                <Stack.Screen name="EditTest" component={EditTest} />
                 </Stack.Navigator>
               ) : userRoles.includes("Employee") ? (
                 <Stack.Navigator
-                  initialRouteName="Home"
+                  initialRouteName="Test"
                   screenOptions={{
                     headerShown: false,
                   }}
                 >
-                <Stack.Screen name="Home" component={Home} />
+                <Stack.Screen name="Test" component={Test} />
+                <Stack.Screen name="TestGetById" component={TestGetById} />
+                <Stack.Screen name="CreateTest" component={CreateTest} />
+                <Stack.Screen name="EditTest" component={EditTest} />
                 </Stack.Navigator>
               ) : (
                 <Stack.Navigator
@@ -85,11 +91,13 @@ export default function () {
               )
             ) : (
               <Stack.Navigator
-                initialRouteName="LoginUser"
+                initialRouteName="Home"
                 screenOptions={{
                   headerShown: false,
                 }}
               >
+                {/* <Stack.Screen name="Drawer" component={Drawer} /> */}
+                <Stack.Screen name="Home" component={Home} />
                 <Stack.Screen name="LoginUser" component={LoginUser} />
                 <Stack.Screen name="SignUpCustomer" component={SignUpCustomer} />
                 <Stack.Screen name="SignUpEmployee" component={SignUpEmployee} />
