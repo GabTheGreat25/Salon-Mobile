@@ -16,6 +16,7 @@ import { BackIcon } from "@helpers";
 import salonLogo from "@assets/salon-logo.png";
 import salonLogoWhite from "@assets/salon-logo-white.png";
 import { useLoginMutation } from "../../state/api/reducer";
+import { loginUserValidation } from "../../validation";
 import { useFormik } from "formik";
 import { useNavigation } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
@@ -43,18 +44,18 @@ export default function ({
   const [keyboardOpen, setKeyboardOpen] = useState(false);
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
 
-  const [login, { isError, isLoading }] = useLoginMutation();
+  const [login] = useLoginMutation();
   const navigation = useNavigation();
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
+    validationSchema: loginUserValidation,
     onSubmit: (values) => {
       login(values)
         .unwrap()
         .then((response) => {
-          console.log("Response from API:", response);
           navigation.navigate("Test");
           formik.resetForm();
           Toast.show({
@@ -163,32 +164,36 @@ export default function ({
               {formik.touched.email && formik.errors.email && (
                 <Text style={{ color: "red" }}>{formik.errors.email}</Text>
               )}
-              <TextInput
-                style={{ color: textColor }}
-                className={`border-b ${
-                  dimensionLayout ? "mb-4" : "mb-3"
-                } ${borderColor}`}
-                placeholder="Enter your password"
-                placeholderTextColor={textColor}
-                autoCapitalize="none"
-                handleTextInputFocus={handleTextInputFocus}
-                onChangeText={formik.handleChange("password")}
-                onBlur={formik.handleBlur("password")}
-                value={formik.values.password}
-                secureTextEntry={!isPasswordVisible}
-              />
-              <TouchableOpacity
-                style={{ position: "absolute", top: 40, right: 15 }}
-                onPress={togglePasswordVisibility}
-              >
-                <Feather
-                  name={isPasswordVisible ? "eye" : "eye-off"}
-                  size={24}
-                  color={textColor}
+              <View className={`relative`}>
+                <TextInput
+                  style={{ color: textColor }}
+                  className={`border-b ${
+                    dimensionLayout ? "mb-4" : "mb-3"
+                  } ${borderColor}`}
+                  placeholder="Enter your password"
+                  placeholderTextColor={textColor}
+                  autoCapitalize="none"
+                  handleTextInputFocus={handleTextInputFocus}
+                  onChangeText={formik.handleChange("password")}
+                  onBlur={formik.handleBlur("password")}
+                  value={formik.values.password}
+                  secureTextEntry={!isPasswordVisible}
                 />
-              </TouchableOpacity>
+                <TouchableOpacity
+                  className={`absolute right-4`}
+                  onPress={togglePasswordVisibility}
+                >
+                  <Feather
+                    name={isPasswordVisible ? "eye" : "eye-off"}
+                    size={24}
+                    color={textColor}
+                  />
+                </TouchableOpacity>
+              </View>
               {formik.touched.password && formik.errors.password && (
-                <Text style={{ color: "red" }}>{formik.errors.password}</Text>
+                <Text style={{ color: "red" }} className={`mb-3`}>
+                  {formik.errors.password}
+                </Text>
               )}
               <View
                 className={`items-center ${
@@ -207,7 +212,9 @@ export default function ({
                     }`}
                   >
                     <View
-                      className={`py-[8px] px-8 rounded-lg bg-primary-accent`}
+                      className={`py-[8px] px-8 rounded-lg bg-primary-accent ${
+                        !formik.isValid ? "opacity-50" : "opacity-100"
+                      }`}
                     >
                       <Text
                         className={`font-semibold text-center ${
