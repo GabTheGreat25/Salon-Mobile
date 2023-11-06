@@ -56,7 +56,7 @@ export default function ({
       login(values)
         .unwrap()
         .then((response) => {
-          navigation.navigate("Test");
+          navigation.navigate("Test"); //! Change to Home Page after testing
           formik.resetForm();
           Toast.show({
             type: "success",

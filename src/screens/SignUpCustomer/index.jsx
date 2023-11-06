@@ -234,7 +234,7 @@ export default function () {
           <LoadingScreen />
         </View>
       ) : isError ? (
-        <Text>Error occurred while fetching data.</Text>
+        <>{formik.resetForm()}</>
       ) : (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <SafeAreaView
@@ -481,9 +481,7 @@ export default function () {
                                 ? "flex-col"
                                 : "flex-row gap-x-2"
                             } ${
-                              !formik.isValid
-                                ? "opacity-50"
-                                : "opacity-100"
+                              !formik.isValid ? "opacity-50" : "opacity-100"
                             }`}
                           >
                             <Text
