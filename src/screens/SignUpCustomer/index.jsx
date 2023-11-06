@@ -51,7 +51,7 @@ export default function () {
       roles: "Online Customer",
       contact_number: "",
       description: "",
-      allergies: "",
+      allergy: "",
       product_preference: "",
     },
     validationSchema: createCustomerValidation,
@@ -75,7 +75,7 @@ export default function () {
       formData.append("name", values.name);
       formData.append("contact_number", values.contact_number);
       formData.append("description", values.description);
-      formData.append("allergies", values.allergies);
+      formData.append("allergy", values.allergy);
       formData.append("product_preference", values.product_preference);
 
       try {
@@ -433,17 +433,17 @@ export default function () {
                       className={`border-b ${
                         isDimensionLayout ? "mb-4" : "mb-3"
                       } ${borderColor}`}
-                      placeholder="Tells us about your allergies"
+                      placeholder="Tells us about your allergy"
                       placeholderTextColor={textColor}
                       autoCapitalize="none"
                       handleTextInputFocus={handleTextInputFocus}
-                      onChangeText={formik.handleChange("allergies")}
-                      onBlur={formik.handleBlur("allergies")}
-                      value={formik.values.allergies}
+                      onChangeText={formik.handleChange("allergy")}
+                      onBlur={formik.handleBlur("allergy")}
+                      value={formik.values.allergy}
                     />
-                    {formik.touched.allergies && formik.errors.allergies && (
+                    {formik.touched.allergy && formik.errors.allergy && (
                       <Text style={{ color: "red" }}>
-                        {formik.errors.allergies}
+                        {formik.errors.allergy}
                       </Text>
                     )}
                     <TextInput
