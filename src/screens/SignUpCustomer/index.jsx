@@ -35,7 +35,7 @@ export default function () {
   const borderColor =
     colorScheme === "dark" ? "border-neutral-light" : "border-neutral-dark";
   const [selectedImages, setSelectedImages] = useState([]);
-  const [addUser, { isLoading, isError }] = useAddUserMutation();
+  const [addUser, { isLoading }] = useAddUserMutation();
 
   const scroll = isDimensionLayout ? 575 : 500;
 
@@ -74,6 +74,7 @@ export default function () {
       formData.append("password", values.password);
       formData.append("name", values.name);
       formData.append("contact_number", values.contact_number);
+      formData.append("roles", values.roles);
       formData.append("description", values.description);
       formData.append("allergy", values.allergy);
       formData.append("product_preference", values.product_preference);
@@ -233,8 +234,6 @@ export default function () {
         >
           <LoadingScreen />
         </View>
-      ) : isError ? (
-        <>{formik.resetForm()}</>
       ) : (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <SafeAreaView
