@@ -1,15 +1,7 @@
-import {
-  createSlice
-} from "@reduxjs/toolkit";
-import {
-  api
-} from "../api/reducer";
-import {
-  initialState
-} from "./state";
-import {
-  TAGS
-} from "../../constants";
+import { createSlice } from "@reduxjs/toolkit";
+import { api } from "../api/reducer";
+import { initialState } from "./state";
+import { TAGS } from "../../constants";
 
 export const authSlice = createSlice({
   name: TAGS.AUTH,
@@ -17,7 +9,7 @@ export const authSlice = createSlice({
   reducers: {
     logout(state) {
       state.token = "";
-      state.user = {};
+      state.user = null;
       state.authenticated = false;
       state.loggedInUserId = null;
     },
@@ -25,9 +17,7 @@ export const authSlice = createSlice({
   extraReducers: (builder) => {
     builder.addMatcher(
       api.endpoints.login.matchFulfilled,
-      (state, {
-        payload
-      }) => {
+      (state, { payload }) => {
         if (payload?.success === true) {
           state.token = payload?.details?.accessToken;
           state.user = payload?.details?.user;
@@ -39,7 +29,5 @@ export const authSlice = createSlice({
   },
 });
 
-export const {
-  logout
-} = authSlice.actions;
+export const { logout } = authSlice.actions;
 export default authSlice.reducer;
