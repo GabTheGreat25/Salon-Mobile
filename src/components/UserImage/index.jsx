@@ -22,7 +22,7 @@ export default function ({ viewWidth, imageSource, imageName, imageRole }) {
             style={{
               color: textColor,
             }}
-            className="mt-2 text-2xl font-bold"
+            className="my-2 text-2xl font-bold"
           >
             {imageName}
           </Text>
@@ -30,7 +30,7 @@ export default function ({ viewWidth, imageSource, imageName, imageRole }) {
             style={{
               color: textColor,
             }}
-            className="mb-2 text-sm"
+            className="mb-2 text-lg font-semibold"
           >
             {imageRole}
           </Text>
