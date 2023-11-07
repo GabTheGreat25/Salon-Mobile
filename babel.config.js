@@ -17,7 +17,7 @@ module.exports = function (api) {
             "@screens": "./src/screens",
             "@helpers": "./src/helpers",
             "@constants": "./src/constants",
-            "@routes": "./src/routes",
+            "@drawer": "./src/drawer",
             "@env": "./src/env",
             "@constants": "./src/constants",
           },
