@@ -131,7 +131,7 @@ export default function () {
           title: "EditEmployeeProfile",
           drawerIcon: () => (
             <Feather
-              name="home"
+              name="edit"
               size={RESOURCE.NUMBER.THIRTY}
               color={textColor}
             />
