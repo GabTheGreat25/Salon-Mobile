@@ -11,6 +11,12 @@ import Test from "./Test";
 import TestGetById from "./Test/TestGetById";
 import CreateTest from "./Test/CreateTest";
 import EditTest from "./Test/EditTest";
+import AdminDashboard from "./AdminDashboard";
+import CustomerDashboard from "./CustomerDashboard";
+import EmployeeDashboard from "./EmployeeDashboard";
+import EditAdminProfile from "./EditAdminProfile";
+import EditCustomerProfile from "./EditCustomerProfile";
+import EditEmployeeProfile from "./EditEmployeeProfile";
 
 export {
   Home,
@@ -26,4 +32,10 @@ export {
   TestGetById,
   CreateTest,
   EditTest,
+  AdminDashboard,
+  CustomerDashboard,
+  EmployeeDashboard,
+  EditAdminProfile,
+  EditCustomerProfile,
+  EditEmployeeProfile,
 };
