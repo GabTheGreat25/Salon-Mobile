@@ -21,7 +21,7 @@ import {
 import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
 import { DarkMode } from "@helpers";
-import { Drawer } from "@routes";
+import { AdminDrawer, EmployeeDrawer, CustomerDrawer } from "@drawer";
 
 const Stack = createStackNavigator();
 
@@ -52,42 +52,35 @@ export default function () {
           <StatusBar barStyle={barStyle} backgroundColor={backgroundColor} />
           <NavigationContainer>
             {authenticated ? (
-              userRoles.includes("Customer") ? (
+              userRoles.includes("Online Customer") ? (
                 <Stack.Navigator
-                  initialRouteName="Test"
+                  initialRouteName="CustomerDrawer"
                   screenOptions={{
                     headerShown: false,
                   }}
                 >
-                <Stack.Screen name="Test" component={Test} />
-                <Stack.Screen name="TestGetById" component={TestGetById} />
-                <Stack.Screen name="CreateTest" component={CreateTest} />
-                <Stack.Screen name="EditTest" component={EditTest} />
+                <Stack.Screen name="CustomerDrawer" component={CustomerDrawer} />
                 </Stack.Navigator>
               ) : userRoles.includes("Employee") ? (
                 <Stack.Navigator
-                  initialRouteName="Test"
+                  initialRouteName="EmployeeDrawer"
                   screenOptions={{
                     headerShown: false,
                   }}
                 >
-                <Stack.Screen name="Test" component={Test} />
-                <Stack.Screen name="TestGetById" component={TestGetById} />
-                <Stack.Screen name="CreateTest" component={CreateTest} />
-                <Stack.Screen name="EditTest" component={EditTest} />
+                <Stack.Screen name="EmployeeDrawer" component={EmployeeDrawer} />
+                </Stack.Navigator>
+              ) :  userRoles.includes("Admin") ? (
+                <Stack.Navigator
+                  initialRouteName="AdminDrawer"
+                  screenOptions={{
+                    headerShown: false,
+                  }}
+                >
+                <Stack.Screen name="AdminDrawer" component={AdminDrawer} />
                 </Stack.Navigator>
               ) : (
-                <Stack.Navigator
-                  initialRouteName="Test"
-                  screenOptions={{
-                    headerShown: false,
-                  }}
-                >
-                <Stack.Screen name="Test" component={Test} />
-                <Stack.Screen name="TestGetById" component={TestGetById} />
-                <Stack.Screen name="CreateTest" component={CreateTest} />
-                <Stack.Screen name="EditTest" component={EditTest} />
-                </Stack.Navigator>
+              null
               )
             ) : (
               <Stack.Navigator
@@ -96,7 +89,6 @@ export default function () {
                   headerShown: false,
                 }}
               >
-                {/* <Stack.Screen name="Drawer" component={Drawer} /> */}
                 <Stack.Screen name="Home" component={Home} />
                 <Stack.Screen name="LoginUser" component={LoginUser} />
                 <Stack.Screen name="SignUpCustomer" component={SignUpCustomer} />
