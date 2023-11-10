@@ -36,6 +36,7 @@ export const api = createApi({
     updateUser: UserAPI.updateById(builder),
     deleteUser: UserAPI.deleteById(builder),
     confirmUser: UserAPI.confirmUser(builder),
+    updateUserPassword: UserAPI.updatePasswordById(builder),
   }),
 });
 
@@ -53,4 +54,5 @@ export const {
   useUpdateUserMutation,
   useDeleteUserMutation,
   useConfirmUserMutation,
+  useUpdateUserPasswordMutation,
 } = api;
