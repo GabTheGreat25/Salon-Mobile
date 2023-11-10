@@ -26,7 +26,7 @@ import { Feather } from "@expo/vector-icons";
 
 export default function () {
   const auth = useSelector((state) => state.auth);
-  console.log(auth);
+
   const navigation = useNavigation();
 
   const [updateUser, { isLoading }] = useUpdateUserMutation();
@@ -41,6 +41,10 @@ export default function () {
 
   const [keyboardOpen, setKeyboardOpen] = useState(false);
   const [scrollViewHeight, setScrollViewHeight] = useState(scroll);
+
+  const handleUpdatePassword = () => {
+    navigation.navigate("UpdateUserPassword");
+  };
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -409,7 +413,7 @@ export default function () {
                         </View>
                       </TouchableOpacity>
                       <TouchableOpacity
-                        // onPress={handleLogout}
+                        onPress={handleUpdatePassword}
                         className={`border border-solid mb-2 rounded-lg ${
                           isDimensionLayout ? "mx-10 mt-12" : "mx-20 mt-6"
                         }`}
