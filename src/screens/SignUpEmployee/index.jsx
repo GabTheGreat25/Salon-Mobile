@@ -55,7 +55,7 @@ export default function () {
       job: "",
     },
     validationSchema: createEmployeeValidation,
-    onSubmit: async (values) => {
+    onSubmit: (values) => {
       const formData = new FormData();
 
       if (selectedImages.length > 0) {
@@ -89,28 +89,32 @@ export default function () {
       formData.append("contact_number", values.contact_number);
       formData.append("job", values.job);
 
-      try {
-        const response = await addUser(formData).unwrap();
-        navigation.navigate("Home");
-        formik.resetForm();
-        Toast.show({
-          type: "success",
-          position: "top",
-          text1: "Employee Successfully Created",
-          text2: `${response?.message}`,
-          visibilityTime: 3000,
-          autoHide: true,
+      addUser(formData)
+        .unwrap()
+        .then((response) => {
+          setSelectedImages([]);
+          setSelectedDocs([]);
+          navigation.navigate("Home");
+          formik.resetForm();
+          Toast.show({
+            type: "success",
+            position: "top",
+            text1: "Employee Successfully Created",
+            text2: `${response?.message}`,
+            visibilityTime: 3000,
+            autoHide: true,
+          });
+        })
+        .catch((error) => {
+          Toast.show({
+            type: "error",
+            position: "top",
+            text1: "Error Creating Employee",
+            text2: `${error?.data?.error?.message}`,
+            visibilityTime: 3000,
+            autoHide: true,
+          });
         });
-      } catch (error) {
-        Toast.show({
-          type: "error",
-          position: "top",
-          text1: "Error Creating Employee",
-          text2: `${error?.data?.error?.message}`,
-          visibilityTime: 3000,
-          autoHide: true,
-        });
-      }
     },
   });
 

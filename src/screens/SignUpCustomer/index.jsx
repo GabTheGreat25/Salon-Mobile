@@ -55,7 +55,7 @@ export default function () {
       product_preference: "",
     },
     validationSchema: createCustomerValidation,
-    onSubmit: async (values) => {
+    onSubmit: (values) => {
       const formData = new FormData();
 
       if (selectedImages.length > 0) {
@@ -79,28 +79,31 @@ export default function () {
       formData.append("allergy", values.allergy);
       formData.append("product_preference", values.product_preference);
 
-      try {
-        const response = await addUser(formData).unwrap();
-        navigation.navigate("LoginUser");
-        formik.resetForm();
-        Toast.show({
-          type: "success",
-          position: "top",
-          text1: "Customer Successfully Created",
-          text2: `${response?.message}`,
-          visibilityTime: 3000,
-          autoHide: true,
+      addUser(formData)
+        .unwrap()
+        .then((response) => {
+          navigation.navigate("LoginUser");
+          setSelectedImages([]);
+          formik.resetForm();
+          Toast.show({
+            type: "success",
+            position: "top",
+            text1: "Customer Successfully Created",
+            text2: `${response?.message}`,
+            visibilityTime: 3000,
+            autoHide: true,
+          });
+        })
+        .catch((error) => {
+          Toast.show({
+            type: "error",
+            position: "top",
+            text1: "Error Creating Customer",
+            text2: `${error?.data?.error?.message}`,
+            visibilityTime: 3000,
+            autoHide: true,
+          });
         });
-      } catch (error) {
-        Toast.show({
-          type: "error",
-          position: "top",
-          text1: "Error Creating Customer",
-          text2: `${error?.data?.error?.message}`,
-          visibilityTime: 3000,
-          autoHide: true,
-        });
-      }
     },
   });
 
