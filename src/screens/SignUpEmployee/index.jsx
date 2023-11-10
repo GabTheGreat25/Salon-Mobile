@@ -337,6 +337,8 @@ export default function () {
                     contentContainerStyle={{ height: scrollViewHeight }}
                     showsVerticalScrollIndicator={scrollViewHeight > 550}
                     scrollEnabled={scrollViewHeight > 550}
+                    decelerationRate="fast"
+                    scrollEventThrottle={1}
                   >
                     <TextInput
                       style={{ color: textColor }}
