@@ -73,6 +73,28 @@ export const confirmUser = (builder) => {
     });
 };
 
+export const updatePasswordById = (builder) => {
+    return builder.mutation({
+        query: ({
+            id,
+            oldPassword,
+            newPassword,
+            confirmPassword
+        }) => {
+            return {
+                url: `${ROUTE.UPDATE_PASSWORD_ROUTE.replace(":id", id)}`,
+                method: API.PATCH,
+                body: {
+                    oldPassword,
+                    newPassword,
+                    confirmPassword
+                },
+            };
+        },
+        invalidatesTags: [TAGS.USERS],
+    });
+};
+
 export default {
     get,
     getById,
@@ -80,4 +102,5 @@ export default {
     updateById,
     deleteById,
     confirmUser,
+    updatePasswordById,
 };
