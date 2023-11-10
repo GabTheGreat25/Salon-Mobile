@@ -7,11 +7,11 @@ export default function ({ name, color, toggle }) {
   return (
     <>
       <TouchableOpacity
-        className="absolute z-[1000] right-5 top-5"
+        className="absolute z-[1000] right-5 top-4"
         onPress={toggle}
       >
         <Text selectable={false}>
-          <Feather name={name} size={RESOURCE.NUMBER.FORTY} color={color} />
+          <Feather name={name} size={25} color={color} />
         </Text>
       </TouchableOpacity>
     </>
