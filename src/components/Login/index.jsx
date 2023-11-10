@@ -68,7 +68,7 @@ export default function ({
             type: "error",
             position: "top",
             text1: "Error Logging In",
-            text2: `${error?.message}`,
+            text2: `${error?.data?.error?.message}`,
             visibilityTime: 3000,
             autoHide: true,
           });
