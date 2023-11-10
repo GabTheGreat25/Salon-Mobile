@@ -13,10 +13,7 @@ import {
   SignUpEmployee,
   ForgetPassword,
   LoginUser,
-  Test,
-  TestGetById,
-  CreateTest,
-  EditTest,
+  UpdateUserPassword,
 } from "@screens";
 import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
@@ -45,7 +42,7 @@ export default function () {
     <>
       {isLoading ? (
         <>
-          {/* <LoadingScreen /> */}
+          <LoadingScreen />
         </>
       ) : (
         <>
@@ -60,6 +57,7 @@ export default function () {
                   }}
                 >
                 <Stack.Screen name="CustomerDrawer" component={CustomerDrawer} />
+                <Stack.Screen name="UpdateUserPassword" component={UpdateUserPassword} />
                 </Stack.Navigator>
               ) : userRoles.includes("Employee") ? (
                 <Stack.Navigator
@@ -69,6 +67,7 @@ export default function () {
                   }}
                 >
                 <Stack.Screen name="EmployeeDrawer" component={EmployeeDrawer} />
+                <Stack.Screen name="UpdateUserPassword" component={UpdateUserPassword} />
                 </Stack.Navigator>
               ) :  userRoles.includes("Admin") ? (
                 <Stack.Navigator
@@ -78,6 +77,7 @@ export default function () {
                   }}
                 >
                 <Stack.Screen name="AdminDrawer" component={AdminDrawer} />
+                <Stack.Screen name="UpdateUserPassword" component={UpdateUserPassword} />
                 </Stack.Navigator>
               ) : (
               null
