@@ -4,7 +4,7 @@ import { Colors } from "../colors";
 export default function () {
   const { colorScheme, toggleColorScheme } = useColorScheme();
 
-  const { backgroundColor, textColor } = Colors[colorScheme];
+  const { backgroundColor, textColor, shadowColor } = Colors[colorScheme];
 
-  return { backgroundColor, textColor, colorScheme, toggleColorScheme };
+  return { backgroundColor, textColor, colorScheme, toggleColorScheme, shadowColor };
 }
