@@ -1,7 +1,8 @@
 {
   "expo": {
-    "name": "Mobile",
-    "slug": "Mobile",
+    "name": "Lhanlee Salon",
+    "slug": "lhanlee-salon",
+    "description": "Lhanlee Salon Your One Stop Beauty Shop in Taguig City",
     "version": "1.0.0",
     "orientation": "default",
     "icon": "./assets/icon.png",
@@ -9,7 +10,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#FDA7DF"
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
@@ -18,7 +19,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#FDA7DF"
       }
     },
     "web": {
