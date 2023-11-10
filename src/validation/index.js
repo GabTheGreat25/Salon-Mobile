@@ -4,6 +4,7 @@ import loginUserValidation from './loginUser'
 import createCustomerValidation from './createCustomer'
 import createEmployeeValidation from './createEmployee'
 import editUserInformationValidation from './editUserInformation'
+import updatePasswordValidation from './updatePassword'
 
 export {
   createTestValidation,
@@ -12,4 +13,5 @@ export {
   createCustomerValidation,
   createEmployeeValidation,
   editUserInformationValidation,
+  updatePasswordValidation,
 }
