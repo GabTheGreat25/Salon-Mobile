@@ -18,19 +18,16 @@ import salonLogoWhite from "@assets/salon-logo-white.png";
 import { useLoginMutation } from "../../state/api/reducer";
 import { loginUserValidation } from "../../validation";
 import { useFormik } from "formik";
-import { useNavigation } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
 import { Feather } from "@expo/vector-icons";
 
 export default function ({
   title,
   description,
-  socialMediaIcons,
   navigateBack,
   buttonTitle,
   linkNavigateTo,
   linkTitle,
-  divider,
   showComponent,
   footerTitle,
   footerLink,
@@ -45,7 +42,7 @@ export default function ({
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
 
   const [login] = useLoginMutation();
-  const navigation = useNavigation();
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -71,7 +68,7 @@ export default function ({
             type: "error",
             position: "top",
             text1: "Error Logging In",
-            text2: `${error?.data?.error?.message}`,
+            text2: `${error?.message}`,
             visibilityTime: 3000,
             autoHide: true,
           });
@@ -243,27 +240,13 @@ export default function ({
             </View>
             {showComponent && (
               <View className={`justify-center items-center`}>
-                <Text
-                  className={`${dimensionLayout ? "my-3" : "mt-0 mb-2"}`}
-                  style={{ color: textColor }}
-                >
-                  {divider}
-                </Text>
                 <View
                   className={`flex-row justify-center ${
                     dimensionLayout ? "gap-x-5" : "gap-x-6"
                   }`}
                 >
-                  {socialMediaIcons.map((icon) => (
-                    <TouchableOpacity key={icon.key}>
-                      <Image
-                        sclassName={`w-[40px] h-[40px]`}
-                        source={icon.source}
-                      />
-                    </TouchableOpacity>
-                  ))}
                 </View>
-                <View className={`my-2 gap-x-3 flex-row`}>
+                <View className={`mb-4 mt-16 gap-x-3 flex-row`}>
                   <Text style={{ color: textColor }} className={`text-base`}>
                     {footerTitle}
                   </Text>
