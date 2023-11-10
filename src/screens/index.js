@@ -17,6 +17,7 @@ import EmployeeDashboard from "./EmployeeDashboard";
 import EditAdminProfile from "./EditAdminProfile";
 import EditCustomerProfile from "./EditCustomerProfile";
 import EditEmployeeProfile from "./EditEmployeeProfile";
+import UpdateUserPassword from "./UpdateUserPassword";
 
 export {
   Home,
@@ -38,4 +39,5 @@ export {
   EditAdminProfile,
   EditCustomerProfile,
   EditEmployeeProfile,
+  UpdateUserPassword,
 };
