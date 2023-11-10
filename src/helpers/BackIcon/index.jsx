@@ -6,11 +6,11 @@ import { RESOURCE } from "@constants";
 export default function ({ navigateBack, textColor }) {
   return (
     <>
-      <View className={`absolute top-4 z-[1000]`}>
+      <View className={`absolute top-3 z-[1000]`}>
         <TouchableOpacity onPress={navigateBack}>
           <Feather
             name="chevron-left"
-            size={RESOURCE.NUMBER.FIFTY}
+            size={35}
             color={textColor}
           />
         </TouchableOpacity>
