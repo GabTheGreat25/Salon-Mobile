@@ -16,7 +16,7 @@ export default function ({ viewWidth, imageSource, imageName, imageRole }) {
         >
           <Image
             source={imageSource}
-            className="w-[150px] rounded-full h-[150px]"
+            className="w-[200px] rounded-full h-[200px]"
           />
           <Text
             style={{
