@@ -11,6 +11,7 @@ export default {
     USER_ID_ROUTE: "/user/:id",
     EDIT_USER_ID_ROUTE: "/user/edit/:id",
     ACTIVATE_USER_ID_ROUTE: "/user/activate/:id",
+    UPDATE_PASSWORD_ROUTE: "updatePassword/:id",
     SERVICE_ROUTE: "/service",
     SERVICE_ID_ROUTE: "/service/:id",
     EDIT_SERVICE_ID_ROUTE: "/service/edit/:id",
