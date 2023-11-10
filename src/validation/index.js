@@ -3,6 +3,7 @@ import editTestValidation from './editTest'
 import loginUserValidation from './loginUser'
 import createCustomerValidation from './createCustomer'
 import createEmployeeValidation from './createEmployee'
+import editUserInformationValidation from './editUserInformation'
 
 export {
   createTestValidation,
@@ -10,4 +11,5 @@ export {
   loginUserValidation,
   createCustomerValidation,
   createEmployeeValidation,
+  editUserInformationValidation,
 }
