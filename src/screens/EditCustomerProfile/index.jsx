@@ -241,7 +241,12 @@ export default function () {
               }`}
             >
               <Image
-                source={{ uri: auth?.user?.image[0]?.url }}
+                source={{
+                  uri: auth?.user?.image[0]?.url,
+                  headers: {
+                    Accept: "*/*",
+                  },
+                }}
                 className={`rounded-full ${
                   isDimensionLayout
                     ? "w-[45%] h-[50%]"
@@ -457,23 +462,21 @@ export default function () {
                         </Text>
                       )}
                     </View>
-                    <View
-                      className={`flex-col`}
-                    >
+                    <View className={`flex-col`}>
                       <TouchableOpacity
                         onPress={formik.handleSubmit}
                         disabled={!formik.isValid}
                       >
-                        <View className={`mb-2 ${
-                              isDimensionLayout
-                                ? "w-full"
-                                : "flex justify-center items-center"
-                            }`}>
+                        <View
+                          className={`mb-2 ${
+                            isDimensionLayout
+                              ? "w-full"
+                              : "flex justify-center items-center"
+                          }`}
+                        >
                           <View
                             className={`py-2 rounded-lg bg-primary-accent ${
-                              isDimensionLayout
-                                ? "mx-20"
-                                : "w-[175px] mx-0"
+                              isDimensionLayout ? "mx-20" : "w-[175px] mx-0"
                             } ${
                               !formik.isValid ? "opacity-50" : "opacity-100"
                             }`}

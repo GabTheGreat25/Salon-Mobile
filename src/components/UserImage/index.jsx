@@ -16,6 +16,9 @@ export default function ({ viewWidth, imageSource, imageName, imageRole }) {
         >
           <Image
             source={imageSource}
+            headers={{
+              Accept: "*/*",
+            }}
             className="w-[200px] rounded-full h-[200px]"
           />
           <Text
