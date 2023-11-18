@@ -281,7 +281,7 @@ export default function () {
                     )}
 
                   <View
-                    className={`items-center justify-center ${
+                    className={`mt-4 items-center justify-center ${
                       isDimensionLayout ? "flex-col" : "flex-row gap-x-2"
                     }`}
                   >
