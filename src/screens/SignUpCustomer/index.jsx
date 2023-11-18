@@ -290,9 +290,7 @@ export default function () {
                   >
                     <TextInput
                       style={{ color: textColor }}
-                      className={`border-b ${
-                        isDimensionLayout ? "mb-4" : "mb-3"
-                      } ${borderColor}`}
+                      className={`border-b mb-3 ${borderColor}`}
                       placeholder="Enter your name"
                       placeholderTextColor={textColor}
                       autoCapitalize="none"
@@ -306,9 +304,7 @@ export default function () {
                     )}
                     <TextInput
                       style={{ color: textColor }}
-                      className={`border-b ${
-                        isDimensionLayout ? "mb-4" : "mb-3"
-                      } ${borderColor}`}
+                      className={`border-b mb-3 ${borderColor}`}
                       placeholder="Enter your email"
                       placeholderTextColor={textColor}
                       autoCapitalize="none"
@@ -415,9 +411,7 @@ export default function () {
                     </View>
                     <TextInput
                       style={{ color: textColor }}
-                      className={`border-b ${
-                        isDimensionLayout ? "mb-4" : "mb-3"
-                      } ${borderColor}`}
+                      className={`border-b mb-3 ${borderColor}`}
                       placeholder="Tells us about yourself"
                       placeholderTextColor={textColor}
                       autoCapitalize="none"
@@ -434,9 +428,7 @@ export default function () {
                       )}
                     <TextInput
                       style={{ color: textColor }}
-                      className={`border-b ${
-                        isDimensionLayout ? "mb-4" : "mb-3"
-                      } ${borderColor}`}
+                      className={`border-b mb-3 ${borderColor}`}
                       placeholder="Tells us about your allergy"
                       placeholderTextColor={textColor}
                       autoCapitalize="none"
@@ -452,9 +444,7 @@ export default function () {
                     )}
                     <TextInput
                       style={{ color: textColor }}
-                      className={`border-b ${
-                        isDimensionLayout ? "mb-4" : "mb-3"
-                      } ${borderColor}`}
+                      className={`border-b mb-3 ${borderColor}`}
                       placeholder="Tells us about your product preference"
                       placeholderTextColor={textColor}
                       autoCapitalize="none"
