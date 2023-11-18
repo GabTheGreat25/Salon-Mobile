@@ -174,6 +174,10 @@ export default function () {
     }
   };
 
+  const handleUpdatePassword = () => {
+    navigation.navigate("UpdateUserPassword");
+  };
+
   const selectImages = async () => {
     let results = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -491,7 +495,7 @@ export default function () {
                         </View>
                       </TouchableOpacity>
                       <TouchableOpacity
-                        // onPress={handleLogout}
+                        onPress={handleUpdatePassword}
                         className={`border border-solid mb-2 rounded-lg ${
                           isDimensionLayout ? "mx-10 mt-12" : "mx-20 mt-6"
                         }`}
