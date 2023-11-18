@@ -27,6 +27,7 @@ import * as ImagePicker from "expo-image-picker";
 import { createEmployeeValidation } from "../../validation";
 import Toast from "react-native-toast-message";
 import { Picker } from "@react-native-picker/picker";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 export default function () {
   const navigation = useNavigation();
@@ -36,14 +37,18 @@ export default function () {
   const borderColor =
     colorScheme === "dark" ? "border-neutral-light" : "border-neutral-dark";
   const [selectedImages, setSelectedImages] = useState([]);
-  const [selectedDocs, setSelectedDocs] = useState([]);
   const [addUser, { isLoading }] = useAddUserMutation();
 
-  const scroll = isDimensionLayout ? 575 : 500;
+  const scroll = isDimensionLayout ? 625 : 600;
 
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
   const [keyboardOpen, setKeyboardOpen] = useState(false);
   const [scrollViewHeight, setScrollViewHeight] = useState(scroll);
+
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showTimePicker, setShowTimePicker] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedTime, setSelectedTime] = useState(new Date());
 
   const formik = useFormik({
     initialValues: {
@@ -53,6 +58,8 @@ export default function () {
       roles: "Employee",
       contact_number: "",
       job: "",
+      date: "",
+      time: "",
     },
     validationSchema: createEmployeeValidation,
     onSubmit: (values) => {
@@ -70,30 +77,19 @@ export default function () {
           });
         });
       }
-      if (selectedDocs.length > 0) {
-        selectedDocs.forEach((docs, index) => {
-          const docsName = docs.uri.split("/").pop();
-          const docsType = "image/" + docsName.split(".").pop();
-
-          formData.append("image", {
-            uri: docs.uri,
-            name: docsName,
-            type: docsType,
-          });
-        });
-      }
       formData.append("email", values.email);
       formData.append("password", values.password);
       formData.append("roles", values.roles);
       formData.append("name", values.name);
       formData.append("contact_number", values.contact_number);
       formData.append("job", values.job);
+      formData.append("date", values.date);
+      formData.append("time", values.time);
 
       addUser(formData)
         .unwrap()
         .then((response) => {
           setSelectedImages([]);
-          setSelectedDocs([]);
           navigation.navigate("Home");
           formik.resetForm();
           Toast.show({
@@ -123,7 +119,7 @@ export default function () {
   };
 
   const handleTextInputFocus = () => {
-    setScrollViewHeight(keyboardOpen ? 650 : scroll);
+    setScrollViewHeight(keyboardOpen ? 700 : scroll);
   };
 
   useEffect(() => {
@@ -139,7 +135,7 @@ export default function () {
       "keyboardDidShow",
       () => {
         setKeyboardOpen(true);
-        setScrollViewHeight(650);
+        setScrollViewHeight(700);
       }
     );
     const keyboardDidHideListener = Keyboard.addListener(
@@ -240,48 +236,45 @@ export default function () {
     }
   };
 
-  const selectDocs = async () => {
-    let results = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      aspect: [3, 2],
-      quality: 1,
-      allowsMultipleSelection: true,
-    });
+  const showDatepicker = () => {
+    setShowDatePicker(true);
+    Keyboard.dismiss();
+  };
 
-    if (!results.canceled) {
-      const selectedAssets = results.assets;
+  const showTimepicker = () => {
+    setShowTimePicker(true);
+    Keyboard.dismiss();
+  };
 
-      const manipulatorOptions = {
-        compress: 0.5,
-        format: ImageManipulator.SaveFormat.JPEG,
-      };
+  const handleDateChange = (event, date) => {
+    setShowDatePicker(false);
+    if (event.type === "dismissed") {
+      return;
+    }
 
-      const newDocs = [];
+    if (date) {
+      const updatedDate = new Date(date);
+      updatedDate.setDate(date.getDate());
 
-      for (const selectedAsset of selectedAssets) {
-        try {
-          const manipulatedDoc = await ImageManipulator.manipulateAsync(
-            selectedAsset.uri,
-            [],
-            manipulatorOptions
-          );
+      setSelectedDate(updatedDate);
+      formik.setFieldValue("date", updatedDate.toISOString().split("T")[0]);
+    }
+  };
 
-          if (manipulatedDoc) {
-            newDocs.push(manipulatedDoc);
-          }
-        } catch (error) {
-          Toast.show({
-            type: "error",
-            position: "top",
-            text1: "Error Adding Docs",
-            text2: `${error}`,
-            visibilityTime: 3000,
-            autoHide: true,
-          });
-        }
-      }
+  const handleTimeChange = (event, time) => {
+    setShowTimePicker(false);
+    if (event.type === "dismissed") {
+      return;
+    }
 
-      setSelectedDocs(newDocs);
+    if (time) {
+      setSelectedTime(time);
+      const formattedTime = time.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      });
+      formik.setFieldValue("time", formattedTime);
     }
   };
 
@@ -339,16 +332,14 @@ export default function () {
                 >
                   <ScrollView
                     contentContainerStyle={{ height: scrollViewHeight }}
-                    showsVerticalScrollIndicator={scrollViewHeight > 550}
-                    scrollEnabled={scrollViewHeight > 550}
+                    showsVerticalScrollIndicator={scrollViewHeight > 600}
+                    scrollEnabled={scrollViewHeight > 600}
                     decelerationRate="fast"
                     scrollEventThrottle={1}
                   >
                     <TextInput
                       style={{ color: textColor }}
-                      className={`border-b ${
-                        isDimensionLayout ? "mb-4" : "mb-3"
-                      } ${borderColor}`}
+                      className={`border-b mb-3 ${borderColor}`}
                       placeholder="Enter your name"
                       placeholderTextColor={textColor}
                       autoCapitalize="none"
@@ -362,9 +353,7 @@ export default function () {
                     )}
                     <TextInput
                       style={{ color: textColor }}
-                      className={`border-b ${
-                        isDimensionLayout ? "mb-4" : "mb-3"
-                      } ${borderColor}`}
+                      className={`border-b mb-3 ${borderColor}`}
                       placeholder="Enter your email"
                       placeholderTextColor={textColor}
                       autoCapitalize="none"
@@ -491,38 +480,58 @@ export default function () {
                     )}
                     <Text
                       style={{ color: textColor }}
-                      className={`${borderColor} font-semibold text-base`}
+                      className={`${borderColor} mt-3 font-semibold text-sm text-center`}
                     >
-                      Add Your Documents (Image Only)
+                      Choose What Date and Time You Are Available For Interview
                     </Text>
-                    <View className={`flex-row gap-x-2 mt-1 mb-5`}>
-                      <TouchableOpacity onPress={selectDocs}>
-                        <Text
-                          style={{ color: textColor }}
-                          className={`${borderColor}`}
-                        >
-                          Select Docs
-                        </Text>
-                      </TouchableOpacity>
-                      {selectedDocs?.length > 0 ? (
-                        <Text
-                          style={{ color: textColor }}
-                          className={`${borderColor}`}
-                        >
-                          Add {selectedDocs.length} document
-                          {selectedDocs.length > 1 ? "s" : ""}
-                        </Text>
-                      ) : (
-                        <Text
-                          style={{ color: textColor }}
-                          className={`${borderColor}`}
-                        >
-                          No Document
-                        </Text>
-                      )}
-                    </View>
+                    <TextInput
+                      style={{ color: textColor }}
+                      className={`border-b mb-3 ${borderColor}`}
+                      placeholder="Enter date"
+                      placeholderTextColor={textColor}
+                      onFocus={showDatepicker}
+                      value={formik.values.date}
+                    />
+                    {showDatePicker && (
+                      <DateTimePicker
+                        value={selectedDate}
+                        mode="date"
+                        is24Hour={true}
+                        display="default"
+                        onChange={handleDateChange}
+                      />
+                    )}
+                    {formik.touched.date && formik.errors.date && (
+                      <Text style={{ color: "red" }}>{formik.errors.date}</Text>
+                    )}
+                    <TextInput
+                      style={{ color: textColor }}
+                      className={`border-b mb-3 ${borderColor}`}
+                      placeholder="Enter time"
+                      placeholderTextColor={textColor}
+                      onFocus={showTimepicker}
+                      value={formik.values.time}
+                    />
+                    {showTimePicker && (
+                      <DateTimePicker
+                        value={selectedTime}
+                        mode="time"
+                        is24Hour={false}
+                        display="default"
+                        onChange={(event, time) => {
+                          handleTimeChange(event, time);
+                          formik.validateForm().then(() => {
+                            formik.setFieldTouched("time", true);
+                          });
+                        }}
+                      />
+                    )}
+                    {formik.touched.time && formik.errors.time && (
+                      <Text style={{ color: "red" }}>{formik.errors.time}</Text>
+                    )}
+
                     <View
-                      className={`items-center justify-start ${
+                      className={`mt-4 items-center justify-start ${
                         isDimensionLayout ? "flex-col" : "flex-row gap-x-2"
                       }`}
                     >
