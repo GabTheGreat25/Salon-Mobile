@@ -6,6 +6,7 @@ import {
   Alert,
   TouchableOpacity,
   ScrollView,
+  Dimensions,
 } from "react-native";
 import {
   useGetUsersQuery,
@@ -18,9 +19,12 @@ import Toast from "react-native-toast-message";
 import { format } from "date-fns";
 import { DataTable } from "react-native-paper";
 import { Feather } from "@expo/vector-icons";
-import { dimensionLayout, changeColor } from "@utils";
+import { changeColor } from "@utils";
 
 export default function () {
+  const { width: deviceWidth } = Dimensions.get("window");
+  const customWidth = 0.25 * deviceWidth;
+
   const { data, isLoading } = useGetUsersQuery();
   const auth = useSelector((state) => state.auth);
   const { backgroundColor, textColor, colorScheme } = changeColor();
@@ -132,7 +136,7 @@ export default function () {
                         justifyContent: "center",
                         alignItems: "center",
                         padding: 10,
-                        width: 150,
+                        width: customWidth,
                       }}
                     >
                       <Text style={{ color: textColor }}>Name</Text>
@@ -142,7 +146,7 @@ export default function () {
                         justifyContent: "center",
                         alignItems: "center",
                         padding: 10,
-                        width: 150,
+                        width: customWidth,
                       }}
                     >
                       <Text style={{ color: textColor }}>Email</Text>
@@ -152,7 +156,7 @@ export default function () {
                         justifyContent: "center",
                         alignItems: "center",
                         padding: 10,
-                        width: 150,
+                        width: customWidth,
                       }}
                     >
                       <Text style={{ color: textColor }}>Contact Number</Text>
@@ -162,7 +166,7 @@ export default function () {
                         justifyContent: "center",
                         alignItems: "center",
                         padding: 10,
-                        width: 150,
+                        width: customWidth,
                       }}
                     >
                       <Text style={{ color: textColor }}>Date</Text>
@@ -172,7 +176,7 @@ export default function () {
                         justifyContent: "center",
                         alignItems: "center",
                         padding: 10,
-                        width: 150,
+                        width: customWidth,
                       }}
                     >
                       <Text style={{ color: textColor }}>Time</Text>
@@ -182,7 +186,7 @@ export default function () {
                         justifyContent: "center",
                         alignItems: "center",
                         padding: 10,
-                        width: 150,
+                        width: customWidth,
                       }}
                     >
                       <Text style={{ color: textColor }}>Applying Job</Text>
@@ -192,7 +196,7 @@ export default function () {
                         justifyContent: "center",
                         alignItems: "center",
                         padding: 10,
-                        width: 150,
+                        width: customWidth,
                       }}
                     >
                       <Text style={{ color: textColor }}>Images</Text>
@@ -202,7 +206,7 @@ export default function () {
                         justifyContent: "center",
                         alignItems: "center",
                         padding: 10,
-                        width: 150,
+                        width: customWidth,
                       }}
                     >
                       <Text style={{ color: textColor }}>Actions</Text>
@@ -222,7 +226,7 @@ export default function () {
                           justifyContent: "center",
                           alignItems: "center",
                           padding: 10,
-                          width: 150,
+                          width: customWidth,
                         }}
                       >
                         <Text
@@ -238,7 +242,7 @@ export default function () {
                           justifyContent: "center",
                           alignItems: "center",
                           padding: 10,
-                          width: 150,
+                          width: customWidth,
                         }}
                       >
                         <Text
@@ -254,7 +258,7 @@ export default function () {
                           justifyContent: "center",
                           alignItems: "center",
                           padding: 10,
-                          width: 150,
+                          width: customWidth,
                         }}
                       >
                         <Text
@@ -270,7 +274,7 @@ export default function () {
                           justifyContent: "center",
                           alignItems: "center",
                           padding: 10,
-                          width: 150,
+                          width: customWidth,
                         }}
                       >
                         <Text
@@ -289,7 +293,7 @@ export default function () {
                           justifyContent: "center",
                           alignItems: "center",
                           padding: 10,
-                          width: 150,
+                          width: customWidth,
                         }}
                       >
                         <Text
@@ -305,7 +309,7 @@ export default function () {
                           justifyContent: "center",
                           alignItems: "center",
                           padding: 10,
-                          width: 150,
+                          width: customWidth,
                         }}
                       >
                         <Text
@@ -335,7 +339,7 @@ export default function () {
                       </DataTable.Cell>
                       <DataTable.Cell
                         style={{
-                          width: 150,
+                          width: customWidth,
                           justifyContent: "space-around",
                           alignItems: "center",
                           padding: 10,
