@@ -61,12 +61,10 @@ export const confirmUser = (builder) => {
     return builder.mutation({
         query: ({
             id,
-            payload
         }) => {
             return {
                 url: `${ROUTE.ACTIVATE_USER_ID_ROUTE.replace(":id", id)}`,
                 method: API.PATCH,
-                body: payload,
             }
         },
         invalidatesTags: [TAGS.USERS],
