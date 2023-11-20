@@ -23,7 +23,7 @@ import { changeColor } from "@utils";
 
 export default function () {
   const { width: deviceWidth } = Dimensions.get("window");
-  const customWidth = 0.25 * deviceWidth;
+  const customWidth = 0.3 * deviceWidth;
 
   const { data, isLoading } = useGetUsersQuery();
   const auth = useSelector((state) => state.auth);
