@@ -85,6 +85,7 @@ export default function () {
             visibilityTime: 3000,
             autoHide: true,
           });
+          setSelectedImages([]);
           navigation.navigate("AdminDashboard");
         })
         .catch((error) => {

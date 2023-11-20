@@ -26,7 +26,7 @@ import { Feather } from "@expo/vector-icons";
 
 export default function () {
   const auth = useSelector((state) => state.auth);
-  console.log(auth);
+
   const navigation = useNavigation();
 
   const [updateUser, { isLoading }] = useUpdateUserMutation();
@@ -81,6 +81,7 @@ export default function () {
             visibilityTime: 3000,
             autoHide: true,
           });
+          setSelectedImages([]);
           navigation.navigate("EmployeeDashboard");
         })
         .catch((error) => {

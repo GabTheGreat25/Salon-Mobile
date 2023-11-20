@@ -86,6 +86,7 @@ export default function () {
             visibilityTime: 3000,
             autoHide: true,
           });
+          setSelectedImages([]);
           navigation.navigate("CustomerDashboard");
         })
         .catch((error) => {
