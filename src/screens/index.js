@@ -18,6 +18,7 @@ import EditAdminProfile from "./EditAdminProfile";
 import EditCustomerProfile from "./EditCustomerProfile";
 import EditEmployeeProfile from "./EditEmployeeProfile";
 import UpdateUserPassword from "./UpdateUserPassword";
+import ConfirmEmployees from "./AdminDashboard/confirmEmployees";
 
 export {
   Home,
@@ -40,4 +41,5 @@ export {
   EditCustomerProfile,
   EditEmployeeProfile,
   UpdateUserPassword,
+  ConfirmEmployees,
 };
