@@ -6,7 +6,7 @@ import {
   DrawerItemList,
   createDrawerNavigator,
 } from "@react-navigation/drawer";
-import { AdminDashboard, EditAdminProfile } from "@screens";
+import { AdminDashboard, EditAdminProfile, ConfirmEmployees } from "@screens";
 import { changeColor, dimensionLayout } from "@utils";
 import { RESOURCE } from "@constants";
 import { UserImage } from "@components";
@@ -144,6 +144,28 @@ export default function () {
           ),
         }}
         component={EditAdminProfile}
+      />
+      <Drawer.Screen
+        name="ConfirmEmployees"
+        options={{
+          drawerActiveBackgroundColor: "#F78FB3",
+          drawerActiveTintColor: textColor,
+          drawerInactiveTintColor: "#FDA7DF",
+          drawerLabel: () => (
+            <Text className={`text-xl font-base`} style={{ color: textColor }}>
+              Confirm Employees
+            </Text>
+          ),
+          title: "ConfirmEmployees",
+          drawerIcon: () => (
+            <Feather
+              name="user-check"
+              size={RESOURCE.NUMBER.THIRTY}
+              color={textColor}
+            />
+          ),
+        }}
+        component={ConfirmEmployees}
       />
     </Drawer.Navigator>
   );
