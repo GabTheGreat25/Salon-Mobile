@@ -2,13 +2,13 @@ import React from "react";
 import { View, Text, Dimensions } from "react-native";
 import { changeColor, dimensionLayout } from "@utils";
 
-export default function CustomCard(props) {
+export default function (props) {
   const isDimensionLayout = dimensionLayout();
   const { width: deviceWidth } = Dimensions.get("window");
   const { title, icon, data, id, backgroundColor } = props;
   const { textColor, shadowColor } = changeColor();
 
-  const customWidth = deviceWidth * (isDimensionLayout ? 0.55 : 0.35);
+  const customWidth = deviceWidth * (isDimensionLayout ? 0.55 : 0.275);
 
   return (
     <View
