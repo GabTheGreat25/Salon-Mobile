@@ -1,6 +1,6 @@
 import React from "react";
-import { ListData, LoadingScreen } from "@components";
-import { View, ScrollView } from "react-native";
+import { ListData, CircleCrud, LoadingScreen } from "@components";
+import { View, ScrollView, Dimensions } from "react-native";
 import { useGetUsersQuery } from "../../state/api/reducer";
 import { Feather } from "@expo/vector-icons";
 import { changeColor, dimensionLayout } from "@utils";
@@ -8,6 +8,10 @@ import ShowPendingEmployees from "./ShowPendingEmployees";
 import randomColor from "randomcolor";
 
 export default function () {
+  const { width: deviceWidth } = Dimensions.get("window");
+  const customCircleWidth = deviceWidth * 0.086;
+  const customBoxWidth = deviceWidth * 0.0525;
+
   const { data, isLoading } = useGetUsersQuery();
   const users = data?.details ?? [];
 
@@ -39,7 +43,76 @@ export default function () {
         <>
           <ScrollView className="flex-1 py-6 px-3" style={{ backgroundColor }}>
             <ScrollView horizontal>
-              <View className={`flex flex-row justify-center items-center`}>
+              <View
+                className={`flex-row items-center justify-center`}
+                style={{
+                  paddingHorizontal: isDimensionLayout ? 0 : customCircleWidth,
+                }}
+              >
+                <CircleCrud
+                  icon="truck"
+                  title="Delivery"
+                  routeName="Test"
+                  backgroundColor={randomColor({ luminosity: "bright" })}
+                />
+                <View style={{ width: 15 }} />
+                <CircleCrud
+                  icon="package"
+                  title="Product"
+                  routeName="Test"
+                  backgroundColor={randomColor({ luminosity: "bright" })}
+                />
+                <View style={{ width: 15 }} />
+                <CircleCrud
+                  icon="tool"
+                  title="Service"
+                  routeName="Test"
+                  backgroundColor={randomColor({ luminosity: "bright" })}
+                />
+                <View style={{ width: 15 }} />
+                <CircleCrud
+                  icon="clock"
+                  title="Appointment"
+                  routeName="Test"
+                  backgroundColor={randomColor({ luminosity: "bright" })}
+                />
+                <View style={{ width: 15 }} />
+                <CircleCrud
+                  icon="user-plus"
+                  title="User"
+                  routeName="Test"
+                  backgroundColor={randomColor({ luminosity: "bright" })}
+                />
+                <View style={{ width: 15 }} />
+                <CircleCrud
+                  icon="clipboard"
+                  title="Schedule"
+                  routeName="Test"
+                  backgroundColor={randomColor({ luminosity: "bright" })}
+                />
+                <View style={{ width: 15 }} />
+                <CircleCrud
+                  icon="credit-card"
+                  title="Transaction"
+                  routeName="Test"
+                  backgroundColor={randomColor({ luminosity: "bright" })}
+                />
+                <View style={{ width: 15 }} />
+                <CircleCrud
+                  icon="message-square"
+                  title="Comment"
+                  routeName="Test"
+                  backgroundColor={randomColor({ luminosity: "bright" })}
+                />
+              </View>
+            </ScrollView>
+            <ScrollView horizontal>
+              <View
+                className={`flex flex-row justify-center items-center`}
+                style={{
+                  paddingHorizontal: isDimensionLayout ? 0 : customBoxWidth,
+                }}
+              >
                 <ListData
                   title="Admin"
                   data={adminCount}
@@ -47,7 +120,7 @@ export default function () {
                   id={data?.details?._id}
                   backgroundColor={randomColor({ luminosity: "bright" })}
                 />
-                <View style={{ width: 10 }} />
+                <View style={{ width: 15 }} />
                 <ListData
                   title="Employee"
                   data={employeeCount}
@@ -55,7 +128,7 @@ export default function () {
                   id={data?.details?._id}
                   backgroundColor={randomColor({ luminosity: "bright" })}
                 />
-                <View style={{ width: 10 }} />
+                <View style={{ width: 15 }} />
                 <ListData
                   title="Customer"
                   data={customerCount}
