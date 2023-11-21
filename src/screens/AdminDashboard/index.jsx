@@ -6,12 +6,13 @@ import { Feather } from "@expo/vector-icons";
 import { changeColor, dimensionLayout } from "@utils";
 
 export default function () {
-  const { data, isLoading, isError } = useGetUsersQuery();
+  const { data, isLoading } = useGetUsersQuery();
   const users = data?.details ?? [];
-  const usersCount = users.length;
+  const usersFilter = users?.filter((user) => user?.active === true);
+  const usersCount = usersFilter.length;
   const admins = users?.filter((user) => user?.roles?.includes("Admin"));
   const adminCount = admins.length;
-  const employees = users?.filter((user) => user?.roles?.includes("Employee"));
+  const employees = users?.filter((user) => user?.roles?.includes("Employee") && user?.active === true);
   const employeeCount = employees.length;
   const customers = users?.filter((user) =>
     user?.roles?.includes("Online Customer")
