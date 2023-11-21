@@ -8,7 +8,7 @@ export default function CustomCard(props) {
   const { title, icon, data, id, backgroundColor } = props;
   const { textColor, shadowColor } = changeColor();
 
-  const customWidth = deviceWidth * (isDimensionLayout ? 0.55 : 0.25);
+  const customWidth = deviceWidth * (isDimensionLayout ? 0.55 : 0.35);
 
   return (
     <View
