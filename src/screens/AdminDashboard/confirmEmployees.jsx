@@ -19,11 +19,12 @@ import Toast from "react-native-toast-message";
 import { format } from "date-fns";
 import { DataTable } from "react-native-paper";
 import { Feather } from "@expo/vector-icons";
-import { changeColor } from "@utils";
+import { changeColor, dimensionLayout } from "@utils";
 
 export default function () {
+  const isDimensionLayout = dimensionLayout();
   const { width: deviceWidth } = Dimensions.get("window");
-  const customWidth = 0.3 * deviceWidth;
+  const customWidth = deviceWidth * (isDimensionLayout ? 0.3 : 0.2);
 
   const { data, isLoading } = useGetUsersQuery();
   const auth = useSelector((state) => state.auth);
