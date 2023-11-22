@@ -14,6 +14,7 @@ import {
   ForgetPassword,
   LoginUser,
   UpdateUserPassword,
+  User,
 } from "@screens";
 import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
@@ -78,6 +79,7 @@ export default function () {
                 >
                 <Stack.Screen name="AdminDrawer" component={AdminDrawer} />
                 <Stack.Screen name="UpdateUserPassword" component={UpdateUserPassword} />
+                <Stack.Screen name="User" component={User} />
                 </Stack.Navigator>
               ) : (
               null
