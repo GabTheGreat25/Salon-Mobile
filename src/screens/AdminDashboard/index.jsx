@@ -80,7 +80,7 @@ export default function () {
                 <CircleCrud
                   icon="user-plus"
                   title="User"
-                  routeName="Test"
+                  routeName="User"
                   backgroundColor={randomColor({ luminosity: "bright" })}
                 />
                 <View style={{ width: 15 }} />
