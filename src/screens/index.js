@@ -20,6 +20,8 @@ import EditEmployeeProfile from "./EditEmployeeProfile";
 import UpdateUserPassword from "./UpdateUserPassword";
 import ConfirmEmployees from "./AdminDashboard/confirmEmployees";
 import User from "./User";
+import Product from "./Product";
+import CreateProduct from "./Product/createProduct";
 
 export {
   Home,
@@ -44,4 +46,6 @@ export {
   UpdateUserPassword,
   ConfirmEmployees,
   User,
+  Product,
+  CreateProduct,
 };
