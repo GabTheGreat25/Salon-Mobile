@@ -50,6 +50,10 @@ export default function () {
     fetchDeletedIds();
   }, []);
 
+  const handleEditProduct = (id) => {
+    navigation.navigate("EditProduct", { id });
+  };
+
   const handleDeleteProduct = async (id) => {
     Alert.alert(
       "Delete Product",
@@ -273,6 +277,12 @@ export default function () {
                             padding: 10,
                           }}
                         >
+                          <TouchableOpacity
+                            onPress={() => handleEditProduct(item?._id)}
+                          >
+                            <Feather name="edit" size={24} color="blue" />
+                          </TouchableOpacity>
+                          <View style={{ width: 10 }} />
                           <TouchableOpacity
                             onPress={() => handleDeleteProduct(item?._id)}
                           >
