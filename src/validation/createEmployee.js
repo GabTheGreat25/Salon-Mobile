@@ -7,8 +7,8 @@ export default yup.object({
     contact_number: yup.string("Enter your contact number").required("Contact number is required").max(11, "Please enter a valid 11-digit phone number"),
     job: yup.string("Enter your job").required("Job is required"),
     date: yup.string().required('Date is required'),
-    time: yup.string().test('is-valid-time', 'Time should be between 8:00 AM and 8:00 PM', (value) => {
-        const regex = /^(0?[8-9]|1[0-1]):[0-5][0-9] (AM|PM)$/i;
+    time: yup.string().test('is-valid-time', 'Time should be between 8:00 AM and 12:00 PM', (value) => {
+        const regex = /^(0?[8-9]|1[0-2]):[0-5][0-9] (AM|PM)$/i;
         return regex.test(value);
     }).required('Time is required'),
 });
