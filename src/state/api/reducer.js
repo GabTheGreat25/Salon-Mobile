@@ -3,6 +3,7 @@ import { API_URL } from "@env";
 import TestAPI from "./routes/tests";
 import AuthAPI from "./routes/auth";
 import UserAPI from "./routes/user";
+import ProductAPI from "./routes/product";
 import { RESOURCE, API, TAGS } from "@constants";
 
 const prepareHeaders = (headers, { getState }) => {
@@ -37,6 +38,11 @@ export const api = createApi({
     deleteUser: UserAPI.deleteById(builder),
     confirmUser: UserAPI.confirmUser(builder),
     updateUserPassword: UserAPI.updatePasswordById(builder),
+    getProducts: ProductAPI.get(builder),
+    getProductById: ProductAPI.getById(builder),
+    addProduct: ProductAPI.add(builder),
+    updateProduct: ProductAPI.updateById(builder),
+    deleteProduct: ProductAPI.deleteById(builder),
   }),
 });
 
@@ -55,4 +61,9 @@ export const {
   useDeleteUserMutation,
   useConfirmUserMutation,
   useUpdateUserPasswordMutation,
+  useGetProductsQuery,
+  useGetProductByIdQuery,
+  useAddProductMutation,
+  useUpdateProductMutation,
+  useDeleteProductMutation,
 } = api;
