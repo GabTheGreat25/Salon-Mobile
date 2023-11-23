@@ -25,6 +25,7 @@ import { createProductValidation } from "../../validation";
 import Toast from "react-native-toast-message";
 import * as ImageManipulator from "expo-image-manipulator";
 import * as ImagePicker from "expo-image-picker";
+import { Picker } from "@react-native-picker/picker";
 
 export default function () {
   const navigation = useNavigation();
@@ -241,7 +242,7 @@ export default function () {
                   isDimensionLayout ? "text-3xl" : "text-2xl"
                 }`}
               >
-                Update Your Product
+                Create Product
               </Text>
               <KeyboardAvoidingView
                 behavior="padding"
@@ -274,32 +275,44 @@ export default function () {
                       </Text>
                     )}
 
-                  <TextInput
+                  <Picker
+                    selectedValue={formik.values.brand}
                     style={{ color: textColor }}
-                    className={`border-b mb-3 ${borderColor}`}
-                    placeholder="Enter your brand"
-                    placeholderTextColor={textColor}
-                    autoCapitalize="none"
-                    handleTextInputFocus={handleTextInputFocus}
-                    onChangeText={formik.handleChange("brand")}
-                    onBlur={formik.handleBlur("brand")}
-                    value={formik.values.brand}
-                  />
+                    dropdownIconColor={textColor}
+                    onValueChange={(itemValue, itemIndex) =>
+                      formik.setFieldValue("brand", itemValue)
+                    }
+                  >
+                    <Picker.Item label="Select Brand" value="" />
+                    <Picker.Item label="Palmolive" value="Palmolive" />
+                    <Picker.Item label="Dove" value="Dove" />
+                    <Picker.Item
+                      label="Head and Shoulders"
+                      value="Head and Shoulders"
+                    />
+                    <Picker.Item label="Sunsilk" value="Sunsilk" />
+                  </Picker>
                   {formik.touched.brand && formik.errors.brand && (
                     <Text style={{ color: "red" }}>{formik.errors.brand}</Text>
                   )}
 
-                  <TextInput
+                  <Picker
+                    selectedValue={formik.values.type}
                     style={{ color: textColor }}
-                    className={`border-b mb-3 ${borderColor}`}
-                    placeholder="Enter your type"
-                    placeholderTextColor={textColor}
-                    autoCapitalize="none"
-                    handleTextInputFocus={handleTextInputFocus}
-                    onChangeText={formik.handleChange("type")}
-                    onBlur={formik.handleBlur("type")}
-                    value={formik.values.type}
-                  />
+                    dropdownIconColor={textColor}
+                    onValueChange={(itemValue, itemIndex) =>
+                      formik.setFieldValue("type", itemValue)
+                    }
+                  >
+                    <Picker.Item label="Select Type" value="" />
+                    <Picker.Item label="Shampoo" value="Shampoo" />
+                    <Picker.Item label="Soap" value="Soap" />
+                    <Picker.Item label="Conditioner" value="Conditioner" />
+                    <Picker.Item
+                      label="Facial Cleanser"
+                      value="Facial Cleanser"
+                    />
+                  </Picker>
                   {formik.touched.type && formik.errors.type && (
                     <Text style={{ color: "red" }}>{formik.errors.type}</Text>
                   )}
