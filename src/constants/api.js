@@ -11,5 +11,6 @@ export default {
         TAGS.TESTS,
         TAGS.USERS,
         TAGS.AUTH,
+        TAGS.PRODUCTS,
     ],
 };
