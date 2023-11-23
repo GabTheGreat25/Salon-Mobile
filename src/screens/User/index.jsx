@@ -55,7 +55,7 @@ export default function () {
               Toast.show({
                 type: "success",
                 position: "top",
-                text1: "Employee Successfully Deleted",
+                text1: "User Successfully Deleted",
                 text2: `${response?.message}`,
                 visibilityTime: 3000,
                 autoHide: true,
@@ -65,7 +65,7 @@ export default function () {
               Toast.show({
                 type: "error",
                 position: "top",
-                text1: "Error Deleting Employee",
+                text1: "Error Deleting User",
                 text2: `${error?.data?.error?.message}`,
                 visibilityTime: 3000,
                 autoHide: true,
@@ -89,12 +89,15 @@ export default function () {
           <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
           <View
             className={`flex-1 items-center justify-center ${
-              isDimensionLayout ? "mt-20" : "mt-10"
+              isDimensionLayout ? "mt-20" : "mt-14 mb-7"
             }`}
           >
             {filteredActiveUsers?.length ? (
-              <ScrollView style={{ backgroundColor }}>
-                <ScrollView horizontal>
+              <ScrollView
+                style={{ backgroundColor }}
+                showsVerticalScrollIndicator={false}
+              >
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                   <DataTable>
                     <DataTable.Header
                       style={{
@@ -252,7 +255,7 @@ export default function () {
                               key={image?.public_id}
                               source={{ uri: image?.url }}
                               style={{ width: 100, height: 75 }}
-                              resizeMode="contain"
+                              resizeMode="cover"
                             />
                           ))}
                         </DataTable.Cell>

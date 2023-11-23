@@ -40,7 +40,7 @@ export default function () {
   }
 
   return (
-    <ScrollView horizontal className={`mt-3`}>
+    <ScrollView horizontal className={`mt-3`} showsHorizontalScrollIndicator={false}>
       <View className={`justify-between items-center`}>
         <Text
           style={{ color: textColor }}
