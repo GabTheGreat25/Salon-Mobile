@@ -17,6 +17,7 @@ import {
   User,
   Product,
   CreateProduct,
+  EditProduct,
 } from "@screens";
 import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
@@ -84,6 +85,7 @@ export default function () {
                 <Stack.Screen name="User" component={User} />
                 <Stack.Screen name="Product" component={Product} />
                 <Stack.Screen name="CreateProduct" component={CreateProduct} />
+                <Stack.Screen name="EditProduct" component={EditProduct} />
                 </Stack.Navigator>
               ) : (
               null
