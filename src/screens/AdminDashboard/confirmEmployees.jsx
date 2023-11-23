@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Dimensions,
+  SafeAreaView,
 } from "react-native";
 import {
   useGetUsersQuery,
@@ -20,13 +21,21 @@ import { format } from "date-fns";
 import { DataTable } from "react-native-paper";
 import { Feather } from "@expo/vector-icons";
 import { changeColor, dimensionLayout } from "@utils";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function () {
+  const isFocused = useIsFocused();
   const isDimensionLayout = dimensionLayout();
   const { width: deviceWidth } = Dimensions.get("window");
   const customWidth = deviceWidth * (isDimensionLayout ? 0.3 : 0.2);
 
-  const { data, isLoading } = useGetUsersQuery();
+  const { data, isLoading, refetch } = useGetUsersQuery();
+  useEffect(() => {
+    if (isFocused) {
+      refetch();
+    }
+  }, [isFocused, refetch]);
+
   const auth = useSelector((state) => state.auth);
   const { backgroundColor, textColor, colorScheme } = changeColor();
 
@@ -122,247 +131,256 @@ export default function () {
       ) : (
         <>
           {filteredEmployees?.length ? (
-            <ScrollView style={{ backgroundColor }}>
-              <ScrollView horizontal>
-                <DataTable>
-                  <DataTable.Header
-                    style={{
-                      backgroundColor,
-                      borderBottomWidth: 1,
-                      borderBottomColor: borderColor,
-                    }}
-                  >
-                    <DataTable.Title
-                      style={{
-                        justifyContent: "center",
-                        alignItems: "center",
-                        padding: 10,
-                        width: customWidth,
-                      }}
-                    >
-                      <Text style={{ color: textColor }}>Name</Text>
-                    </DataTable.Title>
-                    <DataTable.Title
-                      style={{
-                        justifyContent: "center",
-                        alignItems: "center",
-                        padding: 10,
-                        width: customWidth,
-                      }}
-                    >
-                      <Text style={{ color: textColor }}>Email</Text>
-                    </DataTable.Title>
-                    <DataTable.Title
-                      style={{
-                        justifyContent: "center",
-                        alignItems: "center",
-                        padding: 10,
-                        width: customWidth,
-                      }}
-                    >
-                      <Text style={{ color: textColor }}>Contact Number</Text>
-                    </DataTable.Title>
-                    <DataTable.Title
-                      style={{
-                        justifyContent: "center",
-                        alignItems: "center",
-                        padding: 10,
-                        width: customWidth,
-                      }}
-                    >
-                      <Text style={{ color: textColor }}>Date</Text>
-                    </DataTable.Title>
-                    <DataTable.Title
-                      style={{
-                        justifyContent: "center",
-                        alignItems: "center",
-                        padding: 10,
-                        width: customWidth,
-                      }}
-                    >
-                      <Text style={{ color: textColor }}>Time</Text>
-                    </DataTable.Title>
-                    <DataTable.Title
-                      style={{
-                        justifyContent: "center",
-                        alignItems: "center",
-                        padding: 10,
-                        width: customWidth,
-                      }}
-                    >
-                      <Text style={{ color: textColor }}>Applying Job</Text>
-                    </DataTable.Title>
-                    <DataTable.Title
-                      style={{
-                        justifyContent: "center",
-                        alignItems: "center",
-                        padding: 10,
-                        width: customWidth,
-                      }}
-                    >
-                      <Text style={{ color: textColor }}>Images</Text>
-                    </DataTable.Title>
-                    <DataTable.Title
-                      style={{
-                        justifyContent: "center",
-                        alignItems: "center",
-                        padding: 10,
-                        width: customWidth,
-                      }}
-                    >
-                      <Text style={{ color: textColor }}>Actions</Text>
-                    </DataTable.Title>
-                  </DataTable.Header>
-                  {filteredEmployees?.map((item) => (
-                    <DataTable.Row
-                      key={item?._id}
-                      style={{
-                        backgroundColor,
-                        borderBottomWidth: 1,
-                        borderBottomColor: borderColor,
-                      }}
-                    >
-                      <DataTable.Cell
+            <SafeAreaView style={{ backgroundColor }} className={`flex-1`}>
+              <View className={`mb-7`}>
+                <ScrollView
+                  style={{ backgroundColor }}
+                  showsVerticalScrollIndicator={false}
+                >
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                    <DataTable>
+                      <DataTable.Header
                         style={{
-                          justifyContent: "center",
-                          alignItems: "center",
-                          padding: 10,
-                          width: customWidth,
+                          backgroundColor,
+                          borderBottomWidth: 1,
+                          borderBottomColor: borderColor,
                         }}
                       >
-                        <Text
-                          style={{ color: textColor }}
-                          numberOfLines={1}
-                          ellipsizeMode="tail"
+                        <DataTable.Title
+                          style={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: 10,
+                            width: customWidth,
+                          }}
                         >
-                          {item?.name}
-                        </Text>
-                      </DataTable.Cell>
-                      <DataTable.Cell
-                        style={{
-                          justifyContent: "center",
-                          alignItems: "center",
-                          padding: 10,
-                          width: customWidth,
-                        }}
-                      >
-                        <Text
-                          style={{ color: textColor }}
-                          numberOfLines={1}
-                          ellipsizeMode="tail"
+                          <Text style={{ color: textColor }}>Name</Text>
+                        </DataTable.Title>
+                        <DataTable.Title
+                          style={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: 10,
+                            width: customWidth,
+                          }}
                         >
-                          {item?.email}
-                        </Text>
-                      </DataTable.Cell>
-                      <DataTable.Cell
-                        style={{
-                          justifyContent: "center",
-                          alignItems: "center",
-                          padding: 10,
-                          width: customWidth,
-                        }}
-                      >
-                        <Text
-                          style={{ color: textColor }}
-                          numberOfLines={1}
-                          ellipsizeMode="tail"
+                          <Text style={{ color: textColor }}>Email</Text>
+                        </DataTable.Title>
+                        <DataTable.Title
+                          style={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: 10,
+                            width: customWidth,
+                          }}
                         >
-                          {item?.contact_number}
-                        </Text>
-                      </DataTable.Cell>
-                      <DataTable.Cell
-                        style={{
-                          justifyContent: "center",
-                          alignItems: "center",
-                          padding: 10,
-                          width: customWidth,
-                        }}
-                      >
-                        <Text
-                          style={{ color: textColor }}
-                          numberOfLines={1}
-                          ellipsizeMode="tail"
+                          <Text style={{ color: textColor }}>
+                            Contact Number
+                          </Text>
+                        </DataTable.Title>
+                        <DataTable.Title
+                          style={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: 10,
+                            width: customWidth,
+                          }}
                         >
-                          {format(
-                            new Date(item?.requirement?.date),
-                            "yyyy-MM-dd"
-                          )}
-                        </Text>
-                      </DataTable.Cell>
-                      <DataTable.Cell
-                        style={{
-                          justifyContent: "center",
-                          alignItems: "center",
-                          padding: 10,
-                          width: customWidth,
-                        }}
-                      >
-                        <Text
-                          style={{ color: textColor }}
-                          numberOfLines={1}
-                          ellipsizeMode="tail"
+                          <Text style={{ color: textColor }}>Date</Text>
+                        </DataTable.Title>
+                        <DataTable.Title
+                          style={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: 10,
+                            width: customWidth,
+                          }}
                         >
-                          {item?.requirement?.time}
-                        </Text>
-                      </DataTable.Cell>
-                      <DataTable.Cell
-                        style={{
-                          justifyContent: "center",
-                          alignItems: "center",
-                          padding: 10,
-                          width: customWidth,
-                        }}
-                      >
-                        <Text
-                          style={{ color: textColor }}
-                          numberOfLines={1}
-                          ellipsizeMode="tail"
+                          <Text style={{ color: textColor }}>Time</Text>
+                        </DataTable.Title>
+                        <DataTable.Title
+                          style={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: 10,
+                            width: customWidth,
+                          }}
                         >
-                          {item?.requirement?.job}
-                        </Text>
-                      </DataTable.Cell>
-                      <DataTable.Cell
-                        style={{
-                          justifyContent: "center",
-                          alignItems: "center",
-                          padding: 10,
-                          paddingBottom: 24,
-                        }}
-                      >
-                        {item?.image?.map((image) => (
-                          <Image
-                            key={image?.public_id}
-                            source={{ uri: image?.url }}
-                            style={{ width: 100, height: 75 }}
-                            resizeMode="contain"
-                          />
-                        ))}
-                      </DataTable.Cell>
-                      <DataTable.Cell
-                        style={{
-                          width: customWidth,
-                          justifyContent: "space-around",
-                          alignItems: "center",
-                          padding: 10,
-                        }}
-                      >
-                        <TouchableOpacity
-                          onPress={() => handleConfirmUser(item?._id)}
+                          <Text style={{ color: textColor }}>Applying Job</Text>
+                        </DataTable.Title>
+                        <DataTable.Title
+                          style={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: 10,
+                            width: customWidth,
+                          }}
                         >
-                          <Feather name="check" size={24} color="green" />
-                        </TouchableOpacity>
-                        <View style={{ width: 10 }} />
-                        <TouchableOpacity
-                          onPress={() => handleDeleteUser(item?._id)}
+                          <Text style={{ color: textColor }}>Images</Text>
+                        </DataTable.Title>
+                        <DataTable.Title
+                          style={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: 10,
+                            width: customWidth,
+                          }}
                         >
-                          <Feather name="delete" size={24} color="red" />
-                        </TouchableOpacity>
-                      </DataTable.Cell>
-                    </DataTable.Row>
-                  ))}
-                </DataTable>
-              </ScrollView>
-            </ScrollView>
+                          <Text style={{ color: textColor }}>Actions</Text>
+                        </DataTable.Title>
+                      </DataTable.Header>
+                      {filteredEmployees?.map((item) => (
+                        <DataTable.Row
+                          key={item?._id}
+                          style={{
+                            backgroundColor,
+                            borderBottomWidth: 1,
+                            borderBottomColor: borderColor,
+                          }}
+                        >
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
+                          >
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {item?.name}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
+                          >
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {item?.email}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
+                          >
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {item?.contact_number}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
+                          >
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {format(
+                                new Date(item?.requirement?.date),
+                                "yyyy-MM-dd"
+                              )}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
+                          >
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {item?.requirement?.time}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
+                          >
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {item?.requirement?.job}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              paddingBottom: 24,
+                            }}
+                          >
+                            {item?.image?.map((image) => (
+                              <Image
+                                key={image?.public_id}
+                                source={{ uri: image?.url }}
+                                style={{ width: 100, height: 75 }}
+                                resizeMode="cover"
+                              />
+                            ))}
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              width: customWidth,
+                              justifyContent: "space-around",
+                              alignItems: "center",
+                              padding: 10,
+                            }}
+                          >
+                            <TouchableOpacity
+                              onPress={() => handleConfirmUser(item?._id)}
+                            >
+                              <Feather name="check" size={24} color="green" />
+                            </TouchableOpacity>
+                            <View style={{ width: 10 }} />
+                            <TouchableOpacity
+                              onPress={() => handleDeleteUser(item?._id)}
+                            >
+                              <Feather name="delete" size={24} color="red" />
+                            </TouchableOpacity>
+                          </DataTable.Cell>
+                        </DataTable.Row>
+                      ))}
+                    </DataTable>
+                  </ScrollView>
+                </ScrollView>
+              </View>
+            </SafeAreaView>
           ) : (
             <View
               className={`flex-1 justify-center items-center`}
