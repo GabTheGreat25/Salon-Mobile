@@ -22,6 +22,7 @@ import ConfirmEmployees from "./AdminDashboard/confirmEmployees";
 import User from "./User";
 import Product from "./Product";
 import CreateProduct from "./Product/createProduct";
+import EditProduct from "./Product/editProduct";
 
 export {
   Home,
@@ -48,4 +49,5 @@ export {
   User,
   Product,
   CreateProduct,
+  EditProduct,
 };
