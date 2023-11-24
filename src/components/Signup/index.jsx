@@ -117,7 +117,10 @@ export default function ({
               behavior="padding"
               className={`${dimensionLayout ? "w-[300px]" : "w-[375px]"}`}
             >
-              <ScrollView style={{ height: scrollViewHeight }}>
+              <ScrollView
+                style={{ height: scrollViewHeight }}
+                showsVerticalScrollIndicator={false}
+              >
                 <FormInputs
                   initialState={initialState}
                   formData={formData}

@@ -97,6 +97,7 @@ export default function ({
               />
             ) : (
               <ScrollView
+                showsVerticalScrollIndicator={false}
                 contentContainerStyle={{
                   flexGrow: RESOURCE.NUMBER.ONE,
                   alignItems: "center",

@@ -6,7 +6,7 @@ export default function ({ viewWidth, imageSource, imageName, imageRole }) {
   const { textColor } = changeColor();
   return (
     <>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View
           style={{
             width: { viewWidth },

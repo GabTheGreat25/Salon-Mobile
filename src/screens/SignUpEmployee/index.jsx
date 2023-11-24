@@ -332,7 +332,7 @@ export default function () {
                 >
                   <ScrollView
                     contentContainerStyle={{ height: scrollViewHeight }}
-                    showsVerticalScrollIndicator={scrollViewHeight > 600}
+                    showsVerticalScrollIndicator={false}
                     scrollEnabled={scrollViewHeight > 600}
                     decelerationRate="fast"
                     scrollEventThrottle={1}

@@ -165,7 +165,7 @@ export default function () {
               >
                 <ScrollView
                   contentContainerStyle={{ height: scrollViewHeight }}
-                  showsVerticalScrollIndicator={scrollViewHeight > 350}
+                  showsVerticalScrollIndicator={false}
                   scrollEnabled={scrollViewHeight > 350}
                   decelerationRate="fast"
                   scrollEventThrottle={1}
@@ -288,9 +288,7 @@ export default function () {
                       onPress={formik.handleSubmit}
                       disabled={!formik.isValid}
                     >
-                      <View
-                        className={`mb-2 flex justify-center items-center`}
-                      >
+                      <View className={`mb-2 flex justify-center items-center`}>
                         <View
                           className={`py-2 rounded-lg bg-primary-accent w-[175px]
                           } ${!formik.isValid ? "opacity-50" : "opacity-100"}`}

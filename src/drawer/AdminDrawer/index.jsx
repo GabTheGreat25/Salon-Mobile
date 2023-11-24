@@ -56,7 +56,11 @@ export default function () {
       drawerContent={(props) => {
         return (
           <SafeAreaView>
-            <ScrollView decelerationRate="fast" scrollEventThrottle={1}>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              decelerationRate="fast"
+              scrollEventThrottle={1}
+            >
               <UserImage
                 viewWidth={viewWidth}
                 imageSource={{ uri: user?.image[0]?.url }}

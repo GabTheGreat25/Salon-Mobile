@@ -20,7 +20,7 @@ const Drawer = createDrawerNavigator();
 export default function () {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth?.user);
-  const { backgroundColor, textColor,shadowColor } = changeColor();
+  const { backgroundColor, textColor, shadowColor } = changeColor();
   const isDimensionLayout = dimensionLayout();
   const screenWidth = Dimensions.get("window").width;
   const viewWidth = isDimensionLayout
@@ -56,7 +56,11 @@ export default function () {
       drawerContent={(props) => {
         return (
           <SafeAreaView>
-            <ScrollView decelerationRate="fast" scrollEventThrottle={1}>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              decelerationRate="fast"
+              scrollEventThrottle={1}
+            >
               <UserImage
                 viewWidth={viewWidth}
                 imageSource={{ uri: user?.image[0]?.url }}
