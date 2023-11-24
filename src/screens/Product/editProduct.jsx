@@ -25,6 +25,7 @@ import Toast from "react-native-toast-message";
 import { LoadingScreen } from "@components";
 import { dimensionLayout, changeColor } from "@utils";
 import { Picker } from "@react-native-picker/picker";
+import { BackIcon } from "@helpers";
 
 export default function ({ route }) {
   const { id } = route.params;
@@ -54,9 +55,7 @@ export default function ({ route }) {
     },
     validationSchema: editProductValidation,
     onSubmit: (values) => {
-      console.log("values", values);
       const formData = new FormData();
-      console.log("formData", formData);
       if (selectedImages.length > 0) {
         selectedImages.forEach((image, index) => {
           const imageName = image.uri.split("/").pop();
@@ -233,6 +232,7 @@ export default function ({ route }) {
             style={{ backgroundColor }}
             className={`relative flex-1`}
           >
+            <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
             <View
               className={`justify-start ${
                 isDimensionLayout
@@ -271,8 +271,8 @@ export default function ({ route }) {
                 >
                   <ScrollView
                     contentContainerStyle={{ height: scrollViewHeight }}
-                    showsVerticalScrollIndicator={scrollViewHeight > 550}
-                    scrollEnabled={scrollViewHeight > 550}
+                    showsVerticalScrollIndicator={false}
+                    scrollEnabled={scrollViewHeight > 450}
                     decelerationRate="fast"
                     scrollEventThrottle={1}
                   >
