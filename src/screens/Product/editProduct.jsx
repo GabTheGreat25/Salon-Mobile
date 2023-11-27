@@ -15,6 +15,7 @@ import {
 import {
   useUpdateProductMutation,
   useGetProductByIdQuery,
+  useGetProductsQuery,
 } from "../../state/api/reducer";
 import { useFormik } from "formik";
 import { editProductValidation } from "../../validation";
@@ -31,7 +32,12 @@ export default function ({ route }) {
   const { id } = route.params;
   const navigation = useNavigation();
 
-  const { data, isLoading: isProductLoading } = useGetProductByIdQuery(id);
+  const { refetch: refetchProducts } = useGetProductsQuery();
+  const {
+    data,
+    isLoading: isProductLoading,
+    refetch,
+  } = useGetProductByIdQuery(id);
 
   const [updateProduct, { isLoading }] = useUpdateProductMutation();
 
@@ -76,6 +82,8 @@ export default function ({ route }) {
       updateProduct({ id: data?.details?._id, payload: formData })
         .unwrap()
         .then((response) => {
+          refetch();
+          refetchProducts();
           Toast.show({
             type: "success",
             position: "top",
@@ -315,7 +323,6 @@ export default function ({ route }) {
                         formik.setFieldValue("brand", itemValue)
                       }
                     >
-                      <Picker.Item label="Select Brand" value="" />
                       <Picker.Item label="Palmolive" value="Palmolive" />
                       <Picker.Item label="Dove" value="Dove" />
                       <Picker.Item
@@ -345,7 +352,6 @@ export default function ({ route }) {
                         formik.setFieldValue("type", itemValue)
                       }
                     >
-                      <Picker.Item label="Select Type" value="" />
                       <Picker.Item label="Shampoo" value="Shampoo" />
                       <Picker.Item label="Soap" value="Soap" />
                       <Picker.Item label="Conditioner" value="Conditioner" />
