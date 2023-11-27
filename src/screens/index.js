@@ -23,6 +23,9 @@ import User from "./User";
 import Product from "./Product";
 import CreateProduct from "./Product/createProduct";
 import EditProduct from "./Product/editProduct";
+import Delivery from "./Delivery";
+import CreateDelivery from "./Delivery/createDelivery";
+import EditDelivery from "./Delivery/editDelivery";
 
 export {
   Home,
@@ -50,4 +53,7 @@ export {
   Product,
   CreateProduct,
   EditProduct,
+  Delivery,
+  CreateDelivery,
+  EditDelivery,
 };
