@@ -4,11 +4,12 @@ import TestAPI from "./routes/tests";
 import AuthAPI from "./routes/auth";
 import UserAPI from "./routes/user";
 import ProductAPI from "./routes/product";
+import DeliveryAPI from "./routes/delivery";
 import { RESOURCE, API, TAGS } from "@constants";
 
 const prepareHeaders = (headers, { getState }) => {
   if (getState()?.auth?.authenticated)
-  headers.set("authorization", `Bearer ${getState()?.auth?.token || ""}`);
+    headers.set("authorization", `Bearer ${getState()?.auth?.token || ""}`);
   headers.set("accept", `application/json`);
   return headers;
 };
@@ -43,6 +44,11 @@ export const api = createApi({
     addProduct: ProductAPI.add(builder),
     updateProduct: ProductAPI.updateById(builder),
     deleteProduct: ProductAPI.deleteById(builder),
+    getDeliveries: DeliveryAPI.get(builder),
+    getDeliveryById: DeliveryAPI.getById(builder),
+    addDelivery: DeliveryAPI.add(builder),
+    updateDelivery: DeliveryAPI.updateById(builder),
+    deleteDelivery: DeliveryAPI.deleteById(builder),
   }),
 });
 
@@ -66,4 +72,9 @@ export const {
   useAddProductMutation,
   useUpdateProductMutation,
   useDeleteProductMutation,
+  useGetDeliveriesQuery,
+  useGetDeliveryByIdQuery,
+  useAddDeliveryMutation,
+  useUpdateDeliveryMutation,
+  useDeleteDeliveryMutation,
 } = api;
