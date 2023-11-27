@@ -18,6 +18,9 @@ import {
   Product,
   CreateProduct,
   EditProduct,
+  Delivery,
+  CreateDelivery,
+  EditDelivery,
 } from "@screens";
 import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
@@ -34,7 +37,7 @@ export default function () {
   const barStyle = colorScheme === "dark" ? "light-content" : "dark-content";
 
   const authenticated = useSelector((state) => state.auth?.authenticated);
-  const userRoles = useSelector((state) => state.auth?.user?.roles)
+  const userRoles = useSelector((state) => state.auth?.user?.roles);
 
   useEffect(() => {
     setTimeout(() => {
@@ -44,74 +47,93 @@ export default function () {
 
   return (
     <>
-      {isLoading ? (
+      {/* {isLoading ? (
         <>
           <LoadingScreen />
         </>
-      ) : (
-        <>
-          <StatusBar barStyle={barStyle} backgroundColor={backgroundColor} />
-          <NavigationContainer>
-            {authenticated ? (
-              userRoles.includes("Online Customer") ? (
-                <Stack.Navigator
-                  initialRouteName="CustomerDrawer"
-                  screenOptions={{
-                    headerShown: false,
-                  }}
-                >
-                <Stack.Screen name="CustomerDrawer" component={CustomerDrawer} />
-                <Stack.Screen name="UpdateUserPassword" component={UpdateUserPassword} />
-                </Stack.Navigator>
-              ) : userRoles.includes("Employee") ? (
-                <Stack.Navigator
-                  initialRouteName="EmployeeDrawer"
-                  screenOptions={{
-                    headerShown: false,
-                  }}
-                >
-                <Stack.Screen name="EmployeeDrawer" component={EmployeeDrawer} />
-                <Stack.Screen name="UpdateUserPassword" component={UpdateUserPassword} />
-                </Stack.Navigator>
-              ) :  userRoles.includes("Admin") ? (
-                <Stack.Navigator
-                  initialRouteName="AdminDrawer"
-                  screenOptions={{
-                    headerShown: false,
-                  }}
-                >
-                <Stack.Screen name="AdminDrawer" component={AdminDrawer} />
-                <Stack.Screen name="UpdateUserPassword" component={UpdateUserPassword} />
-                <Stack.Screen name="User" component={User} />
-                <Stack.Screen name="Product" component={Product} />
-                <Stack.Screen name="CreateProduct" component={CreateProduct} />
-                <Stack.Screen name="EditProduct" component={EditProduct} />
-                </Stack.Navigator>
-              ) : (
-              null
-              )
-            ) : (
+      ) : ( */}
+      <>
+        <StatusBar barStyle={barStyle} backgroundColor={backgroundColor} />
+        <NavigationContainer>
+          {authenticated ? (
+            userRoles.includes("Online Customer") ? (
               <Stack.Navigator
-                initialRouteName="Home"
+                initialRouteName="CustomerDrawer"
                 screenOptions={{
                   headerShown: false,
                 }}
               >
-                <Stack.Screen name="Home" component={Home} />
-                <Stack.Screen name="LoginUser" component={LoginUser} />
-                <Stack.Screen name="SignUpCustomer" component={SignUpCustomer} />
-                <Stack.Screen name="SignUpEmployee" component={SignUpEmployee} />
-                <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
-                <Stack.Screen name="ChooseRole" component={ChooseRole} />
-                <Stack.Screen name="UserPick" component={UserPick} />
-                <Stack.Screen name="BecomeCustomer" component={BecomeCustomer} />
-                <Stack.Screen name="BecomeEmployee" component={BecomeEmployee} />
+                <Stack.Screen
+                  name="CustomerDrawer"
+                  component={CustomerDrawer}
+                />
+                <Stack.Screen
+                  name="UpdateUserPassword"
+                  component={UpdateUserPassword}
+                />
               </Stack.Navigator>
-            )}
-          </NavigationContainer>
-          <DarkMode toggle={toggleColorScheme} name={icon} color={textColor} />
-        </>
-      )}
+            ) : userRoles.includes("Employee") ? (
+              <Stack.Navigator
+                initialRouteName="EmployeeDrawer"
+                screenOptions={{
+                  headerShown: false,
+                }}
+              >
+                <Stack.Screen
+                  name="EmployeeDrawer"
+                  component={EmployeeDrawer}
+                />
+                <Stack.Screen
+                  name="UpdateUserPassword"
+                  component={UpdateUserPassword}
+                />
+              </Stack.Navigator>
+            ) : userRoles.includes("Admin") ? (
+              <Stack.Navigator
+                initialRouteName="AdminDrawer"
+                screenOptions={{
+                  headerShown: false,
+                }}
+              >
+                <Stack.Screen name="AdminDrawer" component={AdminDrawer} />
+                <Stack.Screen
+                  name="UpdateUserPassword"
+                  component={UpdateUserPassword}
+                />
+                <Stack.Screen name="User" component={User} />
+                <Stack.Screen name="Product" component={Product} />
+                <Stack.Screen name="CreateProduct" component={CreateProduct} />
+                <Stack.Screen name="EditProduct" component={EditProduct} />
+                <Stack.Screen name="Delivery" component={Delivery} />
+                <Stack.Screen
+                  name="CreateDelivery"
+                  component={CreateDelivery}
+                />
+                <Stack.Screen name="EditDelivery" component={EditDelivery} />
+              </Stack.Navigator>
+            ) : null
+          ) : (
+            <Stack.Navigator
+              initialRouteName="Home"
+              screenOptions={{
+                headerShown: false,
+              }}
+            >
+              <Stack.Screen name="Home" component={Home} />
+              <Stack.Screen name="LoginUser" component={LoginUser} />
+              <Stack.Screen name="SignUpCustomer" component={SignUpCustomer} />
+              <Stack.Screen name="SignUpEmployee" component={SignUpEmployee} />
+              <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
+              <Stack.Screen name="ChooseRole" component={ChooseRole} />
+              <Stack.Screen name="UserPick" component={UserPick} />
+              <Stack.Screen name="BecomeCustomer" component={BecomeCustomer} />
+              <Stack.Screen name="BecomeEmployee" component={BecomeEmployee} />
+            </Stack.Navigator>
+          )}
+        </NavigationContainer>
+        <DarkMode toggle={toggleColorScheme} name={icon} color={textColor} />
+      </>
+      {/* )} */}
     </>
   );
 }
