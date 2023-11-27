@@ -20,10 +20,7 @@ import { DataTable } from "react-native-paper";
 import { Feather } from "@expo/vector-icons";
 import { changeColor, dimensionLayout } from "@utils";
 import { useNavigation } from "@react-navigation/native";
-import {
-  saveDeletedProductId,
-  getDeletedProductIds,
-} from "../../helpers/DeleteItem";
+import { saveDeletedId, getDeletedIds } from "../../helpers/DeleteItem";
 
 export default function () {
   const isDimensionLayout = dimensionLayout();
@@ -43,7 +40,7 @@ export default function () {
 
   useEffect(() => {
     const fetchDeletedIds = async () => {
-      const ids = await getDeletedProductIds();
+      const ids = await getDeletedIds();
       setDeletedIds(ids);
     };
 
@@ -68,7 +65,7 @@ export default function () {
           onPress: async () => {
             try {
               const response = await deleteProduct(id).unwrap();
-              await saveDeletedProductId(id);
+              await saveDeletedId(id);
               setDeletedIds((prevIds) => [...prevIds, id]);
               refetch();
               Toast.show({
