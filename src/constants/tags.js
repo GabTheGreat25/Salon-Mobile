@@ -3,5 +3,6 @@ export default {
   AUTH: "auth",
   TESTS: "tests",
   USERS: "users",
-  PRODUCTS : "products",
+  PRODUCTS: "products",
+  DELIVERY: "delivery",
 };
