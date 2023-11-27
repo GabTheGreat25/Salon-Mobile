@@ -41,7 +41,11 @@ export default function () {
         </View>
       ) : (
         <>
-          <ScrollView className="flex-1 py-6 px-3" style={{ backgroundColor }} showsVerticalScrollIndicator={false}>
+          <ScrollView
+            className="flex-1 px-3 py-6"
+            style={{ backgroundColor }}
+            showsVerticalScrollIndicator={false}
+          >
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               <View
                 className={`flex-row items-center justify-center`}
@@ -52,7 +56,7 @@ export default function () {
                 <CircleCrud
                   icon="truck"
                   title="Delivery"
-                  routeName="Test"
+                  routeName="Delivery"
                   backgroundColor={randomColor({ luminosity: "bright" })}
                 />
                 <View style={{ width: 15 }} />
