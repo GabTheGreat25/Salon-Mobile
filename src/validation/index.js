@@ -9,6 +9,8 @@ import createProductValidation from "./createProduct";
 import editProductValidation from "./editProduct";
 import createDeliveryValidation from "./createDelivery";
 import editDeliveryValidation from "./editDelivery";
+import createServiceValidation from "./createService";
+import editServiceValidation from "./editService";
 
 export {
   createTestValidation,
@@ -22,4 +24,6 @@ export {
   editProductValidation,
   createDeliveryValidation,
   editDeliveryValidation,
+  createServiceValidation,
+  editServiceValidation,
 };
