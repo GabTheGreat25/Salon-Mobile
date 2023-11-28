@@ -13,5 +13,6 @@ export default {
     TAGS.AUTH,
     TAGS.PRODUCTS,
     TAGS.DELIVERY,
+    TAGS.SERVICES,
   ],
 };
