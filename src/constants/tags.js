@@ -5,4 +5,5 @@ export default {
   USERS: "users",
   PRODUCTS: "products",
   DELIVERY: "delivery",
+  SERVICES: "services",
 };
