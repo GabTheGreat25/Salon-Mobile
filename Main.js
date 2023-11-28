@@ -21,6 +21,9 @@ import {
   Delivery,
   CreateDelivery,
   EditDelivery,
+  Service,
+  CreateService,
+  EditService,
 } from "@screens";
 import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
@@ -110,6 +113,9 @@ export default function () {
                   component={CreateDelivery}
                 />
                 <Stack.Screen name="EditDelivery" component={EditDelivery} />
+                <Stack.Screen name="Service" component={Service} />
+                <Stack.Screen name="CreateService" component={CreateService} />
+                <Stack.Screen name="EditService" component={EditService} />
               </Stack.Navigator>
             ) : null
           ) : (
