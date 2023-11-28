@@ -26,6 +26,9 @@ import EditProduct from "./Product/editProduct";
 import Delivery from "./Delivery";
 import CreateDelivery from "./Delivery/createDelivery";
 import EditDelivery from "./Delivery/editDelivery";
+import Service from "./Service";
+import CreateService from "./Service/createService";
+import EditService from "./Service/editService";
 
 export {
   Home,
@@ -56,4 +59,7 @@ export {
   Delivery,
   CreateDelivery,
   EditDelivery,
+  Service,
+  CreateService,
+  EditService,
 };
