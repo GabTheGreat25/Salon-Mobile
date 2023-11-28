@@ -5,6 +5,7 @@ import AuthAPI from "./routes/auth";
 import UserAPI from "./routes/user";
 import ProductAPI from "./routes/product";
 import DeliveryAPI from "./routes/delivery";
+import ServiceAPI from "./routes/service";
 import { RESOURCE, API, TAGS } from "@constants";
 
 const prepareHeaders = (headers, { getState }) => {
@@ -49,6 +50,11 @@ export const api = createApi({
     addDelivery: DeliveryAPI.add(builder),
     updateDelivery: DeliveryAPI.updateById(builder),
     deleteDelivery: DeliveryAPI.deleteById(builder),
+    getServices: ServiceAPI.get(builder),
+    getServiceById: ServiceAPI.getById(builder),
+    addService: ServiceAPI.add(builder),
+    updateService: ServiceAPI.updateById(builder),
+    deleteService: ServiceAPI.deleteById(builder),
   }),
 });
 
@@ -77,4 +83,9 @@ export const {
   useAddDeliveryMutation,
   useUpdateDeliveryMutation,
   useDeleteDeliveryMutation,
+  useGetServicesQuery,
+  useGetServiceByIdQuery,
+  useAddServiceMutation,
+  useUpdateServiceMutation,
+  useDeleteServiceMutation,
 } = api;
