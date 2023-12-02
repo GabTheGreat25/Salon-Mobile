@@ -29,7 +29,7 @@ export default function () {
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
   const handlePress = () => {
-    navigation.navigate("CustomerDrawer");
+    navigation.navigate("Relevance");
   };
 
   const widthOne = isDimensionLayout ? windowWidth * 0.35 : windowWidth * 0.75;
