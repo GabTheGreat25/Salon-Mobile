@@ -29,6 +29,7 @@ import {
   MostRecent,
   Budget,
   Cart,
+  Checkout,
 } from "@screens";
 import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
@@ -84,6 +85,7 @@ export default function () {
                 <Stack.Screen name="MostRecent" component={MostRecent} />
                 <Stack.Screen name="Budget" component={Budget} />
                 <Stack.Screen name="Cart" component={Cart} />
+                <Stack.Screen name="Checkout" component={Checkout} />
               </Stack.Navigator>
             ) : userRoles.includes("Employee") ? (
               <Stack.Navigator
