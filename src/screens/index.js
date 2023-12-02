@@ -33,6 +33,7 @@ import Relevance from "./CustomerDashboard/relevance";
 import Popular from "./CustomerDashboard/popular";
 import MostRecent from "./CustomerDashboard/mostRecent";
 import Budget from "./CustomerDashboard/budget";
+import Cart from "./CustomerDashboard/cart";
 
 export {
   Home,
@@ -70,4 +71,5 @@ export {
   Popular,
   MostRecent,
   Budget,
+  Cart,
 };
