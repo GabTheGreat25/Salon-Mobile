@@ -24,6 +24,10 @@ import {
   Service,
   CreateService,
   EditService,
+  Relevance,
+  Popular,
+  MostRecent,
+  Budget,
 } from "@screens";
 import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
@@ -74,6 +78,10 @@ export default function () {
                   name="UpdateUserPassword"
                   component={UpdateUserPassword}
                 />
+                <Stack.Screen name="Relevance" component={Relevance} />
+                <Stack.Screen name="Popular" component={Popular} />
+                <Stack.Screen name="MostRecent" component={MostRecent} />
+                <Stack.Screen name="Budget" component={Budget} />
               </Stack.Navigator>
             ) : userRoles.includes("Employee") ? (
               <Stack.Navigator
