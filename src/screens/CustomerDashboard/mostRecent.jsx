@@ -27,35 +27,30 @@ export default function () {
   const items = [
     {
       name: "Face Wash",
-      new: true,
       price: "₱ 559.00",
       rating: 4.5,
       image: SalonFaceWash,
     },
     {
       name: "Face Wash",
-      new: true,
       price: "₱ 559.00",
       rating: 4.5,
       image: SalonFaceWash,
     },
     {
       name: "Face Wash",
-      new: false,
       price: "₱ 559.00",
       rating: 4.5,
       image: SalonFaceWash,
     },
     {
       name: "Face Wash",
-      new: false,
       price: "₱ 559.00",
       rating: 4.5,
       image: SalonFaceWash,
     },
     {
       name: "Face Wash",
-      new: false,
       price: "₱ 559.00",
       rating: 4.5,
       image: SalonFaceWash,
@@ -63,7 +58,7 @@ export default function () {
   ];
 
   const handlePress = () => {
-    navigation.navigate("AddToCart");
+    navigation.navigate("Cart");
   };
 
   const handleRelevance = () => {
@@ -225,7 +220,7 @@ export default function () {
             scrollEventThrottle={1}
             className={`pb-24`}
           >
-            {items?.map((item, index) => (
+            {items.map((item, index) => (
               <View
                 key={index}
                 className={`${
@@ -243,18 +238,6 @@ export default function () {
                         borderRadius: 20,
                       }}
                     />
-                    {item?.new && (
-                      <View
-                        className={`absolute right-[298px] bottom-[162.5px] bg-primary-default rounded-tl-xl rounded-r-2xl px-4 py-2`}
-                      >
-                        <Text
-                          style={{ color: textColor }}
-                          className={`text-xl font-semibold`}
-                        >
-                          New
-                        </Text>
-                      </View>
-                    )}
                     <TouchableOpacity onPress={handlePress}>
                       <View className={`absolute left-[315px] bottom-2`}>
                         <Ionicons

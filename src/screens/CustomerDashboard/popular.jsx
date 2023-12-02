@@ -58,7 +58,7 @@ export default function () {
   ];
 
   const handlePress = () => {
-    navigation.navigate("AddToCart");
+    navigation.navigate("Cart");
   };
 
   const handleRelevance = () => {
