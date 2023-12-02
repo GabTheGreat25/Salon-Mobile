@@ -34,6 +34,7 @@ import Popular from "./CustomerDashboard/popular";
 import MostRecent from "./CustomerDashboard/mostRecent";
 import Budget from "./CustomerDashboard/budget";
 import Cart from "./CustomerDashboard/cart";
+import Checkout from "./CustomerDashboard/checkout";
 
 export {
   Home,
@@ -72,4 +73,5 @@ export {
   MostRecent,
   Budget,
   Cart,
+  Checkout,
 };
