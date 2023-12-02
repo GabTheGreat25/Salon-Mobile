@@ -29,6 +29,10 @@ import EditDelivery from "./Delivery/editDelivery";
 import Service from "./Service";
 import CreateService from "./Service/createService";
 import EditService from "./Service/editService";
+import Relevance from "./CustomerDashboard/relevance";
+import Popular from "./CustomerDashboard/popular";
+import MostRecent from "./CustomerDashboard/mostRecent";
+import Budget from "./CustomerDashboard/budget";
 
 export {
   Home,
@@ -62,4 +66,8 @@ export {
   Service,
   CreateService,
   EditService,
+  Relevance,
+  Popular,
+  MostRecent,
+  Budget,
 };
