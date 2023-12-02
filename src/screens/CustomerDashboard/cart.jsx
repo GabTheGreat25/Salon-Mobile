@@ -12,7 +12,6 @@ import { Feather, FontAwesome, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { BackIcon } from "@helpers";
 import SalonFaceWash from "@assets/face-wash.png";
-import { te } from "date-fns/locale";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -22,7 +21,7 @@ export default function () {
     changeColor();
   const navigation = useNavigation();
   const isDimensionLayout = dimensionLayout();
-  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
+  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDA7DF";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
   const items = [
@@ -58,6 +57,10 @@ export default function () {
     },
   ];
 
+  const handlePress = () => {
+    navigation.navigate("Checkout");
+  };
+
   return (
     <>
       <View style={{ backgroundColor }} className={`flex-1`}>
@@ -67,10 +70,9 @@ export default function () {
           decelerationRate="fast"
           scrollEventThrottle={1}
           style={{
-            marginTop: 50,
             backgroundColor,
           }}
-          className={`px-3 flex-1 z-[100]`}
+          className={`px-3 flex-1 mt-20`}
         >
           <ScrollView
             decelerationRate="fast"
@@ -236,7 +238,7 @@ export default function () {
               </Text>
             </View>
           </View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handlePress}>
             <View
               style={{
                 backgroundColor: invertBackgroundColor,
