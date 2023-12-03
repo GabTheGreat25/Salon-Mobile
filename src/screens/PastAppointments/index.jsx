@@ -18,8 +18,13 @@ export default function () {
 
     const { textColor, backgroundColor, shadowColor, colorScheme } =
     changeColor();
+<<<<<<< appointment
     const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDA7DF";
     const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
+=======
+    const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
+    const invertTextColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
+>>>>>>> screen commit
 
     const data  = [
         {
@@ -96,7 +101,11 @@ export default function () {
                     className={`text-xl py-4 font-semibold text-center`}
                     style={
                         {
+<<<<<<< appointment
                             color: textColor
+=======
+                            color: invertTextColor
+>>>>>>> screen commit
                         }
                     }
                     >
@@ -108,7 +117,11 @@ export default function () {
                     className={`text-lg mt-4 font-semibold text-center`}
                     style={
                         {
+<<<<<<< appointment
                             color: textColor
+=======
+                            color: invertTextColor
+>>>>>>> screen commit
                         }
                     }
                     >
@@ -120,11 +133,14 @@ export default function () {
                         <View
                         key={index}
                         className={`flex flex-row bg-pink-300 items-center p-1 rounded-lg`}
+<<<<<<< appointment
                         style={
                             {
                                 backgroundColor: invertBackgroundColor
                             }
                         }
+=======
+>>>>>>> screen commit
                         >
                             <View
                             className={`m-1.5`}
@@ -135,11 +151,14 @@ export default function () {
                                 />
                                 <Text
                                 className={`mt-3.5 text-sm text-white`}
+<<<<<<< appointment
                                 style={
                                     {
                                         color: invertTextColor
                                     }
                                 }
+=======
+>>>>>>> screen commit
                                 >
                                     {item.date}
                                 </Text>
@@ -152,21 +171,27 @@ export default function () {
                                 >
                                     <Text
                                     className={`font-bold text-base text-white`}
+<<<<<<< appointment
                                     style={
                                         {
                                             color: invertTextColor
                                         }
                                     }
+=======
+>>>>>>> screen commit
                                     >
                                         {item.service}
                                     </Text>
                                     <Text
                                     className={`font-bold text-base text-white mr-2.5`}
+<<<<<<< appointment
                                     style={
                                         {
                                             color: invertTextColor
                                         }
                                     }
+=======
+>>>>>>> screen commit
                                     >
                                         {item.price}
                                     </Text>
@@ -176,11 +201,14 @@ export default function () {
                                 >
                                     <Text
                                     className={`text-white text-xs`}
+<<<<<<< appointment
                                     style={
                                         {
                                             color: invertTextColor
                                         }
                                     }
+=======
+>>>>>>> screen commit
                                     >    
                                         {item.description}
                                     </Text>
