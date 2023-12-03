@@ -33,8 +33,14 @@ import {
   PaymentOption,
   Employee,
   ChooseDate,
-  PastAppointment
+  PastAppointment,
+  Settings
 } from "@screens";
+import{
+  TermsConditions,
+  PrivacyPolicy,
+  Feedback
+} from "@settings";
 import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
 import { DarkMode } from "@helpers";
@@ -94,6 +100,11 @@ export default function () {
                 <Stack.Screen name="Employee" component={Employee} />
                 <Stack.Screen name="ChooseDate" component={ChooseDate} />
                 <Stack.Screen name="PastAppointment" component={PastAppointment} />
+                <Stack.Screen name="Settings" component={Settings} />
+                <Stack.Screen name="TermsCondition" component={TermsConditions}/>
+                <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
+                <Stack.Screen name="Feedback" component={Feedback} />
+
               </Stack.Navigator>
             ) : userRoles.includes("Employee") ? (
               <Stack.Navigator
