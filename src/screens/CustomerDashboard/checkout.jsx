@@ -80,6 +80,10 @@ export default function () {
     navigation.navigate("Employee");
   };
 
+  const handleDateTime = () => {
+    navigation.navigate("ChooseDate");
+  };
+
   return (
     <>
       <View style={{ backgroundColor }} className={`flex-1`}>
@@ -121,7 +125,7 @@ export default function () {
                 >
                   02/12/2023 | 11: 00 AM, Sat
                 </Text>
-                <TouchableOpacity className={`flex-1`}>
+                <TouchableOpacity onPress={handleDateTime} className={`flex-1`}>
                   <View className={`flex-row justify-end items-end`}>
                     <Feather
                       name="chevron-right"
@@ -131,7 +135,7 @@ export default function () {
                   </View>
                 </TouchableOpacity>
               </View>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={handleDateTime}>
                 <Text
                   style={{ color: invertTextColor }}
                   className={`text-2xl font-semibold`}
