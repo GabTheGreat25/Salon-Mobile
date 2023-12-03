@@ -6,7 +6,7 @@ import {
   DrawerItemList,
   createDrawerNavigator,
 } from "@react-navigation/drawer";
-import { CustomerDashboard, EditCustomerProfile, PastAppointment } from "@screens";
+import { CustomerDashboard, EditCustomerProfile, PastAppointment, Settings } from "@screens";
 import { changeColor, dimensionLayout } from "@utils";
 import { RESOURCE } from "@constants";
 import { UserImage } from "@components";
@@ -170,6 +170,29 @@ export default function () {
           ),
         }}
         component={PastAppointment}
+      />
+
+       <Drawer.Screen
+        name="Settings"
+        options={{
+          drawerActiveBackgroundColor: "#F78FB3",
+          drawerActiveTintColor: textColor,
+          drawerInactiveTintColor: "#FDA7DF",
+          drawerLabel: () => (
+            <Text className={`text-xl font-base`} style={{ color: textColor }}>
+              Settings
+            </Text>
+          ),
+          title: "Settings",
+          drawerIcon: () => (
+            <MaterialIcons
+              name="settings"
+              size={RESOURCE.NUMBER.THIRTY}
+              color={textColor}
+            />
+          ),
+        }}
+        component={Settings}
       />
     </Drawer.Navigator>
   );
