@@ -40,6 +40,7 @@ import Employee from "./CustomerDashboard/employee";
 import ChooseDate from "./CustomerDashboard/chooseDate";
 import PastAppointment from "./PastAppointments";
 import Settings from "./Settings";
+import CheckoutSuccess from "./CustomerDashboard/checkoutSuccess";
 
 export {
   Home,
@@ -84,4 +85,6 @@ export {
   ChooseDate,
   PastAppointment,
   Settings
+  PastAppointment,
+  CheckoutSuccess,
 };
