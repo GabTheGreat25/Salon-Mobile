@@ -36,6 +36,7 @@ import Budget from "./CustomerDashboard/budget";
 import Cart from "./CustomerDashboard/cart";
 import Checkout from "./CustomerDashboard/checkout";
 import PaymentOption from "./CustomerDashboard/paymentOption";
+import Employee from "./CustomerDashboard/employee";
 
 export {
   Home,
@@ -76,4 +77,5 @@ export {
   Cart,
   Checkout,
   PaymentOption,
+  Employee,
 };
