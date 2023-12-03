@@ -39,6 +39,7 @@ import PaymentOption from "./CustomerDashboard/paymentOption";
 import Employee from "./CustomerDashboard/employee";
 import ChooseDate from "./CustomerDashboard/chooseDate";
 import PastAppointment from "./PastAppointments";
+import Settings from "./Settings";
 
 export {
   Home,
@@ -81,5 +82,6 @@ export {
   PaymentOption,
   Employee,
   ChooseDate,
-  PastAppointment
+  PastAppointment,
+  Settings
 };
