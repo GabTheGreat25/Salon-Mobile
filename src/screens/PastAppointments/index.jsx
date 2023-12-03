@@ -18,8 +18,8 @@ export default function () {
 
     const { textColor, backgroundColor, shadowColor, colorScheme } =
     changeColor();
-    const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
-    const invertTextColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
+    const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDA7DF";
+    const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
     const data  = [
         {
@@ -96,7 +96,7 @@ export default function () {
                     className={`text-xl py-4 font-semibold text-center`}
                     style={
                         {
-                            color: invertTextColor
+                            color: textColor
                         }
                     }
                     >
@@ -108,7 +108,7 @@ export default function () {
                     className={`text-lg mt-4 font-semibold text-center`}
                     style={
                         {
-                            color: invertTextColor
+                            color: textColor
                         }
                     }
                     >
@@ -120,6 +120,11 @@ export default function () {
                         <View
                         key={index}
                         className={`flex flex-row bg-pink-300 items-center p-1 rounded-lg`}
+                        style={
+                            {
+                                backgroundColor: invertBackgroundColor
+                            }
+                        }
                         >
                             <View
                             className={`m-1.5`}
@@ -130,6 +135,11 @@ export default function () {
                                 />
                                 <Text
                                 className={`mt-3.5 text-sm text-white`}
+                                style={
+                                    {
+                                        color: invertTextColor
+                                    }
+                                }
                                 >
                                     {item.date}
                                 </Text>
@@ -142,11 +152,21 @@ export default function () {
                                 >
                                     <Text
                                     className={`font-bold text-base text-white`}
+                                    style={
+                                        {
+                                            color: invertTextColor
+                                        }
+                                    }
                                     >
                                         {item.service}
                                     </Text>
                                     <Text
                                     className={`font-bold text-base text-white mr-2.5`}
+                                    style={
+                                        {
+                                            color: invertTextColor
+                                        }
+                                    }
                                     >
                                         {item.price}
                                     </Text>
@@ -156,6 +176,11 @@ export default function () {
                                 >
                                     <Text
                                     className={`text-white text-xs`}
+                                    style={
+                                        {
+                                            color: invertTextColor
+                                        }
+                                    }
                                     >    
                                         {item.description}
                                     </Text>
