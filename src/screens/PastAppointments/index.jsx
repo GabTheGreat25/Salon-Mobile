@@ -1,115 +1,133 @@
+import React from "react";
 import {
-    SafeAreaView,
-    View,
-    Text,
-    Image,
-    StatusBar,
-    Button,
-    FlatList,
-    TouchableOpacity
+  ScrollView,
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  Dimensions,
 } from "react-native";
-
 import { changeColor, dimensionLayout } from "@utils";
+import { useNavigation } from "@react-navigation/native";
+import { BackIcon } from "@helpers";
+import SalonFaceWash from "@assets/face-wash.png";
 
-
-import image from "@assets/salon-service.png";
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
 export default function () {
-
-    const { textColor, backgroundColor, shadowColor, colorScheme } =
+  const { textColor, backgroundColor, shadowColor, colorScheme } =
     changeColor();
-<<<<<<< appointment
-    const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDA7DF";
-    const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
-=======
     const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
     const invertTextColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
->>>>>>> screen commit
 
-    const data  = [
-        {
-            id:1,
-            service:"Face Wash",
-            description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean id ex quis eros imperdiet pretium. Donec lorem justo, molestie vel nisl et, porta pharetra elit. Quisque ac metus felis. Ut fringilla ullamcorper finibus. Aliquam augue mi, rhoncus vitae tellus dignissim, efficitur bibendum dolor. ",
-            date:"December 12, 2023",
-            price:"599.00",
-            image: image
-        },
-        {
-            id:2,
-            service:"Face Wash",
-            description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean id ex quis eros imperdiet pretium. Donec lorem justo, molestie vel nisl et, porta pharetra elit. Quisque ac metus felis. Ut fringilla ullamcorper finibus. Aliquam augue mi, rhoncus vitae tellus dignissim, efficitur bibendum dolor. ",
-            date:"December 12, 2023",
-            price:"599.00",
-            image: image
-        },
-        {
-            id:3,
-            service:"Face Wash",
-            description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean id ex quis eros imperdiet pretium. Donec lorem justo, molestie vel nisl et, porta pharetra elit. Quisque ac metus felis. Ut fringilla ullamcorper finibus. Aliquam augue mi, rhoncus vitae tellus dignissim, efficitur bibendum dolor. ",
-            date:"December 12, 2023",
-            price:"599.00",
-            image: image
-        },
-        {
-            id:4,
-            service:"Face Wash",
-            description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean id ex quis eros imperdiet pretium. Donec lorem justo, molestie vel nisl et, porta pharetra elit. Quisque ac metus felis. Ut fringilla ullamcorper finibus. Aliquam augue mi, rhoncus vitae tellus dignissim, efficitur bibendum dolor. ",
-            date:"December 12, 2023",
-            price:"599.00",
-            image: image
-        },
-        {
-            id:5,
-            service:"Face Wash",
-            description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean id ex quis eros imperdiet pretium. Donec lorem justo, molestie vel nisl et, porta pharetra elit. Quisque ac metus felis. Ut fringilla ullamcorper finibus. Aliquam augue mi, rhoncus vitae tellus dignissim, efficitur bibendum dolor. ",
-            date:"December 12, 2023",
-            price:"599.00",
-            image: image
-        },
-        {
-            id:6,
-            service:"Face Wash",
-            description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean id ex quis eros imperdiet pretium. Donec lorem justo, molestie vel nisl et, porta pharetra elit. Quisque ac metus felis. Ut fringilla ullamcorper finibus. Aliquam augue mi, rhoncus vitae tellus dignissim, efficitur bibendum dolor. ",
-            date:"December 12, 2023",
-            price:"599.00",
-            image: image
-        }
-    ]
-    return (
-        <SafeAreaView
-        className={`flex-1`}
-        style={
-            {
-                backgroundColor
-            }
-        }
+  const handlePress = () => {
+    navigation.navigate("Checkout");
+  };
+
+  const items = [
+    {
+      name: "Face Wash",
+      image: SalonFaceWash,
+      date: "28 Jan, 09:32",
+      price: "₱ 559.00",
+      description: ` Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia dolor molestias, nihil eligendi incidunt ducimus accusantium. Voluptatum quae, unde consectet ur accusamus iusto, excepturi dolore deleniti incidunt, dignissimos dolor veniam alias? Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia dolor molestias, nihil eligendi incidunt ducimus accusantium. Voluptatum quae, unde consectet ur accusamus iusto, excepturi dolore deleniti incidunt, dignissimos dolor veniam alias?`,
+      buttonOne: "Reappoint Service",
+      buttonTwo: "Add Feedback",
+    },
+    {
+      name: "Face Wash",
+      image: SalonFaceWash,
+      date: "28 Jan, 09:32",
+      price: "₱ 559.00",
+      description: ` Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia dolor molestias, nihil eligendi incidunt ducimus accusantium. Voluptatum quae, unde consectet ur accusamus iusto, excepturi dolore deleniti incidunt, dignissimos dolor veniam alias? Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia dolor molestias, nihil eligendi incidunt ducimus accusantium. Voluptatum quae, unde consectet ur accusamus iusto, excepturi dolore deleniti incidunt, dignissimos dolor veniam alias?`,
+      buttonOne: "Reappoint Service",
+      buttonTwo: "Add Feedback",
+    },
+    {
+      name: "Face Wash",
+      image: SalonFaceWash,
+      date: "28 Jan, 09:32",
+      price: "₱ 559.00",
+      description: ` Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia dolor molestias, nihil eligendi incidunt ducimus accusantium. Voluptatum quae, unde consectet ur accusamus iusto, excepturi dolore deleniti incidunt, dignissimos dolor veniam alias? Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia dolor molestias, nihil eligendi incidunt ducimus accusantium. Voluptatum quae, unde consectet ur accusamus iusto, excepturi dolore deleniti incidunt, dignissimos dolor veniam alias?`,
+      buttonOne: "Reappoint Service",
+      buttonTwo: "Add Feedback",
+    },
+    {
+      name: "Face Wash",
+      image: SalonFaceWash,
+      date: "28 Jan, 09:32",
+      price: "₱ 559.00",
+      description: ` Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia dolor molestias, nihil eligendi incidunt ducimus accusantium. Voluptatum quae, unde consectet ur accusamus iusto, excepturi dolore deleniti incidunt, dignissimos dolor veniam alias? Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia dolor molestias, nihil eligendi incidunt ducimus accusantium. Voluptatum quae, unde consectet ur accusamus iusto, excepturi dolore deleniti incidunt, dignissimos dolor veniam alias?`,
+      buttonOne: "Reappoint Service",
+      buttonTwo: "Add Feedback",
+    },
+    {
+      name: "Face Wash",
+      image: SalonFaceWash,
+      date: "28 Jan, 09:32",
+      price: "₱ 559.00",
+      description: ` Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia dolor molestias, nihil eligendi incidunt ducimus accusantium. Voluptatum quae, unde consectet ur accusamus iusto, excepturi dolore deleniti incidunt, dignissimos dolor veniam alias? Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia dolor molestias, nihil eligendi incidunt ducimus accusantium. Voluptatum quae, unde consectet ur accusamus iusto, excepturi dolore deleniti incidunt, dignissimos dolor veniam alias?`,
+      buttonOne: "Reappoint Service",
+      buttonTwo: "Add Feedback",
+    },
+  ];
+
+  return (
+    <>
+      <View style={{ backgroundColor }} className={`flex-1`}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          decelerationRate="fast"
+          scrollEventThrottle={1}
+          style={{
+            backgroundColor,
+          }}
+          className={`px-3 flex-1 mt-4`}
         >
-            <View
-            className={`flex-1 px-4`}
-            >
-                <FlatList
-                data={data}
-                ItemSeparatorComponent={
-                    <View
-                    className={`h-4`}
-                    />
-                }
-
-                ListHeaderComponent={
+          <ScrollView
+            decelerationRate="fast"
+            scrollEventThrottle={1}
+            showsVerticalScrollIndicator={false}
+          >
+            {items.map((item, index) => (
+              <View
+                key={index}
+                style={{
+                  backgroundColor: invertBackgroundColor,
+                  height: windowHeight * 0.25,
+                  width: windowWidth * 0.925,
+                }}
+                className={`flex-row gap-x-4 rounded-2xl ${
+                  isDimensionLayout ? "mx-1 px-4 pt-4 mb-2" : "mx-3"
+                }`}
+              >
+                <View className={`flex-col gap-y-2`}>
+                  <Image
+                    source={item.image}
+                    resizeMode="cover"
+                    className={`h-[100px] w-[100px] rounded-full`}
+                  />
+                  <Text
+                    style={{ color: invertTextColor }}
+                    className={`text-center ${
+                      isDimensionLayout ? "text-base" : "text-lg px-4 py-6"
+                    } font-semibold`}
+                  >
+                    {item.date}
+                  </Text>
+                </View>
+                <View className={`flex-1 flex-col`}>
+                  <View className={`flex-row`}>
                     <Text
                     className={`text-xl py-4 font-semibold text-center`}
                     style={
                         {
-<<<<<<< appointment
-                            color: textColor
-=======
                             color: invertTextColor
->>>>>>> screen commit
                         }
                     }
                     >
-                        Past appointments
+                      {item.name}
                     </Text>
                 }
                 ListFooterComponent={
@@ -117,11 +135,7 @@ export default function () {
                     className={`text-lg mt-4 font-semibold text-center`}
                     style={
                         {
-<<<<<<< appointment
-                            color: textColor
-=======
                             color: invertTextColor
->>>>>>> screen commit
                         }
                     }
                     >
@@ -133,14 +147,6 @@ export default function () {
                         <View
                         key={index}
                         className={`flex flex-row bg-pink-300 items-center p-1 rounded-lg`}
-<<<<<<< appointment
-                        style={
-                            {
-                                backgroundColor: invertBackgroundColor
-                            }
-                        }
-=======
->>>>>>> screen commit
                         >
                             <View
                             className={`m-1.5`}
@@ -151,14 +157,6 @@ export default function () {
                                 />
                                 <Text
                                 className={`mt-3.5 text-sm text-white`}
-<<<<<<< appointment
-                                style={
-                                    {
-                                        color: invertTextColor
-                                    }
-                                }
-=======
->>>>>>> screen commit
                                 >
                                     {item.date}
                                 </Text>
@@ -171,27 +169,11 @@ export default function () {
                                 >
                                     <Text
                                     className={`font-bold text-base text-white`}
-<<<<<<< appointment
-                                    style={
-                                        {
-                                            color: invertTextColor
-                                        }
-                                    }
-=======
->>>>>>> screen commit
                                     >
                                         {item.service}
                                     </Text>
                                     <Text
                                     className={`font-bold text-base text-white mr-2.5`}
-<<<<<<< appointment
-                                    style={
-                                        {
-                                            color: invertTextColor
-                                        }
-                                    }
-=======
->>>>>>> screen commit
                                     >
                                         {item.price}
                                     </Text>
@@ -201,14 +183,6 @@ export default function () {
                                 >
                                     <Text
                                     className={`text-white text-xs`}
-<<<<<<< appointment
-                                    style={
-                                        {
-                                            color: invertTextColor
-                                        }
-                                    }
-=======
->>>>>>> screen commit
                                     >    
                                         {item.description}
                                     </Text>
