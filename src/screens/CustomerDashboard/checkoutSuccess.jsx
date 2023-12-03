@@ -25,7 +25,7 @@ export default function () {
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
   const handlePress = () => {
-    navigation.navigate("Checkout");
+    navigation.navigate("Receipt");
   };
 
   return (
