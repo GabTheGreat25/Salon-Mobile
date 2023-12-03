@@ -41,6 +41,7 @@ import ChooseDate from "./CustomerDashboard/chooseDate";
 import PastAppointment from "./PastAppointments";
 import Settings from "./Settings";
 import CheckoutSuccess from "./CustomerDashboard/checkoutSuccess";
+import Receipt from "./CustomerDashboard/receipt";
 
 export {
   Home,
@@ -87,4 +88,5 @@ export {
   Settings
   PastAppointment,
   CheckoutSuccess,
+  Receipt,
 };
