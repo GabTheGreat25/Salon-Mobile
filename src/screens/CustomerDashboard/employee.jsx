@@ -86,7 +86,7 @@ export default function () {
                   height: windowHeight * 0.2,
                   width: windowWidth * 0.925,
                 }}
-                className={`flex-row ${
+                className={`flex-row rounded ${
                   isDimensionLayout ? "mx-1 px-4 pt-4 mb-2" : "mx-3"
                 }`}
               >
