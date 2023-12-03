@@ -35,6 +35,7 @@ import MostRecent from "./CustomerDashboard/mostRecent";
 import Budget from "./CustomerDashboard/budget";
 import Cart from "./CustomerDashboard/cart";
 import Checkout from "./CustomerDashboard/checkout";
+import PaymentOption from "./CustomerDashboard/paymentOption";
 
 export {
   Home,
@@ -74,4 +75,5 @@ export {
   Budget,
   Cart,
   Checkout,
+  PaymentOption,
 };
