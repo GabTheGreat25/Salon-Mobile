@@ -1,12 +1,12 @@
 import React from "react";
-import { Feather } from "@expo/vector-icons";
+import { Feather, MaterialIcons } from "@expo/vector-icons";
 import { Dimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   DrawerItemList,
   createDrawerNavigator,
 } from "@react-navigation/drawer";
-import { CustomerDashboard, EditCustomerProfile } from "@screens";
+import { CustomerDashboard, EditCustomerProfile, PastAppointment } from "@screens";
 import { changeColor, dimensionLayout } from "@utils";
 import { RESOURCE } from "@constants";
 import { UserImage } from "@components";
@@ -148,6 +148,28 @@ export default function () {
           ),
         }}
         component={EditCustomerProfile}
+      />
+      <Drawer.Screen
+        name="PastAppointment"
+        options={{
+          drawerActiveBackgroundColor: "#F78FB3",
+          drawerActiveTintColor: textColor,
+          drawerInactiveTintColor: "#FDA7DF",
+          drawerLabel: () => (
+            <Text className={`text-xl font-base`} style={{ color: textColor }}>
+              Past Appointment
+            </Text>
+          ),
+          title: "PastAppointment",
+          drawerIcon: () => (
+            <MaterialIcons
+              name="history"
+              size={RESOURCE.NUMBER.THIRTY}
+              color={textColor}
+            />
+          ),
+        }}
+        component={PastAppointment}
       />
     </Drawer.Navigator>
   );
