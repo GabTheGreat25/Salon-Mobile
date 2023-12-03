@@ -84,6 +84,10 @@ export default function () {
     navigation.navigate("ChooseDate");
   };
 
+  const handleSuccess = () => {
+    navigation.navigate("CheckoutSuccess");
+  };
+
   return (
     <>
       <View style={{ backgroundColor }} className={`flex-1`}>
@@ -323,7 +327,7 @@ export default function () {
               </Text>
             </View>
           </View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleSuccess}>
             <View
               style={{
                 backgroundColor: invertBackgroundColor,
