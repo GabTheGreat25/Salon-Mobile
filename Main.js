@@ -32,6 +32,7 @@ import {
   Checkout,
   PaymentOption,
   Employee,
+  ChooseDate,
 } from "@screens";
 import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
@@ -90,6 +91,7 @@ export default function () {
                 <Stack.Screen name="Checkout" component={Checkout} />
                 <Stack.Screen name="PaymentOption" component={PaymentOption} />
                 <Stack.Screen name="Employee" component={Employee} />
+                <Stack.Screen name="ChooseDate" component={ChooseDate} />
               </Stack.Navigator>
             ) : userRoles.includes("Employee") ? (
               <Stack.Navigator
