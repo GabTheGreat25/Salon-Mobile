@@ -35,7 +35,8 @@ import {
   ChooseDate,
   CheckoutSuccess,
   PastAppointment,
-  Settings
+  Settings,
+  Receipt,
 } from "@screens";
 import{
   TermsConditions,
@@ -101,6 +102,15 @@ export default function () {
                 <Stack.Screen name="Employee" component={Employee} />
                 <Stack.Screen name="ChooseDate" component={ChooseDate} />
                 <Stack.Screen name="PastAppointment" component={PastAppointment} />
+                <Stack.Screen name="Receipt" component={Receipt} />
+                <Stack.Screen
+                  name="PastAppointment"
+                  component={PastAppointment}
+                />
+                <Stack.Screen
+                  name="CheckoutSuccess"
+                  component={CheckoutSuccess}
+                />
               </Stack.Navigator>
             ) : userRoles.includes("Employee") ? (
               <Stack.Navigator
