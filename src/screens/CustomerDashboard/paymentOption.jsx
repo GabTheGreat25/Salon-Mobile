@@ -30,6 +30,10 @@ export default function () {
     setChecked(!isChecked);
   };
 
+  const handlePress = () => {
+    navigation.navigate("Checkout");
+  };
+
   return (
     <>
       <View style={{ backgroundColor }} className={`flex-1`}>
@@ -134,6 +138,32 @@ export default function () {
               </View>
             </View>
           </View>
+        </View>
+        <View
+          style={{
+            backgroundColor,
+            height: windowHeight * 0.1,
+            width: windowWidth,
+          }}
+          className={`flex-col px-10 py-5`}
+        >
+          <TouchableOpacity onPress={handlePress}>
+            <View
+              style={{
+                backgroundColor: invertBackgroundColor,
+              }}
+              className={`justify-center items-center rounded-md py-2`}
+            >
+              <Text
+                style={{ color: invertTextColor }}
+                className={`text-center ${
+                  isDimensionLayout ? "text-lg" : "text-lg px-4 py-6"
+                } font-bold`}
+              >
+                Confirm
+              </Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </View>
     </>
