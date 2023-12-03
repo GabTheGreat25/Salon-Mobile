@@ -33,6 +33,7 @@ import {
   PaymentOption,
   Employee,
   ChooseDate,
+  PastAppointment
 } from "@screens";
 import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
@@ -92,6 +93,7 @@ export default function () {
                 <Stack.Screen name="PaymentOption" component={PaymentOption} />
                 <Stack.Screen name="Employee" component={Employee} />
                 <Stack.Screen name="ChooseDate" component={ChooseDate} />
+                <Stack.Screen name="PastAppointment" component={PastAppointment} />
               </Stack.Navigator>
             ) : userRoles.includes("Employee") ? (
               <Stack.Navigator
