@@ -76,6 +76,10 @@ export default function () {
     navigation.navigate("PaymentOption");
   };
 
+  const handleEmployee = () => {
+    navigation.navigate("Employee");
+  };
+
   return (
     <>
       <View style={{ backgroundColor }} className={`flex-1`}>
@@ -274,7 +278,7 @@ export default function () {
               Pick A Beautician
             </Text>
             <View className={`flex-1 justify-end items-end`}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={handleEmployee}>
                 <View className={`flex-row`}>
                   <Text
                     className={`${
