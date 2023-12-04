@@ -13,6 +13,7 @@ import createServiceValidation from "./createService";
 import editServiceValidation from "./editService";
 import createAppointmentValidation from "./createAppointment";
 import editAppointmentValidation from "./editAppointment";
+import editTransactionValidation from "./editTransaction";
 
 export {
   createTestValidation,
@@ -30,4 +31,5 @@ export {
   editServiceValidation,
   createAppointmentValidation,
   editAppointmentValidation,
+  editTransactionValidation,
 };

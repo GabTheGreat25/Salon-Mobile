@@ -98,7 +98,7 @@ export default function () {
                 <CircleCrud
                   icon="credit-card"
                   title="Transaction"
-                  routeName="Test"
+                  routeName="Transaction"
                   backgroundColor={randomColor({ luminosity: "bright" })}
                 />
                 <View style={{ width: 15 }} />

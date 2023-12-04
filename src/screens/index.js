@@ -44,6 +44,8 @@ import CheckoutSuccess from "./CustomerDashboard/checkoutSuccess";
 import Receipt from "./CustomerDashboard/receipt";
 import Appointment from "./Appointment";
 import EditAppointment from "./Appointment/editAppointment";
+import Transaction from "./Transaction";
+import EditTransaction from "./Transaction/editTransaction";
 
 export {
   Home,
@@ -92,4 +94,6 @@ export {
   Receipt,
   Appointment,
   EditAppointment,
+  Transaction,
+  EditTransaction,
 };

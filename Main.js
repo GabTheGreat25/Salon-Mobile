@@ -39,6 +39,8 @@ import {
   Receipt,
   Appointment,
   EditAppointment,
+  Transaction,
+  EditTransaction,
 } from "@screens";
 import { TermsConditions, PrivacyPolicy, Feedback } from "@settings";
 import { LoadingScreen } from "@components";
@@ -154,6 +156,11 @@ export default function () {
                 <Stack.Screen
                   name="EditAppointment"
                   component={EditAppointment}
+                />
+                <Stack.Screen name="Transaction" component={Transaction} />
+                <Stack.Screen
+                  name="EditTransaction"
+                  component={EditTransaction}
                 />
               </Stack.Navigator>
             ) : null
