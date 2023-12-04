@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
+  FlatList,
 } from "react-native";
 import Salon from "@assets/salon-bg.png";
 import SalonService from "@assets/salon-service.png";
@@ -262,13 +263,14 @@ export default function () {
         </TouchableOpacity>
       </View>
 
-      <ScrollView
+      <FlatList
+        data={items}
+        horizontal
         showsHorizontalScrollIndicator={false}
         decelerationRate="fast"
         scrollEventThrottle={1}
-        horizontal
-      >
-        {items.map((item, index) => (
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item, index }) => (
           <View key={index} className={`flex-row px-[22px]`}>
             <View className={`flex-col`}>
               <View className={`relative`}>
@@ -318,8 +320,8 @@ export default function () {
               </View>
             </View>
           </View>
-        ))}
-      </ScrollView>
+        )}
+      />
       <View className={`flex-row px-4`}>
         <Text
           style={{ color: textColor }}
@@ -340,14 +342,15 @@ export default function () {
         </TouchableOpacity>
       </View>
 
-      <ScrollView
+      <FlatList
+        data={items}
+        horizontal
         showsHorizontalScrollIndicator={false}
         decelerationRate="fast"
         scrollEventThrottle={1}
-        horizontal
-      >
-        {items.map((item, index) => (
-          <View key={index} className={`flex-row px-[22px] pb-5`}>
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item, index }) => (
+          <View key={index} className={`flex-row px-[22px]`}>
             <View className={`flex-col`}>
               <View className={`relative`}>
                 <Image
@@ -396,8 +399,8 @@ export default function () {
               </View>
             </View>
           </View>
-        ))}
-      </ScrollView>
+        )}
+      />
     </ScrollView>
   );
 }
