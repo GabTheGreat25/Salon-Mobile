@@ -38,11 +38,7 @@ import {
   Settings,
   Receipt,
 } from "@screens";
-import{
-  TermsConditions,
-  PrivacyPolicy,
-  Feedback
-} from "@settings";
+import { TermsConditions, PrivacyPolicy, Feedback } from "@settings";
 import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
 import { DarkMode } from "@helpers";
@@ -101,12 +97,11 @@ export default function () {
                 <Stack.Screen name="PaymentOption" component={PaymentOption} />
                 <Stack.Screen name="Employee" component={Employee} />
                 <Stack.Screen name="ChooseDate" component={ChooseDate} />
-                <Stack.Screen name="PastAppointment" component={PastAppointment} />
-                <Stack.Screen name="Receipt" component={Receipt} />
                 <Stack.Screen
                   name="PastAppointment"
                   component={PastAppointment}
                 />
+                <Stack.Screen name="Receipt" component={Receipt} />
                 <Stack.Screen
                   name="CheckoutSuccess"
                   component={CheckoutSuccess}

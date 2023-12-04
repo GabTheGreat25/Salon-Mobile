@@ -85,8 +85,7 @@ export {
   Employee,
   ChooseDate,
   PastAppointment,
-  Settings
-  PastAppointment,
+  Settings,
   CheckoutSuccess,
   Receipt,
 };
