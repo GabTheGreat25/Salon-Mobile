@@ -6,6 +6,8 @@ import UserAPI from "./routes/user";
 import ProductAPI from "./routes/product";
 import DeliveryAPI from "./routes/delivery";
 import ServiceAPI from "./routes/service";
+import AppointmentAPi from "./routes/appointment";
+import TransactionAPI from "./routes/transaction";
 import { RESOURCE, API, TAGS } from "@constants";
 
 const prepareHeaders = (headers, { getState }) => {
@@ -55,6 +57,15 @@ export const api = createApi({
     addService: ServiceAPI.add(builder),
     updateService: ServiceAPI.updateById(builder),
     deleteService: ServiceAPI.deleteById(builder),
+    getAppointments: AppointmentAPi.get(builder),
+    getAppointmentById: AppointmentAPi.getById(builder),
+    addAppointment: AppointmentAPi.add(builder),
+    updateAppointment: AppointmentAPi.updateById(builder),
+    deleteAppointment: AppointmentAPi.deleteById(builder),
+    getTransactions: TransactionAPI.get(builder),
+    getTransactionById: TransactionAPI.getById(builder),
+    updateTransaction: TransactionAPI.updateById(builder),
+    deleteTransaction: TransactionAPI.deleteById(builder),
   }),
 });
 
@@ -88,4 +99,13 @@ export const {
   useAddServiceMutation,
   useUpdateServiceMutation,
   useDeleteServiceMutation,
+  useGetAppointmentsQuery,
+  useGetAppointmentByIdQuery,
+  useAddAppointmentMutation,
+  useUpdateAppointmentMutation,
+  useDeleteAppointmentMutation,
+  useGetTransactionsQuery,
+  useGetTransactionByIdQuery,
+  useUpdateTransactionMutation,
+  useDeleteTransactionMutation,
 } = api;
