@@ -1,24 +1,10 @@
-import {
-  configureStore
-} from "@reduxjs/toolkit";
-import {
-  api
-} from "./api/reducer";
-import {
-  setupListeners
-} from "@reduxjs/toolkit/query";
-import {
-  rootReducer
-} from "./reducer";
-import {
-  RESOURCE
-} from "../constants";
-import {
-  API_URL
-} from "../env";
-import {
-  persistConfig
-} from "./persistor";
+import { configureStore } from "@reduxjs/toolkit";
+import { api } from "./api/reducer";
+import { setupListeners } from "@reduxjs/toolkit/query";
+import { rootReducer } from "./reducer";
+import { RESOURCE } from "../constants";
+import { API_URL } from "../env";
+import { persistConfig } from "./persistor";
 import {
   persistReducer,
   persistStore,
