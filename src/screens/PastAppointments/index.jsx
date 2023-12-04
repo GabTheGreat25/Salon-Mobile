@@ -18,8 +18,10 @@ const windowHeight = Dimensions.get("window").height;
 export default function () {
   const { textColor, backgroundColor, shadowColor, colorScheme } =
     changeColor();
-    const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
-    const invertTextColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
+  const navigation = useNavigation();
+  const isDimensionLayout = dimensionLayout();
+  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDA7DF";
+  const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
   const handlePress = () => {
     navigation.navigate("Checkout");
@@ -120,102 +122,77 @@ export default function () {
                 <View className={`flex-1 flex-col`}>
                   <View className={`flex-row`}>
                     <Text
-                    className={`text-xl py-4 font-semibold text-center`}
-                    style={
-                        {
-                            color: invertTextColor
-                        }
-                    }
+                      style={{ color: invertTextColor }}
+                      className={`text-center ${
+                        isDimensionLayout ? "text-lg" : "text-lg px-4 py-6"
+                      } font-semibold`}
                     >
                       {item.name}
                     </Text>
-                }
-                ListFooterComponent={
-                    <Text
-                    className={`text-lg mt-4 font-semibold text-center`}
-                    style={
-                        {
-                            color: invertTextColor
-                        }
-                    }
+                    <View className={`flex-1 flex-row justify-end items-start`}>
+                      <Text
+                        style={{ color: invertTextColor }}
+                        className={`text-center ${
+                          isDimensionLayout ? "text-lg" : "text-lg px-4 py-6"
+                        } font-semibold`}
+                      >
+                        {item.price}
+                      </Text>
+                    </View>
+                  </View>
+                  <View className={`pt-3`}>
+                    <ScrollView
+                      decelerationRate="fast"
+                      scrollEventThrottle={1}
+                      showsVerticalScrollIndicator={false}
+                      style={{ maxHeight: "60%" }}
                     >
-                        End of Appointments
-                    </Text>
-                }
-                renderItem={({ item, index })=>{
-                    return(
-                        <View
-                        key={index}
-                        className={`flex flex-row bg-pink-300 items-center p-1 rounded-lg`}
-                        >
-                            <View
-                            className={`m-1.5`}
-                            > 
-                                <Image
-                                className={`h-32 w-32 items-center rounded-full m-1`}
-                                source={item.image}
-                                />
-                                <Text
-                                className={`mt-3.5 text-sm text-white`}
-                                >
-                                    {item.date}
-                                </Text>
-                            </View>
-                            <View
-                            className={`flex-column p-3`}
-                            >
-                                <View
-                                className={`flex-row justify-between items-center w-52`}
-                                >
-                                    <Text
-                                    className={`font-bold text-base text-white`}
-                                    >
-                                        {item.service}
-                                    </Text>
-                                    <Text
-                                    className={`font-bold text-base text-white mr-2.5`}
-                                    >
-                                        {item.price}
-                                    </Text>
-                                </View>
-                                <View
-                                className={`mt-1 w-52 text-left`}
-                                >
-                                    <Text
-                                    className={`text-white text-xs`}
-                                    >    
-                                        {item.description}
-                                    </Text>
-                                </View>
-                                <View
-                                className={`flex-row mt-2.5 w-52 justify-end`}
-                                >
-                                    <TouchableOpacity
-                                    className={`bg-pink-400 rounded-xl m-1.5 p-2.5`}
-                                    >
-                                        <Text
-                                        className={`text-white text-sm font-semibold`}
-                                        >
-                                            Reappoint Service
-                                        </Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                    className={`bg-purple-400 rounded-xl m-1.5 p-2.5`}
-                                    >
-                                        <Text
-                                        className={`text-white text-sm font-semibold`}
-                                        >
-                                            Add Feedback
-                                        </Text>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        </View>
-                    )
-                }
-            }
-                />
-            </View>
-        </SafeAreaView>
-    )
+                      <Text
+                        style={{ color: invertTextColor }}
+                        className={`${
+                          isDimensionLayout ? "text-xs" : "text-lg px-4 py-6"
+                        } font-semibold`}
+                      >
+                        {item.description}
+                      </Text>
+                    </ScrollView>
+                  </View>
+                  <View className={`flex-1 gap-x-2 flex-row`}>
+                    <TouchableOpacity
+                      className={`px-4 py-2 rounded-2xl bg-primary-accent  self-start`}
+                    >
+                      <Text
+                        style={{ color: invertTextColor }}
+                        className={`${
+                          isDimensionLayout
+                            ? "text-[10px]"
+                            : "text-lg px-4 py-6"
+                        } font-semibold`}
+                      >
+                        {item.buttonOne}
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      className={`px-4 py-2 rounded-2xl bg-secondary-accent  self-start`}
+                    >
+                      <Text
+                        style={{ color: invertTextColor }}
+                        className={`${
+                          isDimensionLayout
+                            ? "text-[10px]"
+                            : "text-lg px-4 py-6"
+                        } font-semibold`}
+                      >
+                        {item.buttonTwo}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            ))}
+          </ScrollView>
+        </ScrollView>
+      </View>
+    </>
+  );
 }
