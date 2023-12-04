@@ -59,7 +59,7 @@ export default function ({ route }) {
       service_name: data?.details?.service_name || "",
       description: data?.details?.description || "",
       price: data?.details?.price || 0,
-      product: data?.details?.product || "",
+      product: data?.details?.product?._id || "",
     },
     validationSchema: editServiceValidation,
     onSubmit: (values) => {
@@ -366,9 +366,11 @@ export default function ({ route }) {
                       selectedValue={formik.values.product}
                       style={{ color: textColor }}
                       dropdownIconColor={textColor}
-                      onValueChange={(itemValue) =>
-                        formik.setFieldValue("product", itemValue)
-                      }
+                      onValueChange={(itemValue) => {
+                        // Ensure that the formik value is always set, even if the user selects the same product
+                        formik.setFieldValue("product", itemValue);
+                        // Additional logic if needed
+                      }}
                     >
                       {data?.details?.product && (
                         <Picker.Item
@@ -395,6 +397,7 @@ export default function ({ route }) {
                         {formik.errors.product}
                       </Text>
                     )}
+
                     <Text
                       style={{ color: textColor }}
                       className={`${borderColor} font-semibold text-base`}
