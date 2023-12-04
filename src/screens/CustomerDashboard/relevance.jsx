@@ -8,19 +8,21 @@ import {
   Dimensions,
   FlatList,
 } from "react-native";
-import SalonFaceWash from "@assets/face-wash.png";
+import { useDispatch } from "react-redux";
 import { changeColor, dimensionLayout } from "@utils";
 import { BackIcon } from "@helpers";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useGetServicesQuery } from "../../state/api/reducer";
 import { LoadingScreen } from "@components";
+import { appointmentSlice } from "../../state/appointment/appointmentReducer";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function () {
   const { textColor, backgroundColor, colorScheme } = changeColor();
+  const dispatch = useDispatch();
   const route = useRoute();
   const navigation = useNavigation();
   const isDimensionLayout = dimensionLayout();
@@ -31,12 +33,17 @@ export default function () {
 
   const items = data?.details || [];
 
-  const handlePress = () => {
-    navigation.navigate("Cart");
-  };
-
-  const handleRelevance = () => {
-    navigation.navigate("Relevance");
+  const handlePress = (selectedProduct) => {
+    dispatch(
+      appointmentSlice.actions.setService({
+        service: selectedProduct?._id || "",
+        service_name: selectedProduct?.service_name || "",
+        product_name: selectedProduct?.product.product_name || "",
+        price: selectedProduct?.price || 0,
+        extraFee: selectedProduct?.extraFee || 0,
+        image: selectedProduct?.image || [],
+      })
+    );
   };
 
   const handlePopular = () => {
@@ -63,6 +70,10 @@ export default function () {
     navigation.navigate("CustomerDrawer");
   };
 
+  const handleCart = () => {
+    navigation.navigate("Cart");
+  };
+
   return (
     <>
       {isLoading ? (
@@ -73,7 +84,11 @@ export default function () {
         </View>
       ) : (
         <>
-          <BackIcon navigateBack={handleBack} textColor={textColor} />
+          <BackIcon
+            navigateBack={handleBack}
+            textColor={textColor}
+            navigateTo={handleCart}
+          />
           <View
             style={{
               backgroundColor,
@@ -87,110 +102,6 @@ export default function () {
                   : "flex-row justify-start items-start"
               }`}
             >
-              <ScrollView
-                decelerationRate="fast"
-                scrollEventThrottle={1}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                className={`mb-5`}
-              >
-                <View
-                  className={`${
-                    isDimensionLayout
-                      ? "flex-row gap-x-2"
-                      : "pt-10 pr-8 justify-center items-center flex-col gap-y-2"
-                  }`}
-                >
-                  <TouchableOpacity onPress={handleRelevance}>
-                    <View
-                      style={{
-                        backgroundColor:
-                          selectedOption === "Relevance"
-                            ? "#FDA7DF"
-                            : invertBackgroundColor,
-                      }}
-                      className={`rounded-2xl px-4 py-2`}
-                    >
-                      <Text
-                        style={{
-                          color:
-                            selectedOption === "Relevance"
-                              ? textColor
-                              : invertTextColor,
-                        }}
-                      >
-                        Relevance
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={handlePopular}>
-                    <View
-                      style={{
-                        backgroundColor:
-                          selectedOption === "Popular"
-                            ? "#FDA7DF"
-                            : invertBackgroundColor,
-                      }}
-                      className={`rounded-2xl px-4 py-2`}
-                    >
-                      <Text
-                        style={{
-                          color:
-                            selectedOption === "Popular"
-                              ? textColor
-                              : invertTextColor,
-                        }}
-                      >
-                        Popular
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={handleMostRecent}>
-                    <View
-                      style={{
-                        backgroundColor:
-                          selectedOption === "MostRecent"
-                            ? "#FDA7DF"
-                            : invertBackgroundColor,
-                      }}
-                      className={`rounded-2xl px-4 py-2`}
-                    >
-                      <Text
-                        style={{
-                          color:
-                            selectedOption === "MostRecent"
-                              ? textColor
-                              : invertTextColor,
-                        }}
-                      >
-                        Most Recent
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={handleBudget}>
-                    <View
-                      style={{
-                        backgroundColor:
-                          selectedOption === "Budget"
-                            ? "#FDA7DF"
-                            : invertBackgroundColor,
-                      }}
-                      className={`rounded-2xl px-4 py-2`}
-                    >
-                      <Text
-                        style={{
-                          color:
-                            selectedOption === "Budget"
-                              ? textColor
-                              : invertTextColor,
-                        }}
-                      >
-                        Budget
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              </ScrollView>
               <FlatList
                 data={items}
                 showsVerticalScrollIndicator={false}
@@ -216,7 +127,7 @@ export default function () {
                             borderRadius: 20,
                           }}
                         />
-                        <TouchableOpacity onPress={handlePress}>
+                        <TouchableOpacity onPress={() => handlePress(item)}>
                           <View className={`absolute left-[315px] bottom-2`}>
                             <Ionicons
                               name="add-circle-sharp"
@@ -232,7 +143,7 @@ export default function () {
                             style={{ color: textColor }}
                             className={`text-base font-semibold`}
                           >
-                            {item?.service_name}
+                            {item?.service_name} - {item?.product.product_name}
                           </Text>
                           <Text
                             style={{ color: textColor }}

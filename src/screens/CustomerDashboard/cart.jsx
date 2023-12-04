@@ -12,6 +12,7 @@ import { Feather, FontAwesome, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { BackIcon } from "@helpers";
 import SalonFaceWash from "@assets/face-wash.png";
+import { useSelector } from "react-redux";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -24,38 +25,18 @@ export default function () {
   const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDA7DF";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
-  const items = [
-    {
-      name: "Face Wash",
-      price: "₱ 559.00",
-      variation: "Variation: Face Service",
-      image: SalonFaceWash,
-    },
-    {
-      name: "Face Wash",
-      price: "₱ 559.00",
-      variation: "Variation: Face Service",
-      image: SalonFaceWash,
-    },
-    {
-      name: "Face Wash",
-      price: "₱ 559.00",
-      variation: "Variation: Face Service",
-      image: SalonFaceWash,
-    },
-    {
-      name: "Face Wash",
-      price: "₱ 559.00",
-      variation: "Variation: Face Service",
-      image: SalonFaceWash,
-    },
-    {
-      name: "Face Wash",
-      price: "₱ 559.00",
-      variation: "Variation: Face Service",
-      image: SalonFaceWash,
-    },
-  ];
+  const selectedService = useSelector((state) => state?.appointment);
+
+  const appointmentData = selectedService?.appointmentData;
+  const dataAsArray = appointmentData ? [appointmentData] : [];
+
+  const items = dataAsArray.map((item) => ({
+    name: item.service_name,
+    product: item.product_name,
+    price: item.price,
+    extraFee: item.extraFee,
+    image: item?.image,
+  }));
 
   const handlePress = () => {
     navigation.navigate("Checkout");
@@ -79,7 +60,7 @@ export default function () {
             scrollEventThrottle={1}
             showsVerticalScrollIndicator={false}
           >
-            {items.map((item, index) => (
+            {items?.map((item, index) => (
               <View
                 key={index}
                 style={{
@@ -118,7 +99,7 @@ export default function () {
                   <View className={`flex-row`}>
                     <View className={`flex-1 justify-center items-center pt-5`}>
                       <Image
-                        source={item.image}
+                        source={{ uri: item?.image?.[0]?.url }}
                         resizeMode="cover"
                         className={`h-[100px] w-[100px] rounded-full`}
                       />
@@ -128,7 +109,7 @@ export default function () {
                     >
                       <Text
                         style={{ color: invertTextColor }}
-                        className={`flex-1 ${
+                        className={` ${
                           isDimensionLayout
                             ? "text-2xl pl-2 pr-1 pt-4"
                             : "text-lg px-4 py-6"
@@ -138,23 +119,23 @@ export default function () {
                       </Text>
                       <Text
                         style={{ color: invertTextColor }}
-                        className={`flex-1 ${
+                        className={` ${
                           isDimensionLayout
-                            ? "text-sm pl-2 pr-1 pt-2"
+                            ? "text-sm pl-2 pr-1"
                             : "text-lg px-4 py-6"
                         } font-semibold`}
                       >
-                        {item.variation}
+                        {item.product}
                       </Text>
                       <Text
                         style={{ color: invertTextColor }}
-                        className={`flex-1 ${
+                        className={` ${
                           isDimensionLayout
                             ? "text-2xl pl-2 pr-1 pt-4"
                             : "text-lg px-4 py-6"
                         } font-semibold`}
                       >
-                        {item.price}
+                        ₱{item.price}
                       </Text>
                     </View>
                   </View>
@@ -187,7 +168,7 @@ export default function () {
                   isDimensionLayout ? "text-base" : "text-lg px-4 py-6"
                 } font-semibold`}
               >
-                ₱ 2,236.00
+                {items?.map((item) => `₱${item.price.toFixed(2)}`)}
               </Text>
             </View>
           </View>
@@ -207,7 +188,7 @@ export default function () {
                   isDimensionLayout ? "text-base" : "text-lg px-4 py-6"
                 } font-light`}
               >
-                ₱ 50.00
+                {items?.map((item) => `₱${item?.extraFee?.toFixed(2)}`)}
               </Text>
             </View>
           </View>
@@ -234,7 +215,9 @@ export default function () {
                   isDimensionLayout ? "text-lg" : "text-lg px-4 py-6"
                 } font-bold`}
               >
-                ₱ 2,286.00
+                {items?.map(
+                  (item) => `₱${(item.price + item?.extraFee)?.toFixed(2)}`
+                )}
               </Text>
             </View>
           </View>
