@@ -77,7 +77,7 @@ export default function () {
                 <CircleCrud
                   icon="clock"
                   title="Appointment"
-                  routeName="Test"
+                  routeName="Appointment"
                   backgroundColor={randomColor({ luminosity: "bright" })}
                 />
                 <View style={{ width: 15 }} />

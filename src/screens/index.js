@@ -42,6 +42,8 @@ import PastAppointment from "./PastAppointments";
 import Settings from "./Settings";
 import CheckoutSuccess from "./CustomerDashboard/checkoutSuccess";
 import Receipt from "./CustomerDashboard/receipt";
+import Appointment from "./Appointment";
+import EditAppointment from "./Appointment/editAppointment";
 
 export {
   Home,
@@ -88,4 +90,6 @@ export {
   Settings,
   CheckoutSuccess,
   Receipt,
+  Appointment,
+  EditAppointment,
 };

@@ -37,6 +37,8 @@ import {
   PastAppointment,
   Settings,
   Receipt,
+  Appointment,
+  EditAppointment,
 } from "@screens";
 import { TermsConditions, PrivacyPolicy, Feedback } from "@settings";
 import { LoadingScreen } from "@components";
@@ -148,6 +150,11 @@ export default function () {
                 <Stack.Screen name="Service" component={Service} />
                 <Stack.Screen name="CreateService" component={CreateService} />
                 <Stack.Screen name="EditService" component={EditService} />
+                <Stack.Screen name="Appointment" component={Appointment} />
+                <Stack.Screen
+                  name="EditAppointment"
+                  component={EditAppointment}
+                />
               </Stack.Navigator>
             ) : null
           ) : (
