@@ -6,4 +6,6 @@ export default {
   PRODUCTS: "products",
   DELIVERY: "delivery",
   SERVICES: "services",
+  APPOINTMENTS: "appointments",
+  TRANSACTIONS: "transactions",
 };
