@@ -1,20 +1,53 @@
 import React from "react";
-import { View, TouchableOpacity } from "react-native";
+import { TouchableOpacity, Text, View } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { RESOURCE } from "@constants";
+import { changeColor } from "@utils";
+import { useSelector, useDispatch } from "react-redux";
+import { appointmentSlice } from "../../state/appointment/appointmentReducer";
+import { useNavigation } from "@react-navigation/native";
 
-export default function ({ navigateBack, textColor }) {
+export default function ({ navigateBack, textColor, navigateTo }) {
+  const navigation = useNavigation();
+  const userRoles = useSelector((state) => state.auth?.user?.roles);
+  const count = useSelector((state) => state.appointment.count);
+  const dispatch = useDispatch();
+
+  const isOnlineCustomer = userRoles?.includes("Online Customer");
+
+  const handleCountClick = () => {
+    dispatch(appointmentSlice.actions.clearAppointmentData());
+  };
+
   return (
     <>
-      <View className={`absolute top-3 z-[1000]`}>
-        <TouchableOpacity onPress={navigateBack}>
-          <Feather
-            name="chevron-left"
-            size={35}
-            color={textColor}
-          />
-        </TouchableOpacity>
-      </View>
+      {isOnlineCustomer && (
+        <>
+          <View className={`absolute top-3 z-[1000]`}>
+            <TouchableOpacity onPress={navigateBack}>
+              <Feather name="chevron-left" size={35} color={textColor} />
+            </TouchableOpacity>
+          </View>
+          <View className={`absolute right-14 top-4 z-[1000]`}>
+            <TouchableOpacity onPress={navigateTo}>
+              <Feather name="shopping-bag" size={25} color={textColor} />
+            </TouchableOpacity>
+            <Text
+              selectable={false}
+              onPress={handleCountClick}
+              className={`absolute left-[25px] bottom-4 z-[1000]`}
+            >
+              {count > 0 && <Text style={{ color: textColor }}>{count}</Text>}
+            </Text>
+          </View>
+        </>
+      )}
+      {!isOnlineCustomer && (
+        <View className={`absolute top-3 z-[1000]`}>
+          <TouchableOpacity onPress={navigateBack}>
+            <Feather name="chevron-left" size={35} color={textColor} />
+          </TouchableOpacity>
+        </View>
+      )}
     </>
   );
 }
