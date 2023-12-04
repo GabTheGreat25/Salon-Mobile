@@ -56,7 +56,9 @@ export default function ({ route }) {
     enableReinitialize: true,
     initialValues: {
       company_name: data?.details?.company_name || "",
-      date: data?.details?.date || "",
+      date: data?.details?.date
+        ? format(new Date(data.details.date), "yyyy-MM-dd")
+        : "",
       status: data?.details?.status || "",
       price: data?.details?.price || 0,
       quantity: data?.details?.quantity || 0,
@@ -226,7 +228,7 @@ export default function ({ route }) {
                     placeholder="Enter date"
                     placeholderTextColor={textColor}
                     onFocus={showDatepicker}
-                    value={format(new Date(formik?.values?.date), "yyyy-MM-dd")}
+                    value={formik.values.date}
                   />
                   {showDatePicker && (
                     <DateTimePicker
