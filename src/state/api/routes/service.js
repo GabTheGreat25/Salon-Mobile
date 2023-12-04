@@ -23,7 +23,7 @@ export const add = (builder) => {
       method: API.POST,
       body: payload,
     }),
-    invalidasERVICEags: [TAGS.SERVICES],
+    invalidatesTags: [TAGS.SERVICES],
   });
 };
 
@@ -36,7 +36,7 @@ export const updateById = (builder) => {
         body: payload,
       };
     },
-    invalidasERVICEags: [TAGS.SERVICES],
+    invalidatesTags: [TAGS.SERVICES],
   });
 };
 
@@ -46,7 +46,7 @@ export const deleteById = (builder) => {
       url: `${ROUTE.SERVICE_ID_ROUTE.replace(":id", id)}`,
       method: API.DELETE,
     }),
-    invalidasERVICEags: [TAGS.SERVICES],
+    invalidatesTags: [TAGS.SERVICES],
   });
 };
 
