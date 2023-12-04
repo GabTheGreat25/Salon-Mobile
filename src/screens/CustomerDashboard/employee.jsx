@@ -6,11 +6,14 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
+  FlatList,
 } from "react-native";
 import { changeColor, dimensionLayout } from "@utils";
 import { useNavigation } from "@react-navigation/native";
 import { BackIcon } from "@helpers";
 import SalonEmployee from "@assets/employee.png";
+import { useGetUsersQuery } from "../../state/api/reducer";
+import { LoadingScreen } from "@components";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -27,123 +30,117 @@ export default function () {
     navigation.navigate("Checkout");
   };
 
-  const items = [
-    {
-      name: "Crislhan",
-      image: SalonEmployee,
-      description:
-        "Jorem ipsum dolor, consectetur adipiscing elit. Nunc v libero et velit interdum, ac mattis.",
-    },
-    {
-      name: "Crislhan",
-      image: SalonEmployee,
-      description:
-        "Jorem ipsum dolor, consectetur adipiscing elit. Nunc v libero et velit interdum, ac mattis.",
-    },
-    {
-      name: "Crislhan",
-      image: SalonEmployee,
-      description:
-        "Jorem ipsum dolor, consectetur adipiscing elit. Nunc v libero et velit interdum, ac mattis.",
-    },
-    {
-      name: "Crislhan",
-      image: SalonEmployee,
-      description:
-        "Jorem ipsum dolor, consectetur adipiscing elit. Nunc v libero et velit interdum, ac mattis.",
-    },
-    {
-      name: "Crislhan",
-      image: SalonEmployee,
-      description:
-        "Jorem ipsum dolor, consectetur adipiscing elit. Nunc v libero et velit interdum, ac mattis.",
-    },
-  ];
+  const { data, isLoading } = useGetUsersQuery();
+
+  const filteredEmployees = data?.details?.filter(
+    (user) => user?.roles.includes("Employee") && user?.active === true
+  );
+
+  const items = filteredEmployees || [];
 
   return (
     <>
-      <View style={{ backgroundColor }} className={`flex-1`}>
-        <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          decelerationRate="fast"
-          scrollEventThrottle={1}
-          style={{
-            backgroundColor,
-          }}
-          className={`px-3 flex-1 mt-20`}
+      {isLoading ? (
+        <View
+          className={`flex-1 justify-center items-center bg-primary-default`}
         >
-          <ScrollView
-            decelerationRate="fast"
-            scrollEventThrottle={1}
-            showsVerticalScrollIndicator={false}
+          <LoadingScreen />
+        </View>
+      ) : (
+        <View style={{ backgroundColor }} className={`flex-1`}>
+          <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
+          <View className={`flex-1 mt-20`}>
+            <FlatList
+              data={items}
+              showsVerticalScrollIndicator={false}
+              decelerationRate="fast"
+              scrollEventThrottle={1}
+              keyExtractor={(item, index) => index.toString()}
+              ListFooterComponent={<View style={{ paddingBottom: 24 }} />}
+              renderItem={({ item, index }) => (
+                <View
+                  key={index}
+                  style={{
+                    backgroundColor: invertBackgroundColor,
+                    height: windowHeight * 0.2,
+                    width: windowWidth * 0.925,
+                  }}
+                  className={`flex-row rounded gap-x-2 ${
+                    isDimensionLayout ? "mt-4 mx-4 px-4 pt-5" : "mx-3"
+                  }`}
+                >
+                  <Image
+                    style={{ width: 150, height: 120 }}
+                    source={{ uri: item?.image?.[0]?.url }}
+                    resizeMode="cover"
+                  />
+                  <View className={`flex-col justify-start items-start`}>
+                    <Text
+                      style={{
+                        color: invertTextColor,
+                      }}
+                      className={`${
+                        isDimensionLayout
+                          ? "w-[200px] text-xl py-1"
+                          : "text-lg px-4 py-6"
+                      } font-semibold`}
+                    >
+                      Name: {item.name}
+                    </Text>
+                    <Text
+                      style={{
+                        color: invertTextColor,
+                        fontWeight: "bold",
+                      }}
+                      className={`${
+                        isDimensionLayout ? "text-lg py-1" : "text-lg px-4 py-6"
+                      } font-semibold`}
+                    >
+                      Contact: {item.contact_number}
+                    </Text>
+                    <Text
+                      style={{
+                        color: invertTextColor,
+                      }}
+                      className={`text-start ${
+                        isDimensionLayout ? "text-lg py-1" : "text-base px-4"
+                      } font-semibold`}
+                    >
+                      Job: {item.requirement?.job}
+                    </Text>
+                  </View>
+                </View>
+              )}
+            />
+          </View>
+          <View
+            style={{
+              backgroundColor,
+              height: windowHeight * 0.1,
+              width: windowWidth,
+            }}
+            className={`flex-col px-10 py-5`}
           >
-            {items.map((item, index) => (
+            <TouchableOpacity onPress={handlePress}>
               <View
-                key={index}
                 style={{
                   backgroundColor: invertBackgroundColor,
-                  height: windowHeight * 0.2,
-                  width: windowWidth * 0.925,
                 }}
-                className={`flex-row rounded ${
-                  isDimensionLayout ? "mx-1 px-4 pt-4 mb-2" : "mx-3"
-                }`}
+                className={`justify-center items-center rounded-md py-2`}
               >
-                <Image
-                  className={`w-[175px] h-[149px]`}
-                  source={item.image}
-                  resizeMode="cover"
-                />
-                <View className={`flex-col pl-4`}>
-                  <Text
-                    style={{ color: invertTextColor }}
-                    className={`${
-                      isDimensionLayout ? "text-2xl" : "text-lg px-4 py-6"
-                    } font-semibold`}
-                  >
-                    {item.name}
-                  </Text>
-                  <Text
-                    style={{ color: invertTextColor }}
-                    className={`w-[150px] text-start ${
-                      isDimensionLayout ? "text-sm" : "text-base px-4"
-                    } font-semibold`}
-                  >
-                    {item.description}
-                  </Text>
-                </View>
+                <Text
+                  style={{ color: invertTextColor }}
+                  className={`text-center ${
+                    isDimensionLayout ? "text-lg" : "text-lg px-4 py-6"
+                  } font-bold`}
+                >
+                  Confirm
+                </Text>
               </View>
-            ))}
-          </ScrollView>
-        </ScrollView>
-        <View
-          style={{
-            backgroundColor,
-            height: windowHeight * 0.1,
-            width: windowWidth,
-          }}
-          className={`flex-col px-10 py-5`}
-        >
-          <TouchableOpacity onPress={handlePress}>
-            <View
-              style={{
-                backgroundColor: invertBackgroundColor,
-              }}
-              className={`justify-center items-center rounded-md py-2`}
-            >
-              <Text
-                style={{ color: invertTextColor }}
-                className={`text-center ${
-                  isDimensionLayout ? "text-lg" : "text-lg px-4 py-6"
-                } font-bold`}
-              >
-                Confirm
-              </Text>
-            </View>
-          </TouchableOpacity>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      )}
     </>
   );
 }
