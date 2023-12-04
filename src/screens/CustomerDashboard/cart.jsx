@@ -121,7 +121,7 @@ export default function () {
                         style={{ color: invertTextColor }}
                         className={` ${
                           isDimensionLayout
-                            ? "text-sm pl-2 pr-1"
+                            ? "text-base pl-2 pr-1"
                             : "text-lg px-4 py-6"
                         } font-semibold`}
                       >

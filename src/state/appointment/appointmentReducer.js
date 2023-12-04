@@ -25,6 +25,9 @@ export const appointmentSlice = createSlice({
     setNote(state, action) {
       state.appointmentData.note = action.payload;
     },
+    setPayment(state, action) {
+      state.appointmentData.payment = action.payload;
+    },
     setCustomer(state, action) {
       state.appointmentData.customer = action.payload;
     },

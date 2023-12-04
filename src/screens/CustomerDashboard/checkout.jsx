@@ -11,8 +11,12 @@ import { changeColor, dimensionLayout } from "@utils";
 import { Feather, FontAwesome, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { BackIcon } from "@helpers";
-import SalonFaceWash from "@assets/face-wash.png";
-
+import { useFormik } from "formik";
+import { useAddAppointmentMutation } from "../../state/api/reducer";
+import { createAppointmentValidation } from "../../validation";
+import { useSelector, useDispatch } from "react-redux";
+import Toast from "react-native-toast-message";
+import { appointmentSlice } from "../../state/appointment/appointmentReducer";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
@@ -24,53 +28,83 @@ export default function () {
   const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDA7DF";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
-  const items = [
-    {
-      name: "Face Wash",
-      price: "₱ 559.00",
-      variation: "Variation: Face Service",
-      image: SalonFaceWash,
-      addNotes: "Add Notes",
-      notes: "Lorem Ipsum",
-      appointment: "Appointment by 2 Dec 2023 11:00am Sat",
+  const selectedService = useSelector((state) => state?.appointment);
+  const selectedServiceTwo = useSelector(
+    (state) => state?.appointment?.appointmentData?.service
+  );
+  const selectedPayment = useSelector(
+    (state) => state?.appointment?.appointmentData?.payment?.type
+  );
+  const selectedEmployee = useSelector(
+    (state) => state?.appointment?.appointmentData?.employee?._id
+  );
+
+  const selectedDate = useSelector(
+    (state) => state?.appointment?.appointmentData?.date
+  );
+
+  const selectedTime = useSelector(
+    (state) => state?.appointment?.appointmentData?.time
+  );
+
+  const dispatch = useDispatch();
+
+  const appointmentData = selectedService?.appointmentData;
+  const dataAsArray = appointmentData ? [appointmentData] : [];
+
+  const auth = useSelector((state) => state.auth);
+  const [addAppointment, { isLoading }] = useAddAppointmentMutation();
+  const items = dataAsArray.map((item) => ({
+    name: item.service_name,
+    product: item.product_name,
+    price: item.price,
+    extraFee: item.extraFee,
+    image: item?.image,
+  }));
+
+  const formik = useFormik({
+    initialValues: {
+      service: selectedServiceTwo,
+      employee: selectedEmployee,
+      customer: auth.user._id,
+      date: selectedDate,
+      time: selectedTime,
+      price: items?.reduce((total, item) => total + item.price, 0),
+      extraFee: items?.reduce((total, item) => total + item.extraFee, 0),
+      note: "",
+      payment: selectedPayment,
+      status: "pending",
     },
-    {
-      name: "Face Wash",
-      price: "₱ 559.00",
-      variation: "Variation: Face Service",
-      image: SalonFaceWash,
-      addNotes: "Add Notes",
-      notes: "Lorem Ipsum",
-      appointment: "Appointment by 2 Dec 2023 11:00am Sat",
+    onSubmit: (values) => {
+      console.log(values);
+      addAppointment(values)
+        .unwrap()
+        .then((response) => {
+          dispatch(appointmentSlice.actions.clearAppointmentData());
+          formik.resetForm();
+          Toast.show({
+            type: "success",
+            position: "top",
+            text1: "Transaction Successfully Created",
+            text2: `${response?.message}`,
+            visibilityTime: 3000,
+            autoHide: true,
+          });
+          navigation.navigate("CustomerDrawer");
+        })
+        .catch((error) => {
+          console.log(error?.data?.error?.message);
+          Toast.show({
+            type: "error",
+            position: "top",
+            text1: "Error Creating Transaction",
+            text2: `${error?.data?.error?.message}`,
+            visibilityTime: 3000,
+            autoHide: true,
+          });
+        });
     },
-    {
-      name: "Face Wash",
-      price: "₱ 559.00",
-      variation: "Variation: Face Service",
-      image: SalonFaceWash,
-      addNotes: "Add Notes",
-      notes: "Lorem Ipsum",
-      appointment: "Appointment by 2 Dec 2023 11:00am Sat",
-    },
-    {
-      name: "Face Wash",
-      price: "₱ 559.00",
-      variation: "Variation: Face Service",
-      image: SalonFaceWash,
-      addNotes: "Add Notes",
-      notes: "Lorem Ipsum",
-      appointment: "Appointment by 2 Dec 2023 11:00am Sat",
-    },
-    {
-      name: "Face Wash",
-      price: "₱ 559.00",
-      variation: "Variation: Face Service",
-      image: SalonFaceWash,
-      addNotes: "Add Notes",
-      notes: "Lorem Ipsum",
-      appointment: "Appointment by 2 Dec 2023 11:00am Sat",
-    },
-  ];
+  });
 
   const handlePayment = () => {
     navigation.navigate("PaymentOption");
@@ -127,7 +161,7 @@ export default function () {
                   style={{ color: invertTextColor }}
                   className={`text-base font-semibold`}
                 >
-                  02/12/2023 | 11: 00 AM, Sat
+                  {selectedDate} |{selectedTime}
                 </Text>
                 <TouchableOpacity onPress={handleDateTime} className={`flex-1`}>
                   <View className={`flex-row justify-end items-end`}>
@@ -148,23 +182,22 @@ export default function () {
                 </Text>
               </TouchableOpacity>
             </View>
-            {items.map((item, index) => (
-              <View
-                key={index}
-                style={{
-                  backgroundColor: invertBackgroundColor,
-                  height: windowHeight * 0.25,
-                  width: windowWidth * 0.925,
-                }}
-                className={`flex-row ${
-                  isDimensionLayout ? "mx-1 px-4 mb-2" : "mx-3"
-                }`}
-              >
-                <View className={`flex-1 flex-col`}>
+            <View
+              style={{
+                backgroundColor: invertBackgroundColor,
+                height: windowHeight * 0.25,
+                width: windowWidth * 0.925,
+              }}
+              className={`flex-row ${
+                isDimensionLayout ? "mx-1 px-4 mb-2" : "mx-3"
+              }`}
+            >
+              {items.map((item, index) => (
+                <View key={index} className={`flex-1 flex-col`}>
                   <View className={`flex-row`}>
                     <View className={`flex-1 justify-center items-center pt-5`}>
                       <Image
-                        source={item.image}
+                        source={{ uri: item?.image?.[0]?.url }}
                         resizeMode="cover"
                         className={`h-[100px] w-[100px] rounded-full`}
                       />
@@ -174,7 +207,7 @@ export default function () {
                     >
                       <Text
                         style={{ color: invertTextColor }}
-                        className={`flex-1 ${
+                        className={` ${
                           isDimensionLayout
                             ? "text-2xl pl-2 pr-1 pt-4"
                             : "text-lg px-4 py-6"
@@ -184,23 +217,23 @@ export default function () {
                       </Text>
                       <Text
                         style={{ color: invertTextColor }}
-                        className={`flex-1 ${
+                        className={` ${
                           isDimensionLayout
-                            ? "text-sm pl-2 pr-1 pt-2"
+                            ? "text-base pl-2 pr-1 pt-2"
                             : "text-lg px-4 py-6"
                         } font-semibold`}
                       >
-                        {item.variation}
+                        {item.product}
                       </Text>
                       <Text
                         style={{ color: invertTextColor }}
-                        className={`flex-1 ${
+                        className={` ${
                           isDimensionLayout
                             ? "text-2xl pl-2 pr-1 pt-4"
                             : "text-lg px-4 py-6"
                         } font-semibold`}
                       >
-                        {item.price}
+                        ₱{item.price}
                       </Text>
                     </View>
                   </View>
@@ -212,35 +245,9 @@ export default function () {
                       paddingVertical: 10,
                     }}
                   />
-                  <View className={`flex-row gap-x-2`}>
-                    <View className={`flex-col`}>
-                      <Text
-                        style={{ color: invertTextColor }}
-                        className={`text-base font-semibold`}
-                      >
-                        {item.addNotes}
-                      </Text>
-                      <Text
-                        style={{ color: invertTextColor }}
-                        className={`text-lg font-semibold`}
-                      >
-                        {item.notes}
-                      </Text>
-                    </View>
-                    <View
-                      className={`flex-1 flex-row justify-end items-end mb-[5px]`}
-                    >
-                      <Text
-                        style={{ color: invertTextColor }}
-                        className={`text-xs font-semibold`}
-                      >
-                        {item.appointment}
-                      </Text>
-                    </View>
-                  </View>
                 </View>
-              </View>
-            ))}
+              ))}
+            </View>
           </ScrollView>
         </ScrollView>
         <View
@@ -323,11 +330,13 @@ export default function () {
                   isDimensionLayout ? "text-lg" : "text-lg px-4 py-6"
                 } font-bold`}
               >
-                ₱ 2,286.00
+                {items?.map(
+                  (item) => `₱${(item.price + item?.extraFee)?.toFixed(2)}`
+                )}
               </Text>
             </View>
           </View>
-          <TouchableOpacity onPress={handleSuccess}>
+          <TouchableOpacity onPress={formik.handleSubmit}>
             <View
               style={{
                 backgroundColor: invertBackgroundColor,

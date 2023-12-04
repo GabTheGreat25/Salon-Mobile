@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   ScrollView,
   View,
@@ -11,20 +11,22 @@ import {
 import { changeColor, dimensionLayout } from "@utils";
 import { useNavigation } from "@react-navigation/native";
 import { BackIcon } from "@helpers";
-import SalonEmployee from "@assets/employee.png";
 import { useGetUsersQuery } from "../../state/api/reducer";
 import { LoadingScreen } from "@components";
+import { useDispatch } from "react-redux";
+import { appointmentSlice } from "../../state/appointment/appointmentReducer";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function () {
-  const { textColor, backgroundColor, shadowColor, colorScheme } =
-    changeColor();
+  const { textColor, backgroundColor, colorScheme } = changeColor();
   const navigation = useNavigation();
   const isDimensionLayout = dimensionLayout();
   const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDA7DF";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
+
+  const dispatch = useDispatch();
 
   const handlePress = () => {
     navigation.navigate("Checkout");
@@ -35,6 +37,8 @@ export default function () {
   const filteredEmployees = data?.details?.filter(
     (user) => user?.roles.includes("Employee") && user?.active === true
   );
+
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
 
   const items = filteredEmployees || [];
 
@@ -58,58 +62,73 @@ export default function () {
               keyExtractor={(item, index) => index.toString()}
               ListFooterComponent={<View style={{ paddingBottom: 24 }} />}
               renderItem={({ item, index }) => (
-                <View
+                <TouchableOpacity
                   key={index}
-                  style={{
-                    backgroundColor: invertBackgroundColor,
-                    height: windowHeight * 0.2,
-                    width: windowWidth * 0.925,
+                  onPress={() => {
+                    setSelectedEmployee(item);
+                    dispatch(
+                      appointmentSlice.actions.setEmployee({
+                        _id: item?._id,
+                      })
+                    );
                   }}
-                  className={`flex-row rounded gap-x-2 ${
-                    isDimensionLayout ? "mt-4 mx-4 px-4 pt-5" : "mx-3"
-                  }`}
+                  activeOpacity={0.7}
                 >
-                  <Image
-                    style={{ width: 150, height: 120 }}
-                    source={{ uri: item?.image?.[0]?.url }}
-                    resizeMode="cover"
-                  />
-                  <View className={`flex-col justify-start items-start`}>
-                    <Text
-                      style={{
-                        color: invertTextColor,
-                      }}
-                      className={`${
-                        isDimensionLayout
-                          ? "w-[200px] text-xl py-1"
-                          : "text-lg px-4 py-6"
-                      } font-semibold`}
-                    >
-                      Name: {item.name}
-                    </Text>
-                    <Text
-                      style={{
-                        color: invertTextColor,
-                        fontWeight: "bold",
-                      }}
-                      className={`${
-                        isDimensionLayout ? "text-lg py-1" : "text-lg px-4 py-6"
-                      } font-semibold`}
-                    >
-                      Contact: {item.contact_number}
-                    </Text>
-                    <Text
-                      style={{
-                        color: invertTextColor,
-                      }}
-                      className={`text-start ${
-                        isDimensionLayout ? "text-lg py-1" : "text-base px-4"
-                      } font-semibold`}
-                    >
-                      Job: {item.requirement?.job}
-                    </Text>
+                  <View
+                    style={{
+                      backgroundColor: invertBackgroundColor,
+                      height: windowHeight * 0.2,
+                      width: windowWidth * 0.925,
+                      opacity: selectedEmployee === item ? 0.7 : 1,
+                    }}
+                    className={`flex-row rounded gap-x-2 ${
+                      isDimensionLayout ? "mt-4 mx-4 px-4 pt-5" : "mx-3"
+                    }`}
+                  >
+                    <Image
+                      style={{ width: 150, height: 120 }}
+                      source={{ uri: item?.image?.[0]?.url }}
+                      resizeMode="cover"
+                    />
+                    <View className={`flex-col justify-start items-start`}>
+                      <Text
+                        style={{
+                          color: invertTextColor,
+                        }}
+                        className={`${
+                          isDimensionLayout
+                            ? "w-[200px] text-xl py-1"
+                            : "text-lg px-4 py-6"
+                        } font-semibold`}
+                      >
+                        Name: {item.name}
+                      </Text>
+                      <Text
+                        style={{
+                          color: invertTextColor,
+                          fontWeight: "bold",
+                        }}
+                        className={`${
+                          isDimensionLayout
+                            ? "text-lg py-1"
+                            : "text-lg px-4 py-6"
+                        } font-semibold`}
+                      >
+                        Contact: {item.contact_number}
+                      </Text>
+                      <Text
+                        style={{
+                          color: invertTextColor,
+                        }}
+                        className={`text-start ${
+                          isDimensionLayout ? "text-lg py-1" : "text-base px-4"
+                        } font-semibold`}
+                      >
+                        Job: {item.requirement?.job}
+                      </Text>
+                    </View>
                   </View>
-                </View>
+                </TouchableOpacity>
               )}
             />
           </View>

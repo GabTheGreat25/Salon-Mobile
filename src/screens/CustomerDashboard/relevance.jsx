@@ -46,6 +46,10 @@ export default function () {
     );
   };
 
+  const handleRelevance = () => {
+    navigation.navigate("Relevance");
+  };
+
   const handlePopular = () => {
     navigation.navigate("Popular");
   };
@@ -102,6 +106,110 @@ export default function () {
                   : "flex-row justify-start items-start"
               }`}
             >
+              <ScrollView
+                decelerationRate="fast"
+                scrollEventThrottle={1}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                className={`mb-5`}
+              >
+                <View
+                  className={`${
+                    isDimensionLayout
+                      ? "flex-row gap-x-2"
+                      : "pt-10 pr-8 justify-center items-center flex-col gap-y-2"
+                  }`}
+                >
+                  <TouchableOpacity onPress={handleRelevance}>
+                    <View
+                      style={{
+                        backgroundColor:
+                          selectedOption === "Relevance"
+                            ? "#FDA7DF"
+                            : invertBackgroundColor,
+                      }}
+                      className={`rounded-2xl px-4 py-2`}
+                    >
+                      <Text
+                        style={{
+                          color:
+                            selectedOption === "Relevance"
+                              ? textColor
+                              : invertTextColor,
+                        }}
+                      >
+                        Relevance
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={handlePopular}>
+                    <View
+                      style={{
+                        backgroundColor:
+                          selectedOption === "Popular"
+                            ? "#FDA7DF"
+                            : invertBackgroundColor,
+                      }}
+                      className={`rounded-2xl px-4 py-2`}
+                    >
+                      <Text
+                        style={{
+                          color:
+                            selectedOption === "Popular"
+                              ? textColor
+                              : invertTextColor,
+                        }}
+                      >
+                        Popular
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={handleMostRecent}>
+                    <View
+                      style={{
+                        backgroundColor:
+                          selectedOption === "MostRecent"
+                            ? "#FDA7DF"
+                            : invertBackgroundColor,
+                      }}
+                      className={`rounded-2xl px-4 py-2`}
+                    >
+                      <Text
+                        style={{
+                          color:
+                            selectedOption === "MostRecent"
+                              ? textColor
+                              : invertTextColor,
+                        }}
+                      >
+                        Most Recent
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={handleBudget}>
+                    <View
+                      style={{
+                        backgroundColor:
+                          selectedOption === "Budget"
+                            ? "#FDA7DF"
+                            : invertBackgroundColor,
+                      }}
+                      className={`rounded-2xl px-4 py-2`}
+                    >
+                      <Text
+                        style={{
+                          color:
+                            selectedOption === "Budget"
+                              ? textColor
+                              : invertTextColor,
+                        }}
+                      >
+                        Budget
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              </ScrollView>
               <FlatList
                 data={items}
                 showsVerticalScrollIndicator={false}

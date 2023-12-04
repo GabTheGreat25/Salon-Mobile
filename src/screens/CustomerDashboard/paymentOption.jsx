@@ -13,21 +13,34 @@ import { BackIcon } from "@helpers";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import GcashWhite from "@assets/Gcash-white.png";
 import GcashDark from "@assets/Gcash-dark.png";
+import { useDispatch } from "react-redux";
+import { appointmentSlice } from "../../state/appointment/appointmentReducer";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function () {
+  const dispatch = useDispatch();
   const { textColor, backgroundColor, colorScheme } = changeColor();
   const navigation = useNavigation();
   const isDimensionLayout = dimensionLayout();
   const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDA7DF";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
   const GcashImage = colorScheme === "dark" ? GcashDark : GcashWhite;
-  const [isChecked, setChecked] = useState(false);
 
-  const handleCheckBoxToggle = () => {
-    setChecked(!isChecked);
+  const [isCashChecked, setCashChecked] = useState(false);
+  const [isGcashChecked, setGcashChecked] = useState(false);
+
+  const handleCheckBoxToggle = (checkboxType) => {
+    if (checkboxType === "cash") {
+      setCashChecked(!isCashChecked);
+      setGcashChecked(false);
+      dispatch(appointmentSlice.actions.setPayment({ type: "Cash" }));
+    } else if (checkboxType === "gcash") {
+      setGcashChecked(!isGcashChecked);
+      setCashChecked(false);
+      dispatch(appointmentSlice.actions.setPayment({ type: "Gcash" }));
+    }
   };
 
   const handlePress = () => {
@@ -55,7 +68,7 @@ export default function () {
             <View className={`flex-row`}>
               <TouchableOpacity
                 className={`flex-row px-4 py-2`}
-                onPress={handleCheckBoxToggle}
+                onPress={() => handleCheckBoxToggle("cash")}
               >
                 <View
                   style={{
@@ -66,7 +79,7 @@ export default function () {
                   }}
                   className={`flex-row justify-center items-center border-2 rounded mr-2`}
                 >
-                  {isChecked && (
+                  {isCashChecked && (
                     <Text
                       style={{ color: invertTextColor }}
                       className={`text-2xl`}
@@ -102,7 +115,7 @@ export default function () {
             <View className={`flex-row pt-2`}>
               <TouchableOpacity
                 className={`flex-row px-4 py-2`}
-                onPress={handleCheckBoxToggle}
+                onPress={() => handleCheckBoxToggle("gcash")}
               >
                 <View
                   style={{
@@ -113,7 +126,7 @@ export default function () {
                   }}
                   className={`flex-row justify-center items-center border-2 rounded mr-2`}
                 >
-                  {isChecked && (
+                  {isGcashChecked && (
                     <Text
                       style={{ color: invertTextColor }}
                       className={`text-2xl`}

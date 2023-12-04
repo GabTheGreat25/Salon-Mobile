@@ -11,6 +11,8 @@ import { changeColor, dimensionLayout } from "@utils";
 import { useNavigation } from "@react-navigation/native";
 import { BackIcon } from "@helpers";
 import { Calendar } from "react-native-calendars";
+import { useDispatch } from "react-redux";
+import { appointmentSlice } from "../../state/appointment/appointmentReducer";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -21,6 +23,7 @@ export default function () {
   const navigation = useNavigation();
   const isDimensionLayout = dimensionLayout();
   const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDB9E5";
+  const revertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
   const currentDate = new Date();
@@ -32,9 +35,14 @@ export default function () {
   }, [nextMonthDate]);
 
   const [markedDates, setMarkedDates] = useState({});
+  const [selectedDateTime, setSelectedDateTime] = useState({
+    date: null,
+    time: null,
+  });
+
+  const dispatch = useDispatch();
 
   const handleDayPress = (day) => {
-    console.log("Selected Day:", day.dateString);
     const updatedMarkedDates = {
       [day.dateString]: {
         selected: true,
@@ -42,29 +50,35 @@ export default function () {
       },
     };
     setMarkedDates(updatedMarkedDates);
+    setSelectedDateTime((prev) => ({ ...prev, date: day.dateString }));
+  };
+
+  const handleTimePress = (time) => {
+    setSelectedDateTime((prev) => ({ ...prev, time }));
   };
 
   const hideArrows = currentDate.getMonth() === nextMonthDate.getMonth();
 
   const items = [
     {
-      time: "10: 00 AM",
+      time: "10:00 AM",
     },
     {
-      time: "12: 00 PM",
+      time: "12:00 PM",
     },
     {
-      time: "01: 00 PM",
+      time: "01:00 PM",
     },
     {
-      time: "03: 00 PM",
+      time: "03:00 PM",
     },
     {
-      time: "05: 00 PM",
+      time: "05:00 PM",
     },
   ];
 
   const handlePress = () => {
+    dispatch(appointmentSlice.actions.setDateTime(selectedDateTime));
     navigation.navigate("Checkout");
   };
 
@@ -134,24 +148,37 @@ export default function () {
             }`}
           >
             {items.map((item, index) => (
-              <View
+              <TouchableOpacity
                 key={index}
-                style={{
-                  backgroundColor: backgroundColor,
-                  height: windowHeight * 0.075,
-                  width: windowWidth * 0.35,
-                }}
-                className={`rounded justify-center items-center text-center ${
-                  isDimensionLayout ? "mr-8 mt-7 mb-2" : "mx-3"
-                }`}
+                onPress={() => handleTimePress(item.time)}
+                activeOpacity={1}
               >
-                <Text
-                  style={{ color: textColor }}
-                  className={`text-lg text-center font-semibold`}
+                <View
+                  style={{
+                    backgroundColor:
+                      selectedDateTime.time === item.time
+                        ? revertBackgroundColor
+                        : backgroundColor,
+                    height: windowHeight * 0.075,
+                    width: windowWidth * 0.35,
+                  }}
+                  className={`rounded justify-center items-center text-center ${
+                    isDimensionLayout ? "mr-8 mt-7 mb-2" : "mx-3"
+                  }`}
                 >
-                  {item.time}
-                </Text>
-              </View>
+                  <Text
+                    style={{
+                      color:
+                        selectedDateTime.time === item.time
+                          ? invertTextColor
+                          : textColor,
+                    }}
+                    className={`text-lg text-center font-semibold`}
+                  >
+                    {item.time}
+                  </Text>
+                </View>
+              </TouchableOpacity>
             ))}
           </ScrollView>
         </ScrollView>
