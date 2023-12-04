@@ -14,6 +14,7 @@ import { BackIcon } from "@helpers";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useGetServicesQuery } from "../../state/api/reducer";
+import { LoadingScreen } from "@components";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;

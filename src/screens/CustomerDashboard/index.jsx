@@ -17,6 +17,7 @@ import { changeColor, dimensionLayout } from "@utils";
 import { Feather, FontAwesome, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useGetServicesQuery } from "../../state/api/reducer";
+import { LoadingScreen } from "@components";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
