@@ -6,7 +6,7 @@ import {
   DrawerItemList,
   createDrawerNavigator,
 } from "@react-navigation/drawer";
-import { EmployeeDashboard, EditEmployeeProfile } from "@screens";
+import { EmployeeDashboard, EditEmployeeProfile, Transaction } from "@screens";
 import { changeColor, dimensionLayout } from "@utils";
 import { RESOURCE } from "@constants";
 import { UserImage } from "@components";
@@ -106,7 +106,7 @@ export default function () {
       }}
     >
       <Drawer.Screen
-        name="EmployeeDashboard"
+        name="Transaction"
         options={{
           drawerActiveBackgroundColor: "#F78FB3",
           drawerActiveTintColor: textColor,
@@ -116,7 +116,7 @@ export default function () {
               Dashboard
             </Text>
           ),
-          title: "EmployeeDashboard",
+          title: "Transaction",
           drawerIcon: () => (
             <Feather
               name="home"
@@ -125,7 +125,7 @@ export default function () {
             />
           ),
         }}
-        component={EmployeeDashboard}
+        component={Transaction}
       />
       <Drawer.Screen
         name="EditEmployeeProfile"

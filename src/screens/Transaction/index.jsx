@@ -22,6 +22,7 @@ import { changeColor, dimensionLayout } from "@utils";
 import { useNavigation } from "@react-navigation/native";
 import { saveDeletedId, getDeletedIds } from "../../helpers/DeleteItem";
 import { format } from "date-fns";
+import { useSelector } from "react-redux";
 
 export default function () {
   const isDimensionLayout = dimensionLayout();
@@ -39,6 +40,8 @@ export default function () {
     useDeleteTransactionMutation();
 
   const [deletedIds, setDeletedIds] = useState([]);
+
+  const roles = useSelector((state) => state.auth.user.roles);
 
   useEffect(() => {
     const fetchDeletedIds = async () => {
@@ -281,11 +284,13 @@ export default function () {
                             <Feather name="edit" size={24} color="blue" />
                           </TouchableOpacity>
                           <View style={{ width: 10 }} />
-                          <TouchableOpacity
-                            onPress={() => handleDeleteTransaction(item?._id)}
-                          >
-                            <Feather name="delete" size={24} color="red" />
-                          </TouchableOpacity>
+                          {roles.includes("Admin") && (
+                            <TouchableOpacity
+                              onPress={() => handleDeleteTransaction(item?._id)}
+                            >
+                              <Feather name="delete" size={24} color="red" />
+                            </TouchableOpacity>
+                          )}
                         </DataTable.Cell>
                       </DataTable.Row>
                     ))}
