@@ -35,17 +35,21 @@ export default function () {
   const selectedPayment = useSelector(
     (state) => state?.appointment?.appointmentData?.payment?.type
   );
+  console.log(selectedPayment);
   const selectedEmployee = useSelector(
     (state) => state?.appointment?.appointmentData?.employee?._id
   );
+  console.log(selectedEmployee);
 
   const selectedDate = useSelector(
     (state) => state?.appointment?.appointmentData?.date
   );
+  console.log(selectedDate);
 
   const selectedTime = useSelector(
     (state) => state?.appointment?.appointmentData?.time
   );
+  console.log(selectedTime);
 
   const dispatch = useDispatch();
 
@@ -90,7 +94,7 @@ export default function () {
             visibilityTime: 3000,
             autoHide: true,
           });
-          navigation.navigate("CustomerDrawer");
+          navigation.navigate("CheckoutSuccess");
         })
         .catch((error) => {
           console.log(error?.data?.error?.message);

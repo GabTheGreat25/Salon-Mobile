@@ -8,11 +8,12 @@ import {
   Dimensions,
 } from "react-native";
 import { changeColor, dimensionLayout } from "@utils";
-import { Feather, FontAwesome, Ionicons } from "@expo/vector-icons";
+import { useGetAppointmentsQuery } from "../../state/api/reducer";
 import { useNavigation } from "@react-navigation/native";
 import { BackIcon } from "@helpers";
 import SalonFaceWash from "@assets/face-wash.png";
 import SalonQRCode from "@assets/qrCode.png";
+import { useSelector } from "react-redux";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -25,38 +26,28 @@ export default function () {
   const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDA7DF";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
-  const items = [
-    {
-      name: "Face Wash",
-      price: "₱ 559.00",
-      variation: "Variation: Face Service",
-      image: SalonFaceWash,
-    },
-    {
-      name: "Face Wash",
-      price: "₱ 559.00",
-      variation: "Variation: Face Service",
-      image: SalonFaceWash,
-    },
-    {
-      name: "Face Wash",
-      price: "₱ 559.00",
-      variation: "Variation: Face Service",
-      image: SalonFaceWash,
-    },
-    {
-      name: "Face Wash",
-      price: "₱ 559.00",
-      variation: "Variation: Face Service",
-      image: SalonFaceWash,
-    },
-    {
-      name: "Face Wash",
-      price: "₱ 559.00",
-      variation: "Variation: Face Service",
-      image: SalonFaceWash,
-    },
-  ];
+  const auth = useSelector((state) => state.auth);
+
+  const { data, isLoading } = useGetAppointmentsQuery();
+
+  const customerAppointments = data?.details?.filter(
+    (appointment) => appointment?.customer?._id === auth?.user?._id
+  );
+
+  const lastAppointment = customerAppointments?.length
+    ? customerAppointments[customerAppointments.length - 1]
+    : null;
+
+  const items = lastAppointment
+    ? [
+        {
+          name: `Employee: ${lastAppointment.employee?.name}`,
+          price: `₱ ${lastAppointment.price}`,
+          variation: `Variation: ${lastAppointment.service.service_name}`,
+          image: SalonFaceWash,
+        },
+      ]
+    : [];
 
   const handlePress = () => {
     navigation.navigate("CustomerDrawer");
@@ -127,7 +118,7 @@ export default function () {
                         style={{ color: invertTextColor }}
                         className={`flex-1 ${
                           isDimensionLayout
-                            ? "text-2xl pl-2 pr-1 pt-4"
+                            ? "text-lg pl-2 pr-1 pt-4"
                             : "text-lg px-4 py-6"
                         } font-semibold`}
                       >
@@ -192,7 +183,7 @@ export default function () {
                   isDimensionLayout ? "text-base" : "text-lg px-4 py-6"
                 } font-semibold`}
               >
-                ₱ 2,236.00
+                ₱ {lastAppointment?.price}
               </Text>
             </View>
           </View>
@@ -212,7 +203,7 @@ export default function () {
                   isDimensionLayout ? "text-base" : "text-lg px-4 py-6"
                 } font-light`}
               >
-                ₱ 50.00
+                ₱ {lastAppointment?.extraFee}
               </Text>
             </View>
           </View>
@@ -239,7 +230,10 @@ export default function () {
                   isDimensionLayout ? "text-lg" : "text-lg px-4 py-6"
                 } font-bold`}
               >
-                ₱ 2,286.00
+                ₱
+                {(lastAppointment.price + lastAppointment?.extraFee)?.toFixed(
+                  2
+                )}
               </Text>
             </View>
           </View>
