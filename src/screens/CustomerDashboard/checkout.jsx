@@ -13,7 +13,6 @@ import { useNavigation } from "@react-navigation/native";
 import { BackIcon } from "@helpers";
 import { useFormik } from "formik";
 import { useAddAppointmentMutation } from "../../state/api/reducer";
-import { createAppointmentValidation } from "../../validation";
 import { useSelector, useDispatch } from "react-redux";
 import Toast from "react-native-toast-message";
 import { appointmentSlice } from "../../state/appointment/appointmentReducer";

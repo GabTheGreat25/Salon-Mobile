@@ -42,8 +42,8 @@ export default function () {
     ? [
         {
           name: `Employee: ${lastAppointment.employee?.name}`,
-          price: `₱ ${lastAppointment.price}`,
-          variation: `Variation: ${lastAppointment.service.service_name}`,
+          price: `₱ ${lastAppointment?.price}`,
+          variation: `Variation: ${lastAppointment.service?.service_name}`,
           image: SalonFaceWash,
         },
       ]
@@ -142,7 +142,7 @@ export default function () {
                             : "text-lg px-4 py-6"
                         } font-semibold`}
                       >
-                        {item.price}
+                        {item?.price}
                       </Text>
                     </View>
                   </View>
@@ -231,7 +231,7 @@ export default function () {
                 } font-bold`}
               >
                 ₱
-                {(lastAppointment.price + lastAppointment?.extraFee)?.toFixed(
+                {(lastAppointment?.price + lastAppointment?.extraFee)?.toFixed(
                   2
                 )}
               </Text>

@@ -126,6 +126,10 @@ export default function () {
                   name="UpdateUserPassword"
                   component={UpdateUserPassword}
                 />
+                <Stack.Screen
+                  name="EditTransaction"
+                  component={EditTransaction}
+                />
               </Stack.Navigator>
             ) : userRoles.includes("Admin") ? (
               <Stack.Navigator
