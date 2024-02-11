@@ -5,7 +5,6 @@ import {
   Text,
   TouchableOpacity,
   Image,
-  ScrollView,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { changeColor } from "@utils";
@@ -21,26 +20,19 @@ export default function ({
   navigateRight,
   navigateTo,
   logo,
-  dimensionLayout,
 }) {
   const { backgroundColor, textColor } = changeColor();
   return (
     <>
-      <SafeAreaView
-        className={`flex-1 ${dimensionLayout ? "flex-col" : "flex-row"}`}
-        style={{ backgroundColor }}
-      >
-        <View className={`flex-1 ${dimensionLayout ? "flex-col" : "flex-row"}`}>
+      <SafeAreaView className={`flex-1 flex-col`} style={{ backgroundColor }}>
+        <View className={`flex-1 flex-col`}>
           <View
-            className={`flex-1 justify-center items-start ${
-              dimensionLayout ? "pl-6" : "pl-12"
+            className={`flex-1 justify-center items-start pl-6
             }`}
           >
             {leftArrow && (
               <TouchableOpacity
-                className={`absolute ${
-                  dimensionLayout ? "top-[85%]" : "top-[45%]"
-                }`}
+                className={`absolute top-[85%]`}
                 onPress={navigateLeft}
               >
                 <Feather
@@ -73,11 +65,7 @@ export default function ({
             </TouchableOpacity>
             {rightArrow && (
               <TouchableOpacity
-                className={`absolute top-[85%] ${
-                  dimensionLayout
-                    ? "left-[93.5%] translate-x-[-50%]"
-                    : "left-[193.5%] top-[45%] translate-x-[-50%]"
-                }`}
+                className={`absolute top-[85%] left-[93.5%] translate-x-[-50%]`}
                 onPress={navigateRight}
               >
                 <Feather
@@ -89,29 +77,11 @@ export default function ({
             )}
           </View>
           <View className={`flex-1 justify-center items-center z-[-1]`}>
-            {dimensionLayout ? (
-              <Image
-                source={logo}
-                className={`w-full h-full`}
-                resizeMode="cover"
-              />
-            ) : (
-              <ScrollView
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={{
-                  flexGrow: RESOURCE.NUMBER.ONE,
-                  alignItems: "center",
-                }}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-              >
-                <Image
-                  source={logo}
-                  className={`w-full h-full`}
-                  resizeMode="cover"
-                />
-              </ScrollView>
-            )}
+            <Image
+              source={logo}
+              className={`w-full h-full`}
+              resizeMode="cover"
+            />
           </View>
         </View>
       </SafeAreaView>

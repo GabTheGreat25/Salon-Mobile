@@ -1,12 +1,10 @@
 import React from "react";
 import { Welcome } from "@components";
-import { dimensionLayout } from "@utils";
 import logo1 from "@assets/logo-1.png";
 import { useNavigation } from "@react-navigation/native";
 
 export default function () {
   const navigation = useNavigation();
-  const isDimensionLayout = dimensionLayout();
 
   return (
     <>
@@ -19,7 +17,6 @@ export default function () {
         navigateRight={() => navigation.navigate("BecomeEmployee")}
         navigateTo={() => navigation.navigate("UserPick")}
         logo={logo1}
-        dimensionLayout={isDimensionLayout}
       />
     </>
   );
