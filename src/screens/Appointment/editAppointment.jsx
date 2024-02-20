@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  Image,
   View,
   SafeAreaView,
   Text,
@@ -9,65 +8,59 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
-  BackHandler,
   TextInput,
 } from "react-native";
 import {
   useUpdateAppointmentMutation,
   useGetAppointmentByIdQuery,
-  useGetAppointmentsQuery,
+  useGetServicesQuery,
+  useGetOptionsQuery,
 } from "../../state/api/reducer";
 import { useFormik } from "formik";
 import { editAppointmentValidation } from "../../validation";
 import { useNavigation } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
 import { LoadingScreen } from "@components";
-import { dimensionLayout, changeColor } from "@utils";
-import { Picker } from "@react-native-picker/picker";
+import { changeColor } from "@utils";
 import { BackIcon } from "@helpers";
-import { format } from "date-fns";
-import DateTimePicker from "@react-native-community/datetimepicker";
 
 export default function ({ route }) {
   const { id } = route.params;
   const navigation = useNavigation();
 
-  const { refetch: refetchAppointments } = useGetAppointmentsQuery();
   const {
     data,
     isLoading: isAppointmentLoading,
     refetch,
   } = useGetAppointmentByIdQuery(id);
   const [updateAppointment, { isLoading }] = useUpdateAppointmentMutation();
+  const { data: services, isLoading: servicesLoading } = useGetServicesQuery();
+  const { data: optionsData } = useGetOptionsQuery();
+  const options = optionsData?.details;
 
-  const isDimensionLayout = dimensionLayout();
   const { backgroundColor, textColor, colorScheme } = changeColor();
   const borderColor =
     colorScheme === "dark" ? "border-neutral-light" : "border-neutral-dark";
 
-  const scroll = isDimensionLayout ? 600 : 700;
-
-  const [keyboardOpen, setKeyboardOpen] = useState(false);
-  const [scrollViewHeight, setScrollViewHeight] = useState(scroll);
-
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      date: data?.details?.date
-        ? format(new Date(data.details.date), "yyyy-MM-dd")
-        : "",
-      time: data?.details?.time || "",
       price: data?.details?.price || 0,
-      extraFee: data?.details?.extraFee || 0,
-      note: data?.details?.note || "",
+      service: data?.details?.service?.map((service) => service._id) || [],
+      options: data?.details?.option || [],
     },
     validationSchema: editAppointmentValidation,
     onSubmit: (values) => {
-      updateAppointment({ id: data?.details?._id, payload: values })
+      updateAppointment({
+        id: data?.details?._id,
+        payload: {
+          ...values,
+          option: values.options,
+        },
+      })
         .unwrap()
         .then((response) => {
           refetch();
-          refetchAppointments();
           Toast.show({
             type: "success",
             position: "top",
@@ -91,91 +84,74 @@ export default function ({ route }) {
     },
   });
 
-  const handleTextInputFocus = () => {
-    setScrollViewHeight(keyboardOpen ? 625 : scroll);
+  const handleServicePress = (serviceId) => {
+    if (!areOptionsEmpty(serviceId)) {
+      return;
+    }
+
+    if (formik.values.service.includes(serviceId)) {
+      formik.setFieldValue(
+        "service",
+        formik.values.service.filter((id) => id !== serviceId)
+      );
+    } else {
+      formik.setFieldValue("service", [...formik.values.service, serviceId]);
+    }
+  };
+
+  const handleOptionPress = (optionId) => {
+    if (formik.values.options.includes(optionId)) {
+      formik.setFieldValue(
+        "options",
+        formik.values.options.filter((id) => id !== optionId)
+      );
+    } else {
+      formik.setFieldValue("options", [...formik.values.options, optionId]);
+    }
+  };
+
+  const areOptionsEmpty = (serviceId) => {
+    const service = services?.details?.find(
+      (service) => service._id === serviceId
+    );
+
+    if (!service) return true;
+
+    const serviceOptions = options?.filter((option) =>
+      option.service.some((s) => s._id === serviceId)
+    );
+
+    return (
+      serviceOptions?.length === 0 ||
+      serviceOptions?.every(
+        (option) => !formik.values.options.includes(option._id)
+      )
+    );
   };
 
   useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      () => {
-        setScrollViewHeight(scroll);
-        return true;
-      }
+    const selectedServicesPrices = formik.values.service.reduce(
+      (sum, serviceId) => {
+        const selectedService = services?.details?.find(
+          (service) => service._id === serviceId
+        );
+        return sum + (selectedService ? selectedService.price : 0);
+      },
+      0
     );
 
-    const keyboardDidShowListener = Keyboard.addListener(
-      "keyboardDidShow",
-      () => {
-        setKeyboardOpen(true);
-        setScrollViewHeight(625);
-      }
-    );
-    const keyboardDidHideListener = Keyboard.addListener(
-      "keyboardDidHide",
-      () => {
-        setKeyboardOpen(false);
-        setScrollViewHeight(scroll);
-      }
-    );
+    const selectedOptionFees = formik.values.options.reduce((sum, optionId) => {
+      const selectedOption = options?.find((option) => option._id === optionId);
+      return sum + (selectedOption ? selectedOption.extraFee : 0);
+    }, 0);
 
-    return () => {
-      backHandler.remove();
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
-
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [selectedTime, setSelectedTime] = useState(new Date());
-  const [showTimePicker, setShowTimePicker] = useState(false);
-
-  const showDatepicker = () => {
-    setShowDatePicker(true);
-    Keyboard.dismiss();
-  };
-
-  const handleDateChange = (event, date) => {
-    setShowDatePicker(false);
-    if (event.type === "dismissed") {
-      return;
-    }
-
-    if (date) {
-      const updatedDate = new Date(date);
-      updatedDate.setDate(date.getDate());
-
-      setSelectedDate(updatedDate);
-      formik.setFieldValue("date", updatedDate.toISOString().split("T")[0]);
-    }
-  };
-
-  const showTimepicker = () => {
-    setShowTimePicker(true);
-    Keyboard.dismiss();
-  };
-
-  const handleTimeChange = (event, time) => {
-    setShowTimePicker(false);
-    if (event.type === "dismissed") {
-      return;
-    }
-
-    if (time) {
-      setSelectedTime(time);
-      const formattedTime = time.toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-      });
-      formik.setFieldValue("time", formattedTime);
-    }
-  };
+    const newTotalPrice = selectedServicesPrices + selectedOptionFees;
+    formik.setFieldValue("price", newTotalPrice);
+  }, [formik.values.service, formik.values.options]);
 
   return (
     <>
-      {isLoading || isAppointmentLoading ? (
+      {isLoading || isAppointmentLoading || servicesLoading ? (
         <View
           className={`flex-1 justify-center items-center bg-primary-default`}
         >
@@ -188,181 +164,163 @@ export default function ({ route }) {
             className={`relative flex-1`}
           >
             <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
-            <View
-              className={`flex-1 items-center justify-start ${
-                isDimensionLayout ? "mt-20" : "mt-0"
-              }`}
-            >
-              <Text
-                style={{ color: textColor }}
-                className={`my-10 font-semibold text-center ${
-                  isDimensionLayout ? "text-3xl" : "text-2xl"
-                }`}
+            <KeyboardAvoidingView behavior="height">
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                decelerationRate="fast"
+                scrollEventThrottle={1}
+                className={`pt-10 px-6`}
               >
-                Update Appointment Details
-              </Text>
-              <KeyboardAvoidingView
-                behavior="padding"
-                className={`${
-                  isDimensionLayout ? "h-[450px] w-[300px]" : "w-[375px]"
-                }`}
-              >
-                <ScrollView
-                  contentContainerStyle={{ height: scrollViewHeight }}
-                  showsVerticalScrollIndicator={false}
-                  scrollEnabled={scrollViewHeight > 550}
-                  decelerationRate="fast"
-                  scrollEventThrottle={1}
+                <Text
+                  style={{ color: textColor }}
+                  className={`font-semibold text-center pt-6 text-3xl`}
                 >
-                  <Text
-                    style={{ color: textColor }}
-                    className={`font-semibold text-base`}
-                  >
-                    Date
-                  </Text>
-                  <TextInput
-                    style={{ color: textColor }}
-                    className={`border-b mb-3 ${borderColor}`}
-                    placeholder="Enter date"
-                    placeholderTextColor={textColor}
-                    onFocus={showDatepicker}
-                    value={formik.values.date}
-                  />
-                  {showDatePicker && (
-                    <DateTimePicker
-                      value={selectedDate}
-                      mode="date"
-                      is24Hour={true}
-                      display="default"
-                      onChange={handleDateChange}
-                    />
-                  )}
-                  {formik.touched.date && formik.errors.date && (
-                    <Text style={{ color: "red" }}>{formik.errors.date}</Text>
-                  )}
-                  <Text
-                    style={{ color: textColor }}
-                    className={`font-semibold text-base`}
-                  >
-                    Time
-                  </Text>
-                  <TextInput
-                    style={{ color: textColor }}
-                    className={`border-b mb-3 ${borderColor}`}
-                    placeholder="Enter time"
-                    placeholderTextColor={textColor}
-                    onFocus={showTimepicker}
-                    value={formik.values.time}
-                  />
-                  {showTimePicker && (
-                    <DateTimePicker
-                      value={selectedTime}
-                      mode="time"
-                      is24Hour={false}
-                      display="default"
-                      onChange={(event, time) => {
-                        handleTimeChange(event, time);
-                        formik.validateForm().then(() => {
-                          formik.setFieldTouched("time", true);
-                        });
-                      }}
-                    />
-                  )}
-                  {formik.touched.time && formik.errors.time && (
-                    <Text style={{ color: "red" }}>{formik.errors.time}</Text>
-                  )}
-                  <Text
-                    style={{ color: textColor }}
-                    className={`font-semibold text-base`}
-                  >
-                    Price
-                  </Text>
-                  <TextInput
-                    style={{ color: textColor }}
-                    className={`border-b mb-3 ${borderColor}`}
-                    placeholder="Enter the price"
-                    placeholderTextColor={textColor}
-                    keyboardType="numeric"
-                    autoCapitalize="none"
-                    handleTextInputFocus={handleTextInputFocus}
-                    onChangeText={formik.handleChange("price")}
-                    onBlur={formik.handleBlur("price")}
-                    value={String(formik.values.price)}
-                  />
-                  {formik.touched.price && formik.errors.price && (
-                    <Text style={{ color: "red" }}>{formik.errors.price}</Text>
-                  )}
-                  <Text
-                    style={{ color: textColor }}
-                    className={`font-semibold text-base`}
-                  >
-                    Extra Fee
-                  </Text>
-                  <TextInput
-                    style={{ color: textColor }}
-                    className={`border-b mb-3 ${borderColor}`}
-                    placeholder="Enter the extra Fee"
-                    placeholderTextColor={textColor}
-                    keyboardType="numeric"
-                    autoCapitalize="none"
-                    handleTextInputFocus={handleTextInputFocus}
-                    onChangeText={formik.handleChange("extraFee")}
-                    onBlur={formik.handleBlur("extraFee")}
-                    value={String(formik.values.extraFee)}
-                  />
-                  {formik.touched.extraFee && formik.errors.extraFee && (
-                    <Text style={{ color: "red" }}>
-                      {formik.errors.extraFee}
-                    </Text>
-                  )}
-                  <Text
-                    style={{ color: textColor }}
-                    className={`font-semibold text-base`}
-                  >
-                    Note
-                  </Text>
-                  <TextInput
-                    style={{ color: textColor }}
-                    className={`border-b mb-3 ${borderColor}`}
-                    placeholder="Enter the note"
-                    placeholderTextColor={textColor}
-                    keyboardType="numeric"
-                    autoCapitalize="none"
-                    handleTextInputFocus={handleTextInputFocus}
-                    onChangeText={formik.handleChange("note")}
-                    onBlur={formik.handleBlur("note")}
-                    value={String(formik.values.note)}
-                  />
-                  {formik.touched.note && formik.errors.note && (
-                    <Text style={{ color: "red" }}>{formik.errors.note}</Text>
-                  )}
-                  <View
-                    className={`mt-4 items-center justify-center ${
-                      isDimensionLayout ? "flex-col" : "flex-row gap-x-2"
-                    }`}
-                  >
+                  Update Appointment Details
+                </Text>
+                <Text
+                  style={{ color: textColor }}
+                  className={`font-semibold text-base`}
+                >
+                  Price
+                </Text>
+                <TextInput
+                  style={{ color: textColor }}
+                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                  placeholder="Enter the price"
+                  placeholderTextColor={textColor}
+                  keyboardType="numeric"
+                  onChangeText={(value) =>
+                    formik.handleChange("price")(value.toString())
+                  }
+                  onBlur={formik.handleBlur("price")}
+                  value={formik.values.price.toFixed(0).toString()}
+                />
+                {formik.touched.price && formik.errors.price && (
+                  <Text style={{ color: "red" }}>{formik.errors.price}</Text>
+                )}
+
+                <Text
+                  style={{ color: textColor }}
+                  className="text-2xl font-semibold"
+                >
+                  Services
+                </Text>
+                <View className="flex flex-row flex-wrap justify-start gap-x-4">
+                  {services?.details?.map((service) => (
                     <TouchableOpacity
-                      onPress={formik.handleSubmit}
-                      disabled={!formik.isValid}
+                      key={service._id}
+                      onPress={() => handleServicePress(service._id)}
+                      disabled={!areOptionsEmpty(service._id)}
+                      className="flex-row py-2 gap-x-2"
                     >
-                      <View className={`mb-2 flex justify-center items-center`}>
-                        <View
-                          className={`py-2 rounded-lg bg-primary-accent w-[175px]
-                          } ${!formik.isValid ? "opacity-50" : "opacity-100"}`}
-                        >
+                      <View
+                        style={{
+                          height: 30,
+                          width: 30,
+                          borderColor: textColor,
+                          backgroundColor: backgroundColor,
+                        }}
+                        className="flex-row items-center justify-center border-2 rounded"
+                      >
+                        {formik.values.service.includes(service._id) ? (
                           <Text
-                            className={`font-semibold text-center text-lg`}
                             style={{ color: textColor }}
+                            className="text-lg"
                           >
-                            Submit
+                            ✓
                           </Text>
-                        </View>
+                        ) : null}
+                      </View>
+                      <View>
+                        <Text
+                          style={{ color: textColor }}
+                          className="text-lg font-semibold"
+                        >
+                          {service.service_name}
+                        </Text>
                       </View>
                     </TouchableOpacity>
-                  </View>
-                </ScrollView>
-              </KeyboardAvoidingView>
-            </View>
+                  ))}
+                </View>
+
+                <View className="flex flex-row flex-wrap justify-start gap-x-2">
+                  {formik.values.service?.map((selectedServiceId) => {
+                    const selectedService = services?.details?.find(
+                      (service) => service._id === selectedServiceId
+                    );
+
+                    if (!selectedService) return null;
+
+                    const serviceOptions = options?.filter((option) =>
+                      option.service.some((s) => s._id === selectedServiceId)
+                    );
+
+                    return (
+                      <View key={selectedService._id}>
+                        <Text className="my-2 text-lg font-semibold text-light-default dark:text-dark-default">
+                          Add Ons for {selectedService.service_name}
+                        </Text>
+                        {serviceOptions?.map((option) => (
+                          <TouchableOpacity
+                            key={option._id}
+                            onPress={() => handleOptionPress(option._id)}
+                            className="flex-row items-center mb-2"
+                          >
+                            <View
+                              style={{
+                                height: 30,
+                                width: 30,
+                                borderColor: textColor,
+                                backgroundColor: backgroundColor,
+                              }}
+                              className="flex-row items-center justify-center border-2 rounded"
+                            >
+                              {formik.values.options.includes(option._id) ? (
+                                <Text
+                                  style={{ color: textColor }}
+                                  className="text-lg"
+                                >
+                                  ✓
+                                </Text>
+                              ) : null}
+                            </View>
+                            <View className="flex items-center pl-2">
+                              <Text
+                                style={{ color: textColor }}
+                                className="text-lg font-semibold"
+                              >
+                                {option.option_name} - ₱{option.extraFee}
+                              </Text>
+                            </View>
+                          </TouchableOpacity>
+                        ))}
+                      </View>
+                    );
+                  })}
+                </View>
+
+                <View className={`mb-20 items-center justify-center flex-col`}>
+                  <TouchableOpacity
+                    onPress={formik.handleSubmit}
+                    disabled={!formik.isValid}
+                  >
+                    <View className={`mb-2 flex justify-center items-center`}>
+                      <View
+                        className={`py-2 rounded-lg bg-primary-accent w-[175px]
+                          } ${!formik.isValid ? "opacity-50" : "opacity-100"}`}
+                      >
+                        <Text
+                          className={`font-semibold text-center text-lg`}
+                          style={{ color: textColor }}
+                        >
+                          Submit
+                        </Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              </ScrollView>
+            </KeyboardAvoidingView>
           </SafeAreaView>
         </TouchableWithoutFeedback>
       )}
