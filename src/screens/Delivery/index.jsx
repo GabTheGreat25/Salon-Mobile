@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
-  Image,
   Alert,
   TouchableOpacity,
   ScrollView,
   Dimensions,
   SafeAreaView,
+  Button,
 } from "react-native";
 import {
   useGetDeliveriesQuery,
@@ -22,14 +22,23 @@ import { changeColor, dimensionLayout } from "@utils";
 import { useNavigation } from "@react-navigation/native";
 import { saveDeletedId, getDeletedIds } from "../../helpers/DeleteItem";
 import { format } from "date-fns";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function () {
+  const isFocused = useIsFocused();
   const isDimensionLayout = dimensionLayout();
   const navigation = useNavigation();
   const { width: deviceWidth } = Dimensions.get("window");
   const customWidth = deviceWidth * (isDimensionLayout ? 0.3 : 0.2);
 
   const { data, isLoading, refetch } = useGetDeliveriesQuery();
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isFocused) refetch();
+    };
+    fetchData();
+  }, [isFocused]);
+
   const { backgroundColor, textColor, colorScheme } = changeColor();
 
   const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
@@ -39,6 +48,8 @@ export default function () {
     useDeleteDeliveryMutation();
 
   const [deletedIds, setDeletedIds] = useState([]);
+  const [page, setPage] = useState(0);
+  const itemsPerPage = 5;
 
   useEffect(() => {
     const fetchDeletedIds = async () => {
@@ -99,6 +110,24 @@ export default function () {
   const filteredData =
     data?.details?.filter((item) => !deletedIds.includes(item?._id)) || [];
 
+  const totalPageCount = Math.ceil(filteredData.length / itemsPerPage);
+  const paginatedData = filteredData.slice(
+    page * itemsPerPage,
+    (page + 1) * itemsPerPage
+  );
+
+  const handleNextPage = () => {
+    if (page < totalPageCount - 1) {
+      setPage(page + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (page > 0) {
+      setPage(page - 1);
+    }
+  };
+
   return (
     <>
       {isLoading || isDeleting ? (
@@ -129,7 +158,7 @@ export default function () {
               isDimensionLayout ? "mt-10" : "my-7"
             }`}
           >
-            {filteredData?.length ? (
+            {paginatedData?.length ? (
               <ScrollView
                 style={{ backgroundColor }}
                 showsVerticalScrollIndicator={false}
@@ -143,6 +172,16 @@ export default function () {
                         borderBottomColor: borderColor,
                       }}
                     >
+                      <DataTable.Title
+                        style={{
+                          justifyContent: "center",
+                          alignItems: "center",
+                          padding: 10,
+                          width: customWidth,
+                        }}
+                      >
+                        <Text style={{ color: textColor }}>ID</Text>
+                      </DataTable.Title>
                       <DataTable.Title
                         style={{
                           justifyContent: "center",
@@ -201,6 +240,16 @@ export default function () {
                           width: customWidth,
                         }}
                       >
+                        <Text style={{ color: textColor }}>Product Type</Text>
+                      </DataTable.Title>
+                      <DataTable.Title
+                        style={{
+                          justifyContent: "center",
+                          alignItems: "center",
+                          padding: 10,
+                          width: customWidth,
+                        }}
+                      >
                         <Text style={{ color: textColor }}>Product Name</Text>
                       </DataTable.Title>
                       <DataTable.Title
@@ -214,7 +263,7 @@ export default function () {
                         <Text style={{ color: textColor }}>Actions</Text>
                       </DataTable.Title>
                     </DataTable.Header>
-                    {filteredData?.map((item) => (
+                    {paginatedData?.map((item) => (
                       <DataTable.Row
                         key={item?._id}
                         style={{
@@ -223,6 +272,22 @@ export default function () {
                           borderBottomColor: borderColor,
                         }}
                       >
+                        <DataTable.Cell
+                          style={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: 10,
+                            width: customWidth,
+                          }}
+                        >
+                          <Text
+                            style={{ color: textColor }}
+                            numberOfLines={1}
+                            ellipsizeMode="tail"
+                          >
+                            {item?._id}
+                          </Text>
+                        </DataTable.Cell>
                         <DataTable.Cell
                           style={{
                             justifyContent: "center",
@@ -268,7 +333,7 @@ export default function () {
                             numberOfLines={1}
                             ellipsizeMode="tail"
                           >
-                            {item?.price}
+                            ₱{item?.price}
                           </Text>
                         </DataTable.Cell>
                         <DataTable.Cell
@@ -316,7 +381,29 @@ export default function () {
                             numberOfLines={1}
                             ellipsizeMode="tail"
                           >
-                            {item?.product?.product_name}
+                            {Array.isArray(item?.type)
+                              ? item.type.join(", ")
+                              : item?.type}
+                          </Text>
+                        </DataTable.Cell>
+                        <DataTable.Cell
+                          style={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: 10,
+                            width: customWidth,
+                          }}
+                        >
+                          <Text
+                            style={{ color: textColor }}
+                            numberOfLines={1}
+                            ellipsizeMode="tail"
+                          >
+                            {Array.isArray(item.product)
+                              ? item.product
+                                  .map((item) => item.product_name)
+                                  .join(", ")
+                              : item.product?.product_name}
                           </Text>
                         </DataTable.Cell>
                         <DataTable.Cell
@@ -328,9 +415,23 @@ export default function () {
                           }}
                         >
                           <TouchableOpacity
-                            onPress={() => handleEditDelivery(item?._id)}
+                            onPress={() => {
+                              if (item.status !== "completed") {
+                                handleEditDelivery(item?._id);
+                              } else
+                                Alert.alert(
+                                  "Edit not allowed",
+                                  "This delivery has been completed."
+                                );
+                            }}
                           >
-                            <Feather name="edit" size={24} color="blue" />
+                            <Feather
+                              name="edit"
+                              size={24}
+                              color={
+                                item.status !== "completed" ? "blue" : "gray"
+                              }
+                            />
                           </TouchableOpacity>
                           <View style={{ width: 10 }} />
                           <TouchableOpacity
@@ -352,6 +453,28 @@ export default function () {
                 <Text style={{ color: textColor }}>No data available.</Text>
               </View>
             )}
+            {paginatedData?.length ? (
+              <View className={`flex items-center flex-row my-6`}>
+                <Button
+                  title="Previous"
+                  onPress={handlePrevPage}
+                  disabled={page === 0}
+                  color="#FDA7DF"
+                />
+                <Text
+                  style={{
+                    color: textColor,
+                  }}
+                  className={`px-20`}
+                >{`Page ${page + 1} of ${totalPageCount}`}</Text>
+                <Button
+                  title="Next"
+                  onPress={handleNextPage}
+                  disabled={page === totalPageCount - 1}
+                  color="#FDA7DF"
+                />
+              </View>
+            ) : null}
           </View>
         </SafeAreaView>
       )}
