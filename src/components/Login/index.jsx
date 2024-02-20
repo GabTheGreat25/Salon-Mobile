@@ -32,7 +32,6 @@ export default function ({
   footerTitle,
   footerLink,
   footerLinkTitle,
-  dimensionLayout,
 }) {
   const { backgroundColor, textColor, colorScheme } = changeColor();
   const imageSource = colorScheme === "dark" ? salonLogoWhite : salonLogo;
@@ -123,9 +122,7 @@ export default function ({
         <BackIcon navigateBack={navigateBack} textColor={textColor} />
         <KeyboardAvoidingView
           behavior="height"
-          className={`flex-1 justify-center items-center ${
-            dimensionLayout ? "flex-col" : "flex-row mb-10"
-          }`}
+          className={`flex-1 justify-center items-center flex-col`}
         >
           <View className={`w-[300px] h-[300px] justify-center items-center`}>
             <Image source={imageSource} resizeMode="contain" />
@@ -133,22 +130,20 @@ export default function ({
           <View className={`items-center justify-start`}>
             <Text
               style={{ color: textColor }}
-              className={`font-semibold mt-5 text-3xl text-center`}
+              className={`font-semibold mt-6 text-3xl text-center`}
             >
               {title}
             </Text>
             <Text
               style={{ color: textColor }}
-              className={`mt-1 mb-2 text-base font-base text-center`}
+              className={`my-2 text-xl font-base text-center`}
             >
               {description}
             </Text>
-            <View className={`${dimensionLayout ? "w-[300px]" : "w-[375px]"}`}>
+            <View className={`w-[300px]`}>
               <TextInput
                 style={{ color: textColor }}
-                className={`border-b ${
-                  dimensionLayout ? "mb-4" : "mb-3"
-                } ${borderColor}`}
+                className={`border-b mt-4 pb-1 text-lg ${borderColor}`}
                 placeholder="Enter your email"
                 placeholderTextColor={textColor}
                 autoCapitalize="none"
@@ -163,9 +158,7 @@ export default function ({
               <View className={`relative`}>
                 <TextInput
                   style={{ color: textColor }}
-                  className={`border-b ${
-                    dimensionLayout ? "mb-4" : "mb-3"
-                  } ${borderColor}`}
+                  className={`border-b my-4 pb-1 text-lg ${borderColor}`}
                   placeholder="Enter your password"
                   placeholderTextColor={textColor}
                   autoCapitalize="none"
@@ -176,7 +169,7 @@ export default function ({
                   secureTextEntry={!isPasswordVisible}
                 />
                 <TouchableOpacity
-                  className={`absolute right-4`}
+                  className={`absolute right-4 top-4`}
                   onPress={togglePasswordVisibility}
                 >
                   <Feather
@@ -191,31 +184,19 @@ export default function ({
                   {formik.errors.password}
                 </Text>
               )}
-              <View
-                className={`items-center ${
-                  dimensionLayout
-                    ? "flex-col justify-start"
-                    : "flex-row gap-x-6 justify-center"
-                }`}
-              >
+              <View className={`items-center flex-col justify-start`}>
                 <TouchableOpacity
                   onPress={formik.handleSubmit}
                   disabled={!formik.isValid}
                 >
-                  <View
-                    className={`w-full mb-1 ${
-                      dimensionLayout ? "mt-0" : "mt-2"
-                    }`}
-                  >
+                  <View className={`w-full mt-1 mb-3`}>
                     <View
                       className={`py-[8px] px-8 rounded-lg bg-primary-accent ${
                         !formik.isValid ? "opacity-50" : "opacity-100"
                       }`}
                     >
                       <Text
-                        className={`font-semibold text-center ${
-                          dimensionLayout ? "text-lg" : "text-base"
-                        }`}
+                        className={`font-semibold text-center text-lg`}
                         style={{ color: textColor }}
                       >
                         {buttonTitle}
@@ -224,12 +205,9 @@ export default function ({
                   </View>
                 </TouchableOpacity>
                 {showComponent && (
-                  <TouchableOpacity
-                    onPress={linkNavigateTo}
-                    disabled={!formik.isValid}
-                  >
+                  <TouchableOpacity onPress={linkNavigateTo}>
                     <Text
-                      className={`mt-1 text-base underline`}
+                      className={`mt-2 text-lg underline`}
                       style={{ color: textColor }}
                     >
                       {linkTitle}
@@ -240,12 +218,7 @@ export default function ({
             </View>
             {showComponent && (
               <View className={`justify-center items-center`}>
-                <View
-                  className={`flex-row justify-center ${
-                    dimensionLayout ? "gap-x-5" : "gap-x-6"
-                  }`}
-                >
-                </View>
+                <View className={`flex-row justify-center gap-x-5`}></View>
                 <View className={`mb-4 mt-16 gap-x-3 flex-row`}>
                   <Text style={{ color: textColor }} className={`text-base`}>
                     {footerTitle}
