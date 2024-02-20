@@ -1,7 +1,29 @@
 import * as yup from "yup";
 
 export default yup.object({
-    product_name: yup.string("Enter your Product Name").required("Product Name is required").min(2, "Your product Name should be of minimum 2 characters legth").max(30, "Your product Name cannot exceed 30 characters"),
-    brand: yup.string("Enter your brand").required("Brand is required"),
-    type: yup.string("Enter your type").required("Type is required"),
+  product_name: yup.string().required("Product Name is required"),
+  brand: yup.string(),
+  // measurement: yup.object({
+  //   quantity: yup
+  //     .number()
+  //     .required("Measurement Quantity is required")
+  //     .min(0, "Quantity must be a positive number"),
+  //   unit: yup
+  //     .string()
+  //     .required("Measurement Unit is required")
+  //     .oneOf(
+  //       [
+  //         "Liter",
+  //         "Milliliter",
+  //         "Gallon",
+  //         "Ounce",
+  //         "Pound",
+  //         "Kilogram",
+  //         "Other",
+  //       ],
+  //       "Invalid Measurement Unit"
+  //     ),
+  // }),
+  isNew: yup.boolean().required("Please specify if the product is new or not"),
+  ingredients: yup.string().required("Ingredients are required"),
 });
