@@ -9,23 +9,20 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
-  BackHandler,
   TextInput,
 } from "react-native";
 import {
   useUpdateServiceMutation,
-  useGetServicesQuery,
   useGetServiceByIdQuery,
   useGetProductsQuery,
 } from "../../state/api/reducer";
 import { useFormik } from "formik";
-import { editServiceValidation } from "../../validation";
 import { useNavigation } from "@react-navigation/native";
 import * as ImageManipulator from "expo-image-manipulator";
 import * as ImagePicker from "expo-image-picker";
 import Toast from "react-native-toast-message";
 import { LoadingScreen } from "@components";
-import { dimensionLayout, changeColor } from "@utils";
+import { changeColor } from "@utils";
 import { Picker } from "@react-native-picker/picker";
 import { BackIcon } from "@helpers";
 
@@ -33,37 +30,40 @@ export default function ({ route }) {
   const { id } = route.params;
   const navigation = useNavigation();
 
-  const { refetch: refetchServices } = useGetServicesQuery();
+  const { data: products, isLoading: productLoading } = useGetProductsQuery();
   const {
     data,
     isLoading: isServiceLoading,
     refetch,
   } = useGetServiceByIdQuery(id);
-  const { data: dataProducts } = useGetProductsQuery();
   const [updateService, { isLoading }] = useUpdateServiceMutation();
 
-  const isDimensionLayout = dimensionLayout();
   const { backgroundColor, textColor, colorScheme } = changeColor();
   const borderColor =
     colorScheme === "dark" ? "border-neutral-light" : "border-neutral-dark";
   const [selectedImages, setSelectedImages] = useState([]);
 
-  const scroll = 500;
-
-  const [keyboardOpen, setKeyboardOpen] = useState(false);
-  const [scrollViewHeight, setScrollViewHeight] = useState(scroll);
+  const convertToServerFormat = (userInput) => {
+    const [hours] = userInput.split(":");
+    return hours.trim();
+  };
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
       service_name: data?.details?.service_name || "",
       description: data?.details?.description || "",
+      duration: data?.details?.duration || "",
+      warranty: data?.details?.warranty || "",
+      type: data?.details?.type || [],
+      occassion: data?.details?.occassion || "",
       price: data?.details?.price || 0,
-      product: data?.details?.product?._id || "",
+      product: data?.details?.product?.map((product) => product._id) || [],
     },
-    validationSchema: editServiceValidation,
     onSubmit: (values) => {
       const formData = new FormData();
+      const formatedDuration = convertToServerFormat(values?.duration);
+
       if (selectedImages.length > 0) {
         selectedImages.forEach((image, index) => {
           const imageName = image.uri.split("/").pop();
@@ -77,16 +77,22 @@ export default function ({ route }) {
         });
       }
 
-      formData.append("service_name", values.service_name);
-      formData.append("description", values.description);
-      formData.append("price", values.price);
-      formData.append("product", values.product);
-
+      formData.append("service_name", values?.service_name);
+      formData.append("description", values?.description);
+      if (Array.isArray(values?.type)) {
+        values.type.forEach((item) => formData.append("type[]", item));
+      } else formData.append("type", values?.type);
+      formData.append("occassion", values?.occassion);
+      formData.append("price", values?.price);
+      formData.append("duration", formatedDuration);
+      formData.append("warranty", values?.warranty);
+      if (Array.isArray(values?.product)) {
+        values.product.forEach((item) => formData.append("product[]", item));
+      } else formData.append("product", values?.product);
       updateService({ id: data?.details?._id, payload: formData })
         .unwrap()
         .then((response) => {
           refetch();
-          refetchServices();
           Toast.show({
             type: "success",
             position: "top",
@@ -110,41 +116,6 @@ export default function ({ route }) {
         });
     },
   });
-
-  const handleTextInputFocus = () => {
-    setScrollViewHeight(keyboardOpen ? 600 : scroll);
-  };
-
-  useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      () => {
-        setScrollViewHeight(scroll);
-        return true;
-      }
-    );
-
-    const keyboardDidShowListener = Keyboard.addListener(
-      "keyboardDidShow",
-      () => {
-        setKeyboardOpen(true);
-        setScrollViewHeight(600);
-      }
-    );
-    const keyboardDidHideListener = Keyboard.addListener(
-      "keyboardDidHide",
-      () => {
-        setKeyboardOpen(false);
-        setScrollViewHeight(scroll);
-      }
-    );
-
-    return () => {
-      backHandler.remove();
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
 
   const takePicture = async () => {
     const result = await ImagePicker.launchCameraAsync({
@@ -229,9 +200,51 @@ export default function ({ route }) {
     }
   };
 
+  const [selectedTypes, setSelectedTypes] = useState(data?.details?.type || []);
+
+  const handleCheckBoxToggle = (value) => {
+    setSelectedTypes((prevOpen) => {
+      if (prevOpen.includes(value)) {
+        return prevOpen.filter((item) => item !== value);
+      } else {
+        return [...prevOpen, value];
+      }
+    });
+  };
+
+  useEffect(() => {
+    formik.setFieldValue("type", selectedTypes);
+  }, [selectedTypes]);
+
+  const handsProducts = products?.details?.filter(
+    (product) => product.type === "Hands"
+  );
+  const hairProducts = products?.details?.filter(
+    (product) => product.type === "Hair"
+  );
+  const feetProducts = products?.details?.filter(
+    (product) => product.type === "Feet"
+  );
+  const faceProducts = products?.details?.filter(
+    (product) => product.type === "Face"
+  );
+  const bodyProducts = products?.details?.filter(
+    (product) => product.type === "Body"
+  );
+
+  const handleCheckBoxProduct = (selectedProduct) => {
+    let updatedProducts;
+    const productId = selectedProduct._id;
+    if (formik.values.product.includes(productId)) {
+      updatedProducts = formik.values.product.filter((id) => id !== productId);
+    } else updatedProducts = [...formik.values.product, productId];
+
+    formik.setFieldValue("product", updatedProducts);
+  };
+
   return (
     <>
-      {isLoading || isServiceLoading ? (
+      {isLoading || isServiceLoading || productLoading ? (
         <View
           className={`flex-1 justify-center items-center bg-primary-default`}
         >
@@ -244,233 +257,673 @@ export default function ({ route }) {
             className={`relative flex-1`}
           >
             <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
-            <View
-              className={`justify-start ${
-                isDimensionLayout
-                  ? "mt-24 flex-col items-center"
-                  : "mt-4 flex-row items-start"
-              }`}
-            >
-              <Image
-                source={{
-                  uri: data?.details?.image[0]?.url,
-                  headers: {
-                    Accept: "*/*",
-                  },
-                }}
-                className={`rounded-full ${
-                  isDimensionLayout
-                    ? "w-[45%] h-[50%]"
-                    : "ml-16 mt-12 w-[200px] h-[200px]"
-                }`}
-                resizeMode="contain"
-              />
-              <View className={`flex-1 items-center justify-start`}>
+            <KeyboardAvoidingView behavior="height">
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                decelerationRate="fast"
+                scrollEventThrottle={1}
+                className={`px-6`}
+              >
+                <View className={`items-center justify-center py-12`}>
+                  <Image
+                    key={
+                      data?.details?.image[
+                        Math.floor(Math.random() * data?.details?.image?.length)
+                      ]?.public_id
+                    }
+                    source={{
+                      uri: data?.details?.image[
+                        Math.floor(Math.random() * data?.details?.image?.length)
+                      ]?.url,
+                    }}
+                    className={`rounded-full w-60 h-60`}
+                    resizeMode="cover"
+                  />
+                </View>
                 <Text
                   style={{ color: textColor }}
-                  className={`font-semibold text-center ${
-                    isDimensionLayout ? "my-[9px] text-3xl" : "my-1 text-xl"
-                  }`}
+                  className={`font-semibold text-center my-[9px] text-3xl`}
                 >
                   Update Service Details
                 </Text>
-                <KeyboardAvoidingView
-                  behavior="padding"
-                  className={`${
-                    isDimensionLayout ? "h-[450px] w-[300px]" : "w-[375px]"
-                  }`}
+                <Text
+                  style={{ color: textColor }}
+                  className={`font-semibold text-base`}
                 >
-                  <ScrollView
-                    contentContainerStyle={{ height: scrollViewHeight }}
-                    showsVerticalScrollIndicator={false}
-                    scrollEnabled={scrollViewHeight > 450}
-                    decelerationRate="fast"
-                    scrollEventThrottle={1}
-                  >
-                    <Text
-                      style={{ color: textColor }}
-                      className={`font-semibold text-base`}
-                    >
-                      Service Name
-                    </Text>
-                    <TextInput
-                      style={{ color: textColor }}
-                      className={`border-b mb-3 ${borderColor}`}
-                      placeholder="Enter your service name"
-                      placeholderTextColor={textColor}
-                      autoCapitalize="none"
-                      handleTextInputFocus={handleTextInputFocus}
-                      onChangeText={formik.handleChange("service_name")}
-                      onBlur={formik.handleBlur("service_name")}
-                      value={formik.values.service_name}
-                    />
-                    {formik.touched.service_name &&
-                      formik.errors.service_name && (
-                        <Text style={{ color: "red" }}>
-                          {formik.errors.service_name}
-                        </Text>
-                      )}
-                    <Text
-                      style={{ color: textColor }}
-                      className={`font-semibold text-base`}
-                    >
-                      Description
-                    </Text>
-                    <TextInput
-                      style={{ color: textColor }}
-                      className={`border-b mb-3 ${borderColor}`}
-                      placeholder="Enter your description"
-                      placeholderTextColor={textColor}
-                      autoCapitalize="none"
-                      handleTextInputFocus={handleTextInputFocus}
-                      onChangeText={formik.handleChange("description")}
-                      onBlur={formik.handleBlur("description")}
-                      value={formik.values.description}
-                    />
-                    {formik.touched.description &&
-                      formik.errors.description && (
-                        <Text style={{ color: "red" }}>
-                          {formik.errors.description}
-                        </Text>
-                      )}
-                    <Text
-                      style={{ color: textColor }}
-                      className={`font-semibold text-base`}
-                    >
-                      Price
-                    </Text>
-                    <TextInput
-                      style={{ color: textColor }}
-                      className={`border-b mb-3 ${borderColor}`}
-                      placeholder="Enter the price"
-                      placeholderTextColor={textColor}
-                      keyboardType="numeric"
-                      autoCapitalize="none"
-                      handleTextInputFocus={handleTextInputFocus}
-                      onChangeText={formik.handleChange("price")}
-                      onBlur={formik.handleBlur("price")}
-                      value={String(formik.values.price)}
-                    />
-                    {formik.touched.price && formik.errors.price && (
-                      <Text style={{ color: "red" }}>
-                        {formik.errors.price}
-                      </Text>
-                    )}
-                    <Text
-                      style={{ color: textColor }}
-                      className={`font-semibold text-base`}
-                    >
-                      Product Name
-                    </Text>
-                    <Picker
-                      selectedValue={formik.values.product}
-                      style={{ color: textColor }}
-                      dropdownIconColor={textColor}
-                      onValueChange={(itemValue) => {
-                        // Ensure that the formik value is always set, even if the user selects the same product
-                        formik.setFieldValue("product", itemValue);
-                        // Additional logic if needed
-                      }}
-                    >
-                      {data?.details?.product && (
-                        <Picker.Item
-                          key={data?.details?.product?._id}
-                          label={data?.details?.product?.product_name}
-                          value={data?.details?.product?._id}
-                        />
-                      )}
-                      {dataProducts?.details
-                        ?.filter(
-                          (product) =>
-                            product._id !== data?.details?.product?._id
-                        )
-                        .map((product) => (
-                          <Picker.Item
-                            key={product._id}
-                            label={product.product_name}
-                            value={product._id}
-                          />
-                        ))}
-                    </Picker>
-                    {formik.touched.product && formik.errors.product && (
-                      <Text style={{ color: "red" }}>
-                        {formik.errors.product}
-                      </Text>
-                    )}
+                  Service Name
+                </Text>
+                <TextInput
+                  style={{ color: textColor }}
+                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                  placeholderTextColor={textColor}
+                  autoCapitalize="none"
+                  onChangeText={formik.handleChange("service_name")}
+                  onBlur={formik.handleBlur("service_name")}
+                  value={formik.values.service_name}
+                />
+                {formik.touched.service_name && formik.errors.service_name && (
+                  <Text style={{ color: "red" }}>
+                    {formik.errors.service_name}
+                  </Text>
+                )}
 
-                    <Text
-                      style={{ color: textColor }}
-                      className={`${borderColor} font-semibold text-base`}
+                <View
+                  className={`border-[1.5px]  font-normal rounded-full my-3 ${borderColor}`}
+                >
+                  <Picker
+                    selectedValue={formik.values.duration}
+                    style={{ color: textColor }}
+                    dropdownIconColor={textColor}
+                    onValueChange={(itemValue) =>
+                      formik.setFieldValue("duration", itemValue)
+                    }
+                  >
+                    <Picker.Item label="Select Duration" value="" />
+                    <Picker.Item
+                      label="Minimum of 30 minutes"
+                      value="Minimum of 30 minutes"
+                    />
+                    <Picker.Item
+                      label="Minimum of 1 hour"
+                      value="Minimum of 1 hour"
+                    />
+                    <Picker.Item
+                      label="Minimum of 2 hours"
+                      value="Minimum of 2 hours"
+                    />
+                    <Picker.Item
+                      label="Minimum of 3 hours"
+                      value="Minimum of 3 hours"
+                    />
+                  </Picker>
+                </View>
+                {formik.touched.duration && formik.errors.duration && (
+                  <Text style={{ color: "red" }}>{formik.errors.duration}</Text>
+                )}
+
+                <View
+                  className={`border-[1.5px]  font-normal rounded-full my-3 ${borderColor}`}
+                >
+                  <Picker
+                    selectedValue={formik.values.warranty}
+                    style={{ color: textColor }}
+                    dropdownIconColor={textColor}
+                    onValueChange={(itemValue) =>
+                      formik.setFieldValue("warranty", itemValue)
+                    }
+                  >
+                    <Picker.Item label="Select Warranty" value="" />
+                    <Picker.Item label="1 day" value="1 day" />
+                    <Picker.Item label="3 days" value="3 days" />
+                    <Picker.Item label="5 days" value="5 days" />
+                    <Picker.Item label="1 week" value="1 week" />
+                    <Picker.Item label="2 weeks" value="2 weeks" />
+                    <Picker.Item label="3 weeks" value="3 weeks" />
+                    <Picker.Item label="1 month" value="1 month" />
+                  </Picker>
+                </View>
+                {formik.touched.warranty && formik.errors.warranty && (
+                  <Text style={{ color: "red" }}>{formik.errors.warranty}</Text>
+                )}
+
+                <Text
+                  style={{ color: textColor }}
+                  className={`font-semibold text-2xl`}
+                >
+                  Service Type
+                </Text>
+                <View
+                  className={`flex flex-row justify-start gap-x-4 flex-wrap`}
+                >
+                  <TouchableOpacity
+                    onPress={() => handleCheckBoxToggle("Hands")}
+                    className={`flex-row py-2`}
+                  >
+                    <View
+                      style={{
+                        height: 35,
+                        width: 35,
+                        borderColor: textColor,
+                        backgroundColor: backgroundColor,
+                      }}
+                      className={`flex-row justify-center items-center border-2 rounded`}
                     >
-                      Update Service Image
-                    </Text>
-                    <View className={`flex-row gap-x-2 mt-1 mb-6`}>
-                      <TouchableOpacity onPress={takePicture}>
+                      {selectedTypes.includes("Hands") && (
                         <Text
                           style={{ color: textColor }}
-                          className={`${borderColor}`}
+                          className={`text-2xl`}
                         >
-                          Take a Picture
-                        </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity onPress={selectImages}>
-                        <Text
-                          style={{ color: textColor }}
-                          className={`${borderColor}`}
-                        >
-                          Select Images
-                        </Text>
-                      </TouchableOpacity>
-                      {selectedImages?.length > 0 ? (
-                        <Text
-                          style={{ color: textColor }}
-                          className={`${borderColor}`}
-                        >
-                          Add {selectedImages.length} image
-                          {selectedImages.length > 1 ? "s" : ""}
-                        </Text>
-                      ) : (
-                        <Text
-                          style={{ color: textColor }}
-                          className={`${borderColor}`}
-                        >
-                          No Image
+                          ✓
                         </Text>
                       )}
                     </View>
-                    <View className={`flex-col`}>
-                      <TouchableOpacity
-                        onPress={formik.handleSubmit}
-                        disabled={!formik.isValid}
-                      >
-                        <View
-                          className={`mb-2 ${
-                            isDimensionLayout
-                              ? "w-full"
-                              : "flex justify-center items-center"
-                          }`}
+                  </TouchableOpacity>
+                  <View className={`pt-2 pb-6`}>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`text-2xl font-semibold`}
+                    >
+                      Hands
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => handleCheckBoxToggle("Hair")}
+                    className={`flex-row py-2`}
+                  >
+                    <View
+                      style={{
+                        height: 35,
+                        width: 35,
+                        borderColor: textColor,
+                        backgroundColor: backgroundColor,
+                      }}
+                      className={`flex-row justify-center items-center border-2 rounded`}
+                    >
+                      {selectedTypes.includes("Hair") && (
+                        <Text
+                          style={{ color: textColor }}
+                          className={`text-2xl`}
+                        >
+                          ✓
+                        </Text>
+                      )}
+                    </View>
+                  </TouchableOpacity>
+                  <View className={`pt-2 pb-6`}>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`text-2xl font-semibold`}
+                    >
+                      Hair
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => handleCheckBoxToggle("Feet")}
+                    className={`flex-row py-2`}
+                  >
+                    <View
+                      style={{
+                        height: 35,
+                        width: 35,
+                        borderColor: textColor,
+                        backgroundColor: backgroundColor,
+                      }}
+                      className={`flex-row justify-center items-center border-2 rounded`}
+                    >
+                      {selectedTypes.includes("Feet") && (
+                        <Text
+                          style={{ color: textColor }}
+                          className={`text-2xl`}
+                        >
+                          ✓
+                        </Text>
+                      )}
+                    </View>
+                  </TouchableOpacity>
+                  <View className={`pt-2 pb-6`}>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`text-2xl font-semibold`}
+                    >
+                      Feet
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => handleCheckBoxToggle("Face")}
+                    className={`flex-row py-2`}
+                  >
+                    <View
+                      style={{
+                        height: 35,
+                        width: 35,
+                        borderColor: textColor,
+                        backgroundColor: backgroundColor,
+                      }}
+                      className={`flex-row justify-center items-center border-2 rounded`}
+                    >
+                      {selectedTypes.includes("Face") && (
+                        <Text
+                          style={{ color: textColor }}
+                          className={`text-2xl`}
+                        >
+                          ✓
+                        </Text>
+                      )}
+                    </View>
+                  </TouchableOpacity>
+                  <View className={`pt-2 pb-6`}>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`text-2xl font-semibold`}
+                    >
+                      Face
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => handleCheckBoxToggle("Body")}
+                    className={`flex-row py-2`}
+                  >
+                    <View
+                      style={{
+                        height: 35,
+                        width: 35,
+                        borderColor: textColor,
+                        backgroundColor: backgroundColor,
+                      }}
+                      className={`flex-row justify-center items-center border-2 rounded`}
+                    >
+                      {selectedTypes.includes("Body") && (
+                        <Text
+                          style={{ color: textColor }}
+                          className={`text-2xl`}
+                        >
+                          ✓
+                        </Text>
+                      )}
+                    </View>
+                  </TouchableOpacity>
+                  <View className={`pt-2 pb-6`}>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`text-2xl font-semibold`}
+                    >
+                      Body
+                    </Text>
+                  </View>
+                </View>
+                {formik.touched.type && formik.errors.type && (
+                  <Text style={{ color: "red" }}>{formik.errors.type}</Text>
+                )}
+
+                <View
+                  className={`border-[1.5px]  font-normal rounded-full my-3 ${borderColor}`}
+                >
+                  <Picker
+                    selectedValue={formik.values.occassion}
+                    style={{ color: textColor }}
+                    dropdownIconColor={textColor}
+                    onValueChange={(itemValue) =>
+                      formik.setFieldValue("occassion", itemValue)
+                    }
+                  >
+                    <Picker.Item label="Select Occassion" value="" />
+                    <Picker.Item label="Graduation" value="Graduation" />
+                    <Picker.Item label="Js Prom" value="Js Prom" />
+                    <Picker.Item label="Halloween" value="Halloween" />
+                    <Picker.Item label="Christmas" value="Christmas" />
+                    <Picker.Item label="Valentines" value="Valentines" />
+                    <Picker.Item label="Wedding" value="Wedding" />
+                    <Picker.Item label="New Year" value="New Year" />
+                    <Picker.Item label="Birthday" value="Birthday" />
+                    <Picker.Item label="None" value="None" />
+                  </Picker>
+                </View>
+                {formik.touched.occassion && formik.errors.occassion && (
+                  <Text style={{ color: "red" }}>
+                    {formik.errors.occassion}
+                  </Text>
+                )}
+
+                <TextInput
+                  style={{ color: textColor }}
+                  className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                  placeholder="Enter the price"
+                  placeholderTextColor={textColor}
+                  keyboardType="numeric"
+                  onChangeText={(value) =>
+                    formik.handleChange("price")(value.toString())
+                  }
+                  onBlur={formik.handleBlur("price")}
+                  value={formik.values.price.toString()}
+                />
+                {formik.touched.price && formik.errors.price && (
+                  <Text style={{ color: "red" }}>{formik.errors.price}</Text>
+                )}
+
+                {selectedTypes.includes("Hands") ? (
+                  <>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`font-semibold text-2xl`}
+                    >
+                      Hands Products
+                    </Text>
+                    <View
+                      className={`flex flex-row justify-start gap-x-4 flex-wrap`}
+                    >
+                      {handsProducts.map((product) => (
+                        <TouchableOpacity
+                          key={product._id}
+                          onPress={() => handleCheckBoxProduct(product)}
+                          className={`flex-row gap-x-2 py-2`}
                         >
                           <View
-                            className={`py-2 rounded-lg bg-primary-accent ${
-                              isDimensionLayout ? "mx-20" : "w-[175px] mx-0"
-                            } ${
-                              !formik.isValid ? "opacity-50" : "opacity-100"
-                            }`}
+                            style={{
+                              height: 30,
+                              width: 30,
+                              borderColor: textColor,
+                              backgroundColor: backgroundColor,
+                            }}
+                            className={`flex-row justify-center items-center border-2 rounded`}
                           >
+                            {formik.values.product.includes(product._id) && (
+                              <Text
+                                style={{ color: textColor }}
+                                className={`text-lg`}
+                              >
+                                ✓
+                              </Text>
+                            )}
+                          </View>
+                          <View className={`pb-6`}>
                             <Text
-                              className={`font-semibold text-center text-lg`}
                               style={{ color: textColor }}
+                              className={`text-lg font-semibold`}
                             >
-                              Submit
+                              {product.product_name}
                             </Text>
                           </View>
-                        </View>
-                      </TouchableOpacity>
+                        </TouchableOpacity>
+                      ))}
                     </View>
-                  </ScrollView>
-                </KeyboardAvoidingView>
-              </View>
-            </View>
+                  </>
+                ) : (
+                  ""
+                )}
+
+                {selectedTypes.includes("Hair") ? (
+                  <>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`font-semibold text-2xl`}
+                    >
+                      Hair Products
+                    </Text>
+                    <View
+                      className={`flex flex-row justify-start gap-x-4 flex-wrap`}
+                    >
+                      {hairProducts.map((product) => (
+                        <TouchableOpacity
+                          key={product._id}
+                          onPress={() => handleCheckBoxProduct(product)}
+                          className={`flex-row gap-x-2 py-2`}
+                        >
+                          <View
+                            style={{
+                              height: 30,
+                              width: 30,
+                              borderColor: textColor,
+                              backgroundColor: backgroundColor,
+                            }}
+                            className={`flex-row justify-center items-center border-2 rounded`}
+                          >
+                            {formik.values.product.includes(product._id) && (
+                              <Text
+                                style={{ color: textColor }}
+                                className={`text-lg`}
+                              >
+                                ✓
+                              </Text>
+                            )}
+                          </View>
+                          <View className={`pb-6`}>
+                            <Text
+                              style={{ color: textColor }}
+                              className={`text-lg font-semibold`}
+                            >
+                              {product.product_name}
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
+                      ))}
+                    </View>
+                  </>
+                ) : (
+                  ""
+                )}
+
+                {selectedTypes.includes("Feet") ? (
+                  <>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`font-semibold text-2xl`}
+                    >
+                      Feet Products
+                    </Text>
+                    <View
+                      className={`flex flex-row justify-start gap-x-4 flex-wrap`}
+                    >
+                      {feetProducts.map((product) => (
+                        <TouchableOpacity
+                          key={product._id}
+                          onPress={() => handleCheckBoxProduct(product)}
+                          className={`flex-row gap-x-2 py-2`}
+                        >
+                          <View
+                            style={{
+                              height: 30,
+                              width: 30,
+                              borderColor: textColor,
+                              backgroundColor: backgroundColor,
+                            }}
+                            className={`flex-row justify-center items-center border-2 rounded`}
+                          >
+                            {formik.values.product.includes(product._id) && (
+                              <Text
+                                style={{ color: textColor }}
+                                className={`text-2xl`}
+                              >
+                                ✓
+                              </Text>
+                            )}
+                          </View>
+                          <View className={`pb-6`}>
+                            <Text
+                              style={{ color: textColor }}
+                              className={`text-lg font-semibold`}
+                            >
+                              {product.product_name}
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
+                      ))}
+                    </View>
+                  </>
+                ) : (
+                  ""
+                )}
+
+                {selectedTypes.includes("Face") ? (
+                  <>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`font-semibold text-2xl`}
+                    >
+                      Face Products
+                    </Text>
+                    <View
+                      className={`flex flex-row justify-start gap-x-4 flex-wrap`}
+                    >
+                      {faceProducts.map((product) => (
+                        <TouchableOpacity
+                          key={product._id}
+                          onPress={() => handleCheckBoxProduct(product)}
+                          className={`flex-row gap-x-2 py-2`}
+                        >
+                          <View
+                            style={{
+                              height: 30,
+                              width: 30,
+                              borderColor: textColor,
+                              backgroundColor: backgroundColor,
+                            }}
+                            className={`flex-row justify-center items-center border-2 rounded`}
+                          >
+                            {formik.values.product.includes(product._id) && (
+                              <Text
+                                style={{ color: textColor }}
+                                className={`text-lg`}
+                              >
+                                ✓
+                              </Text>
+                            )}
+                          </View>
+                          <View className={`pb-6`}>
+                            <Text
+                              style={{ color: textColor }}
+                              className={`text-lg font-semibold`}
+                            >
+                              {product.product_name}
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
+                      ))}
+                    </View>
+                  </>
+                ) : (
+                  ""
+                )}
+
+                {selectedTypes.includes("Body") ? (
+                  <>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`font-semibold text-2xl`}
+                    >
+                      Body Products
+                    </Text>
+                    <View
+                      className={`flex flex-row justify-start gap-x-4 flex-wrap`}
+                    >
+                      {bodyProducts.map((product) => (
+                        <TouchableOpacity
+                          key={product._id}
+                          onPress={() => handleCheckBoxProduct(product)}
+                          className={`flex-row gap-x-2 py-2`}
+                        >
+                          <View
+                            style={{
+                              height: 30,
+                              width: 30,
+                              borderColor: textColor,
+                              backgroundColor: backgroundColor,
+                            }}
+                            className={`flex-row justify-center items-center border-2 rounded`}
+                          >
+                            {formik.values.product.includes(product._id) && (
+                              <Text
+                                style={{ color: textColor }}
+                                className={`text-lg`}
+                              >
+                                ✓
+                              </Text>
+                            )}
+                          </View>
+                          <View className={`pb-6`}>
+                            <Text
+                              style={{ color: textColor }}
+                              className={`text-lg font-semibold`}
+                            >
+                              {product.product_name}
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
+                      ))}
+                    </View>
+                  </>
+                ) : (
+                  ""
+                )}
+
+                {formik.touched.product && formik.errors.product && (
+                  <Text style={{ color: "red" }}>{formik.errors.product}</Text>
+                )}
+
+                <TextInput
+                  style={{
+                    color: textColor,
+                    height: 100,
+                    textAlignVertical: "top",
+                  }}
+                  className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2 ${borderColor}`}
+                  placeholder="Enter your description"
+                  placeholderTextColor={textColor}
+                  autoCapitalize="none"
+                  multiline={true}
+                  onChangeText={formik.handleChange("description")}
+                  onBlur={formik.handleBlur("description")}
+                  value={formik.values.description}
+                />
+                {formik.touched.description && formik.errors.description && (
+                  <Text style={{ color: "red" }}>
+                    {formik.errors.description}
+                  </Text>
+                )}
+
+                <Text
+                  style={{ color: textColor }}
+                  className={`${borderColor} font-semibold text-xl`}
+                >
+                  Update Service Image
+                </Text>
+                <View className={`flex-row gap-x-2 mt-2 mb-6`}>
+                  <TouchableOpacity onPress={takePicture}>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`text-base ${borderColor}`}
+                    >
+                      Take a Picture
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={selectImages}>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`text-base ${borderColor}`}
+                    >
+                      Select Images
+                    </Text>
+                  </TouchableOpacity>
+                  {selectedImages?.length > 0 ? (
+                    <Text
+                      style={{ color: textColor }}
+                      className={`text-base ${borderColor}`}
+                    >
+                      Add {selectedImages.length} image
+                      {selectedImages.length > 1 ? "s" : ""}
+                    </Text>
+                  ) : (
+                    <Text
+                      style={{ color: textColor }}
+                      className={`text-base ${borderColor}`}
+                    >
+                      No Image
+                    </Text>
+                  )}
+                </View>
+
+                <View className={`flex-col`}>
+                  <TouchableOpacity
+                    onPress={formik.handleSubmit}
+                    disabled={!formik.isValid}
+                  >
+                    <View className={`mb-2 w-full`}>
+                      <View
+                        className={`py-2 rounded-lg bg-primary-accent ${
+                          !formik.isValid ? "opacity-50" : "opacity-100"
+                        }`}
+                      >
+                        <Text
+                          className={`font-semibold text-center text-lg`}
+                          style={{ color: textColor }}
+                        >
+                          Submit
+                        </Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              </ScrollView>
+            </KeyboardAvoidingView>
           </SafeAreaView>
         </TouchableWithoutFeedback>
       )}
