@@ -40,6 +40,46 @@ export const updateById = (builder) => {
   });
 };
 
+export const confirmAppointment = (builder) => {
+  return builder.mutation({
+    query: (id) => {
+      return {
+        url: `${ROUTE.ACTIVATE_APPOINTMENT_ID_ROUTE.replace(":id", id)}`,
+        method: API.PATCH,
+      };
+    },
+    invalidatesTags: [TAGS.APPOINTMENTS],
+  });
+};
+
+export const updateScheduleById = (builder) => {
+  return builder.mutation({
+    query: ({ id, payload }) => {
+      return {
+        url: `${ROUTE.SCHEDULE_EDIT_APPOINTMENT_ID_ROUTE.replace(":id", id)}`,
+        method: API.PATCH,
+        body: payload,
+      };
+    },
+    invalidatesTags: [TAGS.APPOINTMENTS],
+  });
+};
+
+export const cancelAppointment = (builder) => {
+  return builder.mutation({
+    query: (id) => {
+      return {
+        url: `${ROUTE.CANCEL_RESCHEDULE_APPOINTMENT_ID_ROUTE.replace(
+          ":id",
+          id
+        )}`,
+        method: API.PATCH,
+      };
+    },
+    invalidatesTags: [TAGS.APPOINTMENTS],
+  });
+};
+
 export const deleteById = (builder) => {
   return builder.mutation({
     query: (id) => ({
@@ -50,4 +90,56 @@ export const deleteById = (builder) => {
   });
 };
 
-export default { get, getById, add, updateById, deleteById };
+export const getAppointmentByBeauticianId = (builder) => {
+  return builder.query({
+    query: (id) => `${ROUTE.BEAUTICIAN_APPOINTMENT_ROUTE.replace(":id", id)}`,
+    method: API.GET,
+    providesTags: [TAGS.APPOINTMENTS],
+  });
+};
+
+export const getAppointmentHistoryByBeauticianId = (builder) => {
+  return builder.query({
+    query: (id) =>
+      `${ROUTE.BEAUTICIAN_HISTORY_APPOINTMENT_ROUTE.replace(":id", id)}`,
+    method: API.GET,
+    providesTags: [TAGS.APPOINTMENTS],
+  });
+};
+
+export const updateBeauticianAppointment = (builder) => {
+  return builder.mutation({
+    query: ({ id, payload }) => {
+      return {
+        url: `${ROUTE.EDIT_APPOINTMENT_BEAUTICIAN_ID_ROUTE.replace(":id", id)}`,
+        method: API.PATCH,
+        body: payload,
+      };
+    },
+    invalidatesTags: [TAGS.APPOINTMENTS],
+  });
+};
+
+export const getRescheduleAppointmentById = (builder) => {
+  return builder.query({
+    query: (id) =>
+      `${ROUTE.RESCHEDULE_APPOINTMENT_ID_ROUTE.replace(":id", id)}`,
+    method: API.GET,
+    providesTags: [TAGS.APPOINTMENTS],
+  });
+};
+
+export default {
+  get,
+  getById,
+  add,
+  updateById,
+  updateScheduleById,
+  deleteById,
+  getAppointmentByBeauticianId,
+  getAppointmentHistoryByBeauticianId,
+  confirmAppointment,
+  cancelAppointment,
+  updateBeauticianAppointment,
+  getRescheduleAppointmentById,
+};
