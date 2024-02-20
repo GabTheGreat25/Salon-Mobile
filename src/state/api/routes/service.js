@@ -2,7 +2,7 @@ import { ROUTE, TAGS, API } from "../../../constants";
 
 export const get = (builder) => {
   return builder.query({
-    query: () => `${ROUTE.SERVICE_ROUTE}`,
+    query: () => `${ROUTE.SERVICES_ROUTE}`,
     method: API.GET,
     providesTags: [TAGS.SERVICES],
   });
@@ -19,7 +19,7 @@ export const getById = (builder) => {
 export const add = (builder) => {
   return builder.mutation({
     query: (payload) => ({
-      url: `${ROUTE.SERVICE_ROUTE}`,
+      url: `${ROUTE.SERVICES_ROUTE}`,
       method: API.POST,
       body: payload,
     }),
