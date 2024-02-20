@@ -25,7 +25,7 @@ export default function ({ viewWidth, imageSource, imageName, imageRole }) {
             style={{
               color: textColor,
             }}
-            className="my-2 text-2xl font-bold"
+            className="my-2 text-xl font-bold"
           >
             {imageName}
           </Text>
