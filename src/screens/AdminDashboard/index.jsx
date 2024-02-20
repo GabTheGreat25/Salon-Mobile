@@ -1,35 +1,49 @@
 import React from "react";
 import { ListData, CircleCrud, LoadingScreen } from "@components";
-import { View, ScrollView, Dimensions } from "react-native";
+import { View, ScrollView } from "react-native";
 import { useGetUsersQuery } from "../../state/api/reducer";
-import { Feather } from "@expo/vector-icons";
-import { changeColor, dimensionLayout } from "@utils";
-import ShowPendingEmployees from "./ShowPendingEmployees";
-import randomColor from "randomcolor";
+import {
+  Feather,
+  MaterialIcons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
+import { changeColor } from "@utils";
+import Calendar from "./Calendar";
 
 export default function () {
-  const { width: deviceWidth } = Dimensions.get("window");
-  const customCircleWidth = deviceWidth * 0.086;
-  const customBoxWidth = deviceWidth * 0.0525;
+  const { backgroundColor, textColor, colorScheme } = changeColor();
+
+  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDA7DF";
+  const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
   const { data, isLoading } = useGetUsersQuery();
   const users = data?.details ?? [];
 
+  const usersAll = users?.filter((user) => user?.active === true);
+  const userCount = usersAll.length;
+
   const admins = users?.filter((user) => user?.roles?.includes("Admin"));
   const adminCount = admins.length;
 
-  const employees = users?.filter(
-    (user) => user?.roles?.includes("Employee") && user?.active === true
+  const beauticians = users?.filter(
+    (user) => user?.roles?.includes("Beautician") && user?.active === true
   );
-  const employeeCount = employees.length;
+  const beauticianCount = beauticians.length;
 
-  const customers = users?.filter((user) =>
+  const pendingBeauticians = users?.filter(
+    (user) => user?.roles?.includes("Beautician") && user?.active === false
+  );
+  const pendingbeauticianCount = pendingBeauticians.length;
+
+  const onlineCustomers = users?.filter((user) =>
     user?.roles?.includes("Online Customer")
   );
-  const customerCount = customers.length;
+  const onlineCustomerCount = onlineCustomers.length;
 
-  const { textColor, backgroundColor } = changeColor();
-  const isDimensionLayout = dimensionLayout();
+  const walkCustomers = users?.filter((user) =>
+    user?.roles?.includes("Walk-in Customer")
+  );
+  const walkCustomerCount = walkCustomers.length;
 
   return (
     <>
@@ -47,106 +61,192 @@ export default function () {
             showsVerticalScrollIndicator={false}
           >
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              <View
-                className={`flex-row items-center justify-center`}
-                style={{
-                  paddingHorizontal: isDimensionLayout ? 0 : customCircleWidth,
-                }}
-              >
+              <View className={`flex-row items-center justify-center`}>
                 <CircleCrud
-                  icon="truck"
-                  title="Delivery"
-                  routeName="Delivery"
-                  backgroundColor={randomColor({ luminosity: "bright" })}
+                  icon="user-plus"
+                  title="User"
+                  routeName="User"
+                  backgroundColor={invertBackgroundColor}
                 />
                 <View style={{ width: 15 }} />
                 <CircleCrud
                   icon="package"
                   title="Product"
                   routeName="Product"
-                  backgroundColor={randomColor({ luminosity: "bright" })}
+                  backgroundColor={invertBackgroundColor}
                 />
                 <View style={{ width: 15 }} />
                 <CircleCrud
                   icon="tool"
                   title="Service"
                   routeName="Service"
-                  backgroundColor={randomColor({ luminosity: "bright" })}
+                  backgroundColor={invertBackgroundColor}
                 />
                 <View style={{ width: 15 }} />
                 <CircleCrud
-                  icon="clock"
+                  icon="briefcase"
                   title="Appointment"
                   routeName="Appointment"
-                  backgroundColor={randomColor({ luminosity: "bright" })}
-                />
-                <View style={{ width: 15 }} />
-                <CircleCrud
-                  icon="user-plus"
-                  title="User"
-                  routeName="User"
-                  backgroundColor={randomColor({ luminosity: "bright" })}
-                />
-                <View style={{ width: 15 }} />
-                <CircleCrud
-                  icon="clipboard"
-                  title="Schedule"
-                  routeName="Test"
-                  backgroundColor={randomColor({ luminosity: "bright" })}
+                  backgroundColor={invertBackgroundColor}
                 />
                 <View style={{ width: 15 }} />
                 <CircleCrud
                   icon="credit-card"
                   title="Transaction"
                   routeName="Transaction"
-                  backgroundColor={randomColor({ luminosity: "bright" })}
+                  backgroundColor={invertBackgroundColor}
+                />
+                <View style={{ width: 15 }} />
+                <CircleCrud
+                  icon="message-circle"
+                  title="Comment"
+                  routeName="Comment"
+                  backgroundColor={invertBackgroundColor}
+                />
+                <View style={{ width: 15 }} />
+                <CircleCrud
+                  icon="truck"
+                  title="Delivery"
+                  routeName="Delivery"
+                  backgroundColor={invertBackgroundColor}
                 />
                 <View style={{ width: 15 }} />
                 <CircleCrud
                   icon="message-square"
-                  title="Comment"
-                  routeName="Test"
-                  backgroundColor={randomColor({ luminosity: "bright" })}
+                  title="Feedback"
+                  routeName="FeedbackTable"
+                  backgroundColor={invertBackgroundColor}
+                />
+                <View style={{ width: 15 }} />
+                <CircleCrud
+                  icon="tag"
+                  title="Brand"
+                  routeName="Brand"
+                  backgroundColor={invertBackgroundColor}
+                />
+                <View style={{ width: 15 }} />
+                <CircleCrud
+                  icon="clock"
+                  title="Time"
+                  routeName="Time"
+                  backgroundColor={invertBackgroundColor}
+                />
+                <View style={{ width: 15 }} />
+                <CircleCrud
+                  icon="clipboard"
+                  title="Status"
+                  routeName="Status"
+                  backgroundColor={invertBackgroundColor}
+                />
+                <View style={{ width: 15 }} />
+                <CircleCrud
+                  icon="plus-square"
+                  title="Add Ons"
+                  routeName="Option"
+                  backgroundColor={invertBackgroundColor}
+                />
+                <View style={{ width: 15 }} />
+                <CircleCrud
+                  icon="calendar"
+                  title="Month"
+                  routeName="Month"
+                  backgroundColor={invertBackgroundColor}
+                />
+                <View style={{ width: 15 }} />
+                <CircleCrud
+                  icon="book"
+                  title={`Chemical Solution`}
+                  routeName="Exclusion"
+                  backgroundColor={invertBackgroundColor}
                 />
               </View>
             </ScrollView>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              <View
-                className={`flex flex-row justify-center items-center`}
-                style={{
-                  paddingHorizontal: isDimensionLayout ? 0 : customBoxWidth,
-                }}
-              >
+              <View className={`flex flex-row justify-center items-center`}>
+                <ListData
+                  title="Users"
+                  data={userCount}
+                  icon={
+                    <Feather name="users" size={40} color={invertTextColor} />
+                  }
+                  id={data?.details?._id}
+                  backgroundColor={invertBackgroundColor}
+                />
+                <View style={{ width: 15 }} />
                 <ListData
                   title="Admin"
                   data={adminCount}
-                  icon={<Feather name="user" size={40} color={textColor} />}
-                  id={data?.details?._id}
-                  backgroundColor={randomColor({ luminosity: "bright" })}
-                />
-                <View style={{ width: 15 }} />
-                <ListData
-                  title="Employee"
-                  data={employeeCount}
-                  icon={<Feather name="users" size={40} color={textColor} />}
-                  id={data?.details?._id}
-                  backgroundColor={randomColor({ luminosity: "bright" })}
-                />
-                <View style={{ width: 15 }} />
-                <ListData
-                  title="Customer"
-                  data={customerCount}
                   icon={
-                    <Feather name="user-check" size={40} color={textColor} />
+                    <MaterialIcons
+                      name="admin-panel-settings"
+                      size={40}
+                      color={invertTextColor}
+                    />
                   }
                   id={data?.details?._id}
-                  backgroundColor={randomColor({ luminosity: "bright" })}
+                  backgroundColor={invertBackgroundColor}
+                />
+                <View style={{ width: 15 }} />
+                <ListData
+                  title="Beautician"
+                  data={beauticianCount}
+                  icon={
+                    <MaterialCommunityIcons
+                      name="briefcase-account"
+                      size={40}
+                      color={invertTextColor}
+                    />
+                  }
+                  id={data?.details?._id}
+                  backgroundColor={invertBackgroundColor}
+                />
+                <View style={{ width: 15 }} />
+                <ListData
+                  title="Online Customer"
+                  data={onlineCustomerCount}
+                  icon={
+                    <Feather name="user" size={40} color={invertTextColor} />
+                  }
+                  id={data?.details?._id}
+                  backgroundColor={invertBackgroundColor}
+                />
+                <View style={{ width: 15 }} />
+                <ListData
+                  title="Walk-In Customer"
+                  data={walkCustomerCount}
+                  icon={
+                    <MaterialCommunityIcons
+                      name="walk"
+                      size={40}
+                      color={invertTextColor}
+                    />
+                  }
+                  id={data?.details?._id}
+                  backgroundColor={invertBackgroundColor}
+                />
+                <View style={{ width: 15 }} />
+                <ListData
+                  title="Pending Beautician"
+                  data={pendingbeauticianCount}
+                  icon={
+                    <MaterialCommunityIcons
+                      name="account-cancel"
+                      size={40}
+                      color={invertTextColor}
+                    />
+                  }
+                  id={data?.details?._id}
+                  backgroundColor={invertBackgroundColor}
                 />
               </View>
             </ScrollView>
-            <View>
-              <ShowPendingEmployees />
-            </View>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              className={`pb-10`}
+            >
+              <Calendar />
+            </ScrollView>
           </ScrollView>
         </>
       )}
