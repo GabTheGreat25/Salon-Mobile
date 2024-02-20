@@ -6,7 +6,16 @@ import {
   DrawerItemList,
   createDrawerNavigator,
 } from "@react-navigation/drawer";
-import { AdminDashboard, EditAdminProfile, ConfirmEmployees } from "@screens";
+import {
+  AdminDashboard,
+  EditAdminProfile,
+  ConfirmBeautician,
+  CustomerWaiver,
+  ConfirmReschedule,
+  BeauticianLeave,
+  HiringBeautician,
+  AppointmentSchedule,
+} from "@screens";
 import { changeColor, dimensionLayout } from "@utils";
 import { RESOURCE } from "@constants";
 import { UserImage } from "@components";
@@ -20,6 +29,7 @@ const Drawer = createDrawerNavigator();
 export default function () {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth?.user);
+
   const { backgroundColor, textColor, shadowColor } = changeColor();
   const isDimensionLayout = dimensionLayout();
   const screenWidth = Dimensions.get("window").width;
@@ -64,7 +74,7 @@ export default function () {
               <UserImage
                 viewWidth={viewWidth}
                 imageSource={{ uri: user?.image[0]?.url }}
-                imageName={user?.name}
+                imageName={`Welcome back, ${user?.name}`}
                 imageRole={user?.roles}
               />
               <DrawerItemList {...props} />
@@ -80,7 +90,7 @@ export default function () {
                     color={textColor}
                   />
                   <Text
-                    className={`text-xl font-base`}
+                    className={`text-lg font-base`}
                     style={{ color: textColor }}
                   >
                     Logout
@@ -112,7 +122,7 @@ export default function () {
           drawerActiveTintColor: textColor,
           drawerInactiveTintColor: "#FDA7DF",
           drawerLabel: () => (
-            <Text className={`text-xl font-base`} style={{ color: textColor }}>
+            <Text className={`text-lg font-base`} style={{ color: textColor }}>
               Dashboard
             </Text>
           ),
@@ -134,7 +144,7 @@ export default function () {
           drawerActiveTintColor: textColor,
           drawerInactiveTintColor: "#FDA7DF",
           drawerLabel: () => (
-            <Text className={`text-xl font-base`} style={{ color: textColor }}>
+            <Text className={`text-lg font-base`} style={{ color: textColor }}>
               Edit Profile
             </Text>
           ),
@@ -150,17 +160,83 @@ export default function () {
         component={EditAdminProfile}
       />
       <Drawer.Screen
-        name="ConfirmEmployees"
+        name="CustomerWaiver"
         options={{
           drawerActiveBackgroundColor: "#F78FB3",
           drawerActiveTintColor: textColor,
           drawerInactiveTintColor: "#FDA7DF",
           drawerLabel: () => (
-            <Text className={`text-xl font-base`} style={{ color: textColor }}>
-              Confirm Employees
+            <Text className={`text-lg font-base`} style={{ color: textColor }}>
+              Customer Waiver
             </Text>
           ),
-          title: "ConfirmEmployees",
+          title: "CustomerWaiver",
+          drawerIcon: () => (
+            <Feather
+              name="file-text"
+              size={RESOURCE.NUMBER.THIRTY}
+              color={textColor}
+            />
+          ),
+        }}
+        component={CustomerWaiver}
+      />
+      <Drawer.Screen
+        name="ConfirmReschedule"
+        options={{
+          drawerActiveBackgroundColor: "#F78FB3",
+          drawerActiveTintColor: textColor,
+          drawerInactiveTintColor: "#FDA7DF",
+          drawerLabel: () => (
+            <Text className={`text-lg font-base`} style={{ color: textColor }}>
+              Resched Application
+            </Text>
+          ),
+          title: "ConfirmReschedule",
+          drawerIcon: () => (
+            <Feather
+              name="clipboard"
+              size={RESOURCE.NUMBER.THIRTY}
+              color={textColor}
+            />
+          ),
+        }}
+        component={ConfirmReschedule}
+      />
+      <Drawer.Screen
+        name="HiringBeautician"
+        options={{
+          drawerActiveBackgroundColor: "#F78FB3",
+          drawerActiveTintColor: textColor,
+          drawerInactiveTintColor: "#FDA7DF",
+          drawerLabel: () => (
+            <Text className={`text-lg font-base`} style={{ color: textColor }}>
+              Open Hiring
+            </Text>
+          ),
+          title: "HiringBeautician",
+          drawerIcon: () => (
+            <Feather
+              name="info"
+              size={RESOURCE.NUMBER.THIRTY}
+              color={textColor}
+            />
+          ),
+        }}
+        component={HiringBeautician}
+      />
+      <Drawer.Screen
+        name="ConfirmBeautician"
+        options={{
+          drawerActiveBackgroundColor: "#F78FB3",
+          drawerActiveTintColor: textColor,
+          drawerInactiveTintColor: "#FDA7DF",
+          drawerLabel: () => (
+            <Text className={`text-lg font-base`} style={{ color: textColor }}>
+              Hiring Application
+            </Text>
+          ),
+          title: "ConfirmBeautician",
           drawerIcon: () => (
             <Feather
               name="user-check"
@@ -169,7 +245,51 @@ export default function () {
             />
           ),
         }}
-        component={ConfirmEmployees}
+        component={ConfirmBeautician}
+      />
+      <Drawer.Screen
+        name="beauticianLeave"
+        options={{
+          drawerActiveBackgroundColor: "#F78FB3",
+          drawerActiveTintColor: textColor,
+          drawerInactiveTintColor: "#FDA7DF",
+          drawerLabel: () => (
+            <Text className={`text-lg font-base`} style={{ color: textColor }}>
+              Leave Application
+            </Text>
+          ),
+          title: "beauticianLeave",
+          drawerIcon: () => (
+            <Feather
+              name="user-x"
+              size={RESOURCE.NUMBER.THIRTY}
+              color={textColor}
+            />
+          ),
+        }}
+        component={BeauticianLeave}
+      />
+      <Drawer.Screen
+        name="scheduleToday"
+        options={{
+          drawerActiveBackgroundColor: "#F78FB3",
+          drawerActiveTintColor: textColor,
+          drawerInactiveTintColor: "#FDA7DF",
+          drawerLabel: () => (
+            <Text className={`text-lg font-base`} style={{ color: textColor }}>
+              Schedule Today
+            </Text>
+          ),
+          title: "scheduleToday",
+          drawerIcon: () => (
+            <Feather
+              name="clock"
+              size={RESOURCE.NUMBER.THIRTY}
+              color={textColor}
+            />
+          ),
+        }}
+        component={AppointmentSchedule}
       />
     </Drawer.Navigator>
   );
