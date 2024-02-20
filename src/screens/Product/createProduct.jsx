@@ -1,25 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   SafeAreaView,
   Text,
   TouchableOpacity,
-  KeyboardAvoidingView,
   ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
-  BackHandler,
   TextInput,
 } from "react-native";
 import { changeColor } from "@utils";
 import { BackIcon } from "@helpers";
 import { useNavigation } from "@react-navigation/native";
 import { LoadingScreen } from "@components";
-import { dimensionLayout } from "@utils";
 import { useFormik } from "formik";
 import {
   useAddProductMutation,
-  useGetProductsQuery,
+  useGetBrandsQuery,
 } from "../../state/api/reducer";
 import { createProductValidation } from "../../validation";
 import Toast from "react-native-toast-message";
@@ -29,25 +26,22 @@ import { Picker } from "@react-native-picker/picker";
 
 export default function () {
   const navigation = useNavigation();
-  const isDimensionLayout = dimensionLayout();
   const { backgroundColor, textColor, colorScheme } = changeColor();
 
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
+  const borderColor =
+    colorScheme === "dark" ? "border-neutral-light" : "border-neutral-dark";
 
-  const scroll = 400;
-
-  const { refetch: refetchProducts } = useGetProductsQuery();
+  const { data: brand, isLoading: brandLoading } = useGetBrandsQuery();
   const [addProduct, { isLoading }] = useAddProductMutation();
   const [selectedImages, setSelectedImages] = useState([]);
 
-  const [keyboardOpen, setKeyboardOpen] = useState(false);
-  const [scrollViewHeight, setScrollViewHeight] = useState(scroll);
-
   const formik = useFormik({
     initialValues: {
-      product_name: "",
       brand: "",
+      product_name: "",
       type: "",
+      ingredients: "",
+      isNew: false,
     },
     validationSchema: createProductValidation,
     onSubmit: (values) => {
@@ -65,14 +59,14 @@ export default function () {
           });
         });
       }
-      formData.append("product_name", values.product_name);
-      formData.append("brand", values.brand);
-      formData.append("type", values.type);
-
+      formData.append("brand", values?.brand);
+      formData.append("product_name", values?.product_name);
+      formData.append("type", values?.type);
+      formData.append("ingredients", values?.ingredients);
+      formData.append("isNew", values?.isNew);
       addProduct(formData)
         .unwrap()
         .then((response) => {
-          refetchProducts();
           navigation.navigate("Product");
           setSelectedImages([]);
           formik.resetForm();
@@ -97,41 +91,6 @@ export default function () {
         });
     },
   });
-
-  const handleTextInputFocus = () => {
-    setScrollViewHeight(keyboardOpen ? 450 : scroll);
-  };
-
-  useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      () => {
-        setScrollViewHeight(scroll);
-        return true;
-      }
-    );
-
-    const keyboardDidShowListener = Keyboard.addListener(
-      "keyboardDidShow",
-      () => {
-        setKeyboardOpen(true);
-        setScrollViewHeight(450);
-      }
-    );
-    const keyboardDidHideListener = Keyboard.addListener(
-      "keyboardDidHide",
-      () => {
-        setKeyboardOpen(false);
-        setScrollViewHeight(scroll);
-      }
-    );
-
-    return () => {
-      backHandler.remove();
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
 
   const takePicture = async () => {
     const result = await ImagePicker.launchCameraAsync({
@@ -216,9 +175,17 @@ export default function () {
     }
   };
 
+  const [isOpen, setOpen] = useState(false);
+
+  const handleCheckBoxToggle = () => {
+    const newValue = !isOpen;
+    setOpen(newValue);
+    formik.setFieldValue("isNew", newValue);
+  };
+
   return (
     <>
-      {isLoading ? (
+      {isLoading || brandLoading ? (
         <View
           className={`flex-1 justify-center items-center bg-primary-default`}
         >
@@ -231,159 +198,215 @@ export default function () {
             className={`relative flex-1`}
           >
             <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
-            <View
-              className={`flex-1 items-center justify-center ${
-                isDimensionLayout ? "mt-20" : "mt-10"
-              }`}
-            >
-              <Text
-                style={{ color: textColor }}
-                className={`my-10 font-semibold text-center ${
-                  isDimensionLayout ? "text-3xl" : "text-2xl"
-                }`}
+            <View className={`flex-1 py-12`}>
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                decelerationRate="fast"
+                scrollEventThrottle={1}
+                className={`px-6`}
               >
-                Create Product
-              </Text>
-              <KeyboardAvoidingView
-                behavior="padding"
-                className={`${
-                  isDimensionLayout ? "h-[450px] w-[300px]" : "w-[375px]"
-                }`}
-              >
-                <ScrollView
-                  contentContainerStyle={{ height: scrollViewHeight }}
-                  showsVerticalScrollIndicator={false}
-                  scrollEnabled={scrollViewHeight > 350}
-                  decelerationRate="fast"
-                  scrollEventThrottle={1}
+                <Text
+                  style={{ color: textColor }}
+                  className={`py-6 font-semibold text-center text-3xl`}
                 >
-                  <TextInput
-                    style={{ color: textColor }}
-                    className={`border-b mb-3 ${borderColor}`}
-                    placeholder="Enter your product name"
-                    placeholderTextColor={textColor}
-                    autoCapitalize="none"
-                    handleTextInputFocus={handleTextInputFocus}
-                    onChangeText={formik.handleChange("product_name")}
-                    onBlur={formik.handleBlur("product_name")}
-                    value={formik.values.product_name}
-                  />
-                  {formik.touched.product_name &&
-                    formik.errors.product_name && (
-                      <Text style={{ color: "red" }}>
-                        {formik.errors.product_name}
-                      </Text>
-                    )}
+                  Create Product
+                </Text>
+                <TextInput
+                  style={{ color: textColor }}
+                  className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                  placeholder="Enter your product name"
+                  placeholderTextColor={textColor}
+                  autoCapitalize="none"
+                  onChangeText={formik.handleChange("product_name")}
+                  onBlur={formik.handleBlur("product_name")}
+                  value={formik.values.product_name}
+                />
+                {formik.touched.product_name && formik.errors.product_name && (
+                  <Text style={{ color: "red" }}>
+                    {formik.errors.product_name}
+                  </Text>
+                )}
 
+                <View
+                  className={`border-[1.5px]  font-normal rounded-full my-3 ${borderColor}`}
+                >
                   <Picker
                     selectedValue={formik.values.brand}
                     style={{ color: textColor }}
                     dropdownIconColor={textColor}
-                    onValueChange={(itemValue, itemIndex) =>
+                    onValueChange={(itemValue) =>
                       formik.setFieldValue("brand", itemValue)
                     }
                   >
                     <Picker.Item label="Select Brand" value="" />
-                    <Picker.Item label="Palmolive" value="Palmolive" />
-                    <Picker.Item label="Dove" value="Dove" />
-                    <Picker.Item
-                      label="Head and Shoulders"
-                      value="Head and Shoulders"
-                    />
-                    <Picker.Item label="Sunsilk" value="Sunsilk" />
+                    {brand?.details
+                      ?.filter(
+                        (b) =>
+                          b.brand_name !== "None" && b.brand_name !== "Others"
+                      )
+                      .map((b) => (
+                        <Picker.Item
+                          key={b?._id}
+                          label={b?.brand_name}
+                          value={b?._id}
+                          color={textColor}
+                        />
+                      ))}
                   </Picker>
-                  {formik.touched.brand && formik.errors.brand && (
-                    <Text style={{ color: "red" }}>{formik.errors.brand}</Text>
-                  )}
+                </View>
+                {formik.touched.brand && formik.errors.brand && (
+                  <Text style={{ color: "red" }}>{formik.errors.brand}</Text>
+                )}
 
+                <View
+                  className={`border-[1.5px]  font-normal rounded-full my-3 ${borderColor}`}
+                >
                   <Picker
                     selectedValue={formik.values.type}
                     style={{ color: textColor }}
                     dropdownIconColor={textColor}
-                    onValueChange={(itemValue, itemIndex) =>
+                    onValueChange={(itemValue) =>
                       formik.setFieldValue("type", itemValue)
                     }
                   >
                     <Picker.Item label="Select Type" value="" />
-                    <Picker.Item label="Shampoo" value="Shampoo" />
-                    <Picker.Item label="Soap" value="Soap" />
-                    <Picker.Item label="Conditioner" value="Conditioner" />
-                    <Picker.Item
-                      label="Facial Cleanser"
-                      value="Facial Cleanser"
-                    />
+                    <Picker.Item label="Hands" value="Hands" />
+                    <Picker.Item label="Hair" value="Hair" />
+                    <Picker.Item label="Feet" value="Feet" />
+                    <Picker.Item label="Face" value="Face" />
+                    <Picker.Item label="Body" value="Body" />
                   </Picker>
-                  {formik.touched.type && formik.errors.type && (
-                    <Text style={{ color: "red" }}>{formik.errors.type}</Text>
-                  )}
+                </View>
+                {formik.touched.type && formik.errors.type && (
+                  <Text style={{ color: "red" }}>{formik.errors.type}</Text>
+                )}
 
-                  <Text
-                    style={{ color: textColor }}
-                    className={`${borderColor} font-semibold text-base`}
-                  >
-                    Add your image
+                <Text
+                  style={{ color: textColor }}
+                  className={`font-semibold text-base`}
+                >
+                  Add ingredients of the product
+                </Text>
+                <TextInput
+                  style={{
+                    color: textColor,
+                    height: 100,
+                    textAlignVertical: "top",
+                  }}
+                  className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2 ${borderColor}`}
+                  placeholder="Add Ingredients Here..."
+                  placeholderTextColor={textColor}
+                  autoCapitalize="none"
+                  multiline={true}
+                  onChangeText={formik.handleChange("ingredients")}
+                  onBlur={formik.handleBlur("ingredients")}
+                  value={formik.values.ingredients}
+                />
+                {formik.touched.ingredients && formik.errors.ingredients && (
+                  <Text style={{ color: "red" }}>
+                    {formik.errors.ingredients}
                   </Text>
-                  <View className={`flex-row gap-x-2 my-1`}>
-                    <TouchableOpacity onPress={takePicture}>
-                      <Text
-                        style={{ color: textColor }}
-                        className={`${borderColor}`}
-                      >
-                        Take a Picture
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={selectImages}>
-                      <Text
-                        style={{ color: textColor }}
-                        className={`${borderColor}`}
-                      >
-                        Select Images
-                      </Text>
-                    </TouchableOpacity>
-                    {selectedImages?.length > 0 ? (
-                      <Text
-                        style={{ color: textColor }}
-                        className={`${borderColor}`}
-                      >
-                        Add {selectedImages.length} image
-                        {selectedImages.length > 1 ? "s" : ""}
-                      </Text>
-                    ) : (
-                      <Text
-                        style={{ color: textColor }}
-                        className={`${borderColor}`}
-                      >
-                        No Image
-                      </Text>
-                    )}
-                  </View>
+                )}
 
-                  <View
-                    className={`mt-4 items-center justify-center ${
-                      isDimensionLayout ? "flex-col" : "flex-row gap-x-2"
-                    }`}
+                <View className={`flex flex-row`}>
+                  <TouchableOpacity
+                    onPress={() => handleCheckBoxToggle()}
+                    className={`flex-row py-2`}
                   >
-                    <TouchableOpacity
-                      onPress={formik.handleSubmit}
-                      disabled={!formik.isValid}
+                    <View
+                      style={{
+                        height: 35,
+                        width: 35,
+                        borderColor: textColor,
+                        backgroundColor: backgroundColor,
+                      }}
+                      className={`flex-row justify-center items-center border-2 rounded mr-3`}
                     >
-                      <View className={`mb-2 flex justify-center items-center`}>
-                        <View
-                          className={`py-2 rounded-lg bg-primary-accent w-[175px]
-                          } ${!formik.isValid ? "opacity-50" : "opacity-100"}`}
+                      {isOpen && (
+                        <Text
+                          style={{ color: textColor }}
+                          className={`text-2xl`}
                         >
-                          <Text
-                            className={`font-semibold text-center text-lg`}
-                            style={{ color: textColor }}
-                          >
-                            Submit
-                          </Text>
-                        </View>
-                      </View>
-                    </TouchableOpacity>
+                          ✓
+                        </Text>
+                      )}
+                    </View>
+                  </TouchableOpacity>
+                  <View className={`pt-2 pb-6`}>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`text-2xl font-semibold`}
+                    >
+                      New Product?
+                    </Text>
                   </View>
-                </ScrollView>
-              </KeyboardAvoidingView>
+                </View>
+                {formik.touched.isNew && formik.errors.isNew && (
+                  <Text style={{ color: "red" }}>{formik.errors.isNew}</Text>
+                )}
+
+                <Text
+                  style={{ color: textColor }}
+                  className={`${borderColor} font-semibold text-xl`}
+                >
+                  Add Your Image
+                </Text>
+                <View className={`flex-row gap-x-2 mt-2 mb-6`}>
+                  <TouchableOpacity onPress={takePicture}>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`text-base ${borderColor}`}
+                    >
+                      Take a Picture
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={selectImages}>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`text-base ${borderColor}`}
+                    >
+                      Select Images
+                    </Text>
+                  </TouchableOpacity>
+                  {selectedImages?.length > 0 ? (
+                    <Text
+                      style={{ color: textColor }}
+                      className={`text-base ${borderColor}`}
+                    >
+                      Add {selectedImages.length} image
+                      {selectedImages.length > 1 ? "s" : ""}
+                    </Text>
+                  ) : (
+                    <Text
+                      style={{ color: textColor }}
+                      className={`text-base ${borderColor}`}
+                    >
+                      No Image
+                    </Text>
+                  )}
+                </View>
+
+                <View className={`mt-4 items-center justify-center flex-col`}>
+                  <TouchableOpacity
+                    onPress={formik.handleSubmit}
+                    disabled={!formik.isValid}
+                  >
+                    <View className={`mb-2 flex justify-center items-center`}>
+                      <View
+                        className={`py-2 rounded-lg bg-primary-accent w-[175px]
+                          } ${!formik.isValid ? "opacity-50" : "opacity-100"}`}
+                      >
+                        <Text
+                          className={`font-semibold text-center text-lg`}
+                          style={{ color: textColor }}
+                        >
+                          Submit
+                        </Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              </ScrollView>
             </View>
           </SafeAreaView>
         </TouchableWithoutFeedback>
