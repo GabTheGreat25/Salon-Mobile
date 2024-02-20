@@ -41,6 +41,27 @@ import {
   EditAppointment,
   Transaction,
   EditTransaction,
+  ResetPassword,
+  Comment,
+  FeedbackTable,
+  CreateBrand,
+  EditBrand,
+  Brand,
+  Time,
+  CreateTime,
+  EditTime,
+  Status,
+  CreateStatus,
+  EditStatus,
+  Option,
+  CreateOption,
+  EditOption,
+  Exclusion,
+  CreateExclusion,
+  EditExclusion,
+  Month,
+  EditMonth,
+  EditBeauticianAppoinment,
 } from "@screens";
 import { TermsConditions, PrivacyPolicy, Feedback } from "@settings";
 import { LoadingScreen } from "@components";
@@ -166,6 +187,32 @@ export default function () {
                   name="EditTransaction"
                   component={EditTransaction}
                 />
+                <Stack.Screen name="Comment" component={Comment} />
+                <Stack.Screen name="FeedbackTable" component={FeedbackTable} />
+                <Stack.Screen name="CreateBrand" component={CreateBrand} />
+                <Stack.Screen name="EditBrand" component={EditBrand} />
+                <Stack.Screen name="Brand" component={Brand} />
+                <Stack.Screen name="Time" component={Time} />
+                <Stack.Screen name="CreateTime" component={CreateTime} />
+                <Stack.Screen name="EditTime" component={EditTime} />
+                <Stack.Screen name="Status" component={Status} />
+                <Stack.Screen name="CreateStatus" component={CreateStatus} />
+                <Stack.Screen name="EditStatus" component={EditStatus} />
+                <Stack.Screen name="Option" component={Option} />
+                <Stack.Screen name="CreateOption" component={CreateOption} />
+                <Stack.Screen name="EditOption" component={EditOption} />
+                <Stack.Screen name="Exclusion" component={Exclusion} />
+                <Stack.Screen
+                  name="CreateExclusion"
+                  component={CreateExclusion}
+                />
+                <Stack.Screen name="EditExclusion" component={EditExclusion} />
+                <Stack.Screen name="Month" component={Month} />
+                <Stack.Screen name="EditMonth" component={EditMonth} />
+                <Stack.Screen
+                  name="EditBeauticianAppoinment"
+                  component={EditBeauticianAppoinment}
+                />
               </Stack.Navigator>
             ) : null
           ) : (
@@ -180,6 +227,7 @@ export default function () {
               <Stack.Screen name="SignUpCustomer" component={SignUpCustomer} />
               <Stack.Screen name="SignUpEmployee" component={SignUpEmployee} />
               <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
+              <Stack.Screen name="ResetPassword" component={ResetPassword} />
               <Stack.Screen name="ChooseRole" component={ChooseRole} />
               <Stack.Screen name="UserPick" component={UserPick} />
               <Stack.Screen name="BecomeCustomer" component={BecomeCustomer} />
