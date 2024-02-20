@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   ScrollView,
   Dimensions,
   SafeAreaView,
+  Button,
 } from "react-native";
 import {
   useGetUsersQuery,
@@ -19,26 +20,32 @@ import Toast from "react-native-toast-message";
 import { BackIcon } from "@helpers";
 import { DataTable } from "react-native-paper";
 import { Feather } from "@expo/vector-icons";
-import { changeColor, dimensionLayout } from "@utils";
+import { changeColor } from "@utils";
 import { useNavigation } from "@react-navigation/native";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function () {
-  const isDimensionLayout = dimensionLayout();
+  const isFocused = useIsFocused();
   const navigation = useNavigation();
   const { width: deviceWidth } = Dimensions.get("window");
-  const customWidth = deviceWidth * (isDimensionLayout ? 0.3 : 0.2);
+  const customWidth = deviceWidth * 0.3;
 
-  const { data, isLoading } = useGetUsersQuery();
+  const { data, isLoading, refetch } = useGetUsersQuery();
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isFocused) refetch();
+    };
+    fetchData();
+  }, [isFocused]);
+
   const auth = useSelector((state) => state.auth);
   const { backgroundColor, textColor, colorScheme } = changeColor();
 
   const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
 
-  const filteredActiveUsers = data?.details?.filter(
-    (user) => user?.active === true && user?._id !== auth?.user?._id
-  );
-
   const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
+  const [page, setPage] = useState(0);
+  const itemsPerPage = 5;
 
   const handleDeleteUser = (id) => {
     Alert.alert("Delete User", "Are you sure you want to delete this user?", [
@@ -60,6 +67,7 @@ export default function () {
                 visibilityTime: 3000,
                 autoHide: true,
               });
+              if (paginatedData.length === 1) setPage(0);
             })
             .catch((error) => {
               Toast.show({
@@ -76,6 +84,28 @@ export default function () {
     ]);
   };
 
+  const filteredActiveUsers = data?.details?.filter(
+    (user) => user?.active === true && user?._id !== auth?.user?._id
+  );
+
+  const totalPageCount = Math.ceil(filteredActiveUsers.length / itemsPerPage);
+  const paginatedData = filteredActiveUsers.slice(
+    page * itemsPerPage,
+    (page + 1) * itemsPerPage
+  );
+
+  const handleNextPage = () => {
+    if (page < totalPageCount - 1) {
+      setPage(page + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (page > 0) {
+      setPage(page - 1);
+    }
+  };
+
   return (
     <>
       {isLoading || isDeleting ? (
@@ -87,12 +117,8 @@ export default function () {
       ) : (
         <SafeAreaView style={{ backgroundColor }} className={`relative flex-1`}>
           <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
-          <View
-            className={`flex-1 items-center justify-center ${
-              isDimensionLayout ? "mt-20" : "mt-14 mb-7"
-            }`}
-          >
-            {filteredActiveUsers?.length ? (
+          <View className={`flex-1 items-center justify-center pt-20`}>
+            {paginatedData?.length ? (
               <ScrollView
                 style={{ backgroundColor }}
                 showsVerticalScrollIndicator={false}
@@ -114,7 +140,27 @@ export default function () {
                           width: customWidth,
                         }}
                       >
+                        <Text style={{ color: textColor }}>ID</Text>
+                      </DataTable.Title>
+                      <DataTable.Title
+                        style={{
+                          justifyContent: "center",
+                          alignItems: "center",
+                          padding: 10,
+                          width: customWidth,
+                        }}
+                      >
                         <Text style={{ color: textColor }}>Name</Text>
+                      </DataTable.Title>
+                      <DataTable.Title
+                        style={{
+                          justifyContent: "center",
+                          alignItems: "center",
+                          padding: 10,
+                          width: customWidth,
+                        }}
+                      >
+                        <Text style={{ color: textColor }}>Age</Text>
                       </DataTable.Title>
                       <DataTable.Title
                         style={{
@@ -167,7 +213,7 @@ export default function () {
                         <Text style={{ color: textColor }}>Actions</Text>
                       </DataTable.Title>
                     </DataTable.Header>
-                    {filteredActiveUsers?.map((item) => (
+                    {paginatedData?.map((item) => (
                       <DataTable.Row
                         key={item?._id}
                         style={{
@@ -189,7 +235,39 @@ export default function () {
                             numberOfLines={1}
                             ellipsizeMode="tail"
                           >
+                            {item?._id}
+                          </Text>
+                        </DataTable.Cell>
+                        <DataTable.Cell
+                          style={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: 10,
+                            width: customWidth,
+                          }}
+                        >
+                          <Text
+                            style={{ color: textColor }}
+                            numberOfLines={1}
+                            ellipsizeMode="tail"
+                          >
                             {item?.name}
+                          </Text>
+                        </DataTable.Cell>
+                        <DataTable.Cell
+                          style={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: 10,
+                            width: customWidth,
+                          }}
+                        >
+                          <Text
+                            style={{ color: textColor }}
+                            numberOfLines={1}
+                            ellipsizeMode="tail"
+                          >
+                            {item?.age}
                           </Text>
                         </DataTable.Cell>
                         <DataTable.Cell
@@ -247,17 +325,23 @@ export default function () {
                             justifyContent: "center",
                             alignItems: "center",
                             padding: 10,
-                            paddingBottom: 24,
                           }}
                         >
-                          {item?.image?.map((image) => (
+                          {item.image?.length > 0 && (
                             <Image
-                              key={image?.public_id}
-                              source={{ uri: image?.url }}
-                              style={{ width: 100, height: 75 }}
-                              resizeMode="cover"
+                              key={
+                                item.image[
+                                  Math.floor(Math.random() * item.image?.length)
+                                ]?.public_id
+                              }
+                              source={{
+                                uri: item.image[
+                                  Math.floor(Math.random() * item.image?.length)
+                                ]?.url,
+                              }}
+                              className={`object-center w-20 h-20 rounded-full`}
                             />
-                          ))}
+                          )}
                         </DataTable.Cell>
                         <DataTable.Cell
                           style={{
@@ -286,6 +370,28 @@ export default function () {
                 <Text style={{ color: textColor }}>No data available.</Text>
               </View>
             )}
+            {paginatedData?.length ? (
+              <View className={`flex items-center flex-row my-6`}>
+                <Button
+                  title="Previous"
+                  onPress={handlePrevPage}
+                  disabled={page === 0}
+                  color="#FDA7DF"
+                />
+                <Text
+                  style={{
+                    color: textColor,
+                  }}
+                  className={`px-20`}
+                >{`Page ${page + 1} of ${totalPageCount}`}</Text>
+                <Button
+                  title="Next"
+                  onPress={handleNextPage}
+                  disabled={page === totalPageCount - 1}
+                  color="#FDA7DF"
+                />
+              </View>
+            ) : null}
           </View>
         </SafeAreaView>
       )}
