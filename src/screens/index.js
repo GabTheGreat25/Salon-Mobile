@@ -18,7 +18,7 @@ import EditAdminProfile from "./EditAdminProfile";
 import EditCustomerProfile from "./EditCustomerProfile";
 import EditEmployeeProfile from "./EditEmployeeProfile";
 import UpdateUserPassword from "./UpdateUserPassword";
-import ConfirmEmployees from "./AdminDashboard/confirmEmployees";
+import ConfirmBeautician from "./AdminDashboard/confirmBeautician";
 import User from "./User";
 import Product from "./Product";
 import CreateProduct from "./Product/createProduct";
@@ -46,6 +46,32 @@ import Appointment from "./Appointment";
 import EditAppointment from "./Appointment/editAppointment";
 import Transaction from "./Transaction";
 import EditTransaction from "./Transaction/editTransaction";
+import ResetPassword from "./ResetPassword";
+import CustomerWaiver from "./AdminDashboard/customerWaiver";
+import ConfirmReschedule from "./AdminDashboard/confirmReschedule";
+import BeauticianLeave from "./AdminDashboard/beauticianLeave";
+import HiringBeautician from "./AdminDashboard/hiringBeautician";
+import Comment from "./Comment";
+import FeedbackTable from "./FeedbackTable";
+import Brand from "./Brand";
+import CreateBrand from "./Brand/createBrand";
+import EditBrand from "./Brand/editBrand";
+import Time from "./Time";
+import CreateTime from "./Time/createTime";
+import EditTime from "./Time/editTime";
+import Status from "./Status";
+import CreateStatus from "./Status/createStatus";
+import EditStatus from "./Status/editStatus";
+import Option from "./Option";
+import CreateOption from "./Option/createOption";
+import EditOption from "./Option/editOption";
+import Exclusion from "./Exclusion";
+import CreateExclusion from "./Exclusion/createExclusion";
+import EditExclusion from "./Exclusion/editExclusion";
+import Month from "./Month";
+import EditMonth from "./Month/editMonth";
+import AppointmentSchedule from "./AdminDashboard/appointmentSchedule";
+import EditBeauticianAppoinment from "./AdminDashboard/editBeauticianAppoinment";
 
 export {
   Home,
@@ -68,7 +94,7 @@ export {
   EditCustomerProfile,
   EditEmployeeProfile,
   UpdateUserPassword,
-  ConfirmEmployees,
+  ConfirmBeautician,
   User,
   Product,
   CreateProduct,
@@ -96,4 +122,30 @@ export {
   EditAppointment,
   Transaction,
   EditTransaction,
+  ResetPassword,
+  CustomerWaiver,
+  ConfirmReschedule,
+  BeauticianLeave,
+  HiringBeautician,
+  Comment,
+  FeedbackTable,
+  Brand,
+  CreateBrand,
+  EditBrand,
+  Time,
+  CreateTime,
+  EditTime,
+  Status,
+  CreateStatus,
+  EditStatus,
+  Option,
+  CreateOption,
+  EditOption,
+  Exclusion,
+  CreateExclusion,
+  EditExclusion,
+  Month,
+  EditMonth,
+  AppointmentSchedule,
+  EditBeauticianAppoinment,
 };
