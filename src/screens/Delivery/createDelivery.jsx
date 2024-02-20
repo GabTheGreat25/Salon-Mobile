@@ -4,18 +4,16 @@ import {
   SafeAreaView,
   Text,
   TouchableOpacity,
-  KeyboardAvoidingView,
   ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
-  BackHandler,
   TextInput,
+  Alert,
 } from "react-native";
 import { changeColor } from "@utils";
 import { BackIcon } from "@helpers";
 import { useNavigation } from "@react-navigation/native";
 import { LoadingScreen } from "@components";
-import { dimensionLayout } from "@utils";
 import { useFormik } from "formik";
 import {
   useAddDeliveryMutation,
@@ -24,32 +22,28 @@ import {
 } from "../../state/api/reducer";
 import { createDeliveryValidation } from "../../validation";
 import Toast from "react-native-toast-message";
-import { Picker } from "@react-native-picker/picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
 export default function () {
   const navigation = useNavigation();
-  const isDimensionLayout = dimensionLayout();
   const { backgroundColor, textColor, colorScheme } = changeColor();
 
   const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
 
-  const scroll = isDimensionLayout ? 500 : 400;
-
   const { refetch: refetchDeliveries } = useGetDeliveriesQuery();
-  const { data } = useGetProductsQuery();
-  const [addDelivery, { isLoading }] = useAddDeliveryMutation();
+  const { data: products } = useGetProductsQuery();
 
-  const [keyboardOpen, setKeyboardOpen] = useState(false);
-  const [scrollViewHeight, setScrollViewHeight] = useState(scroll);
+  const [addDelivery, { isLoading }] = useAddDeliveryMutation();
 
   const formik = useFormik({
     initialValues: {
       company_name: "",
       date: "",
       price: "",
+      status: "pending",
       quantity: "",
-      product: "",
+      type: "",
+      product: [],
     },
     validationSchema: createDeliveryValidation,
     onSubmit: (values) => {
@@ -81,41 +75,6 @@ export default function () {
     },
   });
 
-  const handleTextInputFocus = () => {
-    setScrollViewHeight(keyboardOpen ? 650 : scroll);
-  };
-
-  useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      () => {
-        setScrollViewHeight(scroll);
-        return true;
-      }
-    );
-
-    const keyboardDidShowListener = Keyboard.addListener(
-      "keyboardDidShow",
-      () => {
-        setKeyboardOpen(true);
-        setScrollViewHeight(650);
-      }
-    );
-    const keyboardDidHideListener = Keyboard.addListener(
-      "keyboardDidHide",
-      () => {
-        setKeyboardOpen(false);
-        setScrollViewHeight(scroll);
-      }
-    );
-
-    return () => {
-      backHandler.remove();
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
-
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
 
@@ -126,17 +85,71 @@ export default function () {
 
   const handleDateChange = (event, date) => {
     setShowDatePicker(false);
-    if (event.type === "dismissed") {
+    if (event.type === "dismissed" || !date) {
       return;
     }
 
-    if (date) {
-      const updatedDate = new Date(date);
-      updatedDate.setDate(date.getDate());
+    const selectedDate = new Date(date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-      setSelectedDate(updatedDate);
-      formik.setFieldValue("date", updatedDate.toISOString().split("T")[0]);
+    if (selectedDate < today) {
+      Alert.alert("Error", "Please select a date from today onwards.");
+      return;
     }
+
+    if (selectedDate.getDay() === 1) {
+      Alert.alert(
+        "Error",
+        "We are closed on Mondays. Please select another date."
+      );
+      return;
+    }
+
+    setSelectedDate(selectedDate);
+    formik.setFieldValue("date", selectedDate.toISOString().split("T")[0]);
+  };
+
+  const [selectedTypes, setSelectedTypes] = useState([]);
+
+  const handleCheckBoxToggle = (value) => {
+    setSelectedTypes((prevOpen) => {
+      if (prevOpen.includes(value)) {
+        return prevOpen.filter((item) => item !== value);
+      } else {
+        return [...prevOpen, value];
+      }
+    });
+  };
+
+  useEffect(() => {
+    formik.setFieldValue("type", selectedTypes);
+  }, [selectedTypes]);
+
+  const handsProducts = products?.details?.filter(
+    (product) => product.type === "Hands"
+  );
+  const hairProducts = products?.details?.filter(
+    (product) => product.type === "Hair"
+  );
+  const feetProducts = products?.details?.filter(
+    (product) => product.type === "Feet"
+  );
+  const faceProducts = products?.details?.filter(
+    (product) => product.type === "Face"
+  );
+  const bodyProducts = products?.details?.filter(
+    (product) => product.type === "Body"
+  );
+
+  const handleCheckBoxProduct = (selectedProduct) => {
+    let updatedProducts;
+    const productId = selectedProduct._id;
+    if (formik.values.product.includes(productId)) {
+      updatedProducts = formik.values.product.filter((id) => id !== productId);
+    } else updatedProducts = [...formik.values.product, productId];
+
+    formik.setFieldValue("product", updatedProducts);
   };
 
   return (
@@ -154,154 +167,535 @@ export default function () {
             className={`relative flex-1`}
           >
             <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
-            <View
-              className={`flex-1 items-center justify-center ${
-                isDimensionLayout ? "mt-20" : "mt-10"
-              }`}
-            >
-              <Text
-                style={{ color: textColor }}
-                className={`my-10 font-semibold text-center ${
-                  isDimensionLayout ? "text-3xl" : "text-2xl"
-                }`}
+            <View className={`flex-1 py-12`}>
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                decelerationRate="fast"
+                scrollEventThrottle={1}
+                className={`px-6`}
               >
-                Create Delivery
-              </Text>
-              <KeyboardAvoidingView
-                behavior="padding"
-                className={`${
-                  isDimensionLayout ? "h-[450px] w-[300px]" : "w-[375px]"
-                }`}
-              >
-                <ScrollView
-                  contentContainerStyle={{ height: scrollViewHeight }}
-                  showsVerticalScrollIndicator={false}
-                  scrollEnabled={scrollViewHeight > 350}
-                  decelerationRate="fast"
-                  scrollEventThrottle={1}
+                <Text
+                  style={{ color: textColor }}
+                  className={`py-6 font-semibold text-center text-3xl`}
                 >
-                  <TextInput
-                    style={{ color: textColor }}
-                    className={`border-b mb-3 ${borderColor}`}
-                    placeholder="Enter your company name"
-                    placeholderTextColor={textColor}
-                    autoCapitalize="none"
-                    handleTextInputFocus={handleTextInputFocus}
-                    onChangeText={formik.handleChange("company_name")}
-                    onBlur={formik.handleBlur("company_name")}
-                    value={formik.values.company_name}
-                  />
-                  {formik.touched.company_name &&
-                    formik.errors.company_name && (
-                      <Text style={{ color: "red" }}>
-                        {formik.errors.company_name}
-                      </Text>
-                    )}
+                  Create Delivery
+                </Text>
+                <TextInput
+                  style={{ color: textColor }}
+                  className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                  placeholder="Enter your product name"
+                  placeholderTextColor={textColor}
+                  autoCapitalize="none"
+                  onChangeText={formik.handleChange("company_name")}
+                  onBlur={formik.handleBlur("company_name")}
+                  value={formik.values.company_name}
+                />
+                {formik.touched.company_name && formik.errors.company_name && (
+                  <Text style={{ color: "red" }}>
+                    {formik.errors.company_name}
+                  </Text>
+                )}
 
-                  <TextInput
-                    style={{ color: textColor }}
-                    className={`border-b mb-3 ${borderColor}`}
-                    placeholder="Enter date"
-                    placeholderTextColor={textColor}
-                    onFocus={showDatepicker}
-                    value={formik.values.date}
+                <TextInput
+                  style={{ color: textColor }}
+                  className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                  placeholder="Enter date"
+                  placeholderTextColor={textColor}
+                  onFocus={showDatepicker}
+                  value={formik.values.date}
+                />
+                {showDatePicker && (
+                  <DateTimePicker
+                    value={selectedDate}
+                    mode="date"
+                    is24Hour={true}
+                    display="default"
+                    onChange={handleDateChange}
                   />
-                  {showDatePicker && (
-                    <DateTimePicker
-                      value={selectedDate}
-                      mode="date"
-                      is24Hour={true}
-                      display="default"
-                      onChange={handleDateChange}
-                    />
-                  )}
-                  {formik.touched.date && formik.errors.date && (
-                    <Text style={{ color: "red" }}>{formik.errors.date}</Text>
-                  )}
+                )}
+                {formik.touched.date && formik.errors.date && (
+                  <Text style={{ color: "red" }}>{formik.errors.date}</Text>
+                )}
 
-                  <TextInput
-                    style={{ color: textColor }}
-                    className={`border-b mb-3 ${borderColor}`}
-                    placeholder="Enter the price"
-                    placeholderTextColor={textColor}
-                    keyboardType="numeric"
-                    autoCapitalize="none"
-                    handleTextInputFocus={handleTextInputFocus}
-                    onChangeText={formik.handleChange("price")}
-                    onBlur={formik.handleBlur("price")}
-                    value={formik.values.price}
-                  />
-                  {formik.touched.price && formik.errors.price && (
-                    <Text style={{ color: "red" }}>{formik.errors.price}</Text>
-                  )}
+                <TextInput
+                  style={{ color: textColor }}
+                  className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                  placeholder="Enter the price"
+                  placeholderTextColor={textColor}
+                  keyboardType="numeric"
+                  autoCapitalize="none"
+                  onChangeText={formik.handleChange("price")}
+                  onBlur={formik.handleBlur("price")}
+                  value={formik.values.price}
+                />
+                {formik.touched.price && formik.errors.price && (
+                  <Text style={{ color: "red" }}>{formik.errors.price}</Text>
+                )}
 
-                  <TextInput
-                    style={{ color: textColor }}
-                    className={`border-b mb-3 ${borderColor}`}
-                    placeholder="Enter the quantity"
-                    placeholderTextColor={textColor}
-                    keyboardType="numeric"
-                    autoCapitalize="none"
-                    handleTextInputFocus={handleTextInputFocus}
-                    onChangeText={formik.handleChange("quantity")}
-                    onBlur={formik.handleBlur("quantity")}
-                    value={formik.values.quantity}
-                  />
-                  {formik.touched.quantity && formik.errors.quantity && (
-                    <Text style={{ color: "red" }}>
-                      {formik.errors.quantity}
-                    </Text>
-                  )}
+                <TextInput
+                  style={{ color: textColor }}
+                  className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                  placeholder="Enter the quantity"
+                  placeholderTextColor={textColor}
+                  keyboardType="numeric"
+                  autoCapitalize="none"
+                  onChangeText={formik.handleChange("quantity")}
+                  onBlur={formik.handleBlur("quantity")}
+                  value={formik.values.quantity}
+                />
+                {formik.touched.quantity && formik.errors.quantity && (
+                  <Text style={{ color: "red" }}>{formik.errors.quantity}</Text>
+                )}
 
-                  <Picker
-                    selectedValue={formik.values.product}
-                    style={{ color: textColor }}
-                    dropdownIconColor={textColor}
-                    onValueChange={(itemValue) =>
-                      formik.setFieldValue("product", itemValue)
-                    }
+                <Text
+                  style={{ color: textColor }}
+                  className={`font-semibold text-2xl`}
+                >
+                  Categories
+                </Text>
+                <View
+                  className={`flex flex-row justify-start gap-x-4 flex-wrap`}
+                >
+                  <TouchableOpacity
+                    onPress={() => handleCheckBoxToggle("Hands")}
+                    className={`flex-row py-2`}
                   >
-                    <Picker.Item label="Select Product" value="" />
-                    {data?.details?.map((product) => (
-                      <Picker.Item
-                        key={product._id}
-                        label={product.product_name}
-                        value={product._id}
-                      />
-                    ))}
-                  </Picker>
-                  {formik.touched.product && formik.errors.product && (
-                    <Text style={{ color: "red" }}>
-                      {formik.errors.product}
-                    </Text>
-                  )}
-
-                  <View
-                    className={`mt-4 items-center justify-center ${
-                      isDimensionLayout ? "flex-col" : "flex-row gap-x-2"
-                    }`}
-                  >
-                    <TouchableOpacity
-                      onPress={formik.handleSubmit}
-                      disabled={!formik.isValid}
+                    <View
+                      style={{
+                        height: 35,
+                        width: 35,
+                        borderColor: textColor,
+                        backgroundColor: backgroundColor,
+                      }}
+                      className={`flex-row justify-center items-center border-2 rounded`}
                     >
-                      <View className={`mb-2 flex justify-center items-center`}>
-                        <View
-                          className={`py-2 rounded-lg bg-primary-accent w-[175px]
-                          } ${!formik.isValid ? "opacity-50" : "opacity-100"}`}
+                      {selectedTypes.includes("Hands") && (
+                        <Text
+                          style={{ color: textColor }}
+                          className={`text-2xl`}
                         >
-                          <Text
-                            className={`font-semibold text-center text-lg`}
-                            style={{ color: textColor }}
-                          >
-                            Submit
-                          </Text>
-                        </View>
-                      </View>
-                    </TouchableOpacity>
+                          ✓
+                        </Text>
+                      )}
+                    </View>
+                  </TouchableOpacity>
+                  <View className={`pt-2 pb-6`}>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`text-2xl font-semibold`}
+                    >
+                      Hands
+                    </Text>
                   </View>
-                </ScrollView>
-              </KeyboardAvoidingView>
+                  <TouchableOpacity
+                    onPress={() => handleCheckBoxToggle("Hair")}
+                    className={`flex-row py-2`}
+                  >
+                    <View
+                      style={{
+                        height: 35,
+                        width: 35,
+                        borderColor: textColor,
+                        backgroundColor: backgroundColor,
+                      }}
+                      className={`flex-row justify-center items-center border-2 rounded`}
+                    >
+                      {selectedTypes.includes("Hair") && (
+                        <Text
+                          style={{ color: textColor }}
+                          className={`text-2xl`}
+                        >
+                          ✓
+                        </Text>
+                      )}
+                    </View>
+                  </TouchableOpacity>
+                  <View className={`pt-2 pb-6`}>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`text-2xl font-semibold`}
+                    >
+                      Hair
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => handleCheckBoxToggle("Feet")}
+                    className={`flex-row py-2`}
+                  >
+                    <View
+                      style={{
+                        height: 35,
+                        width: 35,
+                        borderColor: textColor,
+                        backgroundColor: backgroundColor,
+                      }}
+                      className={`flex-row justify-center items-center border-2 rounded`}
+                    >
+                      {selectedTypes.includes("Feet") && (
+                        <Text
+                          style={{ color: textColor }}
+                          className={`text-2xl`}
+                        >
+                          ✓
+                        </Text>
+                      )}
+                    </View>
+                  </TouchableOpacity>
+                  <View className={`pt-2 pb-6`}>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`text-2xl font-semibold`}
+                    >
+                      Feet
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => handleCheckBoxToggle("Face")}
+                    className={`flex-row py-2`}
+                  >
+                    <View
+                      style={{
+                        height: 35,
+                        width: 35,
+                        borderColor: textColor,
+                        backgroundColor: backgroundColor,
+                      }}
+                      className={`flex-row justify-center items-center border-2 rounded`}
+                    >
+                      {selectedTypes.includes("Face") && (
+                        <Text
+                          style={{ color: textColor }}
+                          className={`text-2xl`}
+                        >
+                          ✓
+                        </Text>
+                      )}
+                    </View>
+                  </TouchableOpacity>
+                  <View className={`pt-2 pb-6`}>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`text-2xl font-semibold`}
+                    >
+                      Face
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => handleCheckBoxToggle("Body")}
+                    className={`flex-row py-2`}
+                  >
+                    <View
+                      style={{
+                        height: 35,
+                        width: 35,
+                        borderColor: textColor,
+                        backgroundColor: backgroundColor,
+                      }}
+                      className={`flex-row justify-center items-center border-2 rounded`}
+                    >
+                      {selectedTypes.includes("Body") && (
+                        <Text
+                          style={{ color: textColor }}
+                          className={`text-2xl`}
+                        >
+                          ✓
+                        </Text>
+                      )}
+                    </View>
+                  </TouchableOpacity>
+                  <View className={`pt-2 pb-6`}>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`text-2xl font-semibold`}
+                    >
+                      Body
+                    </Text>
+                  </View>
+                </View>
+                {formik.touched.type && formik.errors.type && (
+                  <Text style={{ color: "red" }}>{formik.errors.type}</Text>
+                )}
+
+                {selectedTypes.includes("Hands") ? (
+                  <>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`font-semibold text-2xl`}
+                    >
+                      Hands Products
+                    </Text>
+                    <View
+                      className={`flex flex-row justify-start gap-x-4 flex-wrap`}
+                    >
+                      {handsProducts.map((product) => (
+                        <TouchableOpacity
+                          key={product._id}
+                          onPress={() => handleCheckBoxProduct(product)}
+                          className={`flex-row gap-x-2 py-2`}
+                        >
+                          <View
+                            style={{
+                              height: 30,
+                              width: 30,
+                              borderColor: textColor,
+                              backgroundColor: backgroundColor,
+                            }}
+                            className={`flex-row justify-center items-center border-2 rounded`}
+                          >
+                            {formik.values.product.includes(product._id) && (
+                              <Text
+                                style={{ color: textColor }}
+                                className={`text-lg`}
+                              >
+                                ✓
+                              </Text>
+                            )}
+                          </View>
+                          <View className={`pb-6`}>
+                            <Text
+                              style={{ color: textColor }}
+                              className={`text-lg font-semibold`}
+                            >
+                              {product.product_name}
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
+                      ))}
+                    </View>
+                  </>
+                ) : (
+                  ""
+                )}
+
+                {selectedTypes.includes("Hair") ? (
+                  <>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`font-semibold text-2xl`}
+                    >
+                      Hair Products
+                    </Text>
+                    <View
+                      className={`flex flex-row justify-start gap-x-4 flex-wrap`}
+                    >
+                      {hairProducts.map((product) => (
+                        <TouchableOpacity
+                          key={product._id}
+                          onPress={() => handleCheckBoxProduct(product)}
+                          className={`flex-row gap-x-2 py-2`}
+                        >
+                          <View
+                            style={{
+                              height: 30,
+                              width: 30,
+                              borderColor: textColor,
+                              backgroundColor: backgroundColor,
+                            }}
+                            className={`flex-row justify-center items-center border-2 rounded`}
+                          >
+                            {formik.values.product.includes(product._id) && (
+                              <Text
+                                style={{ color: textColor }}
+                                className={`text-lg`}
+                              >
+                                ✓
+                              </Text>
+                            )}
+                          </View>
+                          <View className={`pb-6`}>
+                            <Text
+                              style={{ color: textColor }}
+                              className={`text-lg font-semibold`}
+                            >
+                              {product.product_name}
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
+                      ))}
+                    </View>
+                  </>
+                ) : (
+                  ""
+                )}
+
+                {selectedTypes.includes("Feet") ? (
+                  <>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`font-semibold text-2xl`}
+                    >
+                      Feet Products
+                    </Text>
+                    <View
+                      className={`flex flex-row justify-start gap-x-4 flex-wrap`}
+                    >
+                      {feetProducts.map((product) => (
+                        <TouchableOpacity
+                          key={product._id}
+                          onPress={() => handleCheckBoxProduct(product)}
+                          className={`flex-row gap-x-2 py-2`}
+                        >
+                          <View
+                            style={{
+                              height: 30,
+                              width: 30,
+                              borderColor: textColor,
+                              backgroundColor: backgroundColor,
+                            }}
+                            className={`flex-row justify-center items-center border-2 rounded`}
+                          >
+                            {formik.values.product.includes(product._id) && (
+                              <Text
+                                style={{ color: textColor }}
+                                className={`text-2xl`}
+                              >
+                                ✓
+                              </Text>
+                            )}
+                          </View>
+                          <View className={`pb-6`}>
+                            <Text
+                              style={{ color: textColor }}
+                              className={`text-lg font-semibold`}
+                            >
+                              {product.product_name}
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
+                      ))}
+                    </View>
+                  </>
+                ) : (
+                  ""
+                )}
+
+                {selectedTypes.includes("Face") ? (
+                  <>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`font-semibold text-2xl`}
+                    >
+                      Face Products
+                    </Text>
+                    <View
+                      className={`flex flex-row justify-start gap-x-4 flex-wrap`}
+                    >
+                      {faceProducts.map((product) => (
+                        <TouchableOpacity
+                          key={product._id}
+                          onPress={() => handleCheckBoxProduct(product)}
+                          className={`flex-row gap-x-2 py-2`}
+                        >
+                          <View
+                            style={{
+                              height: 30,
+                              width: 30,
+                              borderColor: textColor,
+                              backgroundColor: backgroundColor,
+                            }}
+                            className={`flex-row justify-center items-center border-2 rounded`}
+                          >
+                            {formik.values.product.includes(product._id) && (
+                              <Text
+                                style={{ color: textColor }}
+                                className={`text-lg`}
+                              >
+                                ✓
+                              </Text>
+                            )}
+                          </View>
+                          <View className={`pb-6`}>
+                            <Text
+                              style={{ color: textColor }}
+                              className={`text-lg font-semibold`}
+                            >
+                              {product.product_name}
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
+                      ))}
+                    </View>
+                  </>
+                ) : (
+                  ""
+                )}
+
+                {selectedTypes.includes("Body") ? (
+                  <>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`font-semibold text-2xl`}
+                    >
+                      Body Products
+                    </Text>
+                    <View
+                      className={`flex flex-row justify-start gap-x-4 flex-wrap`}
+                    >
+                      {bodyProducts.map((product) => (
+                        <TouchableOpacity
+                          key={product._id}
+                          onPress={() => handleCheckBoxProduct(product)}
+                          className={`flex-row gap-x-2 py-2`}
+                        >
+                          <View
+                            style={{
+                              height: 30,
+                              width: 30,
+                              borderColor: textColor,
+                              backgroundColor: backgroundColor,
+                            }}
+                            className={`flex-row justify-center items-center border-2 rounded`}
+                          >
+                            {formik.values.product.includes(product._id) && (
+                              <Text
+                                style={{ color: textColor }}
+                                className={`text-lg`}
+                              >
+                                ✓
+                              </Text>
+                            )}
+                          </View>
+                          <View className={`pb-6`}>
+                            <Text
+                              style={{ color: textColor }}
+                              className={`text-lg font-semibold`}
+                            >
+                              {product.product_name}
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
+                      ))}
+                    </View>
+                  </>
+                ) : (
+                  ""
+                )}
+
+                {formik.touched.product && formik.errors.product && (
+                  <Text style={{ color: "red" }}>{formik.errors.product}</Text>
+                )}
+
+                <View className={`mt-4 items-center justify-center flex-col`}>
+                  <TouchableOpacity
+                    onPress={formik.handleSubmit}
+                    disabled={!formik.isValid}
+                  >
+                    <View className={`mb-2 flex justify-center items-center`}>
+                      <View
+                        className={`py-2 rounded-lg bg-primary-accent w-[175px]
+                          } ${!formik.isValid ? "opacity-50" : "opacity-100"}`}
+                      >
+                        <Text
+                          className={`font-semibold text-center text-lg`}
+                          style={{ color: textColor }}
+                        >
+                          Submit
+                        </Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              </ScrollView>
             </View>
           </SafeAreaView>
         </TouchableWithoutFeedback>
