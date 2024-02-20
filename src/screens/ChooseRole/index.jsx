@@ -1,11 +1,12 @@
 import React from "react";
 import { Opening } from "@components";
-import { dimensionLayout } from "@utils";
 import { useNavigation } from "@react-navigation/native";
+import { useSelector } from "react-redux";
 
-export default function () {
+export default function MyComponent() {
   const navigation = useNavigation();
-  const isDimensionLayout = dimensionLayout();
+  const hiring = useSelector((state) => state.hiring);
+
   return (
     <>
       <Opening
@@ -13,11 +14,14 @@ export default function () {
         showTitle={true}
         showName={false}
         navigateBack={() => navigation.goBack()}
-        firstButton="Employee"
-        navigateFirstButton={() => navigation.navigate("SignUpEmployee")}
+        firstButton={hiring.hiringData.isHiring === true ? "Beautician" : null}
+        navigateFirstButton={() => {
+          if (hiring.hiringData.isHiring === true) {
+            navigation.navigate("SignUpEmployee");
+          }
+        }}
         secondButton="Customer"
         navigateSecondButton={() => navigation.navigate("SignUpCustomer")}
-        dimensionLayout={isDimensionLayout}
       />
     </>
   );
