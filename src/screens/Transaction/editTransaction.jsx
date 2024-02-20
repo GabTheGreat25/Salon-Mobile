@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Image,
   View,
@@ -9,30 +9,25 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
-  BackHandler,
   TextInput,
 } from "react-native";
 import {
   useUpdateTransactionMutation,
   useGetTransactionByIdQuery,
-  useGetTransactionsQuery,
 } from "../../state/api/reducer";
 import { useFormik } from "formik";
 import { editTransactionValidation } from "../../validation";
 import { useNavigation } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
 import { LoadingScreen } from "@components";
-import { dimensionLayout, changeColor } from "@utils";
+import { changeColor } from "@utils";
 import { Picker } from "@react-native-picker/picker";
 import { BackIcon } from "@helpers";
-import { format } from "date-fns";
-import DateTimePicker from "@react-native-community/datetimepicker";
 
 export default function ({ route }) {
   const { id } = route.params;
   const navigation = useNavigation();
 
-  const { refetch: refetchTransactions } = useGetTransactionsQuery();
   const {
     data,
     isLoading: isTransactionLoading,
@@ -40,24 +35,15 @@ export default function ({ route }) {
   } = useGetTransactionByIdQuery(id);
   const [updateTransaction, { isLoading }] = useUpdateTransactionMutation();
 
-  const isDimensionLayout = dimensionLayout();
   const { backgroundColor, textColor, colorScheme } = changeColor();
   const borderColor =
     colorScheme === "dark" ? "border-neutral-light" : "border-neutral-dark";
 
-  const scroll = isDimensionLayout ? 600 : 700;
-
-  const [keyboardOpen, setKeyboardOpen] = useState(false);
-  const [scrollViewHeight, setScrollViewHeight] = useState(scroll);
-
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      date: data?.details?.date
-        ? format(new Date(data.details.date), "yyyy-MM-dd")
-        : "",
-      status: data?.details?.status || "",
-      payment: data?.details?.payment || 0,
+      status: data?.details?.status || "pending",
+      hasDiscount: false,
     },
     validationSchema: editTransactionValidation,
     onSubmit: (values) => {
@@ -65,7 +51,6 @@ export default function ({ route }) {
         .unwrap()
         .then((response) => {
           refetch();
-          refetchTransactions();
           Toast.show({
             type: "success",
             position: "top",
@@ -89,62 +74,12 @@ export default function ({ route }) {
     },
   });
 
-  const handleTextInputFocus = () => {
-    setScrollViewHeight(keyboardOpen ? 625 : scroll);
-  };
+  const [isOpen, setOpen] = useState(data?.details?.isNew || false);
 
-  useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      () => {
-        setScrollViewHeight(scroll);
-        return true;
-      }
-    );
-
-    const keyboardDidShowListener = Keyboard.addListener(
-      "keyboardDidShow",
-      () => {
-        setKeyboardOpen(true);
-        setScrollViewHeight(625);
-      }
-    );
-    const keyboardDidHideListener = Keyboard.addListener(
-      "keyboardDidHide",
-      () => {
-        setKeyboardOpen(false);
-        setScrollViewHeight(scroll);
-      }
-    );
-
-    return () => {
-      backHandler.remove();
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
-
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [showDatePicker, setShowDatePicker] = useState(false);
-
-  const showDatepicker = () => {
-    setShowDatePicker(true);
-    Keyboard.dismiss();
-  };
-
-  const handleDateChange = (event, date) => {
-    setShowDatePicker(false);
-    if (event.type === "dismissed") {
-      return;
-    }
-
-    if (date) {
-      const updatedDate = new Date(date);
-      updatedDate.setDate(date.getDate());
-
-      setSelectedDate(updatedDate);
-      formik.setFieldValue("date", updatedDate.toISOString().split("T")[0]);
-    }
+  const handleCheckBoxToggle = () => {
+    const newValue = !isOpen;
+    setOpen(newValue);
+    formik.setFieldValue("hasDiscount", newValue);
   };
 
   return (
@@ -162,64 +97,50 @@ export default function ({ route }) {
             className={`relative flex-1`}
           >
             <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
-            <View
-              className={`flex-1 items-center justify-start ${
-                isDimensionLayout ? "mt-20" : "mt-0"
-              }`}
-            >
-              <Text
-                style={{ color: textColor }}
-                className={`my-10 font-semibold text-center ${
-                  isDimensionLayout ? "text-3xl" : "text-2xl"
-                }`}
+            <KeyboardAvoidingView behavior="height">
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                decelerationRate="fast"
+                scrollEventThrottle={1}
+                className={`p-6`}
               >
-                Update Transaction Details
-              </Text>
-              <KeyboardAvoidingView
-                behavior="padding"
-                className={`${
-                  isDimensionLayout ? "h-[450px] w-[300px]" : "w-[375px]"
-                }`}
-              >
-                <ScrollView
-                  contentContainerStyle={{ height: scrollViewHeight }}
-                  showsVerticalScrollIndicator={false}
-                  scrollEnabled={scrollViewHeight > 550}
-                  decelerationRate="fast"
-                  scrollEventThrottle={1}
-                >
-                  <Text
-                    style={{ color: textColor }}
-                    className={`font-semibold text-base`}
-                  >
-                    Date
-                  </Text>
-                  <TextInput
-                    style={{ color: textColor }}
-                    className={`border-b mb-3 ${borderColor}`}
-                    placeholder="Enter date"
-                    placeholderTextColor={textColor}
-                    onFocus={showDatepicker}
-                    value={formik.values.date}
-                  />
-                  {showDatePicker && (
-                    <DateTimePicker
-                      value={selectedDate}
-                      mode="date"
-                      is24Hour={true}
-                      display="default"
-                      onChange={handleDateChange}
+                {data?.details?.image?.length > 0 && (
+                  <View className={`items-center justify-end pt-12`}>
+                    <Image
+                      key={
+                        data?.details?.image[
+                          Math.floor(
+                            Math.random() * data?.details?.image?.length
+                          )
+                        ]?.public_id
+                      }
+                      source={{
+                        uri: data?.details?.image[
+                          Math.floor(
+                            Math.random() * data?.details?.image?.length
+                          )
+                        ]?.url,
+                      }}
+                      className={`rounded-full w-60 h-60`}
+                      resizeMode="cover"
                     />
-                  )}
-                  {formik.touched.date && formik.errors.date && (
-                    <Text style={{ color: "red" }}>{formik.errors.date}</Text>
-                  )}
-                  <Text
-                    style={{ color: textColor }}
-                    className={`font-semibold text-base`}
-                  >
-                    Status
-                  </Text>
+                  </View>
+                )}
+                <Text
+                  style={{ color: textColor }}
+                  className={`mt-10 mb-5 font-semibold text-center text-3xl`}
+                >
+                  Update Transaction Details
+                </Text>
+                <Text
+                  style={{ color: textColor }}
+                  className={`font-semibold text-base`}
+                >
+                  Status
+                </Text>
+                <View
+                  className={`border-[1.5px]  font-normal rounded-full my-3 ${borderColor}`}
+                >
                   <Picker
                     selectedValue={formik.values.status}
                     style={{ color: textColor }}
@@ -230,62 +151,70 @@ export default function ({ route }) {
                   >
                     <Picker.Item label="pending" value="pending" />
                     <Picker.Item label="completed" value="completed" />
-                    <Picker.Item label="cancel" value="cancel" />
                   </Picker>
+                </View>
+                {formik.touched.status && formik.errors.status && (
+                  <Text style={{ color: "red" }}>{formik.errors.status}</Text>
+                )}
 
-                  {formik.touched.status && formik.errors.status && (
-                    <Text style={{ color: "red" }}>{formik.errors.status}</Text>
-                  )}
-                  <Text
-                    style={{ color: textColor }}
-                    className={`font-semibold text-base`}
-                  >
-                    Payment
-                  </Text>
-                  <Picker
-                    selectedValue={formik.values.payment}
-                    style={{ color: textColor }}
-                    dropdownIconColor={textColor}
-                    onValueChange={(itemValue) =>
-                      formik.setFieldValue("payment", itemValue)
-                    }
-                  >
-                    <Picker.Item label="Cash" value="Cash" />
-                    <Picker.Item label="Gcash" value="Gcash" />
-                  </Picker>
-
-                  {formik.touched.payment && formik.errors.payment && (
-                    <Text style={{ color: "red" }}>
-                      {formik.errors.payment}
-                    </Text>
-                  )}
-                  <View
-                    className={`mt-4 items-center justify-center ${
-                      isDimensionLayout ? "flex-col" : "flex-row gap-x-2"
-                    }`}
-                  >
+                {data?.details?.image?.length > 0 && (
+                  <View className={`flex flex-row`}>
                     <TouchableOpacity
-                      onPress={formik.handleSubmit}
-                      disabled={!formik.isValid}
+                      onPress={() => handleCheckBoxToggle()}
+                      className={`flex-row py-2`}
                     >
-                      <View className={`mb-2 flex justify-center items-center`}>
-                        <View
-                          className={`py-2 rounded-lg bg-primary-accent w-[175px]
-                          } ${!formik.isValid ? "opacity-50" : "opacity-100"}`}
-                        >
+                      <View
+                        style={{
+                          height: 35,
+                          width: 35,
+                          borderColor: textColor,
+                          backgroundColor: backgroundColor,
+                        }}
+                        className={`flex-row justify-center items-center border-2 rounded mr-3`}
+                      >
+                        {isOpen && (
                           <Text
-                            className={`font-semibold text-center text-lg`}
                             style={{ color: textColor }}
+                            className={`text-2xl`}
                           >
-                            Submit
+                            ✓
                           </Text>
-                        </View>
+                        )}
                       </View>
                     </TouchableOpacity>
+                    <View className={`pt-2 pb-6`}>
+                      <Text
+                        style={{ color: textColor }}
+                        className={`text-2xl font-semibold`}
+                      >
+                        Valid for Discount
+                      </Text>
+                    </View>
                   </View>
-                </ScrollView>
-              </KeyboardAvoidingView>
-            </View>
+                )}
+
+                <View className={`mt-4 items-center justify-center flex-col`}>
+                  <TouchableOpacity
+                    onPress={formik.handleSubmit}
+                    disabled={!formik.isValid}
+                  >
+                    <View className={`mb-2 flex justify-center items-center`}>
+                      <View
+                        className={`py-2 rounded-lg bg-primary-accent w-[175px]
+                          } ${!formik.isValid ? "opacity-50" : "opacity-100"}`}
+                      >
+                        <Text
+                          className={`font-semibold text-center text-lg`}
+                          style={{ color: textColor }}
+                        >
+                          Submit
+                        </Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              </ScrollView>
+            </KeyboardAvoidingView>
           </SafeAreaView>
         </TouchableWithoutFeedback>
       )}
