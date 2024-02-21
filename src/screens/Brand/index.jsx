@@ -123,6 +123,10 @@ export default function () {
     }
   };
 
+  const handleViewBrand = (id)=>{
+    navigation.navigate("ViewBrand", { id });
+  };
+
   return (
     <>
       {isLoading || isDeleting ? (
@@ -195,67 +199,72 @@ export default function () {
                       </DataTable.Title>
                     </DataTable.Header>
                     {paginatedData?.map((item) => (
-                      <DataTable.Row
-                        key={item?._id}
-                        style={{
-                          backgroundColor,
-                          borderBottomWidth: 1,
-                          borderBottomColor: borderColor,
-                        }}
-                      >
-                        <DataTable.Cell
+                      <TouchableOpacity
+                       key={item?._id}
+                       onPress={()=>handleViewBrand(item?._id)}
+                       >
+                        <DataTable.Row
+                          key={item?._id}
                           style={{
-                            justifyContent: "center",
-                            alignItems: "center",
-                            padding: 10,
-                            width: customWidth,
+                            backgroundColor,
+                            borderBottomWidth: 1,
+                            borderBottomColor: borderColor,
                           }}
                         >
-                          <Text
-                            style={{ color: textColor }}
-                            numberOfLines={1}
-                            ellipsizeMode="tail"
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
                           >
-                            {item?._id}
-                          </Text>
-                        </DataTable.Cell>
-                        <DataTable.Cell
-                          style={{
-                            justifyContent: "center",
-                            alignItems: "center",
-                            padding: 10,
-                            width: customWidth,
-                          }}
-                        >
-                          <Text
-                            style={{ color: textColor }}
-                            numberOfLines={1}
-                            ellipsizeMode="tail"
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {item?._id}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
                           >
-                            {item?.brand_name}
-                          </Text>
-                        </DataTable.Cell>
-                        <DataTable.Cell
-                          style={{
-                            width: customWidth,
-                            justifyContent: "space-around",
-                            alignItems: "center",
-                            padding: 10,
-                          }}
-                        >
-                          <TouchableOpacity
-                            onPress={() => handleEditBrand(item?._id)}
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {item?.brand_name}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              width: customWidth,
+                              justifyContent: "space-around",
+                              alignItems: "center",
+                              padding: 10,
+                            }}
                           >
-                            <Feather name="edit" size={24} color="blue" />
-                          </TouchableOpacity>
-                          <View style={{ width: 10 }} />
-                          <TouchableOpacity
-                            onPress={() => handleDeleteBrand(item?._id)}
-                          >
-                            <Feather name="delete" size={24} color="red" />
-                          </TouchableOpacity>
-                        </DataTable.Cell>
-                      </DataTable.Row>
+                            <TouchableOpacity
+                              onPress={() => handleEditBrand(item?._id)}
+                            >
+                              <Feather name="edit" size={24} color="blue" />
+                            </TouchableOpacity>
+                            <View style={{ width: 10 }} />
+                            <TouchableOpacity
+                              onPress={() => handleDeleteBrand(item?._id)}
+                            >
+                              <Feather name="delete" size={24} color="red" />
+                            </TouchableOpacity>
+                          </DataTable.Cell>
+                        </DataTable.Row>
+                      </TouchableOpacity>
                     ))}
                   </DataTable>
                 </ScrollView>
