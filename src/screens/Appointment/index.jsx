@@ -140,6 +140,10 @@ export default function () {
     }
   };
 
+  const handleViewAppointment = (id) => {
+    navigation.navigate("ViewAppointment", { id });
+  };
+
   return (
     <>
       {isLoading || isDeleting ? (
@@ -250,173 +254,178 @@ export default function () {
                       </DataTable.Title>
                     </DataTable.Header>
                     {paginatedData?.map((item) => (
-                      <DataTable.Row
-                        key={item?._id}
-                        style={{
-                          backgroundColor,
-                          borderBottomWidth: 1,
-                          borderBottomColor: borderColor,
-                        }}
-                      >
-                        <DataTable.Cell
+                      <TouchableOpacity
+                      key={item?._id}
+                       onPress={()=>handleViewAppointment(item?._id)}
+                       >
+                        <DataTable.Row
+                          key={item?._id}
                           style={{
-                            justifyContent: "center",
-                            alignItems: "center",
-                            padding: 10,
-                            width: customWidth,
+                            backgroundColor,
+                            borderBottomWidth: 1,
+                            borderBottomColor: borderColor,
                           }}
                         >
-                          <Text
-                            style={{ color: textColor }}
-                            numberOfLines={1}
-                            ellipsizeMode="tail"
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
                           >
-                            {item?._id}
-                          </Text>
-                        </DataTable.Cell>
-                        <DataTable.Cell
-                          style={{
-                            justifyContent: "center",
-                            alignItems: "center",
-                            padding: 10,
-                            width: customWidth,
-                          }}
-                        >
-                          <Text
-                            style={{ color: textColor }}
-                            numberOfLines={1}
-                            ellipsizeMode="tail"
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {item?._id}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
                           >
-                            {item.date && item.time
-                              ? item.time.length === 1
-                                ? `${
-                                    new Date(item.date)
-                                      .toISOString()
-                                      .split("T")[0]
-                                  } ${item.time[0]}`
-                                : `${
-                                    new Date(item.date)
-                                      .toISOString()
-                                      .split("T")[0]
-                                  } ${item.time[0]} to ${
-                                    item.time[item.time.length - 1]
-                                  }`
-                              : ""}
-                          </Text>
-                        </DataTable.Cell>
-                        <DataTable.Cell
-                          style={{
-                            justifyContent: "center",
-                            alignItems: "center",
-                            padding: 10,
-                            width: customWidth,
-                          }}
-                        >
-                          <Text
-                            style={{ color: textColor }}
-                            numberOfLines={1}
-                            ellipsizeMode="tail"
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {item.date && item.time
+                                ? item.time.length === 1
+                                  ? `${
+                                      new Date(item.date)
+                                        .toISOString()
+                                        .split("T")[0]
+                                    } ${item.time[0]}`
+                                  : `${
+                                      new Date(item.date)
+                                        .toISOString()
+                                        .split("T")[0]
+                                    } ${item.time[0]} to ${
+                                      item.time[item.time.length - 1]
+                                    }`
+                                : ""}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
                           >
-                            {item?.price.toFixed(0)}
-                          </Text>
-                        </DataTable.Cell>
-                        <DataTable.Cell
-                          style={{
-                            justifyContent: "center",
-                            alignItems: "center",
-                            padding: 10,
-                            width: customWidth,
-                          }}
-                        >
-                          <Text
-                            style={{ color: textColor }}
-                            numberOfLines={1}
-                            ellipsizeMode="tail"
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {item?.price.toFixed(0)}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
                           >
-                            {Array.isArray(item?.service)
-                              ? item?.service
-                                  ?.map((item) => item?.service_name)
-                                  .join(", ")
-                              : item?.service?.service_name}
-                          </Text>
-                        </DataTable.Cell>
-                        <DataTable.Cell
-                          style={{
-                            justifyContent: "center",
-                            alignItems: "center",
-                            padding: 10,
-                            width: customWidth,
-                          }}
-                        >
-                          <Text
-                            style={{ color: textColor }}
-                            numberOfLines={1}
-                            ellipsizeMode="tail"
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {Array.isArray(item?.service)
+                                ? item?.service
+                                    ?.map((item) => item?.service_name)
+                                    .join(", ")
+                                : item?.service?.service_name}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
                           >
-                            {Array.isArray(item?.option)
-                              ? item?.option
-                                  ?.map((item) => item?.option_name)
-                                  .join(", ")
-                              : item?.option?.option_name}
-                          </Text>
-                        </DataTable.Cell>
-                        <DataTable.Cell
-                          style={{
-                            justifyContent: "center",
-                            alignItems: "center",
-                            padding: 10,
-                            width: customWidth,
-                          }}
-                        >
-                          <Text
-                            style={{ color: textColor }}
-                            numberOfLines={1}
-                            ellipsizeMode="tail"
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {Array.isArray(item?.option)
+                                ? item?.option
+                                    ?.map((item) => item?.option_name)
+                                    .join(", ")
+                                : item?.option?.option_name}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
                           >
-                            {Array.isArray(item?.beautician)
-                              ? item?.beautician
-                                  ?.map((item) => item?.name)
-                                  .join(", ")
-                              : item?.beautician?.name}
-                          </Text>
-                        </DataTable.Cell>
-                        <DataTable.Cell
-                          style={{
-                            justifyContent: "center",
-                            alignItems: "center",
-                            padding: 10,
-                            width: customWidth,
-                          }}
-                        >
-                          <Text
-                            style={{ color: textColor }}
-                            numberOfLines={1}
-                            ellipsizeMode="tail"
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {Array.isArray(item?.beautician)
+                                ? item?.beautician
+                                    ?.map((item) => item?.name)
+                                    .join(", ")
+                                : item?.beautician?.name}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
                           >
-                            {item?.customer?.name}
-                          </Text>
-                        </DataTable.Cell>
-                        <DataTable.Cell
-                          style={{
-                            width: customWidth,
-                            justifyContent: "space-around",
-                            alignItems: "center",
-                            padding: 10,
-                          }}
-                        >
-                          {/* <TouchableOpacity
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {item?.customer?.name}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              width: customWidth,
+                              justifyContent: "space-around",
+                              alignItems: "center",
+                              padding: 10,
+                            }}
+                          >
+                            {/* <TouchableOpacity
                             onPress={() => handleEditAppointment(item?._id)}
                           >
                             <Feather name="edit" size={24} color="blue" />
                           </TouchableOpacity>
                           <View style={{ width: 10 }} /> */}
-                          <TouchableOpacity
-                            onPress={() => handleDeleteAppointment(item?._id)}
-                          >
-                            <Feather name="delete" size={24} color="red" />
-                          </TouchableOpacity>
-                        </DataTable.Cell>
-                      </DataTable.Row>
+                            <TouchableOpacity
+                              onPress={() => handleDeleteAppointment(item?._id)}
+                            >
+                              <Feather name="delete" size={24} color="red" />
+                            </TouchableOpacity>
+                          </DataTable.Cell>
+                        </DataTable.Row>
+                      </TouchableOpacity>
                     ))}
                   </DataTable>
                 </ScrollView>
