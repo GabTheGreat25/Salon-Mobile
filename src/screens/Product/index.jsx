@@ -64,6 +64,10 @@ export default function () {
     navigation.navigate("EditProduct", { id });
   };
 
+  const handleViewProduct = (id)=>{
+    navigation.navigate("ViewProduct", { id })
+  }
+
   const handleDeleteProduct = async (id) => {
     Alert.alert(
       "Delete Product",
@@ -249,6 +253,10 @@ export default function () {
                       </DataTable.Title>
                     </DataTable.Header>
                     {paginatedData?.map((item) => (
+                       <TouchableOpacity
+                       key={item?._id}
+                       onPress={()=> handleViewProduct(item?._id)}
+                       >
                       <DataTable.Row
                         key={item?._id}
                         style={{
@@ -397,6 +405,7 @@ export default function () {
                           </TouchableOpacity>
                         </DataTable.Cell>
                       </DataTable.Row>
+                      </TouchableOpacity>
                     ))}
                   </DataTable>
                 </ScrollView>
