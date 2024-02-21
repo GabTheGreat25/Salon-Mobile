@@ -27,7 +27,6 @@ import * as ImagePicker from "expo-image-picker";
 import { createEmployeeValidation } from "../../validation";
 import Toast from "react-native-toast-message";
 import { Picker } from "@react-native-picker/picker";
-import DateTimePicker from "@react-native-community/datetimepicker";
 
 export default function () {
   const navigation = useNavigation();
@@ -45,11 +44,6 @@ export default function () {
   const [keyboardOpen, setKeyboardOpen] = useState(false);
   const [scrollViewHeight, setScrollViewHeight] = useState(scroll);
 
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [showTimePicker, setShowTimePicker] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedTime, setSelectedTime] = useState(new Date());
-
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -58,8 +52,6 @@ export default function () {
       roles: "Employee",
       contact_number: "",
       job: "",
-      date: "",
-      time: "",
     },
     validationSchema: createEmployeeValidation,
     onSubmit: (values) => {
@@ -83,8 +75,6 @@ export default function () {
       formData.append("name", values.name);
       formData.append("contact_number", values.contact_number);
       formData.append("job", values.job);
-      formData.append("date", values.date);
-      formData.append("time", values.time);
 
       addUser(formData)
         .unwrap()
@@ -233,48 +223,6 @@ export default function () {
       }
 
       setSelectedImages(newImages);
-    }
-  };
-
-  const showDatepicker = () => {
-    setShowDatePicker(true);
-    Keyboard.dismiss();
-  };
-
-  const showTimepicker = () => {
-    setShowTimePicker(true);
-    Keyboard.dismiss();
-  };
-
-  const handleDateChange = (event, date) => {
-    setShowDatePicker(false);
-    if (event.type === "dismissed") {
-      return;
-    }
-
-    if (date) {
-      const updatedDate = new Date(date);
-      updatedDate.setDate(date.getDate());
-
-      setSelectedDate(updatedDate);
-      formik.setFieldValue("date", updatedDate.toISOString().split("T")[0]);
-    }
-  };
-
-  const handleTimeChange = (event, time) => {
-    setShowTimePicker(false);
-    if (event.type === "dismissed") {
-      return;
-    }
-
-    if (time) {
-      setSelectedTime(time);
-      const formattedTime = time.toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-      });
-      formik.setFieldValue("time", formattedTime);
     }
   };
 
@@ -478,58 +426,6 @@ export default function () {
                     {formik.touched.job && formik.errors.job && (
                       <Text style={{ color: "red" }}>{formik.errors.job}</Text>
                     )}
-                    <Text
-                      style={{ color: textColor }}
-                      className={`${borderColor} mt-3 font-semibold text-sm text-center`}
-                    >
-                      Choose What Date and Time You Are Available For Interview
-                    </Text>
-                    <TextInput
-                      style={{ color: textColor }}
-                      className={`border-b mb-3 ${borderColor}`}
-                      placeholder="Enter date"
-                      placeholderTextColor={textColor}
-                      onFocus={showDatepicker}
-                      value={formik.values.date}
-                    />
-                    {showDatePicker && (
-                      <DateTimePicker
-                        value={selectedDate}
-                        mode="date"
-                        is24Hour={true}
-                        display="default"
-                        onChange={handleDateChange}
-                      />
-                    )}
-                    {formik.touched.date && formik.errors.date && (
-                      <Text style={{ color: "red" }}>{formik.errors.date}</Text>
-                    )}
-                    <TextInput
-                      style={{ color: textColor }}
-                      className={`border-b mb-3 ${borderColor}`}
-                      placeholder="Enter time"
-                      placeholderTextColor={textColor}
-                      onFocus={showTimepicker}
-                      value={formik.values.time}
-                    />
-                    {showTimePicker && (
-                      <DateTimePicker
-                        value={selectedTime}
-                        mode="time"
-                        is24Hour={false}
-                        display="default"
-                        onChange={(event, time) => {
-                          handleTimeChange(event, time);
-                          formik.validateForm().then(() => {
-                            formik.setFieldTouched("time", true);
-                          });
-                        }}
-                      />
-                    )}
-                    {formik.touched.time && formik.errors.time && (
-                      <Text style={{ color: "red" }}>{formik.errors.time}</Text>
-                    )}
-
                     <View
                       className={`mt-4 items-center justify-start ${
                         isDimensionLayout ? "flex-col" : "flex-row gap-x-2"
