@@ -10,8 +10,7 @@ export default function () {
     <>
       <Welcome
         title={`Looking for a \nsalon?`}
-        description={`Lorem ipsum dolor sit amet \nconsectetur adipisicing elit.`}
-        buttonTitle="Learn More"
+        description={`Ready to experience the ultimate in beauty and relaxation? Discover a haven of luxury and indulgence at Lhanlee Beauty Lounge.Step into a world of exquisite treatments and personalized care tailored just for you.`}        buttonTitle="Learn More"
         leftArrow={false}
         rightArrow={true}
         navigateRight={() => navigation.navigate("BecomeEmployee")}
