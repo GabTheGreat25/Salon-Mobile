@@ -9,8 +9,8 @@ export default function () {
   return (
     <>
       <Welcome
-        title="Become a Lanlee Beautician?"
-        description={`Lorem ipsum dolor sit amet \nconsectetur adipisicing elit.`}
+        title="Become a Lanlee Beautician"
+        description={`Are you passionate about beauty and wellness?Turn your passion into a rewarding career as a beautician at Lhanlee Beauty Lounge..`}
         buttonTitle="Learn More"
         leftArrow={true}
         rightArrow={true}
