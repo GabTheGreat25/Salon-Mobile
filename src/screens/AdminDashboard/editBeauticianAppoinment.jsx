@@ -23,12 +23,22 @@ import Toast from "react-native-toast-message";
 import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
 import { BackIcon } from "@helpers";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function ({ route }) {
   const { id } = route.params;
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
 
   const { data, isLoading, refetch } = useGetAppointmentByIdQuery(id);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isFocused) refetch();
+    };
+    fetchData();
+  }, [isFocused]);
+
   const appointment = data?.details;
   const [updateBeauticianAppointment] =
     useUpdateBeauticianAppointmentMutation();

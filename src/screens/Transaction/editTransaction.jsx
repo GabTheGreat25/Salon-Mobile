@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Image,
   View,
@@ -23,16 +23,26 @@ import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
 import { Picker } from "@react-native-picker/picker";
 import { BackIcon } from "@helpers";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function ({ route }) {
   const { id } = route.params;
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
 
   const {
     data,
     isLoading: isTransactionLoading,
     refetch,
   } = useGetTransactionByIdQuery(id);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isFocused) refetch();
+    };
+    fetchData();
+  }, [isFocused]);
+  
   const [updateTransaction, { isLoading }] = useUpdateTransactionMutation();
 
   const { backgroundColor, textColor, colorScheme } = changeColor();
