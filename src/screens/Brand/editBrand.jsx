@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect  } from "react";
 import {
   Image,
   View,
@@ -22,12 +22,21 @@ import Toast from "react-native-toast-message";
 import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
 import { BackIcon } from "@helpers";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function ({ route }) {
   const { id } = route.params;
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
 
   const { data, isLoading: isBrandLoading, refetch } = useGetBrandByIdQuery(id);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isFocused) refetch();
+    };
+    fetchData();
+  }, [isFocused]);
 
   const [updateBrand, { isLoading }] = useUpdateBrandMutation();
 

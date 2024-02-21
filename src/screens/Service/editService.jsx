@@ -25,10 +25,13 @@ import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
 import { Picker } from "@react-native-picker/picker";
 import { BackIcon } from "@helpers";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function ({ route }) {
   const { id } = route.params;
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
+
 
   const { data: products, isLoading: productLoading } = useGetProductsQuery();
   const {
@@ -36,6 +39,14 @@ export default function ({ route }) {
     isLoading: isServiceLoading,
     refetch,
   } = useGetServiceByIdQuery(id);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isFocused) refetch();
+    };
+    fetchData();
+  }, [isFocused]);
+  
   const [updateService, { isLoading }] = useUpdateServiceMutation();
 
   const { backgroundColor, textColor, colorScheme } = changeColor();

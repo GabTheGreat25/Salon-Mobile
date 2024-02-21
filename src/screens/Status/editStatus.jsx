@@ -23,10 +23,12 @@ import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
 import { BackIcon } from "@helpers";
 import { Picker } from "@react-native-picker/picker";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function ({ route }) {
   const { id } = route.params;
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
 
   const {
     data,
@@ -34,6 +36,14 @@ export default function ({ route }) {
     refetch,
   } = useGetScheduleByIdQuery(id);
   const schedule = data?.details;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isFocused) refetch();
+    };
+    fetchData();
+  }, [isFocused]);
+  
   console.log(schedule);
 
   const [updateAbsent, { isLoading }] = useUpdateAbsentMutation();

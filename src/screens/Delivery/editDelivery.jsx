@@ -28,16 +28,26 @@ import { Picker } from "@react-native-picker/picker";
 import { BackIcon } from "@helpers";
 import { format } from "date-fns";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function ({ route }) {
   const { id } = route.params;
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
 
   const {
     data,
     isLoading: isDeliveryLoading,
     refetch,
   } = useGetDeliveryByIdQuery(id);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isFocused) refetch();
+    };
+    fetchData();
+  }, [isFocused]);
+  
   const { data: products } = useGetProductsQuery();
   const [updateDelivery, { isLoading }] = useUpdateDeliveryMutation();
 

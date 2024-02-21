@@ -22,10 +22,12 @@ import Toast from "react-native-toast-message";
 import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
 import { BackIcon } from "@helpers";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function ({ route }) {
   const { id } = route.params;
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
 
   const {
     data,
@@ -33,6 +35,14 @@ export default function ({ route }) {
     refetch,
   } = useGetExclusionByIdQuery(id);
   const ingredients = data?.details;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isFocused) refetch();
+    };
+    fetchData();
+  }, [isFocused]);
+
   console.log(ingredients);
 
   const [updateExclusion, { isLoading }] = useUpdateExclusionMutation();
