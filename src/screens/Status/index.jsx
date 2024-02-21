@@ -131,6 +131,10 @@ export default function () {
     }
   };
 
+  const handleViewStatus = (id)=>{
+    navigation.navigate("ViewStatus", { id })
+  }
+
   return (
     <>
       {isLoading || isDeleting ? (
@@ -235,7 +239,11 @@ export default function () {
                       </DataTable.Title>
                     </DataTable.Header>
                     {paginatedData?.map((item) => (
-                      <DataTable.Row
+                      <TouchableOpacity
+                      key={item?._id}
+                      onPress={()=>handleViewStatus(item?._id)}
+                      >
+                         <DataTable.Row
                         key={item?._id}
                         style={{
                           backgroundColor,
@@ -348,6 +356,7 @@ export default function () {
                           </TouchableOpacity>
                         </DataTable.Cell>
                       </DataTable.Row>
+                      </TouchableOpacity>
                     ))}
                   </DataTable>
                 </ScrollView>
