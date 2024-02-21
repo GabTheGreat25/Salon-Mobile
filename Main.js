@@ -62,6 +62,18 @@ import {
   Month,
   EditMonth,
   EditBeauticianAppoinment,
+  ViewProduct,
+  ViewDelivery,
+  ViewService,
+  ViewAppointment,
+  ViewTransaction,
+  ViewBrand,
+  ViewTime,
+  ViewStatus,
+  ViewOption,
+  ViewFeedback,
+  ViewComment,
+  ViewMonth,
 } from "@screens";
 import { TermsConditions, PrivacyPolicy, Feedback } from "@settings";
 import { LoadingScreen } from "@components";
@@ -132,15 +144,15 @@ export default function () {
                   component={CheckoutSuccess}
                 />
               </Stack.Navigator>
-            ) : userRoles.includes("Employee") ? (
+            ) : userRoles.includes("Beautician") ? (
               <Stack.Navigator
-                initialRouteName="EmployeeDrawer"
+                initialRouteName="BeauticianDrawer"
                 screenOptions={{
                   headerShown: false,
                 }}
               >
                 <Stack.Screen
-                  name="EmployeeDrawer"
+                  name="BeauticianDrawer"
                   component={EmployeeDrawer}
                 />
                 <Stack.Screen
@@ -213,6 +225,19 @@ export default function () {
                   name="EditBeauticianAppoinment"
                   component={EditBeauticianAppoinment}
                 />
+                <Stack.Screen name="ViewProduct" component={ViewProduct} />
+                <Stack.Screen name="ViewDelivery" component={ViewDelivery} />
+                <Stack.Screen name="ViewService" component={ViewService} />
+                <Stack.Screen name="ViewAppointment" component={ViewAppointment} />
+                <Stack.Screen name="ViewTransaction" component={ViewTransaction} />
+                <Stack.Screen name="ViewBrand" component={ViewBrand} /> 
+                <Stack.Screen name="ViewTime" component={ViewTime} /> 
+                <Stack.Screen name="ViewStatus" component={ViewStatus} /> 
+                <Stack.Screen name="ViewOption" component={ViewOption} /> 
+                <Stack.Screen name="ViewFeedback" component={ViewFeedback} /> 
+                <Stack.Screen name="ViewComment" component={ViewComment} /> 
+                <Stack.Screen name="ViewMonth" component={ViewMonth} /> 
+
               </Stack.Navigator>
             ) : null
           ) : (
