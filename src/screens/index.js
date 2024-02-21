@@ -72,6 +72,18 @@ import Month from "./Month";
 import EditMonth from "./Month/editMonth";
 import AppointmentSchedule from "./AdminDashboard/appointmentSchedule";
 import EditBeauticianAppoinment from "./AdminDashboard/editBeauticianAppoinment";
+import ViewProduct from "./Product/viewProductById";
+import ViewDelivery from "./Delivery/viewDeliveryById";
+import ViewService from "./Service/viewServiceById";
+import ViewAppointment from "./Appointment/viewAppointmentById";
+import ViewTransaction from "./Transaction/viewTransactionById";
+import ViewBrand from "./Brand/viewBrand";
+import ViewTime from "./Time/viewTime";
+import ViewStatus from "./Status/viewStatus";
+import ViewOption from "./Option/viewOptionById";
+import ViewFeedback from "./FeedbackTable/viewFeedbackById";
+import ViewComment from "./Comment/viewCommentById";
+import ViewMonth from "./Month/viewMonth";
 
 export {
   Home,
@@ -148,4 +160,16 @@ export {
   EditMonth,
   AppointmentSchedule,
   EditBeauticianAppoinment,
+  ViewProduct,
+  ViewDelivery,
+  ViewService,
+  ViewAppointment,
+  ViewTransaction,
+  ViewBrand,
+  ViewTime,
+  ViewStatus,
+  ViewOption,
+  ViewFeedback,
+  ViewComment,
+  ViewMonth,
 };
