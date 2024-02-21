@@ -8,7 +8,10 @@ import {
   SafeAreaView,
   Button,
 } from "react-native";
-import { useGetUsersQuery } from "../../state/api/reducer";
+import {
+  useGetUsersQuery,
+  useGetExclusionsQuery,
+} from "../../state/api/reducer";
 import { LoadingScreen } from "@components";
 import { DataTable } from "react-native-paper";
 import { changeColor } from "@utils";
@@ -33,15 +36,22 @@ export default function () {
   const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
 
   const [page, setPage] = useState(0);
-  const itemsPerPage = 7;
+  const itemsPerPage = 6;
 
   const filteredUser = users?.filter(
     (user) =>
-      (user.roles.includes("Online Customer") ||
-        user.roles.includes("Walk-in Customer")) &&
-      !user.information.allergy.includes("None") &&
-      !user.information.allergy.includes("Others")
+      user.roles.includes("Online Customer") ||
+      user.roles.includes("Walk-in Customer")
   );
+
+  const { data: exclusion, isLoading: exclusionLoading } =
+    useGetExclusionsQuery();
+  const exclusions = exclusion?.details;
+
+  const filteredExclusions = exclusions?.flatMap((exclusion) => ({
+    _id: exclusion._id,
+    ingredientName: exclusion.ingredient_name.trim(),
+  }));
 
   const totalPageCount = Math.ceil(filteredUser.length / itemsPerPage);
   const paginatedData = filteredUser.slice(
@@ -63,7 +73,7 @@ export default function () {
 
   return (
     <>
-      {isLoading ? (
+      {isLoading || exclusionLoading ? (
         <View
           className={`flex-1 justify-center items-center bg-primary-default`}
         >
@@ -261,7 +271,24 @@ export default function () {
                             numberOfLines={1}
                             ellipsizeMode="tail"
                           >
-                            {item?.information?.allergy.join(", ")}
+                            {(() => {
+                              const allergies = item?.information?.allergy;
+                              if (allergies && allergies.length > 0) {
+                                const exclusionNames = allergies.map(
+                                  (allergy) => {
+                                    const foundExclusion =
+                                      filteredExclusions.find(
+                                        (exclusion) => exclusion._id === allergy
+                                      );
+                                    return foundExclusion
+                                      ? foundExclusion.ingredientName
+                                      : allergy;
+                                  }
+                                );
+                                return exclusionNames.join(", ");
+                              }
+                              return "";
+                            })()}
                           </Text>
                         </DataTable.Cell>
                         <DataTable.Cell
