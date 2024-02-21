@@ -328,7 +328,7 @@ export default function () {
                             numberOfLines={1}
                             ellipsizeMode="tail"
                           >
-                            {item?.extraFee}
+                            ₱{item?.extraFee}
                           </Text>
                         </DataTable.Cell>
                         <DataTable.Cell
