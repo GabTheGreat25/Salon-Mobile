@@ -127,6 +127,10 @@ export default function () {
     }
   };
 
+  const handleViewService = (id)=>{
+    navigation.navigate("ViewService", { id });
+  };
+
   return (
     <>
       {isLoading || isDeleting ? (
@@ -279,6 +283,10 @@ export default function () {
                       </DataTable.Title>
                     </DataTable.Header>
                     {paginatedData?.map((item) => (
+                       <TouchableOpacity
+                       key={item?._id}
+                       onPress={()=> handleViewService(item?._id)}
+                       >
                       <DataTable.Row
                         key={item?._id}
                         style={{
@@ -479,6 +487,7 @@ export default function () {
                           </TouchableOpacity>
                         </DataTable.Cell>
                       </DataTable.Row>
+                      </TouchableOpacity>
                     ))}
                   </DataTable>
                 </ScrollView>
