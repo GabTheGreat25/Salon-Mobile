@@ -47,8 +47,8 @@ export default function () {
     (appointment) => appointment.isRebooked === false
   );
 
-  const totalPageCount = Math.ceil(filteredSchedule.length / itemsPerPage);
-  const paginatedData = filteredSchedule.slice(
+  const totalPageCount = Math.ceil(filteredSchedule?.length / itemsPerPage);
+  const paginatedData = filteredSchedule?.slice(
     page * itemsPerPage,
     (page + 1) * itemsPerPage
   );
@@ -322,7 +322,7 @@ export default function () {
                                     item.time
                                       ? item.time[0] +
                                         " - " +
-                                        item.time[item.time.length - 1]
+                                        item.time[item.time?.length - 1]
                                       : ""
                                   }`
                                 : ""}
