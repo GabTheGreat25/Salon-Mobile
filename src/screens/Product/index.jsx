@@ -64,9 +64,9 @@ export default function () {
     navigation.navigate("EditProduct", { id });
   };
 
-  const handleViewProduct = (id)=>{
-    navigation.navigate("ViewProduct", { id })
-  }
+  const handleViewProduct = (id) => {
+    navigation.navigate("ViewProduct", { id });
+  };
 
   const handleDeleteProduct = async (id) => {
     Alert.alert(
@@ -253,10 +253,6 @@ export default function () {
                       </DataTable.Title>
                     </DataTable.Header>
                     {paginatedData?.map((item) => (
-                       <TouchableOpacity
-                       key={item?._id}
-                       onPress={()=> handleViewProduct(item?._id)}
-                       >
                       <DataTable.Row
                         key={item?._id}
                         style={{
@@ -393,11 +389,19 @@ export default function () {
                           }}
                         >
                           <TouchableOpacity
+                            onPress={() => handleViewProduct(item?._id)}
+                          >
+                            <Feather name="eye" size={24} color="blue" />
+                          </TouchableOpacity>
+
+                          <View style={{ width: 10 }} />
+
+                          <TouchableOpacity
                             onPress={() => handleEditProduct(item?._id)}
                           >
                             <Feather name="edit" size={24} color="blue" />
                           </TouchableOpacity>
-                          <View style={{ width: 10 }} />
+
                           <TouchableOpacity
                             onPress={() => handleDeleteProduct(item?._id)}
                           >
@@ -405,7 +409,6 @@ export default function () {
                           </TouchableOpacity>
                         </DataTable.Cell>
                       </DataTable.Row>
-                      </TouchableOpacity>
                     ))}
                   </DataTable>
                 </ScrollView>
