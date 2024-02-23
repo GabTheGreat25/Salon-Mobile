@@ -122,7 +122,7 @@ export default function ({ route }) {
                   style={{ color: textColor }}
                   className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
                   autoCapitalize="none"
-                  value={delivery?.price ? delivery.price.toString() : ""}
+                  value={`₱${delivery?.price ? delivery.price.toString() : ""}`}
                 />
                 <Text
                   style={{ color: textColor }}
