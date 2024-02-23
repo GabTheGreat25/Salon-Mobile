@@ -73,7 +73,7 @@ export default function ({ route }) {
                   style={{ color: textColor }}
                   className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
                   autoCapitalize="none"
-                  value={transaction?.appointment}
+                  value={transaction?.appointment?._id}
                 />
 
                 <Text
