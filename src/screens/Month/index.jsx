@@ -148,84 +148,82 @@ export default function () {
                       </DataTable.Title>
                     </DataTable.Header>
                     {paginatedData?.map((item) => (
-                      <TouchableOpacity
+                      <DataTable.Row
                         key={item?._id}
-                        onPress={() => handleViewMonth(item?._id)}
+                        style={{
+                          backgroundColor,
+                          borderBottomWidth: 1,
+                          borderBottomColor: borderColor,
+                        }}
                       >
-                        <DataTable.Row
-                          key={item?._id}
+                        <DataTable.Cell
                           style={{
-                            backgroundColor,
-                            borderBottomWidth: 1,
-                            borderBottomColor: borderColor,
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: 10,
+                            width: customWidth,
                           }}
                         >
-                          <DataTable.Cell
-                            style={{
-                              justifyContent: "center",
-                              alignItems: "center",
-                              padding: 10,
-                              width: customWidth,
-                            }}
+                          <Text
+                            style={{ color: textColor }}
+                            numberOfLines={1}
+                            ellipsizeMode="tail"
                           >
-                            <Text
-                              style={{ color: textColor }}
-                              numberOfLines={1}
-                              ellipsizeMode="tail"
-                            >
-                              {item?._id}
-                            </Text>
-                          </DataTable.Cell>
-                          <DataTable.Cell
-                            style={{
-                              justifyContent: "center",
-                              alignItems: "center",
-                              padding: 10,
-                              width: customWidth,
-                            }}
+                            {item?._id}
+                          </Text>
+                        </DataTable.Cell>
+                        <DataTable.Cell
+                          style={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: 10,
+                            width: customWidth,
+                          }}
+                        >
+                          <Text
+                            style={{ color: textColor }}
+                            numberOfLines={1}
+                            ellipsizeMode="tail"
                           >
-                            <Text
-                              style={{ color: textColor }}
-                              numberOfLines={1}
-                              ellipsizeMode="tail"
-                            >
-                              {item?.month != null
-                                ? monthNames[item.month]
-                                : ""}
-                            </Text>
-                          </DataTable.Cell>
-                          <DataTable.Cell
-                            style={{
-                              justifyContent: "center",
-                              alignItems: "center",
-                              padding: 10,
-                              width: customWidth,
-                            }}
+                            {item?.month != null ? monthNames[item.month] : ""}
+                          </Text>
+                        </DataTable.Cell>
+                        <DataTable.Cell
+                          style={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: 10,
+                            width: customWidth,
+                          }}
+                        >
+                          <Text
+                            style={{ color: textColor }}
+                            numberOfLines={1}
+                            ellipsizeMode="tail"
                           >
-                            <Text
-                              style={{ color: textColor }}
-                              numberOfLines={1}
-                              ellipsizeMode="tail"
-                            >
-                              {item?.message}
-                            </Text>
-                          </DataTable.Cell>
-                          <DataTable.Cell
-                            style={{
-                              width: customWidth,
-                              justifyContent: "space-around",
-                              alignItems: "center",
-                              padding: 10,
-                            }}
+                            {item?.message}
+                          </Text>
+                        </DataTable.Cell>
+                        <DataTable.Cell
+                          style={{
+                            width: customWidth,
+                            justifyContent: "space-around",
+                            alignItems: "center",
+                            padding: 10,
+                          }}
+                        >
+                          <TouchableOpacity
+                            onPress={() => handleViewMonth(item?._id)}
                           >
-                            <TouchableOpacity
-                              onPress={() => handleEditMonth(item?._id)}
-                            >
-                              <Feather name="edit" size={24} color="blue" />
-                            </TouchableOpacity>
-                          </DataTable.Cell>
-                        </DataTable.Row>
-                      </TouchableOpacity>
+                            <Feather name="eye" size={24} color="blue" />
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            onPress={() => handleEditMonth(item?._id)}
+                          >
+                            <Feather name="edit" size={24} color="blue" />
+                          </TouchableOpacity>
+                        </DataTable.Cell>
+                      </DataTable.Row>
                     ))}
                   </DataTable>
                 </ScrollView>
