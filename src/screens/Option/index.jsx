@@ -127,7 +127,7 @@ export default function () {
     }
   };
 
-  const handleViewOption = (id)=>{
+  const handleViewOption = (id) => {
     navigation.navigate("ViewOption", { id });
   };
 
@@ -243,11 +243,7 @@ export default function () {
                       </DataTable.Title>
                     </DataTable.Header>
                     {paginatedData?.map((item) => (
-                      <TouchableOpacity
-                      key={item?._id}
-                      onPress={()=>handleViewOption(item?._id)}
-                      >
-                         <DataTable.Row
+                      <DataTable.Row
                         key={item?._id}
                         style={{
                           backgroundColor,
@@ -371,6 +367,12 @@ export default function () {
                           }}
                         >
                           <TouchableOpacity
+                            onPress={() => handleViewOption(item?._id)}
+                          >
+                            <Feather name="eye" size={24} color="blue" />
+                          </TouchableOpacity>
+
+                          <TouchableOpacity
                             onPress={() => handleEditOption(item?._id)}
                           >
                             <Feather name="edit" size={24} color="blue" />
@@ -383,7 +385,6 @@ export default function () {
                           </TouchableOpacity>
                         </DataTable.Cell>
                       </DataTable.Row>
-                      </TouchableOpacity>
                     ))}
                   </DataTable>
                 </ScrollView>
