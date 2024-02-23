@@ -283,10 +283,6 @@ export default function () {
                       </DataTable.Title>
                     </DataTable.Header>
                     {paginatedData?.map((item) => (
-                       <TouchableOpacity
-                       key={item?._id}
-                       onPress={()=> handleViewService(item?._id)}
-                       >
                       <DataTable.Row
                         key={item?._id}
                         style={{
@@ -475,11 +471,17 @@ export default function () {
                           }}
                         >
                           <TouchableOpacity
+                            onPress={() => handleViewService(item?._id)}
+                          >
+                            <Feather name="eye" size={24} color="blue" />
+                          </TouchableOpacity>
+                          <View style={{ width: 10 }} />
+                          <TouchableOpacity
                             onPress={() => handleEditService(item?._id)}
                           >
                             <Feather name="edit" size={24} color="blue" />
                           </TouchableOpacity>
-                          <View style={{ width: 10 }} />
+
                           <TouchableOpacity
                             onPress={() => handleDeleteService(item?._id)}
                           >
@@ -487,7 +489,6 @@ export default function () {
                           </TouchableOpacity>
                         </DataTable.Cell>
                       </DataTable.Row>
-                      </TouchableOpacity>
                     ))}
                   </DataTable>
                 </ScrollView>
