@@ -124,7 +124,7 @@ export default function () {
     }
   };
 
-  const handleViewTransaction = (id) =>{
+  const handleViewTransaction = (id) => {
     navigation.navigate("ViewTransaction", { id });
   };
 
@@ -230,11 +230,7 @@ export default function () {
                       </DataTable.Title>
                     </DataTable.Header>
                     {paginatedData?.map((item) => (
-                      <TouchableOpacity
-                      key={item?._id}
-                      onPress={()=> handleViewTransaction(item._id)}
-                      >
-                         <DataTable.Row
+                      <DataTable.Row
                         key={item?._id}
                         style={{
                           backgroundColor,
@@ -380,6 +376,12 @@ export default function () {
                             padding: 10,
                           }}
                         >
+                           <TouchableOpacity
+                              onPress={() => handleViewTransaction(item?._id)}
+                            >
+                              <Feather name="eye" size={24} color="blue" />
+                            </TouchableOpacity>
+                            
                           <TouchableOpacity
                             onPress={() => {
                               if (item.status !== "completed") {
@@ -408,7 +410,6 @@ export default function () {
                           </TouchableOpacity>
                         </DataTable.Cell>
                       </DataTable.Row>
-                      </TouchableOpacity>
                     ))}
                   </DataTable>
                 </ScrollView>
