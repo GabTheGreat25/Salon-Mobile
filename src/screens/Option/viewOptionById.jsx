@@ -11,9 +11,7 @@ import {
   Keyboard,
   TextInput,
 } from "react-native";
-import {
-  useGetOptionByIdQuery,
-} from "../../state/api/reducer";
+import { useGetOptionByIdQuery } from "../../state/api/reducer";
 import { useNavigation } from "@react-navigation/native";
 import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
@@ -43,7 +41,7 @@ export default function ({ route }) {
 
   return (
     <>
-      {isLoading  ? (
+      {isLoading ? (
         <View
           className={`flex-1 justify-center items-center bg-primary-default`}
         >
@@ -89,7 +87,7 @@ export default function ({ route }) {
                   style={{ color: textColor }}
                   className={`font-semibold text-base`}
                 >
-                 Adds On Name
+                  Adds On Name
                 </Text>
                 <TextInput
                   style={{ color: textColor }}
@@ -112,7 +110,7 @@ export default function ({ route }) {
                     .map((service) => service?.service_name)
                     .join(", ")}
                 />
-                  <Text
+                <Text
                   style={{ color: textColor }}
                   className={`font-semibold text-base`}
                 >
@@ -129,7 +127,7 @@ export default function ({ route }) {
                   multiline={true}
                   value={option?.description}
                 />
-                  <Text
+                <Text
                   style={{ color: textColor }}
                   className={`font-semibold text-base`}
                 >
@@ -139,7 +137,9 @@ export default function ({ route }) {
                   style={{ color: textColor }}
                   className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
                   autoCapitalize="none"
-                  value={option?.extraFee ? option.extraFee.toString() : ""}
+                  value={`₱${
+                    option?.extraFee ? option.extraFee.toString() : ""
+                  }`}
                 />
               </ScrollView>
             </KeyboardAvoidingView>

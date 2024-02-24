@@ -217,10 +217,7 @@ export default function () {
                       </DataTable.Title>
                     </DataTable.Header>
                     {paginatedData?.map((item) => (
-                      <TouchableOpacity
-                        key={item?._id}
-                        onPress={() => handleViewFeedback(item?._id)}
-                      >
+            
                         <DataTable.Row
                           key={item?._id}
                           style={{
@@ -319,6 +316,12 @@ export default function () {
                               padding: 10,
                             }}
                           >
+                              <TouchableOpacity
+                              onPress={() => handleViewFeedback(item?._id)}
+                            >
+                              <Feather name="eye" size={24} color="blue" />
+                            </TouchableOpacity>
+
                             <TouchableOpacity
                               onPress={() => handleDeleteFeedback(item?._id)}
                             >
@@ -326,7 +329,7 @@ export default function () {
                             </TouchableOpacity>
                           </DataTable.Cell>
                         </DataTable.Row>
-                      </TouchableOpacity>
+                     
                     ))}
                   </DataTable>
                 </ScrollView>

@@ -131,9 +131,9 @@ export default function () {
     }
   };
 
-  const handleViewStatus = (id)=>{
-    navigation.navigate("ViewStatus", { id })
-  }
+  const handleViewStatus = (id) => {
+    navigation.navigate("ViewStatus", { id });
+  };
 
   return (
     <>
@@ -239,11 +239,7 @@ export default function () {
                       </DataTable.Title>
                     </DataTable.Header>
                     {paginatedData?.map((item) => (
-                      <TouchableOpacity
-                      key={item?._id}
-                      onPress={()=>handleViewStatus(item?._id)}
-                      >
-                         <DataTable.Row
+                      <DataTable.Row
                         key={item?._id}
                         style={{
                           backgroundColor,
@@ -344,6 +340,12 @@ export default function () {
                           }}
                         >
                           <TouchableOpacity
+                            onPress={() => handleViewSchedule(item?._id)}
+                          >
+                            <Feather name="eye" size={24} color="blue" />
+                          </TouchableOpacity>
+
+                          <TouchableOpacity
                             onPress={() => handleEditSchedule(item?._id)}
                           >
                             <Feather name="edit" size={24} color="blue" />
@@ -356,7 +358,6 @@ export default function () {
                           </TouchableOpacity>
                         </DataTable.Cell>
                       </DataTable.Row>
-                      </TouchableOpacity>
                     ))}
                   </DataTable>
                 </ScrollView>

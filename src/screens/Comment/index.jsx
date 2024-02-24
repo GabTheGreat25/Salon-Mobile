@@ -227,10 +227,6 @@ export default function () {
                       </DataTable.Title>
                     </DataTable.Header>
                     {paginatedData?.map((item) => (
-                      <TouchableOpacity
-                        key={item?._id}
-                        onPress={() => handleViewComment(item?._id)}
-                      >
                         <DataTable.Row
                           key={item?._id}
                           style={{
@@ -387,6 +383,12 @@ export default function () {
                               padding: 10,
                             }}
                           >
+                              <TouchableOpacity
+                              onPress={() => handleViewComment(item?._id)}
+                            >
+                              <Feather name="eye" size={24} color="red" />
+                            </TouchableOpacity>
+
                             <TouchableOpacity
                               onPress={() => handleDeleteComment(item?._id)}
                             >
@@ -394,7 +396,7 @@ export default function () {
                             </TouchableOpacity>
                           </DataTable.Cell>
                         </DataTable.Row>
-                      </TouchableOpacity>
+                     
                     ))}
                   </DataTable>
                 </ScrollView>

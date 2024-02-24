@@ -129,8 +129,8 @@ export default function () {
   };
 
   const handleViewDelivery = (id) => {
-    navigation.navigate("ViewDelivery", { id })
-  }
+    navigation.navigate("ViewDelivery", { id });
+  };
 
   return (
     <>
@@ -268,10 +268,6 @@ export default function () {
                       </DataTable.Title>
                     </DataTable.Header>
                     {paginatedData?.map((item) => (
-                      <TouchableOpacity
-                      key={item?._id}
-                      onPress={()=> handleViewDelivery(item?._id)}
-                      >
                       <DataTable.Row
                         key={item?._id}
                         style={{
@@ -423,6 +419,12 @@ export default function () {
                           }}
                         >
                           <TouchableOpacity
+                            onPress={() => handleViewDelivery(item?._id)}
+                          >
+                            <Feather name="eye" size={24} color="blue" />
+                          </TouchableOpacity>
+
+                          <TouchableOpacity
                             onPress={() => {
                               if (item.status !== "completed") {
                                 handleEditDelivery(item?._id);
@@ -449,7 +451,6 @@ export default function () {
                           </TouchableOpacity>
                         </DataTable.Cell>
                       </DataTable.Row>
-                      </TouchableOpacity>
                     ))}
                   </DataTable>
                 </ScrollView>

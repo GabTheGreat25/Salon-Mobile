@@ -113,18 +113,6 @@ export default function ({ route }) {
                   style={{ color: textColor }}
                   className={`font-semibold text-base`}
                 >
-                  Appointment Time
-                </Text>
-                <TextInput
-                  style={{ color: textColor }}
-                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                  autoCapitalize="none"
-                  value={appointment?.time.map((time) => time?.time).join(", ")}
-                />
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-base`}
-                >
                   Appointment Services
                 </Text>
                 <TextInput
@@ -159,9 +147,9 @@ export default function ({ route }) {
                   style={{ color: textColor }}
                   className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
                   autoCapitalize="none"
-                  value={
+                  value={`₱${
                     appointment?.price ? appointment?.price.toString() : ""
-                  }
+                  }`}
                 />
               </ScrollView>
             </KeyboardAvoidingView>

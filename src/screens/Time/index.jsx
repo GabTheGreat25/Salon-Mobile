@@ -199,72 +199,73 @@ export default function () {
                       </DataTable.Title>
                     </DataTable.Header>
                     {paginatedData?.map((item) => (
-                      <TouchableOpacity
+                      <DataTable.Row
                         key={item?._id}
-                        onPress={() => handleViewTime(item?._id)}
+                        style={{
+                          backgroundColor,
+                          borderBottomWidth: 1,
+                          borderBottomColor: borderColor,
+                        }}
                       >
-                        <DataTable.Row
-                          key={item?._id}
+                        <DataTable.Cell
                           style={{
-                            backgroundColor,
-                            borderBottomWidth: 1,
-                            borderBottomColor: borderColor,
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: 10,
+                            width: customWidth,
                           }}
                         >
-                          <DataTable.Cell
-                            style={{
-                              justifyContent: "center",
-                              alignItems: "center",
-                              padding: 10,
-                              width: customWidth,
-                            }}
+                          <Text
+                            style={{ color: textColor }}
+                            numberOfLines={1}
+                            ellipsizeMode="tail"
                           >
-                            <Text
-                              style={{ color: textColor }}
-                              numberOfLines={1}
-                              ellipsizeMode="tail"
-                            >
-                              {item?._id}
-                            </Text>
-                          </DataTable.Cell>
-                          <DataTable.Cell
-                            style={{
-                              justifyContent: "center",
-                              alignItems: "center",
-                              padding: 10,
-                              width: customWidth,
-                            }}
+                            {item?._id}
+                          </Text>
+                        </DataTable.Cell>
+                        <DataTable.Cell
+                          style={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: 10,
+                            width: customWidth,
+                          }}
+                        >
+                          <Text
+                            style={{ color: textColor }}
+                            numberOfLines={1}
+                            ellipsizeMode="tail"
                           >
-                            <Text
-                              style={{ color: textColor }}
-                              numberOfLines={1}
-                              ellipsizeMode="tail"
-                            >
-                              {item?.time}
-                            </Text>
-                          </DataTable.Cell>
-                          <DataTable.Cell
-                            style={{
-                              width: customWidth,
-                              justifyContent: "space-around",
-                              alignItems: "center",
-                              padding: 10,
-                            }}
+                            {item?.time}
+                          </Text>
+                        </DataTable.Cell>
+                        <DataTable.Cell
+                          style={{
+                            width: customWidth,
+                            justifyContent: "space-around",
+                            alignItems: "center",
+                            padding: 10,
+                          }}
+                        >
+                          <TouchableOpacity
+                            onPress={() => handleViewTime(item?._id)}
                           >
-                            <TouchableOpacity
-                              onPress={() => handleEditTime(item?._id)}
-                            >
-                              <Feather name="edit" size={24} color="blue" />
-                            </TouchableOpacity>
-                            <View style={{ width: 10 }} />
-                            <TouchableOpacity
-                              onPress={() => handleDeleteTime(item?._id)}
-                            >
-                              <Feather name="delete" size={24} color="red" />
-                            </TouchableOpacity>
-                          </DataTable.Cell>
-                        </DataTable.Row>
-                      </TouchableOpacity>
+                            <Feather name="eye" size={24} color="blue" />
+                          </TouchableOpacity>
+
+                          <TouchableOpacity
+                            onPress={() => handleEditTime(item?._id)}
+                          >
+                            <Feather name="edit" size={24} color="blue" />
+                          </TouchableOpacity>
+                          <View style={{ width: 10 }} />
+                          <TouchableOpacity
+                            onPress={() => handleDeleteTime(item?._id)}
+                          >
+                            <Feather name="delete" size={24} color="red" />
+                          </TouchableOpacity>
+                        </DataTable.Cell>
+                      </DataTable.Row>
                     ))}
                   </DataTable>
                 </ScrollView>
