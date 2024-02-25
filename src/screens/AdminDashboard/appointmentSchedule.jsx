@@ -50,6 +50,10 @@ export default function () {
     navigation.navigate("EditBeauticianAppoinment", { id });
   };
 
+  const handleViewBeauticianAppointment = (id) => {
+    navigation.navigate("ViewScheduleToday", { id });
+  };
+
   const filteredAppointments = appointments?.filter((appointment) => {
     const appointmentDate = new Date(appointment.date);
     return (
@@ -342,6 +346,19 @@ export default function () {
                             padding: 10,
                           }}
                         >
+                            <TouchableOpacity
+                            onPress={() => {
+                              handleViewBeauticianAppointment(item?._id);
+                            }}
+                          >
+                            <Feather
+                              name="eye"
+                              size={24}
+                              color={
+                               "green"
+                              }
+                            />
+                          </TouchableOpacity>
                           <TouchableOpacity
                             onPress={() => {
                               handleEditBeauticianAppoinment(item?._id);
