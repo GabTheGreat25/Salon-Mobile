@@ -23,9 +23,11 @@ import { DataTable } from "react-native-paper";
 import { Feather } from "@expo/vector-icons";
 import { changeColor, dimensionLayout } from "@utils";
 import { useIsFocused } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
 export default function () {
   const isFocused = useIsFocused();
+  const navigation = useNavigation();
   const isDimensionLayout = dimensionLayout();
   const { width: deviceWidth } = Dimensions.get("window");
   const customWidth = deviceWidth * (isDimensionLayout ? 0.3 : 0.2);
@@ -143,6 +145,11 @@ export default function () {
       },
     ]);
   };
+
+  const handleViewBeautician = (id) => {
+    navigation.navigate("ViewApplyingBeautician", { id });
+  };
+
   return (
     <>
       {isLoading || isDeleting || isConfirming ? (
@@ -414,10 +421,17 @@ export default function () {
                             }}
                           >
                             <TouchableOpacity
+                              onPress={() => handleViewBeautician(item?._id)}
+                            >
+                              <Feather name="eye" size={24} color="blue" />
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
                               onPress={() => handleConfirmUser(item?._id)}
                             >
                               <Feather name="check" size={24} color="green" />
                             </TouchableOpacity>
+
                             <View style={{ width: 10 }} />
                             <TouchableOpacity
                               onPress={() => handleDeleteUser(item?._id)}
