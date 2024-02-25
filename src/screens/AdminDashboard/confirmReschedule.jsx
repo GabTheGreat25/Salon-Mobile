@@ -19,10 +19,11 @@ import Toast from "react-native-toast-message";
 import { DataTable } from "react-native-paper";
 import { Feather } from "@expo/vector-icons";
 import { changeColor } from "@utils";
-import { useIsFocused } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 
 export default function () {
   const isFocused = useIsFocused();
+  const navigation = useNavigation();
   const { width: deviceWidth } = Dimensions.get("window");
   const customWidth = deviceWidth * 0.3;
 
@@ -145,6 +146,11 @@ export default function () {
       ]
     );
   };
+
+  const handleViewReschedule = (id)=>{
+    navigation.navigate("ViewRescheduleAppointment", {id});
+  };
+
   return (
     <>
       {isLoading || isConfirming || isDeleting ? (
@@ -368,6 +374,13 @@ export default function () {
                               padding: 10,
                             }}
                           >
+                             <TouchableOpacity
+                              onPress={() =>
+                                handleViewReschedule(item?._id)
+                              }
+                            >
+                              <Feather name="eye" size={24} color="blue" />
+                            </TouchableOpacity>
                             <TouchableOpacity
                               onPress={() =>
                                 handleConfirmAppointment(item?._id)
