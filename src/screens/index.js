@@ -84,6 +84,10 @@ import ViewOption from "./Option/viewOptionById";
 import ViewFeedback from "./FeedbackTable/viewFeedbackById";
 import ViewComment from "./Comment/viewCommentById";
 import ViewMonth from "./Month/viewMonth";
+import ViewScheduleToday from "./AdminDashboard/viewAppointmentSchedule";
+import ViewApplyingBeautician from "./AdminDashboard/viewConfirmBeauticianById";
+import ViewBeauticianLeave from "./AdminDashboard/viewBeauticianLeave";
+import ViewRescheduleAppointment from "./AdminDashboard/viewRescheduleAppointment";
 
 export {
   Home,
@@ -172,4 +176,8 @@ export {
   ViewFeedback,
   ViewComment,
   ViewMonth,
+  ViewScheduleToday,
+  ViewApplyingBeautician,
+  ViewBeauticianLeave,
+  ViewRescheduleAppointment,
 };

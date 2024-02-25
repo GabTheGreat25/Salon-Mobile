@@ -74,6 +74,10 @@ import {
   ViewFeedback,
   ViewComment,
   ViewMonth,
+  ViewScheduleToday,
+  ViewApplyingBeautician,
+  ViewBeauticianLeave,
+  ViewRescheduleAppointment,
 } from "@screens";
 import { TermsConditions, PrivacyPolicy, Feedback } from "@settings";
 import { LoadingScreen } from "@components";
@@ -237,7 +241,10 @@ export default function () {
                 <Stack.Screen name="ViewFeedback" component={ViewFeedback} /> 
                 <Stack.Screen name="ViewComment" component={ViewComment} /> 
                 <Stack.Screen name="ViewMonth" component={ViewMonth} /> 
-
+                <Stack.Screen name="ViewScheduleToday" component={ViewScheduleToday} /> 
+                <Stack.Screen name="ViewApplyingBeautician" component={ViewApplyingBeautician} /> 
+                <Stack.Screen name="ViewBeauticianLeave" component={ViewBeauticianLeave} /> 
+                <Stack.Screen name="ViewRescheduleAppointment" component={ViewRescheduleAppointment} /> 
               </Stack.Navigator>
             ) : null
           ) : (
