@@ -20,11 +20,12 @@ import { format } from "date-fns";
 import { DataTable } from "react-native-paper";
 import { Feather } from "@expo/vector-icons";
 import { changeColor } from "@utils";
-import { useIsFocused } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { saveDeletedId, getDeletedIds } from "../../helpers/DeleteItem";
 
 export default function () {
   const isFocused = useIsFocused();
+  const navigation = useNavigation();
   const { width: deviceWidth } = Dimensions.get("window");
   const customWidth = deviceWidth * 0.3;
 
@@ -158,6 +159,10 @@ export default function () {
       },
     ]);
   };
+
+  const handleViewLeave = (id)=>{
+    navigation.navigate("ViewBeauticianLeave", { id })
+  }
 
   return (
     <>
@@ -322,6 +327,12 @@ export default function () {
                               padding: 10,
                             }}
                           >
+                             <TouchableOpacity
+                              onPress={() => handleViewLeave(item?._id)}
+                            >
+                              <Feather name="eye" size={24} color="blue" />
+                            </TouchableOpacity>
+
                             <TouchableOpacity
                               onPress={() => handleConfirmSchedule(item?._id)}
                             >
