@@ -6,7 +6,12 @@ import {
   DrawerItemList,
   createDrawerNavigator,
 } from "@react-navigation/drawer";
-import { EmployeeDashboard, EditEmployeeProfile, Transaction } from "@screens";
+import {
+  EmployeeDashboard,
+  EditEmployeeProfile,
+  Transaction,
+  BeauticianAppointment,
+} from "@screens";
 import { changeColor, dimensionLayout } from "@utils";
 import { RESOURCE } from "@constants";
 import { UserImage } from "@components";
@@ -148,6 +153,29 @@ export default function () {
           ),
         }}
         component={EditEmployeeProfile}
+      />
+      <Drawer.Screen
+        name="BeauticianAppointment"
+        options={{
+          drawerActiveBackgroundColor: "#F78FB3",
+          drawerActiveTintColor: textColor,
+          drawerInactiveTintColor: "#FDA7DF",
+          drawerLabel: () => (
+            <Text className={`text-xl font-base`} style={{ color: textColor }}>
+              My Appointments
+            </Text>
+          ),
+          title: "BeauticianAppointment",
+          drawerIcon: () => (
+            <Feather
+              name="calendar"
+              size={RESOURCE.NUMBER.THIRTY}
+              color={textColor}
+            />
+          ),
+        }}
+        initialParams={{ id: user?._id }}
+        component={BeauticianAppointment}
       />
     </Drawer.Navigator>
   );
