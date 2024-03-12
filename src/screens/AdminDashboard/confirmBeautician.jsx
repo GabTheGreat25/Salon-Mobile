@@ -420,12 +420,12 @@ export default function () {
                               padding: 10,
                             }}
                           >
+                            <View style={{ width: 10 }} />
                             <TouchableOpacity
                               onPress={() => handleViewBeautician(item?._id)}
                             >
                               <Feather name="eye" size={24} color="blue" />
                             </TouchableOpacity>
-
                             <TouchableOpacity
                               onPress={() => handleConfirmUser(item?._id)}
                             >

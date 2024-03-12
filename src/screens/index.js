@@ -88,6 +88,7 @@ import ViewScheduleToday from "./AdminDashboard/viewAppointmentSchedule";
 import ViewApplyingBeautician from "./AdminDashboard/viewConfirmBeauticianById";
 import ViewBeauticianLeave from "./AdminDashboard/viewBeauticianLeave";
 import ViewRescheduleAppointment from "./AdminDashboard/viewRescheduleAppointment";
+import BeauticianAppointment from "./BeauticianAppointment";
 
 export {
   Home,
@@ -180,4 +181,5 @@ export {
   ViewApplyingBeautician,
   ViewBeauticianLeave,
   ViewRescheduleAppointment,
+  BeauticianAppointment
 };

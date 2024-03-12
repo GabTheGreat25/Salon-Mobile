@@ -78,6 +78,7 @@ import {
   ViewApplyingBeautician,
   ViewBeauticianLeave,
   ViewRescheduleAppointment,
+  BeauticianAppointment,
 } from "@screens";
 import { TermsConditions, PrivacyPolicy, Feedback } from "@settings";
 import { LoadingScreen } from "@components";
@@ -167,6 +168,11 @@ export default function () {
                   name="EditTransaction"
                   component={EditTransaction}
                 />
+                <Stack.Screen
+                  name="BeauticianAppointment"
+                  component={BeauticianAppointment}
+                />
+                
               </Stack.Navigator>
             ) : userRoles.includes("Admin") ? (
               <Stack.Navigator
