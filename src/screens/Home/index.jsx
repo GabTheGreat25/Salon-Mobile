@@ -1,6 +1,6 @@
 import React from "react";
 import { Welcome } from "@components";
-import logo1 from "@assets/logo-1.png";
+import logo1 from "@assets/lhanlee-front.png";
 import { useNavigation } from "@react-navigation/native";
 
 export default function () {
@@ -10,7 +10,8 @@ export default function () {
     <>
       <Welcome
         title={`Looking for a \nsalon?`}
-        description={`Ready to experience the ultimate in beauty and relaxation? Discover a haven of luxury and indulgence at Lhanlee Beauty Lounge.Step into a world of exquisite treatments and personalized care tailored just for you.`}        buttonTitle="Learn More"
+        description={`Step into a world of personalized beauty at Lhanlee Beauty Lounge. Sign up today and embark on a journey of self-care and confidence with Lhanlee Beauty Lounge. Let us be your partner in achieving your beauty goals.`}
+        buttonTitle="Learn More"
         leftArrow={false}
         rightArrow={true}
         navigateRight={() => navigation.navigate("BecomeEmployee")}
