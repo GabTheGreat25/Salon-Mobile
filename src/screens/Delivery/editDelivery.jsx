@@ -47,7 +47,7 @@ export default function ({ route }) {
     };
     fetchData();
   }, [isFocused]);
-  
+
   const { data: products } = useGetProductsQuery();
   const [updateDelivery, { isLoading }] = useUpdateDeliveryMutation();
 
@@ -150,20 +150,23 @@ export default function ({ route }) {
     formik.setFieldValue("type", selectedTypes);
   }, [selectedTypes]);
 
-  const handsProducts = products?.details?.filter(
-    (product) => product.type === "Hands"
+  const handsProducts = products?.details?.filter((product) =>
+    product.type.includes("Hands")
   );
-  const hairProducts = products?.details?.filter(
-    (product) => product.type === "Hair"
+  const hairProducts = products?.details?.filter((product) =>
+    product.type.includes("Hair")
   );
-  const feetProducts = products?.details?.filter(
-    (product) => product.type === "Feet"
+  const feetProducts = products?.details?.filter((product) =>
+    product.type.includes("Feet")
   );
-  const faceProducts = products?.details?.filter(
-    (product) => product.type === "Face"
+  const facialProducts = products?.details?.filter((product) =>
+    product.type.includes("Facial")
   );
-  const bodyProducts = products?.details?.filter(
-    (product) => product.type === "Body"
+  const bodyProducts = products?.details?.filter((product) =>
+    product.type.includes("Body")
+  );
+  const eyeLashProducts = products?.details?.filter((product) =>
+    product.type.includes("Eyelash")
   );
 
   const handleCheckBoxProduct = (selectedProduct) => {
@@ -203,7 +206,7 @@ export default function ({ route }) {
                     style={{ color: textColor }}
                     className={`font-semibold text-center my-[9px] text-3xl`}
                   >
-                    Update Delivery Details
+                    Edit Delivery Details
                   </Text>
                   <Text
                     style={{ color: textColor }}
@@ -424,7 +427,7 @@ export default function ({ route }) {
                       </Text>
                     </View>
                     <TouchableOpacity
-                      onPress={() => handleCheckBoxToggle("Face")}
+                      onPress={() => handleCheckBoxToggle("Facial")}
                       className={`flex-row py-2`}
                     >
                       <View
@@ -436,7 +439,7 @@ export default function ({ route }) {
                         }}
                         className={`flex-row justify-center items-center border-2 rounded`}
                       >
-                        {selectedTypes.includes("Face") && (
+                        {selectedTypes.includes("Facial") && (
                           <Text
                             style={{ color: textColor }}
                             className={`text-2xl`}
@@ -451,7 +454,7 @@ export default function ({ route }) {
                         style={{ color: textColor }}
                         className={`text-2xl font-semibold`}
                       >
-                        Face
+                        Facial
                       </Text>
                     </View>
                     <TouchableOpacity
@@ -483,6 +486,37 @@ export default function ({ route }) {
                         className={`text-2xl font-semibold`}
                       >
                         Body
+                      </Text>
+                    </View>
+                    <TouchableOpacity
+                      onPress={() => handleCheckBoxToggle("Eyelash")}
+                      className={`flex-row py-2`}
+                    >
+                      <View
+                        style={{
+                          height: 35,
+                          width: 35,
+                          borderColor: textColor,
+                          backgroundColor: backgroundColor,
+                        }}
+                        className={`flex-row justify-center items-center border-2 rounded`}
+                      >
+                        {selectedTypes.includes("Eyelash") && (
+                          <Text
+                            style={{ color: textColor }}
+                            className={`text-2xl`}
+                          >
+                            ✓
+                          </Text>
+                        )}
+                      </View>
+                    </TouchableOpacity>
+                    <View className={`pt-2 pb-6`}>
+                      <Text
+                        style={{ color: textColor }}
+                        className={`text-2xl font-semibold`}
+                      >
+                        Eyelash
                       </Text>
                     </View>
                   </View>
@@ -643,18 +677,18 @@ export default function ({ route }) {
                     ""
                   )}
 
-                  {selectedTypes.includes("Face") ? (
+                  {selectedTypes.includes("Facial") ? (
                     <>
                       <Text
                         style={{ color: textColor }}
                         className={`font-semibold text-2xl`}
                       >
-                        Face Products
+                        Facial Products
                       </Text>
                       <View
                         className={`flex flex-row justify-start gap-x-4 flex-wrap`}
                       >
-                        {faceProducts.map((product) => (
+                        {facialProducts.map((product) => (
                           <TouchableOpacity
                             key={product._id}
                             onPress={() => handleCheckBoxProduct(product)}
@@ -706,6 +740,57 @@ export default function ({ route }) {
                         className={`flex flex-row justify-start gap-x-4 flex-wrap`}
                       >
                         {bodyProducts.map((product) => (
+                          <TouchableOpacity
+                            key={product._id}
+                            onPress={() => handleCheckBoxProduct(product)}
+                            className={`flex-row gap-x-2 py-2`}
+                          >
+                            <View
+                              style={{
+                                height: 30,
+                                width: 30,
+                                borderColor: textColor,
+                                backgroundColor: backgroundColor,
+                              }}
+                              className={`flex-row justify-center items-center border-2 rounded`}
+                            >
+                              {formik.values.product.includes(product._id) && (
+                                <Text
+                                  style={{ color: textColor }}
+                                  className={`text-lg`}
+                                >
+                                  ✓
+                                </Text>
+                              )}
+                            </View>
+                            <View className={`pb-6`}>
+                              <Text
+                                style={{ color: textColor }}
+                                className={`text-lg font-semibold`}
+                              >
+                                {product.product_name}
+                              </Text>
+                            </View>
+                          </TouchableOpacity>
+                        ))}
+                      </View>
+                    </>
+                  ) : (
+                    ""
+                  )}
+
+                  {selectedTypes.includes("Eyelash") ? (
+                    <>
+                      <Text
+                        style={{ color: textColor }}
+                        className={`font-semibold text-2xl`}
+                      >
+                        Eyelash Products
+                      </Text>
+                      <View
+                        className={`flex flex-row justify-start gap-x-4 flex-wrap`}
+                      >
+                        {eyeLashProducts.map((product) => (
                           <TouchableOpacity
                             key={product._id}
                             onPress={() => handleCheckBoxProduct(product)}
