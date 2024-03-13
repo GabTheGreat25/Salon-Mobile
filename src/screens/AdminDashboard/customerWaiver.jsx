@@ -38,11 +38,7 @@ export default function () {
   const [page, setPage] = useState(0);
   const itemsPerPage = 6;
 
-  const filteredUser = users?.filter(
-    (user) =>
-      user.roles.includes("Online Customer") ||
-      user.roles.includes("Walk-in Customer")
-  );
+  const filteredUser = users?.filter((user) => user.roles.includes("Customer"));
 
   const { data: exclusion, isLoading: exclusionLoading } =
     useGetExclusionsQuery();
@@ -81,7 +77,7 @@ export default function () {
         </View>
       ) : (
         <SafeAreaView style={{ backgroundColor }} className={`relative flex-1`}>
-          <View className={`flex-1 items-center justify-center pt-4`}>
+          <View className={`flex-1 items-center justify-center`}>
             {paginatedData?.length ? (
               <ScrollView
                 style={{ backgroundColor }}
@@ -134,7 +130,7 @@ export default function () {
                           width: customWidth,
                         }}
                       >
-                        <Text style={{ color: textColor }}>Contact Number</Text>
+                        <Text style={{ color: textColor }}>Mobile Number</Text>
                       </DataTable.Title>
                       <DataTable.Title
                         style={{
@@ -277,7 +273,7 @@ export default function () {
                                 const exclusionNames = allergies.map(
                                   (allergy) => {
                                     const foundExclusion =
-                                      filteredExclusions.find(
+                                      filteredExclusions?.find(
                                         (exclusion) => exclusion._id === allergy
                                       );
                                     return foundExclusion
