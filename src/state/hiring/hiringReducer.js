@@ -1,20 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { initialState } from "./state";
 
 export const hiringSlice = createSlice({
   name: "hiring",
-  initialState: {
-    hiringData: {
-      date: "",
-      time: "",
-      isHiring: false,
-    },
-  },
+  initialState,
   reducers: {
     submitForm: (state, action) => {
-      const { date, time, isHiring } = action.payload;
+      const { date, time, type, isHiring } = action.payload;
 
       state.hiringData.date = date;
       state.hiringData.time = time;
+      state.hiringData.type = type;
       state.hiringData.isHiring = isHiring;
     },
   },
