@@ -61,7 +61,7 @@ export default function ({ route }) {
               >
                 <Text
                   style={{ color: textColor }}
-                  className={`font-semibold text-center pb-6 text-3xl`}
+                  className={`font-semibold text-center pt-12 pb-6 text-3xl`}
                 >
                   View Leave Details
                 </Text>
@@ -98,6 +98,18 @@ export default function ({ route }) {
                   style={{ color: textColor }}
                   className={`font-semibold text-base`}
                 >
+                  Leave Status
+                </Text>
+                <TextInput
+                  style={{ color: textColor }}
+                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                  autoCapitalize="none"
+                  value={schedule?.status}
+                />
+                <Text
+                  style={{ color: textColor }}
+                  className={`font-semibold text-base`}
+                >
                   Leave Note
                 </Text>
                 <TextInput
@@ -105,25 +117,7 @@ export default function ({ route }) {
                   className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
                   autoCapitalize="none"
                   value={
-                    schedule?.leaveNote
-                      ? schedule?.leaveNote
-                      : "Currently Marked as Absent"
-                  }
-                />
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-base`}
-                >
-                  Leave Status
-                </Text>
-                <TextInput
-                  style={{ color: textColor }}
-                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                  autoCapitalize="none"
-                  value={
-                    schedule?.leaveNoteConfirmed
-                      ? "Note Confirmed"
-                      : "Leave Note not Confirmed"
+                    schedule?.leaveNote || "The Status Is Currently Absent"
                   }
                 />
               </ScrollView>
