@@ -13,10 +13,11 @@ import deliveryAPI from "./routes/delivery";
 import brandAPI from "./routes/brand";
 import timeAPI from "./routes/time";
 import ScheduleAPI from "./routes/schedule";
-import IngrediantAPI from "./routes/ingredient";
 import OptionAPI from "./routes/option";
 import ExclusionAPI from "./routes/exclusion";
 import MonthAPI from "./routes/month";
+import MayaApi from "./routes/maya";
+import HiringApi from "./routes/hiring";
 import { RESOURCE, API, TAGS } from "@constants";
 
 const prepareHeaders = (headers, { getState }) => {
@@ -112,11 +113,6 @@ export const api = createApi({
     deleteConfirmSchedule: ScheduleAPI.deleteConfirmById(builder),
     deleteSchedule: ScheduleAPI.deleteById(builder),
     updateAbsent: ScheduleAPI.updateAbsentById(builder),
-    getIngredients: IngrediantAPI.get(builder),
-    getIngredientById: IngrediantAPI.getById(builder),
-    addIngredient: IngrediantAPI.add(builder),
-    updateIngredient: IngrediantAPI.updateById(builder),
-    deleteIngredient: IngrediantAPI.deleteById(builder),
     getOptions: OptionAPI.get(builder),
     getOptionById: OptionAPI.getById(builder),
     addOption: OptionAPI.add(builder),
@@ -136,6 +132,12 @@ export const api = createApi({
       AppointmentAPI.updateBeauticianAppointment(builder),
     getRescheduleAppointmentById:
       AppointmentAPI.getRescheduleAppointmentById(builder),
+    mayaCheckout: MayaApi.mayaCheckout(builder),
+    getHirings: HiringApi.get(builder),
+    getHiringById: HiringApi.getById(builder),
+    addHiring: HiringApi.add(builder),
+    updateHiring: HiringApi.updateById(builder),
+    deleteHiring: HiringApi.deleteById(builder),
   }),
 });
 
@@ -213,11 +215,6 @@ export const {
   useDeleteConfirmScheduleMutation,
   useDeleteScheduleMutation,
   useUpdateAbsentMutation,
-  useGetIngredientsQuery,
-  useGetIngredientByIdQuery,
-  useAddIngredientMutation,
-  useUpdateIngredientMutation,
-  useDeleteIngredientMutation,
   useGetOptionsQuery,
   useGetOptionByIdQuery,
   useAddOptionMutation,
@@ -235,4 +232,10 @@ export const {
   useDeleteMonthMutation,
   useUpdateBeauticianAppointmentMutation,
   useGetRescheduleAppointmentByIdQuery,
+  useMayaCheckoutMutation,
+  useGetHiringsQuery,
+  useGetHiringByIdQuery,
+  useAddHiringMutation,
+  useUpdateHiringMutation,
+  useDeleteHiringMutation,
 } = api;
