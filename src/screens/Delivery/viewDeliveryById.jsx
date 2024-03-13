@@ -61,25 +61,9 @@ export default function ({ route }) {
                 scrollEventThrottle={1}
                 className={`px-6`}
               >
-                {/* <View className="items-center justify-center py-12">
-                  <Image
-                    key={
-                      data?.details?.image[
-                        Math.floor(Math.random() * data?.details?.image?.length)
-                      ]?.public_id
-                    }
-                    source={{
-                      uri: data?.details?.image[
-                        Math.floor(Math.random() * data?.details?.image?.length)
-                      ]?.url,
-                    }}
-                    className={`rounded-full w-60 h-60`}
-                    resizeMode="cover"
-                  />
-                </View> */}
                 <Text
                   style={{ color: textColor }}
-                  className={`font-semibold text-center pb-6 text-3xl`}
+                  className={`font-semibold text-center pt-12 pb-6 text-3xl`}
                 >
                   View delivery Details
                 </Text>
