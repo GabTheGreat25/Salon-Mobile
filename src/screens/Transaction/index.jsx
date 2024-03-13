@@ -214,6 +214,16 @@ export default function () {
                           width: customWidth,
                         }}
                       >
+                        <Text style={{ color: textColor }}>Customer Type</Text>
+                      </DataTable.Title>
+                      <DataTable.Title
+                        style={{
+                          justifyContent: "center",
+                          alignItems: "center",
+                          padding: 10,
+                          width: customWidth,
+                        }}
+                      >
                         <Text style={{ color: textColor }}>
                           PWD / Senior Citizen ID Image
                         </Text>
@@ -345,28 +355,39 @@ export default function () {
                             numberOfLines={1}
                             ellipsizeMode="tail"
                           >
-                            {item.image?.length > 0 ? (
-                              <Image
-                                key={
-                                  item.image[
-                                    Math.floor(
-                                      Math.random() * item.image?.length
-                                    )
-                                  ]?.public_id
-                                }
-                                source={{
-                                  uri: item.image[
-                                    Math.floor(
-                                      Math.random() * item.image?.length
-                                    )
-                                  ]?.url,
-                                }}
-                                className={`object-center w-20 h-20 rounded-full`}
-                              />
-                            ) : (
-                              <Text>Not Applicable</Text>
-                            )}
+                            {item?.customer_type}
                           </Text>
+                        </DataTable.Cell>
+                        <DataTable.Cell
+                          style={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: 10,
+                          }}
+                        >
+                          {item.image?.length > 0 ? (
+                            <Image
+                              key={
+                                item.image[
+                                  Math.floor(Math.random() * item.image?.length)
+                                ]?.public_id
+                              }
+                              source={{
+                                uri: item.image[
+                                  Math.floor(Math.random() * item.image?.length)
+                                ]?.url,
+                              }}
+                              className={`object-center w-20 h-20 rounded-full`}
+                            />
+                          ) : (
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              Not Applicable
+                            </Text>
+                          )}
                         </DataTable.Cell>
                         <DataTable.Cell
                           style={{
@@ -376,12 +397,12 @@ export default function () {
                             padding: 10,
                           }}
                         >
-                           <TouchableOpacity
-                              onPress={() => handleViewTransaction(item?._id)}
-                            >
-                              <Feather name="eye" size={24} color="blue" />
-                            </TouchableOpacity>
-                            
+                          <TouchableOpacity
+                            onPress={() => handleViewTransaction(item?._id)}
+                          >
+                            <Feather name="eye" size={24} color="green" />
+                          </TouchableOpacity>
+                          <View style={{ width: 10 }} />
                           <TouchableOpacity
                             onPress={() => {
                               if (item.status !== "completed") {
@@ -401,7 +422,6 @@ export default function () {
                               }
                             />
                           </TouchableOpacity>
-
                           <View style={{ width: 10 }} />
                           <TouchableOpacity
                             onPress={() => handleDeleteTransaction(item?._id)}
