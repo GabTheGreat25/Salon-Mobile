@@ -160,9 +160,9 @@ export default function () {
     ]);
   };
 
-  const handleViewLeave = (id)=>{
-    navigation.navigate("ViewBeauticianLeave", { id })
-  }
+  const handleViewLeave = (id) => {
+    navigation.navigate("ViewBeauticianLeave", { id });
+  };
 
   return (
     <>
@@ -178,7 +178,7 @@ export default function () {
             style={{ backgroundColor }}
             className={`relative flex-1`}
           >
-            <View className={`flex-1 items-center justify-center pt-4`}>
+            <View className={`flex-1 items-center justify-center`}>
               {paginatedData?.length ? (
                 <ScrollView
                   style={{ backgroundColor }}
@@ -212,7 +212,7 @@ export default function () {
                           }}
                         >
                           <Text style={{ color: textColor }}>
-                            Beautician Name
+                            Employee Name
                           </Text>
                         </DataTable.Title>
                         <DataTable.Title
@@ -327,16 +327,16 @@ export default function () {
                               padding: 10,
                             }}
                           >
-                             <TouchableOpacity
+                            <TouchableOpacity
                               onPress={() => handleViewLeave(item?._id)}
                             >
-                              <Feather name="eye" size={24} color="blue" />
+                              <Feather name="eye" size={24} color="green" />
                             </TouchableOpacity>
-
+                            <View style={{ width: 10 }} />
                             <TouchableOpacity
                               onPress={() => handleConfirmSchedule(item?._id)}
                             >
-                              <Feather name="check" size={24} color="green" />
+                              <Feather name="check" size={24} color="blue" />
                             </TouchableOpacity>
                             <View style={{ width: 10 }} />
                             <TouchableOpacity
