@@ -125,7 +125,7 @@ export default function () {
     return name[0] + "*".repeat(name?.length - 2) + name[name?.length - 1];
   };
 
-  const handleViewFeedback = (id)=>{
+  const handleViewFeedback = (id) => {
     navigation.navigate("ViewFeedback", { id });
   };
 
@@ -217,119 +217,117 @@ export default function () {
                       </DataTable.Title>
                     </DataTable.Header>
                     {paginatedData?.map((item) => (
-            
-                        <DataTable.Row
-                          key={item?._id}
+                      <DataTable.Row
+                        key={item?._id}
+                        style={{
+                          backgroundColor,
+                          borderBottomWidth: 1,
+                          borderBottomColor: borderColor,
+                        }}
+                      >
+                        <DataTable.Cell
                           style={{
-                            backgroundColor,
-                            borderBottomWidth: 1,
-                            borderBottomColor: borderColor,
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: 10,
+                            width: customWidth,
                           }}
                         >
-                          <DataTable.Cell
-                            style={{
-                              justifyContent: "center",
-                              alignItems: "center",
-                              padding: 10,
-                              width: customWidth,
-                            }}
+                          <Text
+                            style={{ color: textColor }}
+                            numberOfLines={1}
+                            ellipsizeMode="tail"
                           >
-                            <Text
-                              style={{ color: textColor }}
-                              numberOfLines={1}
-                              ellipsizeMode="tail"
-                            >
-                              {item?._id}
-                            </Text>
-                          </DataTable.Cell>
-                          <DataTable.Cell
-                            style={{
-                              justifyContent: "center",
-                              alignItems: "center",
-                              padding: 10,
-                              width: customWidth,
-                            }}
+                            {item?._id}
+                          </Text>
+                        </DataTable.Cell>
+                        <DataTable.Cell
+                          style={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: 10,
+                            width: customWidth,
+                          }}
+                        >
+                          <Text
+                            style={{ color: textColor }}
+                            numberOfLines={1}
+                            ellipsizeMode="tail"
                           >
-                            <Text
-                              style={{ color: textColor }}
-                              numberOfLines={1}
-                              ellipsizeMode="tail"
-                            >
-                              {item?.isAnonymous
-                                ? anonymizeName(item?.name)
-                                : item?.name}
-                            </Text>
-                          </DataTable.Cell>
-                          <DataTable.Cell
-                            style={{
-                              justifyContent: "center",
-                              alignItems: "center",
-                              padding: 10,
-                              width: customWidth,
-                            }}
+                            {item?.isAnonymous
+                              ? anonymizeName(item?.name)
+                              : item?.name}
+                          </Text>
+                        </DataTable.Cell>
+                        <DataTable.Cell
+                          style={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: 10,
+                            width: customWidth,
+                          }}
+                        >
+                          <Text
+                            style={{ color: textColor }}
+                            numberOfLines={1}
+                            ellipsizeMode="tail"
                           >
-                            <Text
-                              style={{ color: textColor }}
-                              numberOfLines={1}
-                              ellipsizeMode="tail"
-                            >
-                              {item?.contact_number}
-                            </Text>
-                          </DataTable.Cell>
-                          <DataTable.Cell
-                            style={{
-                              justifyContent: "center",
-                              alignItems: "center",
-                              padding: 10,
-                              width: customWidth,
-                            }}
+                            {item?.contact_number}
+                          </Text>
+                        </DataTable.Cell>
+                        <DataTable.Cell
+                          style={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: 10,
+                            width: customWidth,
+                          }}
+                        >
+                          <Text
+                            style={{ color: textColor }}
+                            numberOfLines={1}
+                            ellipsizeMode="tail"
                           >
-                            <Text
-                              style={{ color: textColor }}
-                              numberOfLines={1}
-                              ellipsizeMode="tail"
-                            >
-                              {item?.email}
-                            </Text>
-                          </DataTable.Cell>
-                          <DataTable.Cell
-                            style={{
-                              justifyContent: "center",
-                              alignItems: "center",
-                              padding: 10,
-                              width: customWidth,
-                            }}
+                            {item?.email}
+                          </Text>
+                        </DataTable.Cell>
+                        <DataTable.Cell
+                          style={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: 10,
+                            width: customWidth,
+                          }}
+                        >
+                          <Text
+                            style={{ color: textColor }}
+                            numberOfLines={1}
+                            ellipsizeMode="tail"
                           >
-                            <Text
-                              style={{ color: textColor }}
-                              numberOfLines={1}
-                              ellipsizeMode="tail"
-                            >
-                              {item?.description}
-                            </Text>
-                          </DataTable.Cell>
-                          <DataTable.Cell
-                            style={{
-                              width: customWidth,
-                              justifyContent: "space-around",
-                              alignItems: "center",
-                              padding: 10,
-                            }}
+                            {item?.description}
+                          </Text>
+                        </DataTable.Cell>
+                        <DataTable.Cell
+                          style={{
+                            width: customWidth,
+                            justifyContent: "space-around",
+                            alignItems: "center",
+                            padding: 10,
+                          }}
+                        >
+                          <TouchableOpacity
+                            onPress={() => handleViewFeedback(item?._id)}
                           >
-                              <TouchableOpacity
-                              onPress={() => handleViewFeedback(item?._id)}
-                            >
-                              <Feather name="eye" size={24} color="blue" />
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
-                              onPress={() => handleDeleteFeedback(item?._id)}
-                            >
-                              <Feather name="delete" size={24} color="red" />
-                            </TouchableOpacity>
-                          </DataTable.Cell>
-                        </DataTable.Row>
-                     
+                            <Feather name="eye" size={24} color="green" />
+                          </TouchableOpacity>
+                          <View style={{ width: 10 }} />
+                          <TouchableOpacity
+                            onPress={() => handleDeleteFeedback(item?._id)}
+                          >
+                            <Feather name="delete" size={24} color="red" />
+                          </TouchableOpacity>
+                        </DataTable.Cell>
+                      </DataTable.Row>
                     ))}
                   </DataTable>
                 </ScrollView>
