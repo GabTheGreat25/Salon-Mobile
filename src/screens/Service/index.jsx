@@ -127,7 +127,7 @@ export default function () {
     }
   };
 
-  const handleViewService = (id)=>{
+  const handleViewService = (id) => {
     navigation.navigate("ViewService", { id });
   };
 
@@ -473,7 +473,7 @@ export default function () {
                           <TouchableOpacity
                             onPress={() => handleViewService(item?._id)}
                           >
-                            <Feather name="eye" size={24} color="blue" />
+                            <Feather name="eye" size={24} color="green" />
                           </TouchableOpacity>
                           <View style={{ width: 10 }} />
                           <TouchableOpacity
@@ -481,7 +481,7 @@ export default function () {
                           >
                             <Feather name="edit" size={24} color="blue" />
                           </TouchableOpacity>
-
+                          <View style={{ width: 10 }} />
                           <TouchableOpacity
                             onPress={() => handleDeleteService(item?._id)}
                           >
