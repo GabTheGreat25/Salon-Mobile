@@ -32,7 +32,6 @@ export default function ({ route }) {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
 
-
   const { data: products, isLoading: productLoading } = useGetProductsQuery();
   const {
     data,
@@ -46,7 +45,7 @@ export default function ({ route }) {
     };
     fetchData();
   }, [isFocused]);
-  
+
   const [updateService, { isLoading }] = useUpdateServiceMutation();
 
   const { backgroundColor, textColor, colorScheme } = changeColor();
@@ -236,8 +235,8 @@ export default function ({ route }) {
   const feetProducts = products?.details?.filter((product) =>
     product.type.includes("Feet")
   );
-  const faceProducts = products?.details?.filter((product) =>
-    product.type.includes("Face")
+  const facialProducts = products?.details?.filter((product) =>
+    product.type.includes("Facial")
   );
   const bodyProducts = products?.details?.filter((product) =>
     product.type.includes("Body")
@@ -298,7 +297,7 @@ export default function ({ route }) {
                   style={{ color: textColor }}
                   className={`font-semibold text-center my-[9px] text-3xl`}
                 >
-                  Update Service Details
+                  Edit Service Details
                 </Text>
                 <Text
                   style={{ color: textColor }}
@@ -320,7 +319,12 @@ export default function ({ route }) {
                     {formik.errors.service_name}
                   </Text>
                 )}
-
+                <Text
+                  style={{ color: textColor }}
+                  className={`font-semibold text-base`}
+                >
+                  Service Duration
+                </Text>
                 <View
                   className={`border-[1.5px]  font-normal rounded-full my-3 ${borderColor}`}
                 >
@@ -354,7 +358,12 @@ export default function ({ route }) {
                 {formik.touched.duration && formik.errors.duration && (
                   <Text style={{ color: "red" }}>{formik.errors.duration}</Text>
                 )}
-
+                <Text
+                  style={{ color: textColor }}
+                  className={`font-semibold text-base`}
+                >
+                  Service Warranty
+                </Text>
                 <View
                   className={`border-[1.5px]  font-normal rounded-full my-3 ${borderColor}`}
                 >
@@ -379,7 +388,6 @@ export default function ({ route }) {
                 {formik.touched.warranty && formik.errors.warranty && (
                   <Text style={{ color: "red" }}>{formik.errors.warranty}</Text>
                 )}
-
                 <Text
                   style={{ color: textColor }}
                   className={`font-semibold text-2xl`}
@@ -483,7 +491,7 @@ export default function ({ route }) {
                     </Text>
                   </View>
                   <TouchableOpacity
-                    onPress={() => handleCheckBoxToggle("Face")}
+                    onPress={() => handleCheckBoxToggle("Facial")}
                     className={`flex-row py-2`}
                   >
                     <View
@@ -495,7 +503,7 @@ export default function ({ route }) {
                       }}
                       className={`flex-row justify-center items-center border-2 rounded`}
                     >
-                      {selectedTypes.includes("Face") && (
+                      {selectedTypes.includes("Facial") && (
                         <Text
                           style={{ color: textColor }}
                           className={`text-2xl`}
@@ -510,7 +518,7 @@ export default function ({ route }) {
                       style={{ color: textColor }}
                       className={`text-2xl font-semibold`}
                     >
-                      Face
+                      Facial
                     </Text>
                   </View>
                   <TouchableOpacity
@@ -579,7 +587,12 @@ export default function ({ route }) {
                 {formik.touched.type && formik.errors.type && (
                   <Text style={{ color: "red" }}>{formik.errors.type}</Text>
                 )}
-
+                <Text
+                  style={{ color: textColor }}
+                  className={`font-semibold text-base`}
+                >
+                  Service Occasion
+                </Text>
                 <View
                   className={`border-[1.5px]  font-normal rounded-full my-3 ${borderColor}`}
                 >
@@ -608,7 +621,12 @@ export default function ({ route }) {
                     {formik.errors.occassion}
                   </Text>
                 )}
-
+                <Text
+                  style={{ color: textColor }}
+                  className={`font-semibold text-base`}
+                >
+                  Service Price
+                </Text>
                 <TextInput
                   style={{ color: textColor }}
                   className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
@@ -778,18 +796,18 @@ export default function ({ route }) {
                   ""
                 )}
 
-                {selectedTypes.includes("Face") ? (
+                {selectedTypes.includes("Facial") ? (
                   <>
                     <Text
                       style={{ color: textColor }}
                       className={`font-semibold text-2xl`}
                     >
-                      Face Products
+                      Facial Products
                     </Text>
                     <View
                       className={`flex flex-row justify-start gap-x-4 flex-wrap`}
                     >
-                      {faceProducts.map((product) => (
+                      {facialProducts.map((product) => (
                         <TouchableOpacity
                           key={product._id}
                           onPress={() => handleCheckBoxProduct(product)}
@@ -930,7 +948,12 @@ export default function ({ route }) {
                 ) : (
                   ""
                 )}
-
+                <Text
+                  style={{ color: textColor }}
+                  className={`font-semibold text-base`}
+                >
+                  Service Description
+                </Text>
                 <TextInput
                   style={{
                     color: textColor,
