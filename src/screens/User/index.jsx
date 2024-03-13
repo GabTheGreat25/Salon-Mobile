@@ -47,6 +47,10 @@ export default function () {
   const [page, setPage] = useState(0);
   const itemsPerPage = 5;
 
+  const handleViewUser = (id) => {
+    navigation.navigate("ViewUser", { id });
+  };
+
   const handleDeleteUser = (id) => {
     Alert.alert("Delete User", "Are you sure you want to delete this user?", [
       {
@@ -351,6 +355,13 @@ export default function () {
                             padding: 10,
                           }}
                         >
+                          <TouchableOpacity
+                            onPress={() => handleViewUser(item?._id)}
+                          >
+                            <Feather name="eye" size={24} color="green" />
+                          </TouchableOpacity>
+
+                          <View style={{ width: 10 }} />
                           <TouchableOpacity
                             onPress={() => handleDeleteUser(item?._id)}
                           >
