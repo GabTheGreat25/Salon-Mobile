@@ -129,6 +129,10 @@ export default function () {
     }
   };
 
+  const handleViewExclusion = (id) => {
+    navigation.navigate("ViewExclusion", { id });
+  };
+
   return (
     <>
       {isLoading || isDeleting ? (
@@ -279,6 +283,12 @@ export default function () {
                             padding: 10,
                           }}
                         >
+                          <TouchableOpacity
+                            onPress={() => handleViewExclusion(item?._id)}
+                          >
+                            <Feather name="eye" size={24} color="green" />
+                          </TouchableOpacity>
+                          <View style={{ width: 10 }} />
                           <TouchableOpacity
                             onPress={() => handleEditExclusion(item?._id)}
                           >
