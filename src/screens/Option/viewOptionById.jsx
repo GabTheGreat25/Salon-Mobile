@@ -61,7 +61,7 @@ export default function ({ route }) {
                 scrollEventThrottle={1}
                 className={`px-6`}
               >
-                <View className="items-center justify-center py-12">
+                <View className="items-center justify-center pt-12 pb-6">
                   <Image
                     key={
                       data?.details?.image[
