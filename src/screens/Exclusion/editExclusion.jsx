@@ -43,8 +43,6 @@ export default function ({ route }) {
     fetchData();
   }, [isFocused]);
 
-  console.log(ingredients);
-
   const [updateExclusion, { isLoading }] = useUpdateExclusionMutation();
 
   const { backgroundColor, textColor, colorScheme } = changeColor();
@@ -63,7 +61,7 @@ export default function ({ route }) {
       updateExclusion({ id: data?.details?._id, payload: values })
         .unwrap()
         .then((response) => {
-          console.log(response);
+          s;
           refetch();
           Toast.show({
             type: "success",
@@ -76,7 +74,6 @@ export default function ({ route }) {
           navigation.navigate("Exclusion");
         })
         .catch((error) => {
-          console.log(error);
           Toast.show({
             type: "error",
             position: "top",
@@ -90,7 +87,6 @@ export default function ({ route }) {
   });
 
   const [selectedTypes, setSelectedTypes] = useState([]);
-  console.log(selectedTypes);
 
   const handleCheckBoxToggle = (value) => {
     setSelectedTypes((prevSelectedTypes) => {
@@ -131,9 +127,9 @@ export default function ({ route }) {
                 <View className="pt-10 pb-2">
                   <Text
                     style={{ color: textColor }}
-                    className={`font-semibold text-center pb-6 text-3xl`}
+                    className={`font-semibold text-center pt-12 pb-6 text-3xl`}
                   >
-                    Update Exclusion Details
+                    Edit Exclusion Details
                   </Text>
                   <TextInput
                     style={{ color: textColor }}
@@ -314,6 +310,37 @@ export default function ({ route }) {
                         className={`text-2xl font-semibold`}
                       >
                         Body
+                      </Text>
+                    </View>
+                    <TouchableOpacity
+                      onPress={() => handleCheckBoxToggle("Eyelash")}
+                      className={`flex-row py-2`}
+                    >
+                      <View
+                        style={{
+                          height: 35,
+                          width: 35,
+                          borderColor: textColor,
+                          backgroundColor: backgroundColor,
+                        }}
+                        className={`flex-row justify-center items-center border-2 rounded`}
+                      >
+                        {selectedTypes.includes("Eyelash") && (
+                          <Text
+                            style={{ color: textColor }}
+                            className={`text-2xl`}
+                          >
+                            ✓
+                          </Text>
+                        )}
+                      </View>
+                    </TouchableOpacity>
+                    <View className={`pt-2 pb-6`}>
+                      <Text
+                        style={{ color: textColor }}
+                        className={`text-2xl font-semibold`}
+                      >
+                        Eyelash
                       </Text>
                     </View>
                   </View>
