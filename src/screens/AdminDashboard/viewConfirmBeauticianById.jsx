@@ -86,13 +86,13 @@ export default function ({ route }) {
                   style={{ color: textColor }}
                   className={`font-semibold text-center pb-6 text-3xl`}
                 >
-                  Applying Beautician's Information
+                  Applying Employee's Information
                 </Text>
                 <Text
                   style={{ color: textColor }}
                   className={`font-semibold text-base`}
                 >
-                  Beautician's Name
+                  Employee's Name
                 </Text>
                 <TextInput
                   style={{ color: textColor }}
@@ -104,7 +104,7 @@ export default function ({ route }) {
                   style={{ color: textColor }}
                   className={`font-semibold text-base`}
                 >
-                  Beautician's Registered Email
+                  Employee's Registered Email
                 </Text>
                 <TextInput
                   style={{ color: textColor }}
@@ -116,7 +116,7 @@ export default function ({ route }) {
                   style={{ color: textColor }}
                   className={`font-semibold text-base`}
                 >
-                  Phone Number
+                  Mobile Number
                 </Text>
                 <TextInput
                   style={{ color: textColor }}
@@ -149,18 +149,29 @@ export default function ({ route }) {
                   autoCapitalize="none"
                   value={timePart}
                 />
-
                 <Text
                   style={{ color: textColor }}
                   className={`font-semibold text-base`}
                 >
-                  Beautician's Category Service
+                  Employee's Role
                 </Text>
                 <TextInput
                   style={{ color: textColor }}
                   className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
                   autoCapitalize="none"
-                  value={user?.requirement?.type}
+                  value={user?.roles?.join(", ")}
+                />
+                <Text
+                  style={{ color: textColor }}
+                  className={`font-semibold text-base`}
+                >
+                  Employee's Category Service
+                </Text>
+                <TextInput
+                  style={{ color: textColor }}
+                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                  autoCapitalize="none"
+                  value={user?.requirement?.job_type}
                 />
               </ScrollView>
             </KeyboardAvoidingView>
