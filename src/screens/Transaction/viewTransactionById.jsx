@@ -59,7 +59,7 @@ export default function ({ route }) {
               >
                 <Text
                   style={{ color: textColor }}
-                  className={`font-semibold text-center pb-6 text-3xl`}
+                  className={`font-semibold text-center pt-12 pb-6 text-3xl`}
                 >
                   View Transaction Details
                 </Text>
@@ -67,13 +67,13 @@ export default function ({ route }) {
                   style={{ color: textColor }}
                   className={`font-semibold text-base`}
                 >
-                  Appointment ID
+                  Transaction ID
                 </Text>
                 <TextInput
                   style={{ color: textColor }}
                   className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
                   autoCapitalize="none"
-                  value={transaction?.appointment?._id}
+                  value={transaction?._id}
                 />
 
                 <Text
