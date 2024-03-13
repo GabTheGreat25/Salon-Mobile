@@ -67,9 +67,9 @@ export default function ({ route }) {
               >
                 <Text
                   style={{ color: textColor }}
-                  className={`font-semibold text-center pb-6 text-3xl`}
+                  className={`font-semibold text-center pt-12 pb-6 text-3xl`}
                 >
-                Reschedule Appointment Details
+                  Reschedule Appointment Details
                 </Text>
                 <Text
                   style={{ color: textColor }}
@@ -95,7 +95,26 @@ export default function ({ route }) {
                   autoCapitalize="none"
                   value={appointmentDate}
                 />
-                  <Text
+                <Text
+                  style={{ color: textColor }}
+                  className={`font-semibold text-base`}
+                >
+                  Appointment Time:
+                </Text>
+                <TextInput
+                  style={{ color: textColor }}
+                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                  autoCapitalize="none"
+                  value={
+                    Array.isArray(appointment?.time) &&
+                    appointment.time.length === 1
+                      ? appointment?.time[0]
+                      : `${appointment?.time?.[0]} to ${
+                          appointment?.time?.[appointment?.time?.length - 1]
+                        }`
+                  }
+                />
+                <Text
                   style={{ color: textColor }}
                   className={`font-semibold text-base`}
                 >
@@ -111,11 +130,11 @@ export default function ({ route }) {
                   multiline={true}
                   value={appointment?.rebookReason}
                 />
-                   <Text
+                <Text
                   style={{ color: textColor }}
                   className={`font-semibold text-base`}
                 >
-                  Customer's Message 
+                  Customer's Message
                 </Text>
                 <TextInput
                   style={{
