@@ -360,8 +360,8 @@ export default function () {
                             {Array.isArray(item?.option)
                               ? item?.option
                                   ?.map((item) => item?.option_name)
-                                  .join(", ")
-                              : item?.option?.option_name}
+                                  .join(", ") || "None"
+                              : item?.option?.option_name || "None"}
                           </Text>
                         </DataTable.Cell>
                         <DataTable.Cell
@@ -418,10 +418,10 @@ export default function () {
                           </TouchableOpacity>
                           <View style={{ width: 10 }} /> */}
 
-                            <View style={{ width: 10 }} />
-
-                            <Feather name="eye" size={24} color="blue" />
+                            <Feather name="eye" size={24} color="green" />
                           </TouchableOpacity>
+
+                          <View style={{ width: 10 }} />
 
                           <TouchableOpacity
                             onPress={() => handleDeleteAppointment(item?._id)}
