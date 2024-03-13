@@ -215,8 +215,9 @@ export default function () {
                           <TouchableOpacity
                             onPress={() => handleViewMonth(item?._id)}
                           >
-                            <Feather name="eye" size={24} color="blue" />
+                            <Feather name="eye" size={24} color="green" />
                           </TouchableOpacity>
+                          <View style={{ width: 10 }} />
                           <TouchableOpacity
                             onPress={() => handleEditMonth(item?._id)}
                           >
