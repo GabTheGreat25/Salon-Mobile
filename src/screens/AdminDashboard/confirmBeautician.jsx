@@ -50,7 +50,8 @@ export default function () {
 
   const filteredBeauticians = data?.details?.filter(
     (user) =>
-      user?.roles.includes("Beautician") &&
+      (user?.roles.includes("Beautician") ||
+        user?.roles.includes("Receptionist")) &&
       user?.active === false &&
       user?._id !== auth?.user?._id
   );
@@ -90,7 +91,7 @@ export default function () {
             Toast.show({
               type: "success",
               position: "top",
-              text1: "Beautician Successfully Confirmed",
+              text1: "Employee Successfully Confirmed",
               text2: `${response?.data?.message}`,
               visibilityTime: 3000,
               autoHide: true,
@@ -99,7 +100,7 @@ export default function () {
             Toast.show({
               type: "error",
               position: "top",
-              text1: "Error Confirming Beautician",
+              text1: "Error Confirming Employee",
               text2: `${error?.data?.error?.message}`,
               visibilityTime: 3000,
               autoHide: true,
@@ -125,7 +126,7 @@ export default function () {
               Toast.show({
                 type: "success",
                 position: "top",
-                text1: "Beautician Successfully Deleted",
+                text1: "Employee Successfully Deleted",
                 text2: `${response?.message}`,
                 visibilityTime: 3000,
                 autoHide: true,
@@ -135,7 +136,7 @@ export default function () {
               Toast.show({
                 type: "error",
                 position: "top",
-                text1: "Error Deleting Beautician",
+                text1: "Error Deleting Employee",
                 text2: `${error?.data?.error?.message}`,
                 visibilityTime: 3000,
                 autoHide: true,
@@ -164,7 +165,7 @@ export default function () {
             style={{ backgroundColor }}
             className={`relative flex-1`}
           >
-            <View className={`flex-1 items-center justify-center pt-4`}>
+            <View className={`flex-1 items-center justify-center`}>
               {paginatedData?.length ? (
                 <ScrollView
                   style={{ backgroundColor }}
@@ -218,7 +219,7 @@ export default function () {
                           }}
                         >
                           <Text style={{ color: textColor }}>
-                            Contact Number
+                            Mobile Number
                           </Text>
                         </DataTable.Title>
                         <DataTable.Title
@@ -229,17 +230,7 @@ export default function () {
                             width: customWidth,
                           }}
                         >
-                          <Text style={{ color: textColor }}>Date</Text>
-                        </DataTable.Title>
-                        <DataTable.Title
-                          style={{
-                            justifyContent: "center",
-                            alignItems: "center",
-                            padding: 10,
-                            width: customWidth,
-                          }}
-                        >
-                          <Text style={{ color: textColor }}>Time</Text>
+                          <Text style={{ color: textColor }}>Roles</Text>
                         </DataTable.Title>
                         <DataTable.Title
                           style={{
@@ -358,26 +349,7 @@ export default function () {
                               numberOfLines={1}
                               ellipsizeMode="tail"
                             >
-                              {format(
-                                new Date(item?.requirement?.date),
-                                "yyyy-MM-dd"
-                              )}
-                            </Text>
-                          </DataTable.Cell>
-                          <DataTable.Cell
-                            style={{
-                              justifyContent: "center",
-                              alignItems: "center",
-                              padding: 10,
-                              width: customWidth,
-                            }}
-                          >
-                            <Text
-                              style={{ color: textColor }}
-                              numberOfLines={1}
-                              ellipsizeMode="tail"
-                            >
-                              {item?.requirement?.time}
+                              {item?.roles?.join(", ")}
                             </Text>
                           </DataTable.Cell>
                           <DataTable.Cell
@@ -403,14 +375,25 @@ export default function () {
                               padding: 10,
                             }}
                           >
-                            {item?.image?.map((image) => (
+                            {item.image?.length > 0 && (
                               <Image
-                                key={image?.public_id}
-                                source={{ uri: image?.url }}
-                                style={{ width: 100, height: 100 }}
-                                resizeMode="cover"
+                                key={
+                                  item.image[
+                                    Math.floor(
+                                      Math.random() * item.image?.length
+                                    )
+                                  ]?.public_id
+                                }
+                                source={{
+                                  uri: item.image[
+                                    Math.floor(
+                                      Math.random() * item.image?.length
+                                    )
+                                  ]?.url,
+                                }}
+                                className={`object-center w-20 h-20 rounded-full`}
                               />
-                            ))}
+                            )}
                           </DataTable.Cell>
                           <DataTable.Cell
                             style={{
@@ -424,12 +407,13 @@ export default function () {
                             <TouchableOpacity
                               onPress={() => handleViewBeautician(item?._id)}
                             >
-                              <Feather name="eye" size={24} color="blue" />
+                              <Feather name="eye" size={24} color="green" />
                             </TouchableOpacity>
+                            <View style={{ width: 10 }} />
                             <TouchableOpacity
                               onPress={() => handleConfirmUser(item?._id)}
                             >
-                              <Feather name="check" size={24} color="green" />
+                              <Feather name="check" size={24} color="blue" />
                             </TouchableOpacity>
 
                             <View style={{ width: 10 }} />
