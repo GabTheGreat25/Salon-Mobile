@@ -228,9 +228,9 @@ export default function ({ route }) {
                 <View className="pt-10 pb-2">
                   <Text
                     style={{ color: textColor }}
-                    className={`font-semibold text-center pb-6 text-3xl`}
+                    className={`font-semibold text-center pt-12 pb-6 text-3xl`}
                   >
-                    Update Option Details
+                    Edit Add Ons Details
                   </Text>
 
                   <TextInput
