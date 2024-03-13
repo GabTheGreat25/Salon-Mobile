@@ -224,7 +224,7 @@ export default function () {
                     </Text>
                   </View>
                   <TouchableOpacity
-                    onPress={() => handleCheckBoxToggle("Face")}
+                    onPress={() => handleCheckBoxToggle("Facial")}
                     className={`flex-row py-2`}
                   >
                     <View
@@ -251,7 +251,7 @@ export default function () {
                       style={{ color: textColor }}
                       className={`text-2xl font-semibold`}
                     >
-                      Face
+                      Facial
                     </Text>
                   </View>
                   <TouchableOpacity
@@ -283,6 +283,37 @@ export default function () {
                       className={`text-2xl font-semibold`}
                     >
                       Body
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => handleCheckBoxToggle("Eyelash")}
+                    className={`flex-row py-2`}
+                  >
+                    <View
+                      style={{
+                        height: 35,
+                        width: 35,
+                        borderColor: textColor,
+                        backgroundColor: backgroundColor,
+                      }}
+                      className={`flex-row justify-center items-center border-2 rounded`}
+                    >
+                      {selectedTypes.includes("Eyelash") && (
+                        <Text
+                          style={{ color: textColor }}
+                          className={`text-2xl`}
+                        >
+                          ✓
+                        </Text>
+                      )}
+                    </View>
+                  </TouchableOpacity>
+                  <View className={`pt-2 pb-6`}>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`text-2xl font-semibold`}
+                    >
+                      Eyelash
                     </Text>
                   </View>
                 </View>
