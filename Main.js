@@ -79,6 +79,8 @@ import {
   ViewBeauticianLeave,
   ViewRescheduleAppointment,
   BeauticianAppointment,
+  ViewUser,
+  ViewExclusion,
 } from "@screens";
 import { TermsConditions, PrivacyPolicy, Feedback } from "@settings";
 import { LoadingScreen } from "@components";
@@ -172,7 +174,6 @@ export default function () {
                   name="BeauticianAppointment"
                   component={BeauticianAppointment}
                 />
-                
               </Stack.Navigator>
             ) : userRoles.includes("Admin") ? (
               <Stack.Navigator
@@ -238,19 +239,39 @@ export default function () {
                 <Stack.Screen name="ViewProduct" component={ViewProduct} />
                 <Stack.Screen name="ViewDelivery" component={ViewDelivery} />
                 <Stack.Screen name="ViewService" component={ViewService} />
-                <Stack.Screen name="ViewAppointment" component={ViewAppointment} />
-                <Stack.Screen name="ViewTransaction" component={ViewTransaction} />
-                <Stack.Screen name="ViewBrand" component={ViewBrand} /> 
-                <Stack.Screen name="ViewTime" component={ViewTime} /> 
-                <Stack.Screen name="ViewStatus" component={ViewStatus} /> 
-                <Stack.Screen name="ViewOption" component={ViewOption} /> 
-                <Stack.Screen name="ViewFeedback" component={ViewFeedback} /> 
-                <Stack.Screen name="ViewComment" component={ViewComment} /> 
-                <Stack.Screen name="ViewMonth" component={ViewMonth} /> 
-                <Stack.Screen name="ViewScheduleToday" component={ViewScheduleToday} /> 
-                <Stack.Screen name="ViewApplyingBeautician" component={ViewApplyingBeautician} /> 
-                <Stack.Screen name="ViewBeauticianLeave" component={ViewBeauticianLeave} /> 
-                <Stack.Screen name="ViewRescheduleAppointment" component={ViewRescheduleAppointment} /> 
+                <Stack.Screen
+                  name="ViewAppointment"
+                  component={ViewAppointment}
+                />
+                <Stack.Screen
+                  name="ViewTransaction"
+                  component={ViewTransaction}
+                />
+                <Stack.Screen name="ViewBrand" component={ViewBrand} />
+                <Stack.Screen name="ViewTime" component={ViewTime} />
+                <Stack.Screen name="ViewStatus" component={ViewStatus} />
+                <Stack.Screen name="ViewOption" component={ViewOption} />
+                <Stack.Screen name="ViewFeedback" component={ViewFeedback} />
+                <Stack.Screen name="ViewComment" component={ViewComment} />
+                <Stack.Screen name="ViewMonth" component={ViewMonth} />
+                <Stack.Screen name="ViewUser" component={ViewUser} />
+                <Stack.Screen name="ViewExclusion" component={ViewExclusion} />
+                <Stack.Screen
+                  name="ViewScheduleToday"
+                  component={ViewScheduleToday}
+                />
+                <Stack.Screen
+                  name="ViewApplyingBeautician"
+                  component={ViewApplyingBeautician}
+                />
+                <Stack.Screen
+                  name="ViewBeauticianLeave"
+                  component={ViewBeauticianLeave}
+                />
+                <Stack.Screen
+                  name="ViewRescheduleAppointment"
+                  component={ViewRescheduleAppointment}
+                />
               </Stack.Navigator>
             ) : null
           ) : (
