@@ -147,8 +147,8 @@ export default function () {
     );
   };
 
-  const handleViewReschedule = (id)=>{
-    navigation.navigate("ViewRescheduleAppointment", {id});
+  const handleViewReschedule = (id) => {
+    navigation.navigate("ViewRescheduleAppointment", { id });
   };
 
   return (
@@ -165,7 +165,7 @@ export default function () {
             style={{ backgroundColor }}
             className={`relative flex-1`}
           >
-            <View className={`flex-1 items-center justify-center pt-4`}>
+            <View className={`flex-1 items-center justify-center`}>
               {paginatedData?.length ? (
                 <ScrollView
                   style={{ backgroundColor }}
@@ -271,22 +271,6 @@ export default function () {
                               numberOfLines={1}
                               ellipsizeMode="tail"
                             >
-                              {item?.name}
-                            </Text>
-                          </DataTable.Cell>
-                          <DataTable.Cell
-                            style={{
-                              justifyContent: "center",
-                              alignItems: "center",
-                              padding: 10,
-                              width: customWidth,
-                            }}
-                          >
-                            <Text
-                              style={{ color: textColor }}
-                              numberOfLines={1}
-                              ellipsizeMode="tail"
-                            >
                               {item?._id}
                             </Text>
                           </DataTable.Cell>
@@ -374,19 +358,18 @@ export default function () {
                               padding: 10,
                             }}
                           >
-                             <TouchableOpacity
-                              onPress={() =>
-                                handleViewReschedule(item?._id)
-                              }
+                            <TouchableOpacity
+                              onPress={() => handleViewReschedule(item?._id)}
                             >
-                              <Feather name="eye" size={24} color="blue" />
+                              <Feather name="eye" size={24} color="green" />
                             </TouchableOpacity>
+                            <View style={{ width: 10 }} />
                             <TouchableOpacity
                               onPress={() =>
                                 handleConfirmAppointment(item?._id)
                               }
                             >
-                              <Feather name="check" size={24} color="green" />
+                              <Feather name="check" size={24} color="blue" />
                             </TouchableOpacity>
                             <View style={{ width: 10 }} />
                             <TouchableOpacity
