@@ -24,5 +24,6 @@ export default {
     TAGS.OPTIONS,
     TAGS.EXCLUSIONS,
     TAGS.MONTHS,
+    TAGS.HIRINGS,
   ],
 };
