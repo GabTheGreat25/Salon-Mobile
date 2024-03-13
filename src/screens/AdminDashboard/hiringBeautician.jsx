@@ -14,6 +14,8 @@ import { hiringSlice } from "../../state/hiring/hiringReducer";
 import { useFormik } from "formik";
 import { useSelector } from "react-redux";
 import Toast from "react-native-toast-message";
+import { useAddHiringMutation } from "../../state/api/reducer";
+import { Picker } from "@react-native-picker/picker";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -24,17 +26,27 @@ export default function () {
 
   const hiring = useSelector((state) => state.hiring);
 
+  const [addHiring] = useAddHiringMutation();
+
   const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDB9E5";
   const revertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
+  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
 
   const currentDate = new Date();
-  const nextMonthDate = new Date(currentDate);
-  nextMonthDate.setMonth(currentDate.getMonth() + 1);
+  const next21Days = new Date(currentDate);
+  next21Days.setDate(currentDate.getDate() + 21);
+
+  const next8Days = new Date(currentDate);
+  next8Days.setDate(currentDate.getDate() + 8);
+
+  const minDate = useMemo(() => {
+    return next8Days.toISOString().split("T")[0];
+  }, [next8Days]);
 
   const maxDate = useMemo(() => {
-    return nextMonthDate.toISOString().split("T")[0];
-  }, [nextMonthDate]);
+    return next21Days.toISOString().split("T")[0];
+  }, [next21Days]);
 
   const [markedDates, setMarkedDates] = useState({});
   const [selectedDateTime, setSelectedDateTime] = useState({
@@ -61,15 +73,25 @@ export default function () {
   const dispatch = useDispatch();
 
   const handleDayPress = (day) => {
-    const updatedMarkedDates = {
-      [day.dateString]: {
-        selected: true,
-        selectedColor: "#F78FB3",
-      },
-    };
+    let updatedMarkedDates = { ...markedDates };
+    let updatedSelectedDateTime = { ...selectedDateTime };
+
+    if (updatedMarkedDates[day.dateString]) {
+      delete updatedMarkedDates[day.dateString];
+      updatedSelectedDateTime.date = null;
+    } else {
+      updatedMarkedDates = {
+        [day.dateString]: {
+          selected: true,
+          selectedColor: "#F78FB3",
+        },
+      };
+      updatedSelectedDateTime.date = day.dateString;
+    }
+
     setMarkedDates(updatedMarkedDates);
-    setSelectedDateTime((prev) => ({ ...prev, date: day.dateString }));
-    formik.setFieldValue("date", day.dateString);
+    setSelectedDateTime(updatedSelectedDateTime);
+    formik.setFieldValue("date", updatedSelectedDateTime.date);
   };
 
   const handleTimePress = (time) => {
@@ -80,7 +102,7 @@ export default function () {
     });
   };
 
-  const hideArrows = currentDate.getMonth() === nextMonthDate.getMonth();
+  const hideArrows = currentDate.getMonth() === next21Days.getMonth();
 
   const items = [
     {
@@ -115,25 +137,45 @@ export default function () {
     const newValue = !isOpen;
     setOpen(newValue);
     formik.setFieldValue("isHiring", newValue);
+    if (!newValue) {
+      formik.setFieldValue("date", "");
+      formik.setFieldValue("time", "");
+      formik.setFieldValue("type", "");
+    }
   };
 
   const formik = useFormik({
     initialValues: {
-      date: hiring.hiringData.date || "",
-      time: hiring.hiringData.time || "",
-      isHiring: hiring.hiringData.isHiring || false,
+      date: hiring?.hiringData?.date || "",
+      time: hiring?.hiringData?.time || "",
+      type: hiring?.hiringData?.type || "",
+      isHiring: hiring?.hiringData?.isHiring || false,
     },
     onSubmit: (values) => {
-      dispatch(hiringSlice.actions.submitForm(values));
-      navigation.navigate("AdminDashboard");
-      Toast.show({
-        type: "success",
-        position: "top",
-        text1: "Successfully Submitted",
-        text2: `Admin has edited the hiring details`,
-        visibilityTime: 3000,
-        autoHide: true,
-      });
+      addHiring(values)
+        .unwrap()
+        .then((response) => {
+          dispatch(hiringSlice.actions.submitForm(values));
+          navigation.navigate("AdminDashboard");
+          Toast.show({
+            type: "success",
+            position: "top",
+            text1: "Successfully Created",
+            text2: `${response?.message}`,
+            visibilityTime: 3000,
+            autoHide: true,
+          });
+        })
+        .catch((error) => {
+          Toast.show({
+            type: "error",
+            position: "top",
+            text1: "Error Creating",
+            text2: `${error?.data?.error?.message}`,
+            visibilityTime: 3000,
+            autoHide: true,
+          });
+        });
     },
   });
 
@@ -171,7 +213,7 @@ export default function () {
                 todayTextColor: "#BE2EDD",
                 arrowColor: "black",
               }}
-              minDate={currentDate.toISOString().split("T")[0]}
+              minDate={minDate}
               maxDate={maxDate}
               hideExtraDays={true}
               hideArrows={hideArrows ? true : false}
@@ -229,6 +271,25 @@ export default function () {
               </TouchableOpacity>
             ))}
           </ScrollView>
+          <View
+            className={`border-[1.5px]  font-normal rounded-full my-3 ${borderColor}`}
+          >
+            <Picker
+              selectedValue={formik.values.type}
+              style={{ color: textColor }}
+              dropdownIconColor={textColor}
+              onValueChange={(itemValue) =>
+                formik.setFieldValue("type", itemValue)
+              }
+            >
+              <Picker.Item label="Select Employee Type" value="" />
+              <Picker.Item label="Beautician" value="Beautician" />
+              <Picker.Item label="Receptionist" value="Receptionist" />
+            </Picker>
+          </View>
+          {formik.touched.type && formik.errors.type && (
+            <Text style={{ color: "red" }}>{formik.errors.type}</Text>
+          )}
           <View className={`flex flex-row`}>
             <TouchableOpacity
               onPress={() => handleCheckBoxToggle()}
