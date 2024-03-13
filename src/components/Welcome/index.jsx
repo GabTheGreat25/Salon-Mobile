@@ -48,7 +48,7 @@ export default function ({
             >
               {title}
             </Text>
-            <Text className={`text-xl font-light`} style={{ color: textColor }}>
+            <Text className={`text-lg font-light`} style={{ color: textColor }}>
               {description}
             </Text>
             <TouchableOpacity onPress={navigateTo}>
