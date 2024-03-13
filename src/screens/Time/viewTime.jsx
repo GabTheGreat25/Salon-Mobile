@@ -61,15 +61,15 @@ export default function ({ route }) {
               >
                 <Text
                   style={{ color: textColor }}
-                  className={`font-semibold text-center pb-6 text-3xl`}
+                  className={`font-semibold text-center pt-12 pb-6 text-3xl`}
                 >
-                  View Time Details 
+                  View Time Details
                 </Text>
                 <Text
                   style={{ color: textColor }}
                   className={`font-semibold text-base`}
                 >
-                  Time 
+                  Time
                 </Text>
                 <TextInput
                   style={{ color: textColor }}
