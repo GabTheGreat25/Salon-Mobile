@@ -44,7 +44,6 @@ export default function ({ route }) {
 
   const leaveDate = `${datePart} `;
 
-
   return (
     <>
       {isLoading ? (
@@ -69,15 +68,15 @@ export default function ({ route }) {
               >
                 <Text
                   style={{ color: textColor }}
-                  className={`font-semibold text-center pb-6 text-3xl`}
+                  className={`font-semibold text-center pt-12 pb-6 text-3xl`}
                 >
-                  Beautician's Leave Information
+                  Employee's Leave Information
                 </Text>
                 <Text
                   style={{ color: textColor }}
                   className={`font-semibold text-base`}
                 >
-                Beautician
+                  Employee
                 </Text>
                 <TextInput
                   style={{ color: textColor }}
@@ -97,7 +96,7 @@ export default function ({ route }) {
                   autoCapitalize="none"
                   value={leaveDate}
                 />
-                 <Text
+                <Text
                   style={{ color: textColor }}
                   className={`font-semibold text-base`}
                 >
