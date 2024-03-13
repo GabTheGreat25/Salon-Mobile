@@ -91,7 +91,7 @@ export default function () {
         </View>
       ) : (
         <SafeAreaView style={{ backgroundColor }} className={`relative flex-1`}>
-          <View className={`flex-1 items-center justify-center pt-12`}>
+          <View className={`flex-1 items-center justify-center`}>
             {paginatedData?.length ? (
               <ScrollView
                 style={{ backgroundColor }}
@@ -166,9 +166,7 @@ export default function () {
                           width: customWidth,
                         }}
                       >
-                        <Text style={{ color: textColor }}>
-                          Beautician Name
-                        </Text>
+                        <Text style={{ color: textColor }}>Employee Name</Text>
                       </DataTable.Title>
                       <DataTable.Title
                         style={{
@@ -346,19 +344,14 @@ export default function () {
                             padding: 10,
                           }}
                         >
-                            <TouchableOpacity
+                          <TouchableOpacity
                             onPress={() => {
                               handleViewBeauticianAppointment(item?._id);
                             }}
                           >
-                            <Feather
-                              name="eye"
-                              size={24}
-                              color={
-                               "green"
-                              }
-                            />
+                            <Feather name="eye" size={24} color={"green"} />
                           </TouchableOpacity>
+                          <View style={{ width: 10 }} />
                           <TouchableOpacity
                             onPress={() => {
                               handleEditBeauticianAppoinment(item?._id);
