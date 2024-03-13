@@ -61,7 +61,7 @@ export default function ({ route }) {
               >
                 <Text
                   style={{ color: textColor }}
-                  className={`font-semibold text-center pb-6 text-3xl`}
+                  className={`font-semibold text-center pt-12 pb-6 text-3xl`}
                 >
                   View Brand Details
                 </Text>
