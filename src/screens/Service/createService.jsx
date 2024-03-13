@@ -218,8 +218,8 @@ export default function () {
   const feetProducts = products?.details?.filter((product) =>
     product.type.includes("Feet")
   );
-  const faceProducts = products?.details?.filter((product) =>
-    product.type.includes("Face")
+  const facialProducts = products?.details?.filter((product) =>
+    product.type.includes("Facial")
   );
   const bodyProducts = products?.details?.filter((product) =>
     product.type.includes("Body")
@@ -444,7 +444,7 @@ export default function () {
                     </Text>
                   </View>
                   <TouchableOpacity
-                    onPress={() => handleCheckBoxToggle("Face")}
+                    onPress={() => handleCheckBoxToggle("Facial")}
                     className={`flex-row py-2`}
                   >
                     <View
@@ -456,7 +456,7 @@ export default function () {
                       }}
                       className={`flex-row justify-center items-center border-2 rounded`}
                     >
-                      {selectedTypes.includes("Face") && (
+                      {selectedTypes.includes("Facial") && (
                         <Text
                           style={{ color: textColor }}
                           className={`text-2xl`}
@@ -471,7 +471,7 @@ export default function () {
                       style={{ color: textColor }}
                       className={`text-2xl font-semibold`}
                     >
-                      Face
+                      Facial
                     </Text>
                   </View>
                   <TouchableOpacity
@@ -737,18 +737,18 @@ export default function () {
                   ""
                 )}
 
-                {selectedTypes.includes("Face") ? (
+                {selectedTypes.includes("Facial") ? (
                   <>
                     <Text
                       style={{ color: textColor }}
                       className={`font-semibold text-2xl`}
                     >
-                      Face Products
+                      Facial Products
                     </Text>
                     <View
                       className={`flex flex-row justify-start gap-x-4 flex-wrap`}
                     >
-                      {faceProducts.map((product) => (
+                      {facialProducts.map((product) => (
                         <TouchableOpacity
                           key={product._id}
                           onPress={() => handleCheckBoxProduct(product)}
