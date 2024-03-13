@@ -131,7 +131,7 @@ export default function () {
     }
   };
 
-  const handleViewStatus = (id) => {
+  const handleViewSchedule = (id) => {
     navigation.navigate("ViewStatus", { id });
   };
 
@@ -193,9 +193,7 @@ export default function () {
                           width: customWidth,
                         }}
                       >
-                        <Text style={{ color: textColor }}>
-                          Beautician Name
-                        </Text>
+                        <Text style={{ color: textColor }}>Employee Name</Text>
                       </DataTable.Title>
                       <DataTable.Title
                         style={{
@@ -342,9 +340,9 @@ export default function () {
                           <TouchableOpacity
                             onPress={() => handleViewSchedule(item?._id)}
                           >
-                            <Feather name="eye" size={24} color="blue" />
+                            <Feather name="eye" size={24} color="green" />
                           </TouchableOpacity>
-
+                          <View style={{ width: 10 }} />
                           <TouchableOpacity
                             onPress={() => handleEditSchedule(item?._id)}
                           >
