@@ -35,7 +35,9 @@ export default function () {
 
   const activeBeauticians = beauticianList.filter(
     (beautician) =>
-      beautician?.roles?.includes("Beautician") && beautician?.active === true
+      (beautician?.roles?.includes("Beautician") ||
+        beautician?.roles?.includes("Receptionist")) &&
+      beautician?.active === true
   );
 
   const { data: schedules, isLoading: schedulesLoading } =
@@ -63,7 +65,7 @@ export default function () {
             type: "error",
             position: "top",
             text1: "Error Creating Schedule",
-            text2: `Beautician already has a schedule for ${
+            text2: `Employee already has a schedule for ${
               new Date(values.date).toISOString().split("T")[0]
             }`,
             visibilityTime: 3000,
