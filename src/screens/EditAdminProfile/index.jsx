@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   SafeAreaView,
@@ -19,6 +19,7 @@ import Toast from "react-native-toast-message";
 import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
 import { useSelector } from "react-redux";
+import { TextInputMask } from "react-native-masked-text";
 
 export default function () {
   const auth = useSelector((state) => state.auth);
@@ -269,10 +270,14 @@ export default function () {
                   style={{ color: textColor }}
                   className={`font-semibold text-xl`}
                 >
-                  Contact Number
+                  Mobile Number
                 </Text>
-                <TextInput
+                <TextInputMask
                   style={{ color: textColor }}
+                  type={"custom"}
+                  options={{
+                    mask: "9999 - 999 - 9999",
+                  }}
                   className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
                   placeholder="Enter your contact number"
                   placeholderTextColor={textColor}
@@ -348,10 +353,7 @@ export default function () {
                       </Text>
                     </View>
                   </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={handleUpdatePassword}
-                    disabled={!formik.isValid}
-                  >
+                  <TouchableOpacity onPress={handleUpdatePassword}>
                     <View
                       className={`border border-solid rounded-lg py-2 px-6`}
                     >
