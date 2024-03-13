@@ -250,9 +250,9 @@ export default function () {
                           <TouchableOpacity
                             onPress={() => handleViewTime(item?._id)}
                           >
-                            <Feather name="eye" size={24} color="blue" />
+                            <Feather name="eye" size={24} color="green" />
                           </TouchableOpacity>
-
+                          <View style={{ width: 10 }} />
                           <TouchableOpacity
                             onPress={() => handleEditTime(item?._id)}
                           >
