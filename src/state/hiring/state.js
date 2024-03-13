@@ -1,1 +1,8 @@
-export const initialState = {};
+export const initialState = {
+  hiringData: {
+    date: "",
+    time: "",
+    type: "",
+    isHiring: false,
+  },
+};
