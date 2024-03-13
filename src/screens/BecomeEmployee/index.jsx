@@ -1,8 +1,12 @@
 import React from "react";
 import { Welcome } from "@components";
-import logo2 from "@assets/logo-2.png";
+import logo2 from "@assets/lhanlee-hiring.png";
 import { useNavigation } from "@react-navigation/native";
-import { selectDate, selectTime, selectIsHiring } from "../../state/hiring/hiringReducer";
+import {
+  selectDate,
+  selectTime,
+  selectIsHiring,
+} from "../../state/hiring/hiringReducer";
 import { useSelector } from "react-redux";
 
 export default function () {
@@ -21,7 +25,6 @@ export default function () {
 
   const title = hiring ? hiringTitle : defaultTitle;
   const info = hiring ? hiringMsg : msg;
-
 
   return (
     <>
