@@ -89,6 +89,8 @@ import ViewApplyingBeautician from "./AdminDashboard/viewConfirmBeauticianById";
 import ViewBeauticianLeave from "./AdminDashboard/viewBeauticianLeave";
 import ViewRescheduleAppointment from "./AdminDashboard/viewRescheduleAppointment";
 import BeauticianAppointment from "./BeauticianAppointment";
+import ViewUser from "./User/viewUserById";
+import ViewExclusion from "./Exclusion/viewExclusionById";
 
 export {
   Home,
@@ -181,5 +183,7 @@ export {
   ViewApplyingBeautician,
   ViewBeauticianLeave,
   ViewRescheduleAppointment,
-  BeauticianAppointment
+  BeauticianAppointment,
+  ViewUser,
+  ViewExclusion,
 };
