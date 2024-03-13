@@ -10,7 +10,7 @@ import {
   Keyboard,
   TextInput,
 } from "react-native";
-import { useGetFeedbackByIdQuery } from "../../state/api/reducer";
+import { useGetCommentByIdQuery } from "../../state/api/reducer";
 import { useNavigation } from "@react-navigation/native";
 import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
@@ -66,7 +66,7 @@ export default function ({ route }) {
               >
                 <Text
                   style={{ color: textColor }}
-                  className={`font-semibold text-center pb-6 text-3xl`}
+                  className={`font-semibold text-center pt-12 pb-6 text-3xl`}
                 >
                   View Feedback Details
                 </Text>
@@ -97,7 +97,7 @@ export default function ({ route }) {
                   className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
                   autoCapitalize="none"
                   value={
-                    feedback?.isAnonymous
+                    comment?.isAnonymous
                       ? anonymizeName(
                           comment?.transaction?.appointment?.customer?.name
                         )
