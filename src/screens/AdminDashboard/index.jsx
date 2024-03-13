@@ -30,20 +30,24 @@ export default function () {
   );
   const beauticianCount = beauticians.length;
 
-  const pendingBeauticians = users?.filter(
-    (user) => user?.roles?.includes("Beautician") && user?.active === false
+  const receptionists = users?.filter(
+    (user) => user?.roles?.includes("Receptionist") && user?.active === true
   );
-  const pendingbeauticianCount = pendingBeauticians.length;
+  const receptionistCount = receptionists.length;
 
-  const onlineCustomers = users?.filter((user) =>
-    user?.roles?.includes("Online Customer")
+  const beauticianInactive = users.filter(
+    (user) => user?.roles?.includes("Beautician") && !user?.active
   );
-  const onlineCustomerCount = onlineCustomers.length;
 
-  const walkCustomers = users?.filter((user) =>
-    user?.roles?.includes("Walk-in Customer")
+  const receptionistInactive = users.filter(
+    (user) => user?.roles?.includes("Receptionist") && !user?.active
   );
-  const walkCustomerCount = walkCustomers.length;
+
+  const pendingEmployeeCount =
+    beauticianInactive.length + receptionistInactive.length;
+
+  const customers = users?.filter((user) => user?.roles?.includes("Customer"));
+  const customerCount = customers.length;
 
   return (
     <>
@@ -174,7 +178,7 @@ export default function () {
                 />
                 <View style={{ width: 15 }} />
                 <ListData
-                  title="Admin"
+                  title="Admins"
                   data={adminCount}
                   icon={
                     <MaterialIcons
@@ -188,7 +192,7 @@ export default function () {
                 />
                 <View style={{ width: 15 }} />
                 <ListData
-                  title="Beautician"
+                  title="Beauticians"
                   data={beauticianCount}
                   icon={
                     <MaterialCommunityIcons
@@ -202,18 +206,8 @@ export default function () {
                 />
                 <View style={{ width: 15 }} />
                 <ListData
-                  title="Online Customer"
-                  data={onlineCustomerCount}
-                  icon={
-                    <Feather name="user" size={40} color={invertTextColor} />
-                  }
-                  id={data?.details?._id}
-                  backgroundColor={invertBackgroundColor}
-                />
-                <View style={{ width: 15 }} />
-                <ListData
-                  title="Walk-In Customer"
-                  data={walkCustomerCount}
+                  title="Receptionists"
+                  data={receptionistCount}
                   icon={
                     <MaterialCommunityIcons
                       name="walk"
@@ -226,8 +220,18 @@ export default function () {
                 />
                 <View style={{ width: 15 }} />
                 <ListData
-                  title="Pending Beautician"
-                  data={pendingbeauticianCount}
+                  title="Customers"
+                  data={customerCount}
+                  icon={
+                    <Feather name="user" size={40} color={invertTextColor} />
+                  }
+                  id={data?.details?._id}
+                  backgroundColor={invertBackgroundColor}
+                />
+                <View style={{ width: 15 }} />
+                <ListData
+                  title="Pending Employees"
+                  data={pendingEmployeeCount}
                   icon={
                     <MaterialCommunityIcons
                       name="account-cancel"
