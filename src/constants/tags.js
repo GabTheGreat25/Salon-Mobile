@@ -18,4 +18,5 @@ export default {
   DELIVERY: "delivery",
   EXCLUSIONS: "exclusions",
   MONTHS: "months",
+  HIRINGS: "hirings",
 };
