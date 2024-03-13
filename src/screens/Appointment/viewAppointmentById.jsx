@@ -61,7 +61,7 @@ export default function ({ route }) {
               >
                 <Text
                   style={{ color: textColor }}
-                  className={`font-semibold text-center pb-6 text-3xl`}
+                  className={`font-semibold text-center py-12 pb-6 text-3xl`}
                 >
                   View Appointment Details
                 </Text>
@@ -69,7 +69,7 @@ export default function ({ route }) {
                   style={{ color: textColor }}
                   className={`font-semibold text-base`}
                 >
-                  Customer Name
+                  Customer Name:
                 </Text>
                 <TextInput
                   style={{ color: textColor }}
@@ -82,7 +82,7 @@ export default function ({ route }) {
                   style={{ color: textColor }}
                   className={`font-semibold text-base`}
                 >
-                  Appointment Beauticians
+                  Employee Name:
                 </Text>
                 <TextInput
                   style={{ color: textColor }}
@@ -92,12 +92,11 @@ export default function ({ route }) {
                     .map((beautician) => beautician?.name)
                     .join(", ")}
                 />
-
                 <Text
                   style={{ color: textColor }}
                   className={`font-semibold text-base`}
                 >
-                  Appointment Date
+                  Appointment Date:
                 </Text>
                 <TextInput
                   style={{ color: textColor }}
@@ -113,7 +112,26 @@ export default function ({ route }) {
                   style={{ color: textColor }}
                   className={`font-semibold text-base`}
                 >
-                  Appointment Services
+                  Appointment Time:
+                </Text>
+                <TextInput
+                  style={{ color: textColor }}
+                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                  autoCapitalize="none"
+                  value={
+                    Array.isArray(appointment?.time) &&
+                    appointment.time.length === 1
+                      ? appointment?.time[0]
+                      : `${appointment?.time?.[0]} to ${
+                          appointment?.time?.[appointment?.time?.length - 1]
+                        }`
+                  }
+                />
+                <Text
+                  style={{ color: textColor }}
+                  className={`font-semibold text-base`}
+                >
+                  Appointment Services:
                 </Text>
                 <TextInput
                   style={{ color: textColor }}
@@ -127,21 +145,23 @@ export default function ({ route }) {
                   style={{ color: textColor }}
                   className={`font-semibold text-base`}
                 >
-                  Appointment Options
+                  Appointment Options:
                 </Text>
                 <TextInput
                   style={{ color: textColor }}
                   className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
                   autoCapitalize="none"
-                  value={appointment?.option
-                    .map((option) => option?.option_name)
-                    .join(", ")}
+                  value={
+                    appointment?.option
+                      .map((option) => option?.option_name)
+                      .join(", ") || "None"
+                  }
                 />
                 <Text
                   style={{ color: textColor }}
                   className={`font-semibold text-base`}
                 >
-                  Appointment Price
+                  Appointment Price:
                 </Text>
                 <TextInput
                   style={{ color: textColor }}
