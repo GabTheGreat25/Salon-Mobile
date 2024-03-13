@@ -273,8 +273,9 @@ export default function () {
                     <Picker.Item label="Hands" value="Hands" />
                     <Picker.Item label="Hair" value="Hair" />
                     <Picker.Item label="Feet" value="Feet" />
-                    <Picker.Item label="Face" value="Face" />
+                    <Picker.Item label="Facial" value="Facial" />
                     <Picker.Item label="Body" value="Body" />
+                    <Picker.Item label="Eyelash" value="Eyelash" />
                   </Picker>
                 </View>
                 {formik.touched.type && formik.errors.type && (
