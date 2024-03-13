@@ -1,4 +1,4 @@
-import React, { useState, useEffect  } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Image,
   View,
@@ -39,7 +39,7 @@ export default function ({ route }) {
     isLoading: isProductLoading,
     refetch,
   } = useGetProductByIdQuery(id);
-  
+
   useEffect(() => {
     const fetchData = async () => {
       if (isFocused) refetch();
@@ -249,7 +249,7 @@ export default function ({ route }) {
                   style={{ color: textColor }}
                   className={`font-semibold text-center pb-6 text-3xl`}
                 >
-                  Update Product Details
+                  Edit Product Details
                 </Text>
                 <Text
                   style={{ color: textColor }}
@@ -333,8 +333,9 @@ export default function ({ route }) {
                     <Picker.Item label="Hands" value="Hands" />
                     <Picker.Item label="Hair" value="Hair" />
                     <Picker.Item label="Feet" value="Feet" />
-                    <Picker.Item label="Face" value="Face" />
+                    <Picker.Item label="Facial" value="Facial" />
                     <Picker.Item label="Body" value="Body" />
+                    <Picker.Item label="Eyelash" value="Eyelash" />
                   </Picker>
                 </View>
 
