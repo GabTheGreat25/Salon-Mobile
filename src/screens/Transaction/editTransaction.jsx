@@ -14,6 +14,7 @@ import {
 import {
   useUpdateTransactionMutation,
   useGetTransactionByIdQuery,
+  useMayaCheckoutMutation,
 } from "../../state/api/reducer";
 import { useFormik } from "formik";
 import { editTransactionValidation } from "../../validation";
@@ -35,6 +36,8 @@ export default function ({ route }) {
     isLoading: isTransactionLoading,
     refetch,
   } = useGetTransactionByIdQuery(id);
+  const transactions = data?.details;
+  const [mayaCheckout] = useMayaCheckoutMutation();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,22 +45,26 @@ export default function ({ route }) {
     };
     fetchData();
   }, [isFocused]);
-  
+
   const [updateTransaction, { isLoading }] = useUpdateTransactionMutation();
 
   const { backgroundColor, textColor, colorScheme } = changeColor();
   const borderColor =
     colorScheme === "dark" ? "border-neutral-light" : "border-neutral-dark";
 
+  const [isOpen, setOpen] = useState(transactions?.hasDiscount || false);
+  const [status, setStatus] = useState(transactions?.status || "pending");
+
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      status: data?.details?.status || "pending",
-      hasDiscount: false,
+      status: status,
+      hasDiscount: transactions?.hasDiscount || isOpen,
+      isApproved: true,
     },
     validationSchema: editTransactionValidation,
     onSubmit: (values) => {
-      updateTransaction({ id: data?.details?._id, payload: values })
+      updateTransaction({ id: transactions?._id, payload: values })
         .unwrap()
         .then((response) => {
           refetch();
@@ -70,6 +77,60 @@ export default function ({ route }) {
             autoHide: true,
           });
           navigation.navigate("Transaction");
+          if (
+            values.status === "completed" &&
+            transactions.payment === "Maya"
+          ) {
+            mayaFormik.handleSubmit();
+          }
+        })
+        .catch((error) => {
+          console.log(error?.data?.error?.message);
+          Toast.show({
+            type: "error",
+            position: "top",
+            text1: "Error Updating Transaction Details",
+            text2: `${error?.data?.error?.message}`,
+            visibilityTime: 3000,
+            autoHide: true,
+          });
+        });
+    },
+  });
+
+  const mayaFormik = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      discount: isOpen
+        ? Number((transactions?.appointment?.price * 0.2).toFixed(0))
+        : 0,
+      contactNumber: transactions?.appointment?.customer?.contact_number,
+      name: transactions?.appointment?.customer?.name,
+      items: transactions?.appointment?.service?.map((service) => ({
+        name: service?.service_name,
+        description: service?.description,
+        totalAmount: {
+          value:
+            service?.price +
+            (transactions?.appointment?.option?.find((option) =>
+              option?.service?.some((serv) => serv._id === service?._id)
+            )?.extraFee || 0) -
+            (transactions?.appointment?.hasAppointmentFee === true ? 150 : 0),
+        },
+      })),
+    },
+    onSubmit: async (values) => {
+      mayaCheckout(values)
+        .unwrap()
+        .then((response) => {
+          Toast.show({
+            type: "success",
+            position: "top",
+            text1: "Maya Details Successfully Sent to Customer",
+            text2: `${response?.message}`,
+            visibilityTime: 3000,
+            autoHide: true,
+          });
         })
         .catch((error) => {
           Toast.show({
@@ -83,8 +144,6 @@ export default function ({ route }) {
         });
     },
   });
-
-  const [isOpen, setOpen] = useState(data?.details?.isNew || false);
 
   const handleCheckBoxToggle = () => {
     const newValue = !isOpen;
@@ -114,20 +173,20 @@ export default function ({ route }) {
                 scrollEventThrottle={1}
                 className={`p-6`}
               >
-                {data?.details?.image?.length > 0 && (
+                {transactions?.image?.length > 0 && (
                   <View className={`items-center justify-end pt-12`}>
                     <Image
                       key={
-                        data?.details?.image[
+                        transactions?.image[
                           Math.floor(
-                            Math.random() * data?.details?.image?.length
+                            Math.random() * transactions?.image?.length
                           )
                         ]?.public_id
                       }
                       source={{
-                        uri: data?.details?.image[
+                        uri: transactions?.image[
                           Math.floor(
-                            Math.random() * data?.details?.image?.length
+                            Math.random() * transactions?.image?.length
                           )
                         ]?.url,
                       }}
@@ -140,34 +199,10 @@ export default function ({ route }) {
                   style={{ color: textColor }}
                   className={`mt-10 mb-5 font-semibold text-center text-3xl`}
                 >
-                  Update Transaction Details
+                  Edit Transaction Details
                 </Text>
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-base`}
-                >
-                  Status
-                </Text>
-                <View
-                  className={`border-[1.5px]  font-normal rounded-full my-3 ${borderColor}`}
-                >
-                  <Picker
-                    selectedValue={formik.values.status}
-                    style={{ color: textColor }}
-                    dropdownIconColor={textColor}
-                    onValueChange={(itemValue) =>
-                      formik.setFieldValue("status", itemValue)
-                    }
-                  >
-                    <Picker.Item label="pending" value="pending" />
-                    <Picker.Item label="completed" value="completed" />
-                  </Picker>
-                </View>
-                {formik.touched.status && formik.errors.status && (
-                  <Text style={{ color: "red" }}>{formik.errors.status}</Text>
-                )}
 
-                {data?.details?.image?.length > 0 && (
+                {transactions?.image?.length > 0 && (
                   <View className={`flex flex-row`}>
                     <TouchableOpacity
                       onPress={() => handleCheckBoxToggle()}
@@ -201,6 +236,31 @@ export default function ({ route }) {
                       </Text>
                     </View>
                   </View>
+                )}
+
+                <Text
+                  style={{ color: textColor }}
+                  className={`font-semibold text-base`}
+                >
+                  Status
+                </Text>
+                <View
+                  className={`border-[1.5px]  font-normal rounded-full my-3 ${borderColor}`}
+                >
+                  <Picker
+                    selectedValue={formik.values.status}
+                    style={{ color: textColor }}
+                    dropdownIconColor={textColor}
+                    onValueChange={(itemValue) => {
+                      setStatus(itemValue);
+                    }}
+                  >
+                    <Picker.Item label="pending" value="pending" />
+                    <Picker.Item label="completed" value="completed" />
+                  </Picker>
+                </View>
+                {formik.touched.status && formik.errors.status && (
+                  <Text style={{ color: "red" }}>{formik.errors.status}</Text>
                 )}
 
                 <View className={`mt-4 items-center justify-center flex-col`}>
