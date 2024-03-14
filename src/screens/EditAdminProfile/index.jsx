@@ -177,6 +177,12 @@ export default function () {
     }
   };
 
+  const handlePhoneNumberChange = (event) => {
+    let phoneNumber = event.nativeEvent.text.replace(/[-\s]/g, "");
+    phoneNumber = phoneNumber.substring(0, 11);
+    formik.setFieldValue("contact_number", phoneNumber);
+  };
+
   return (
     <>
       {isLoading ? (
@@ -279,10 +285,10 @@ export default function () {
                     mask: "9999 - 999 - 9999",
                   }}
                   className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                  placeholder="Enter your contact number"
+                  placeholder="09XX - XXX - XXXX"
                   placeholderTextColor={textColor}
                   autoCapitalize="none"
-                  onChangeText={formik.handleChange("contact_number")}
+                  onChangeText={handlePhoneNumberChange}
                   onBlur={formik.handleBlur("contact_number")}
                   value={formik.values.contact_number}
                   keyboardType="numeric"
