@@ -82,7 +82,12 @@ import {
   ViewUser,
   ViewExclusion,
 } from "@screens";
-import { TermsConditions, PrivacyPolicy, Feedback } from "@settings";
+import {
+  TermsConditions,
+  PrivacyPolicy,
+  Feedback,
+  BeauticianRegisterTermsCondition,
+} from "@settings";
 import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
 import { DarkMode } from "@helpers";
@@ -291,6 +296,10 @@ export default function () {
               <Stack.Screen name="UserPick" component={UserPick} />
               <Stack.Screen name="BecomeCustomer" component={BecomeCustomer} />
               <Stack.Screen name="BecomeEmployee" component={BecomeEmployee} />
+              <Stack.Screen
+                name="BeauticianRegisterTermsCondition"
+                component={BeauticianRegisterTermsCondition}
+              />
             </Stack.Navigator>
           )}
         </NavigationContainer>
