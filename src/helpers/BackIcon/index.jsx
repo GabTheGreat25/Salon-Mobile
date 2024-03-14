@@ -1,12 +1,9 @@
 import React from "react";
 import { TouchableOpacity, Text, View } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { changeColor } from "@utils";
-import { useSelector, useDispatch } from "react-redux";
-import { useNavigation } from "@react-navigation/native";
+import { useSelector } from "react-redux";
 
 export default function ({ navigateBack, textColor, navigateTo }) {
-  const navigation = useNavigation();
   const userRoles = useSelector((state) => state.auth?.user?.roles);
   const count = useSelector((state) => state.appointment.count);
 
