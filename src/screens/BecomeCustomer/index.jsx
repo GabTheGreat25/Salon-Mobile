@@ -9,8 +9,8 @@ export default function () {
   return (
     <>
       <Welcome
-        title="Become a Lhanlee Customer"
-        description={`Ready to experience the ultimate in beauty and relaxation? Discover a haven of luxury and indulgence at Lhanlee Beauty Lounge.`}
+        title={`${"Become a Lhanlee\nCustomer"}`}
+        description={`${"Ready to experience the ultimate in beauty and relaxation? Discover a haven of luxury and indulgence at Lhanlee Beauty Lounge. Step into a world of exquisite treatments and personalized care tailored just for you."}`}
         buttonTitle="Learn More"
         leftArrow={true}
         rightArrow={false}
