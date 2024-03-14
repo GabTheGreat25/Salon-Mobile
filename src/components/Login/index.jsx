@@ -118,19 +118,24 @@ export default function ({
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView style={{ backgroundColor }} className={`relative flex-1`}>
+      <SafeAreaView
+        style={{ backgroundColor }}
+        className={`relative flex-1 pb-12`}
+      >
         <BackIcon navigateBack={navigateBack} textColor={textColor} />
         <KeyboardAvoidingView
           behavior="height"
           className={`flex-1 justify-center items-center flex-col`}
         >
-          <View className={`w-[300px] h-[300px] justify-center items-center`}>
+          <View
+            className={`w-[280px] h-[280px] justify-center items-center pt-10`}
+          >
             <Image source={imageSource} resizeMode="contain" />
           </View>
           <View className={`items-center justify-start`}>
             <Text
               style={{ color: textColor }}
-              className={`font-semibold mt-6 text-3xl text-center`}
+              className={`font-semibold mt-14 text-3xl text-center`}
             >
               {title}
             </Text>
@@ -143,7 +148,7 @@ export default function ({
             <View className={`w-[300px]`}>
               <TextInput
                 style={{ color: textColor }}
-                className={`border-b mt-4 pb-1 text-lg ${borderColor}`}
+                className={`border-b mt-4 mb-1 pb-1 text-lg ${borderColor}`}
                 placeholder="Enter your email"
                 placeholderTextColor={textColor}
                 autoCapitalize="none"
@@ -158,7 +163,7 @@ export default function ({
               <View className={`relative`}>
                 <TextInput
                   style={{ color: textColor }}
-                  className={`border-b my-4 pb-1 text-lg ${borderColor}`}
+                  className={`border-b mt-4 mb-1 pb-1 text-lg ${borderColor}`}
                   placeholder="Enter your password"
                   placeholderTextColor={textColor}
                   autoCapitalize="none"
@@ -180,9 +185,7 @@ export default function ({
                 </TouchableOpacity>
               </View>
               {formik.touched.password && formik.errors.password && (
-                <Text style={{ color: "red" }} className={`mb-3`}>
-                  {formik.errors.password}
-                </Text>
+                <Text style={{ color: "red" }}>{formik.errors.password}</Text>
               )}
               <View className={`items-center flex-col justify-start`}>
                 <TouchableOpacity
