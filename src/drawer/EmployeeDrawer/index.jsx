@@ -1,5 +1,5 @@
 import React from "react";
-import { Feather } from "@expo/vector-icons";
+import { Feather, FontAwesome5 } from "@expo/vector-icons";
 import { Dimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
@@ -9,7 +9,7 @@ import {
 import {
   EmployeeDashboard,
   EditEmployeeProfile,
-  Transaction,
+  LeaveDateBeautician,
   BeauticianAppointment,
 } from "@screens";
 import { changeColor, dimensionLayout } from "@utils";
@@ -111,7 +111,7 @@ export default function () {
       }}
     >
       <Drawer.Screen
-        name="Transaction"
+        name="EmployeeDashboard"
         options={{
           drawerActiveBackgroundColor: "#F78FB3",
           drawerActiveTintColor: textColor,
@@ -121,7 +121,7 @@ export default function () {
               Dashboard
             </Text>
           ),
-          title: "Transaction",
+          title: "EmployeeDashboard",
           drawerIcon: () => (
             <Feather
               name="home"
@@ -130,7 +130,7 @@ export default function () {
             />
           ),
         }}
-        component={Transaction}
+        component={EmployeeDashboard}
       />
       <Drawer.Screen
         name="EditEmployeeProfile"
@@ -155,27 +155,27 @@ export default function () {
         component={EditEmployeeProfile}
       />
       <Drawer.Screen
-        name="BeauticianAppointment"
+        name="LeaveDateBeautician"
         options={{
           drawerActiveBackgroundColor: "#F78FB3",
           drawerActiveTintColor: textColor,
           drawerInactiveTintColor: "#FDA7DF",
           drawerLabel: () => (
             <Text className={`text-xl font-base`} style={{ color: textColor }}>
-              My Appointments
+              File Leave
             </Text>
           ),
-          title: "BeauticianAppointment",
+          title: "LeaveDateBeautician",
           drawerIcon: () => (
-            <Feather
-              name="calendar"
+            <FontAwesome5
+              name="door-open"
               size={RESOURCE.NUMBER.THIRTY}
               color={textColor}
             />
           ),
         }}
         initialParams={{ id: user?._id }}
-        component={BeauticianAppointment}
+        component={LeaveDateBeautician}
       />
     </Drawer.Navigator>
   );
