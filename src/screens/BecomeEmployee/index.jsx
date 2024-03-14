@@ -2,29 +2,32 @@ import React from "react";
 import { Welcome } from "@components";
 import logo2 from "@assets/lhanlee-hiring.png";
 import { useNavigation } from "@react-navigation/native";
-import {
-  selectDate,
-  selectTime,
-  selectIsHiring,
-} from "../../state/hiring/hiringReducer";
-import { useSelector } from "react-redux";
+import { useGetHiringsQuery } from "../../state/api/reducer";
 
 export default function () {
   const navigation = useNavigation();
+  const { data } = useGetHiringsQuery();
+  const hiring = data?.details[0];
 
-  const date = useSelector(selectDate);
-  const time = useSelector(selectTime);
-  const hiring = useSelector(selectIsHiring);
+  const defaultTitle = `Become a Lhanlee  Employee!`;
+  const hiringTitle = `${"Were Hiring A\n" + hiring?.type + " Apply now!"}`;
 
-  const defaultTitle = `Become a Lhanlee  Beautician!`;
-  const hiringTitle = `Were Hiring! Apply now!`;
+  const hiringDate = hiring?.date ? new Date(hiring.date) : null;
+  const hiringDateFormatted = hiringDate
+    ? hiringDate.toISOString().split("T")[0]
+    : "";
 
-  const msg = `Are you passionate about beauty and wellness?   Turn your passion into a rewarding career as a beautician at Lhanlee Beauty Lounge..`;
-  const hiringMsg = `Hiring Date: ${date}  Hiring Time Slot ${time}  Bring a Valid ID  Bring Your Own Resume with Updated:   contact
-  information, education, and relevant work experience.`;
+  const msg = `Are you passionate about beauty and wellness? Turn your passion into a rewarding career as a employee at Lhanlee Beauty Lounge..`;
+  const hiringMsg = `${
+    "Hiring Date: " +
+    hiringDateFormatted +
+    "\nHiring Time Slot: " +
+    hiring?.time +
+    "\nBring a Valid ID, Bring Your Own Resume with Updated: contact information, education, and relevant work experience."
+  }`;
 
-  const title = hiring ? hiringTitle : defaultTitle;
-  const info = hiring ? hiringMsg : msg;
+  const title = hiring?.isHiring === false ? defaultTitle : hiringTitle;
+  const info = hiring?.isHiring === false ? msg : hiringMsg;
 
   return (
     <>
