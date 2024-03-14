@@ -173,7 +173,7 @@ export default function () {
 
         {item.type === "leave" && (
           <>
-            Leave :{"\n"}
+            Leave {"\n"}
             Employee: {item.data?.beautician?.name}
             {"\n"}
             Date: {new Date(item.data?.date).toLocaleDateString("en-PH")}
@@ -183,7 +183,7 @@ export default function () {
         )}
         {item.type === "absent" && (
           <>
-            Absent : {"\n"}
+            Absent {"\n"}
             Employee: {item.data?.beautician?.name}
             {"\n"}
             Date: {new Date(item.data?.date).toLocaleDateString("en-PH")}
@@ -194,114 +194,123 @@ export default function () {
   );
 
   return (
-    // <>
-    //   {transactionLoading || scheduleLoading ? (
-    //     <View
-    //       className={`flex-1 justify-center items-center bg-primary-default`}
-    //     >
-    //       <LoadingScreen />
-    //     </View>
-    //   ) : (
     <>
-      <View
-        style={{
-          borderColor: borderColor,
-          backgroundColor: invertBackgroundColor,
-        }}
-        className={`flex-1 flex-grow border px-1 pb-5 rounded-xl`}
-      >
-        <View className="flex-row items-center justify-between mb-4">
-          <TouchableOpacity onPress={handlePreviousPage}>
-            <Feather name="chevron-left" size={40} color={invertTextColor} />
-          </TouchableOpacity>
-          <Text
-            style={{ color: invertTextColor }}
-            className={`text-center text-2xl font-semibold my-5`}
-          >
-            {currentMonthYearText}
-          </Text>
-          <TouchableOpacity onPress={handleNextPage}>
-            <Feather name="chevron-right" size={40} color={invertTextColor} />
-          </TouchableOpacity>
+      {transactionLoading || scheduleLoading ? (
+        <View
+          className={`flex-1 justify-center items-center bg-primary-default`}
+        >
+          <LoadingScreen />
         </View>
-        <FlatList
-          data={paginatedEvents}
-          renderItem={renderItem}
-          keyExtractor={(item, index) => index.toString()}
-          numColumns={3}
-        />
-        <Modal visible={modalVisible} transparent animationType="slide">
+      ) : (
+        <>
           <View
-            style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
-            className={`flex-1 justify-center items-center `}
+            style={{
+              borderColor: borderColor,
+              backgroundColor: invertBackgroundColor,
+            }}
+            className={`flex-1 flex-grow border px-1 pb-5 rounded-xl`}
           >
-            <View
-              style={{ backgroundColor }}
-              className={`p-10 rounded-lg border-1 w-[80%]`}
-            >
+            <View className="flex-row items-center justify-between mb-4">
+              <TouchableOpacity onPress={handlePreviousPage}>
+                <Feather
+                  name="chevron-left"
+                  size={40}
+                  color={invertTextColor}
+                />
+              </TouchableOpacity>
               <Text
-                style={{ color: textColor }}
-                className={`text-xl font-semibold mb-5`}
-                numberOfLines={8}
-                ellipsizeMode="tail"
+                style={{ color: invertTextColor }}
+                className={`text-center text-2xl font-semibold my-5`}
               >
-                {selectedItem && selectedItem.type === "transaction" ? (
-                  <>
-                    Appointment Details:{"\n"}
-                    Status: {selectedItem.data?.status}
-                    {"\n"}
-                    Service:{" "}
-                    {selectedItem.data?.appointment?.service
-                      .map((s) => s?.service_name)
-                      .join(", ")}
-                    {"\n"}
-                    Customer: {selectedItem.data?.appointment?.customer?.name}
-                    {"\n"}
-                    Beautician:{" "}
-                    {selectedItem.data?.appointment?.beautician
-                      ?.map((b) => b?.name)
-                      .join(", ")}
-                    {"\n"}
-                    Date:{" "}
-                    {new Date(
-                      selectedItem.data?.appointment?.date
-                    ).toLocaleDateString("en-PH")}
-                    {"\n"}
-                    Time: {selectedItem.data?.appointment?.time.join(" - ")}
-                  </>
-                ) : selectedItem?.type === "leave" ? (
-                  <>
-                    Leave Schedule{"\n"}
-                    Beautician: {selectedItem.data?.beautician?.name}
-                    {"\n"}
-                    Date:{" "}
-                    {new Date(selectedItem.data?.date).toLocaleDateString(
-                      "en-PH"
-                    )}
-                    {"\n"}
-                    Leave Note: {selectedItem.data?.leaveNote}
-                  </>
-                ) : selectedItem?.type === "absent" ? (
-                  <>
-                    Absent Schedule{"\n"}
-                    Beautician: {selectedItem.data?.beautician?.name}
-                    {"\n"}
-                    Date:{" "}
-                    {new Date(selectedItem.data?.date).toLocaleDateString(
-                      "en-PH"
-                    )}
-                  </>
-                ) : (
-                  ""
-                )}
+                {currentMonthYearText}
               </Text>
-              <Button title="Close" onPress={closeModal} />
+              <TouchableOpacity onPress={handleNextPage}>
+                <Feather
+                  name="chevron-right"
+                  size={40}
+                  color={invertTextColor}
+                />
+              </TouchableOpacity>
             </View>
+            <FlatList
+              data={paginatedEvents}
+              renderItem={renderItem}
+              keyExtractor={(item, index) => index.toString()}
+              numColumns={3}
+            />
+            <Modal visible={modalVisible} transparent animationType="slide">
+              <View
+                style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+                className={`flex-1 justify-center items-center `}
+              >
+                <View
+                  style={{ backgroundColor }}
+                  className={`p-10 rounded-lg border-1 w-[80%]`}
+                >
+                  <Text
+                    style={{ color: textColor }}
+                    className={`text-xl font-semibold mb-5`}
+                    numberOfLines={8}
+                    ellipsizeMode="tail"
+                  >
+                    {selectedItem && selectedItem.type === "transaction" ? (
+                      <>
+                        Appointment Details:{"\n"}
+                        Status: {selectedItem.data?.status}
+                        {"\n"}
+                        Service:{" "}
+                        {selectedItem.data?.appointment?.service
+                          .map((s) => s?.service_name)
+                          .join(", ")}
+                        {"\n"}
+                        Customer:{" "}
+                        {selectedItem.data?.appointment?.customer?.name}
+                        {"\n"}
+                        Beautician:{" "}
+                        {selectedItem.data?.appointment?.beautician
+                          ?.map((b) => b?.name)
+                          .join(", ")}
+                        {"\n"}
+                        Date:{" "}
+                        {new Date(
+                          selectedItem.data?.appointment?.date
+                        ).toLocaleDateString("en-PH")}
+                        {"\n"}
+                        Time: {selectedItem.data?.appointment?.time.join(" - ")}
+                      </>
+                    ) : selectedItem?.type === "leave" ? (
+                      <>
+                        Leave Schedule {"\n"}
+                        Employee: {selectedItem.data?.beautician?.name}
+                        {"\n"}
+                        Date:{" "}
+                        {new Date(selectedItem.data?.date).toLocaleDateString(
+                          "en-PH"
+                        )}
+                        {"\n"}
+                        Leave Note: {selectedItem.data?.leaveNote}
+                      </>
+                    ) : selectedItem?.type === "absent" ? (
+                      <>
+                        Absent Schedule {"\n"}
+                        Employee: {selectedItem.data?.beautician?.name}
+                        {"\n"}
+                        Date:{" "}
+                        {new Date(selectedItem.data?.date).toLocaleDateString(
+                          "en-PH"
+                        )}
+                      </>
+                    ) : (
+                      ""
+                    )}
+                  </Text>
+                  <Button title="Close" onPress={closeModal} />
+                </View>
+              </View>
+            </Modal>
           </View>
-        </Modal>
-      </View>
+        </>
+      )}
     </>
-    //   )}
-    // </>
   );
 }
