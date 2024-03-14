@@ -28,7 +28,7 @@ export default function ({
         <View className={`flex-1 flex-col`}>
           <View
             className={`flex-1 justify-center items-start pl-6
-            }`}
+            `}
           >
             {leftArrow && (
               <TouchableOpacity
@@ -43,19 +43,22 @@ export default function ({
               </TouchableOpacity>
             )}
             <Text
-              className={`text-4xl font-semibold mb-2`}
+              className={`text-3xl font-semibold mb-2`}
               style={{ color: textColor }}
             >
               {title}
             </Text>
-            <Text className={`text-lg font-light`} style={{ color: textColor }}>
+            <Text
+              className={`text-base font-light pr-6`}
+              style={{ color: textColor }}
+            >
               {description}
             </Text>
             <TouchableOpacity onPress={navigateTo}>
               <View className={`self-start mt-3 w-full`}>
-                <View className={`px-6 py-2 rounded-lg bg-primary-accent`}>
+                <View className={`px-6 py-2 mb-5 rounded-lg bg-primary-accent`}>
                   <Text
-                    className={`text-neutral-light font-semibold text-center text-lg`}
+                    className={`text-neutral-light font-semibold text-center text-base`}
                     style={{ color: textColor }}
                   >
                     {buttonTitle}
