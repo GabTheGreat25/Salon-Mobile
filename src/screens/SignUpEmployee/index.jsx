@@ -25,9 +25,13 @@ import { createEmployeeValidation } from "../../validation";
 import Toast from "react-native-toast-message";
 import { Picker } from "@react-native-picker/picker";
 import { TextInputMask } from "react-native-masked-text";
+import { employeeSlice } from "../../state/auth/employeeReducer";
+import { useSelector, useDispatch } from "react-redux";
 
 export default function () {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+
   const { data } = useGetHiringsQuery();
   const hiring = data?.details[0];
   const { backgroundColor, textColor, colorScheme } = changeColor();
@@ -39,17 +43,18 @@ export default function () {
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
   const [isConfirmPasswordVisible, setConfirmPasswordVisibility] =
     useState(false);
+  const formikValues = useSelector((state) => state.employee.formData);
 
   const formik = useFormik({
     initialValues: {
-      name: "",
-      age: "",
-      contact_number: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
+      name: formikValues?.name || "",
+      age: formikValues?.age || "",
+      contact_number: formikValues?.contact_number || "",
+      email: formikValues?.email || "",
+      password: formikValues?.password || "",
+      confirmPassword: formikValues?.confirmPassword || "",
       roles: "Beautician",
-      job_type: "",
+      job_type: formikValues?.job_type || "",
       date: hiring?.date,
       time: hiring?.time,
     },
@@ -83,6 +88,7 @@ export default function () {
         .unwrap()
         .then((response) => {
           setSelectedImages([]);
+          dispatch(employeeSlice.actions.clearFormData());
           navigation.navigate("Home");
           formik.resetForm();
           Toast.show({
@@ -98,7 +104,7 @@ export default function () {
           Toast.show({
             type: "error",
             position: "top",
-            text1: "Error Creating Employee",
+            text1: "Error Creating Beautician",
             text2: `${error?.data?.error?.message}`,
             visibilityTime: 3000,
             autoHide: true,
@@ -204,6 +210,17 @@ export default function () {
     formik.setFieldValue("contact_number", phoneNumber);
   };
 
+  const [termsAgreed, setTermsAgreed] = useState(false);
+
+  const handleTermsAgreementChange = () => {
+    setTermsAgreed(!termsAgreed);
+  };
+
+  const handleTermsAndConditions = () => {
+    dispatch(employeeSlice.actions.updateFormData(formik.values));
+    navigation.navigate("BeauticianRegisterTermsCondition");
+  };
+
   return (
     <>
       {isLoading ? (
@@ -219,7 +236,7 @@ export default function () {
             className={`relative flex-1`}
           >
             <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
-            <View className={`flex-1 py-12`}>
+            <View className={`flex-1 pt-12 pb-6`}>
               <ScrollView
                 showsVerticalScrollIndicator={false}
                 decelerationRate="fast"
@@ -474,9 +491,78 @@ export default function () {
                   )}
                 </View>
 
+                <Text
+                  style={{ color: textColor }}
+                  className={`${borderColor} font-semibold text-xl`}
+                >
+                  Terms & Conditions
+                </Text>
+                <Text
+                  style={{ color: textColor }}
+                  className={`${borderColor} font-semibold text-base pb-2`}
+                >
+                  By registering as a beautician on our platform, you
+                  acknowledge and agree to the following terms and conditions.
+                </Text>
+
+                <View className={`flex flex-row`}>
+                  <TouchableOpacity
+                    onPress={() => handleTermsAgreementChange()}
+                    className={`flex-row px-4 py-2`}
+                  >
+                    <View
+                      style={{
+                        height: 35,
+                        width: 35,
+                        borderColor: textColor,
+                        backgroundColor,
+                      }}
+                      className={`flex-row justify-center items-center border-2 rounded mr-2 mt-2`}
+                    >
+                      {termsAgreed && (
+                        <Text
+                          style={{ color: textColor }}
+                          className={`text-2xl`}
+                        >
+                          ✓
+                        </Text>
+                      )}
+                    </View>
+                  </TouchableOpacity>
+                  <View className={`pt-2 pb-6`}>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`text-base font-semibold`}
+                    >
+                      {`I agree with Lhanlee Beauty Lounge\n`}
+                      <Text
+                        className={`text-base font-semibold underline text-primary-accent`}
+                        onPress={handleTermsAndConditions}
+                      >
+                        terms & conditions
+                      </Text>
+                    </Text>
+                  </View>
+                </View>
+
                 <View className={`mt-4 items-center justify-start`}>
                   <TouchableOpacity
-                    onPress={formik.handleSubmit}
+                    onPress={(e) => {
+                      e.preventDefault();
+                      if (!termsAgreed) {
+                        Toast.show({
+                          type: "error",
+                          position: "top",
+                          text1: "Error Creating Beautician",
+                          text2:
+                            "Please agree to the Lhanlee Beauty Lounge Terms and conditions.",
+                          visibilityTime: 3000,
+                          autoHide: true,
+                        });
+                        return;
+                      }
+                      formik.handleSubmit(e);
+                    }}
                     disabled={!formik.isValid}
                   >
                     <View className={`w-full mb-2`}>
@@ -495,14 +581,19 @@ export default function () {
                     </View>
                   </TouchableOpacity>
                   <View className={`gap-x-2 flex-row`}>
-                    <Text style={{ color: textColor }} className={`text-base`}>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`text-base font-semibold`}
+                    >
                       Already have an account?
                     </Text>
                     <TouchableOpacity
                       onPress={() => navigation.navigate("LoginUser")}
                     >
-                      <Text className={`text-primary-accent text-base`}>
-                        Sign in
+                      <Text
+                        className={`text-primary-accent text-base font-semibold`}
+                      >
+                        Log in here
                       </Text>
                     </TouchableOpacity>
                   </View>
