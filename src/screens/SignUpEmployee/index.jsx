@@ -1,57 +1,57 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
-  Image,
   View,
   SafeAreaView,
   Text,
   TouchableOpacity,
-  KeyboardAvoidingView,
   ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
-  BackHandler,
   TextInput,
 } from "react-native";
 import { changeColor } from "@utils";
 import { BackIcon } from "@helpers";
 import { useNavigation } from "@react-navigation/native";
-import salonLogo from "@assets/salon-logo.png";
-import salonLogoWhite from "@assets/salon-logo-white.png";
 import { LoadingScreen } from "@components";
-import { dimensionLayout } from "@utils";
 import { Feather } from "@expo/vector-icons";
 import { useFormik } from "formik";
-import { useAddUserMutation } from "../../state/api/reducer";
+import {
+  useAddUserMutation,
+  useGetHiringsQuery,
+} from "../../state/api/reducer";
 import * as ImageManipulator from "expo-image-manipulator";
 import * as ImagePicker from "expo-image-picker";
 import { createEmployeeValidation } from "../../validation";
 import Toast from "react-native-toast-message";
 import { Picker } from "@react-native-picker/picker";
+import { TextInputMask } from "react-native-masked-text";
 
 export default function () {
   const navigation = useNavigation();
-  const isDimensionLayout = dimensionLayout();
+  const { data } = useGetHiringsQuery();
+  const hiring = data?.details[0];
   const { backgroundColor, textColor, colorScheme } = changeColor();
-  const imageSource = colorScheme === "dark" ? salonLogoWhite : salonLogo;
   const borderColor =
     colorScheme === "dark" ? "border-neutral-light" : "border-neutral-dark";
   const [selectedImages, setSelectedImages] = useState([]);
   const [addUser, { isLoading }] = useAddUserMutation();
 
-  const scroll = isDimensionLayout ? 625 : 600;
-
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
-  const [keyboardOpen, setKeyboardOpen] = useState(false);
-  const [scrollViewHeight, setScrollViewHeight] = useState(scroll);
+  const [isConfirmPasswordVisible, setConfirmPasswordVisibility] =
+    useState(false);
 
   const formik = useFormik({
     initialValues: {
       name: "",
+      age: "",
+      contact_number: "",
       email: "",
       password: "",
-      roles: "Employee",
-      contact_number: "",
-      job: "",
+      confirmPassword: "",
+      roles: "Beautician",
+      job_type: "",
+      date: hiring?.date,
+      time: hiring?.time,
     },
     validationSchema: createEmployeeValidation,
     onSubmit: (values) => {
@@ -69,12 +69,15 @@ export default function () {
           });
         });
       }
+      formData.append("name", values.name);
+      formData.append("age", values.age);
+      formData.append("contact_number", values.contact_number);
       formData.append("email", values.email);
       formData.append("password", values.password);
       formData.append("roles", values.roles);
-      formData.append("name", values.name);
-      formData.append("contact_number", values.contact_number);
-      formData.append("job", values.job);
+      formData.append("job_type", values.job_type);
+      formData.append("date", values?.date);
+      formData.append("time", values?.time);
 
       addUser(formData)
         .unwrap()
@@ -108,40 +111,9 @@ export default function () {
     setPasswordVisibility(!isPasswordVisible);
   };
 
-  const handleTextInputFocus = () => {
-    setScrollViewHeight(keyboardOpen ? 700 : scroll);
+  const toggleConfirmPasswordVisibility = () => {
+    setConfirmPasswordVisibility(!isConfirmPasswordVisible);
   };
-
-  useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      () => {
-        setScrollViewHeight(scroll);
-        return true;
-      }
-    );
-
-    const keyboardDidShowListener = Keyboard.addListener(
-      "keyboardDidShow",
-      () => {
-        setKeyboardOpen(true);
-        setScrollViewHeight(700);
-      }
-    );
-    const keyboardDidHideListener = Keyboard.addListener(
-      "keyboardDidHide",
-      () => {
-        setKeyboardOpen(false);
-        setScrollViewHeight(scroll);
-      }
-    );
-
-    return () => {
-      backHandler.remove();
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
 
   const takePicture = async () => {
     const result = await ImagePicker.launchCameraAsync({
@@ -226,6 +198,12 @@ export default function () {
     }
   };
 
+  const handlePhoneNumberChange = (event) => {
+    let phoneNumber = event.nativeEvent.text.replace(/[-\s]/g, "");
+    phoneNumber = phoneNumber.substring(0, 11);
+    formik.setFieldValue("contact_number", phoneNumber);
+  };
+
   return (
     <>
       {isLoading ? (
@@ -241,238 +219,295 @@ export default function () {
             className={`relative flex-1`}
           >
             <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
-            <View
-              className={`justify-start ${
-                isDimensionLayout
-                  ? "flex-col items-center"
-                  : "flex-row items-start"
-              }`}
-            >
-              <Image
-                source={imageSource}
-                className={`${
-                  isDimensionLayout
-                    ? "w-[60%] h-[60%]"
-                    : "ml-5 mt-16 w-[40%] h-[55%]"
-                }`}
-                resizeMode="contain"
-              />
-              <View className={`flex-1 items-center justify-start`}>
+            <View className={`flex-1 py-12`}>
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                decelerationRate="fast"
+                scrollEventThrottle={1}
+                className={`px-6`}
+              >
                 <Text
                   style={{ color: textColor }}
-                  className={`font-semibold text-center ${
-                    isDimensionLayout ? "my-[9px] text-3xl" : "my-1 text-xl"
-                  }`}
+                  className={`pt-6 pb-2 font-semibold text-center text-3xl`}
                 >
-                  Sign up as Employee
+                  Sign up as Beautician
                 </Text>
                 <Text
                   style={{ color: textColor }}
-                  className={`mb-2 text-sm font-base text-center`}
+                  className={`mb-2 text-lg font-base text-center`}
                 >
-                  Create your account
+                  The date of the initial interview will be exactly on{" "}
+                  {new Date(hiring?.date).toISOString().split("T")[0]} at{" "}
+                  {hiring?.time}.
                 </Text>
-                <KeyboardAvoidingView
-                  behavior="padding"
-                  className={`${
-                    isDimensionLayout ? "h-[450px] w-[300px]" : "w-[375px]"
-                  }`}
-                >
-                  <ScrollView
-                    contentContainerStyle={{ height: scrollViewHeight }}
-                    showsVerticalScrollIndicator={false}
-                    scrollEnabled={scrollViewHeight > 600}
-                    decelerationRate="fast"
-                    scrollEventThrottle={1}
+
+                <View>
+                  <Text
+                    style={{ color: textColor }}
+                    className={`text-center font-semibold text-xl mb-2`}
                   >
-                    <TextInput
-                      style={{ color: textColor }}
-                      className={`border-b mb-3 ${borderColor}`}
-                      placeholder="Enter your name"
-                      placeholderTextColor={textColor}
-                      autoCapitalize="none"
-                      handleTextInputFocus={handleTextInputFocus}
-                      onChangeText={formik.handleChange("name")}
-                      onBlur={formik.handleBlur("name")}
-                      value={formik.values.name}
-                    />
-                    {formik.touched.name && formik.errors.name && (
-                      <Text style={{ color: "red" }}>{formik.errors.name}</Text>
-                    )}
-                    <TextInput
-                      style={{ color: textColor }}
-                      className={`border-b mb-3 ${borderColor}`}
-                      placeholder="Enter your email"
-                      placeholderTextColor={textColor}
-                      autoCapitalize="none"
-                      handleTextInputFocus={handleTextInputFocus}
-                      onChangeText={formik.handleChange("email")}
-                      onBlur={formik.handleBlur("email")}
-                      value={formik.values.email}
-                    />
-                    {formik.touched.email && formik.errors.email && (
-                      <Text style={{ color: "red" }}>
-                        {formik.errors.email}
-                      </Text>
-                    )}
-                    <View className={`relative`}>
-                      <TextInput
+                    Things you need to bring during the interview:
+                  </Text>
+                  <View className={`mb-2`}>
+                    <Text style={{ color: textColor }} className={`text-base`}>
+                      <Text
                         style={{ color: textColor }}
-                        className={`border-b ${
-                          isDimensionLayout ? "mb-4" : "mb-3"
-                        } ${borderColor}`}
-                        placeholder="Enter your password"
-                        placeholderTextColor={textColor}
-                        autoCapitalize="none"
-                        handleTextInputFocus={handleTextInputFocus}
-                        onChangeText={formik.handleChange("password")}
-                        onBlur={formik.handleBlur("password")}
-                        value={formik.values.password}
-                        secureTextEntry={!isPasswordVisible}
-                      />
-                      <TouchableOpacity
-                        className={`absolute right-4`}
-                        onPress={togglePasswordVisibility}
+                        className={`font-semibold`}
                       >
-                        <Feather
-                          name={isPasswordVisible ? "eye" : "eye-off"}
-                          size={24}
-                          color={textColor}
-                        />
-                      </TouchableOpacity>
-                    </View>
-                    {formik.touched.password && formik.errors.password && (
-                      <Text style={{ color: "red" }}>
-                        {formik.errors.password}
-                      </Text>
-                    )}
-                    <TextInput
-                      style={{ color: textColor }}
-                      className={`border-b ${
-                        dimensionLayout ? "mb-4" : "mb-3"
-                      } ${borderColor}`}
-                      placeholder="Enter your contact number"
-                      placeholderTextColor={textColor}
-                      autoCapitalize="none"
-                      handleTextInputFocus={handleTextInputFocus}
-                      onChangeText={formik.handleChange("contact_number")}
-                      onBlur={formik.handleBlur("contact_number")}
-                      value={formik.values.contact_number}
-                      keyboardType="numeric"
+                        Resume:
+                      </Text>{" "}
+                      Updated with your contact information, education, and
+                      relevant work experience.
+                    </Text>
+                  </View>
+                  <View className={`mb-2`}>
+                    <Text style={{ color: textColor }} className={`text-base`}>
+                      <Text
+                        style={{ color: textColor }}
+                        className={`font-semibold`}
+                      >
+                        Work Samples:
+                      </Text>{" "}
+                      Showcase your work, including photos of hairstyles,
+                      makeovers, or any beauty services you've provided.
+                    </Text>
+                  </View>
+                  <View className={`mb-2`}>
+                    <Text style={{ color: textColor }} className={`text-base`}>
+                      <Text
+                        style={{ color: textColor }}
+                        className={`font-semibold`}
+                      >
+                        Identification:
+                      </Text>{" "}
+                      Valid government-issued photo ID (driver's license,
+                      passport, etc.).
+                    </Text>
+                  </View>
+                </View>
+
+                <TextInput
+                  style={{ color: textColor }}
+                  className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                  placeholder="Enter your name"
+                  placeholderTextColor={textColor}
+                  autoCapitalize="none"
+                  onChangeText={formik.handleChange("name")}
+                  onBlur={formik.handleBlur("name")}
+                  value={formik.values.name}
+                />
+                {formik.touched.name && formik.errors.name && (
+                  <Text style={{ color: "red" }}>{formik.errors.name}</Text>
+                )}
+
+                <TextInput
+                  style={{ color: textColor }}
+                  className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                  placeholder="Enter age"
+                  placeholderTextColor={textColor}
+                  keyboardType="numeric"
+                  onChangeText={formik.handleChange("age")}
+                  onBlur={formik.handleBlur("age")}
+                  value={formik.values.age}
+                />
+                {formik.touched.age && formik.errors.age && (
+                  <Text style={{ color: "red" }}>{formik.errors.age}</Text>
+                )}
+
+                <TextInput
+                  style={{ color: textColor }}
+                  className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                  placeholder="Enter your email"
+                  placeholderTextColor={textColor}
+                  autoCapitalize="none"
+                  onChangeText={formik.handleChange("email")}
+                  onBlur={formik.handleBlur("email")}
+                  value={formik.values.email}
+                />
+                {formik.touched.email && formik.errors.email && (
+                  <Text style={{ color: "red" }}>{formik.errors.email}</Text>
+                )}
+
+                <TextInputMask
+                  style={{ color: textColor }}
+                  type={"custom"}
+                  options={{
+                    mask: "9999 - 999 - 9999",
+                  }}
+                  className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                  placeholder="09XX - XXX - XXXX"
+                  placeholderTextColor={textColor}
+                  autoCapitalize="none"
+                  onChange={handlePhoneNumberChange}
+                  onBlur={formik.handleBlur("contact_number")}
+                  value={formik.values.contact_number}
+                  keyboardType="numeric"
+                />
+                {formik.touched.contact_number &&
+                  formik.errors.contact_number && (
+                    <Text style={{ color: "red" }}>
+                      {formik.errors.contact_number}
+                    </Text>
+                  )}
+
+                <View className={`relative`}>
+                  <TextInput
+                    style={{ color: textColor }}
+                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    placeholder="Enter your password"
+                    placeholderTextColor={textColor}
+                    autoCapitalize="none"
+                    onChangeText={formik.handleChange("password")}
+                    onBlur={formik.handleBlur("password")}
+                    value={formik.values.password}
+                    secureTextEntry={!isPasswordVisible}
+                  />
+                  <TouchableOpacity
+                    className={`absolute right-4 top-5`}
+                    onPress={togglePasswordVisibility}
+                  >
+                    <Feather
+                      name={isPasswordVisible ? "eye" : "eye-off"}
+                      size={24}
+                      color={textColor}
                     />
-                    {formik.touched.contact_number &&
-                      formik.errors.contact_number && (
-                        <Text style={{ color: "red" }}>
-                          {formik.errors.contact_number}
-                        </Text>
-                      )}
+                  </TouchableOpacity>
+                </View>
+                {formik.touched.password && formik.errors.password && (
+                  <Text style={{ color: "red" }} className={`mb-3`}>
+                    {formik.errors.password}
+                  </Text>
+                )}
+
+                <View className={`relative`}>
+                  <TextInput
+                    style={{ color: textColor }}
+                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    placeholder="Confirm your password"
+                    placeholderTextColor={textColor}
+                    autoCapitalize="none"
+                    onChangeText={formik.handleChange("confirmPassword")}
+                    onBlur={formik.handleBlur("confirmPassword")}
+                    value={formik.values.confirmPassword}
+                    secureTextEntry={!isConfirmPasswordVisible}
+                  />
+                  <TouchableOpacity
+                    className={`absolute right-4 top-5`}
+                    onPress={toggleConfirmPasswordVisibility}
+                  >
+                    <Feather
+                      name={isConfirmPasswordVisible ? "eye" : "eye-off"}
+                      size={24}
+                      color={textColor}
+                    />
+                  </TouchableOpacity>
+                </View>
+                {formik.touched.confirmPassword &&
+                  formik.errors.confirmPassword && (
+                    <Text style={{ color: "red" }} className={`mb-3`}>
+                      {formik.errors.confirmPassword}
+                    </Text>
+                  )}
+
+                <View
+                  className={`border-[1.5px]  font-normal rounded-full my-3 ${borderColor}`}
+                >
+                  <Picker
+                    selectedValue={formik.values.job_type}
+                    style={{ color: textColor }}
+                    dropdownIconColor={textColor}
+                    onValueChange={(itemValue) =>
+                      formik.setFieldValue("job_type", itemValue)
+                    }
+                  >
+                    <Picker.Item label="Select Job Type" value="" />
+                    <Picker.Item label="Hands" value="Hands" />
+                    <Picker.Item label="Hair" value="Hair" />
+                    <Picker.Item label="Feet" value="Feet" />
+                    <Picker.Item label="Facial" value="Facial" />
+                    <Picker.Item label="Body" value="Body" />
+                    <Picker.Item label="Eyelash" value="Eyelash" />
+                  </Picker>
+                </View>
+                {formik.touched.job_type && formik.errors.job_type && (
+                  <Text style={{ color: "red" }}>{formik.errors.job_type}</Text>
+                )}
+
+                <Text
+                  style={{ color: textColor }}
+                  className={`${borderColor} font-semibold text-xl`}
+                >
+                  Add Your Image
+                </Text>
+                <View className={`flex-row gap-x-2 mt-2 mb-6`}>
+                  <TouchableOpacity onPress={takePicture}>
                     <Text
                       style={{ color: textColor }}
-                      className={`${borderColor} font-semibold text-base`}
+                      className={`text-base ${borderColor}`}
                     >
-                      Add your image
+                      Take a Picture
                     </Text>
-                    <View className={`flex-row gap-x-2 my-1`}>
-                      <TouchableOpacity onPress={takePicture}>
-                        <Text
-                          style={{ color: textColor }}
-                          className={`${borderColor}`}
-                        >
-                          Take a Picture
-                        </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity onPress={selectImages}>
-                        <Text
-                          style={{ color: textColor }}
-                          className={`${borderColor}`}
-                        >
-                          Select Images
-                        </Text>
-                      </TouchableOpacity>
-                      {selectedImages?.length > 0 ? (
-                        <Text
-                          style={{ color: textColor }}
-                          className={`${borderColor}`}
-                        >
-                          Add {selectedImages.length} image
-                          {selectedImages.length > 1 ? "s" : ""}
-                        </Text>
-                      ) : (
-                        <Text
-                          style={{ color: textColor }}
-                          className={`${borderColor}`}
-                        >
-                          No Image
-                        </Text>
-                      )}
-                    </View>
-                    <Picker
-                      selectedValue={formik.values.job}
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={selectImages}>
+                    <Text
                       style={{ color: textColor }}
-                      dropdownIconColor={textColor}
-                      onValueChange={(itemValue, itemIndex) =>
-                        formik.setFieldValue("job", itemValue)
-                      }
+                      className={`text-base ${borderColor}`}
                     >
-                      <Picker.Item label="Select Job" value="" />
-                      <Picker.Item label="Stylist" value="Stylist" />
-                      <Picker.Item label="Barber" value="Barber" />
-                      <Picker.Item
-                        label="Nail technician"
-                        value="Nail technician"
-                      />
-                      <Picker.Item label="Receptionist" value="Receptionist" />
-                    </Picker>
-                    {formik.touched.job && formik.errors.job && (
-                      <Text style={{ color: "red" }}>{formik.errors.job}</Text>
-                    )}
-                    <View
-                      className={`mt-4 items-center justify-start ${
-                        isDimensionLayout ? "flex-col" : "flex-row gap-x-2"
-                      }`}
+                      Select Images
+                    </Text>
+                  </TouchableOpacity>
+                  {selectedImages?.length > 0 ? (
+                    <Text
+                      style={{ color: textColor }}
+                      className={`text-base ${borderColor}`}
                     >
-                      <TouchableOpacity
-                        onPress={formik.handleSubmit}
-                        disabled={!formik.isValid}
+                      Add {selectedImages.length} image
+                      {selectedImages.length > 1 ? "s" : ""}
+                    </Text>
+                  ) : (
+                    <Text
+                      style={{ color: textColor }}
+                      className={`text-base ${borderColor}`}
+                    >
+                      No Image
+                    </Text>
+                  )}
+                </View>
+
+                <View className={`mt-4 items-center justify-start`}>
+                  <TouchableOpacity
+                    onPress={formik.handleSubmit}
+                    disabled={!formik.isValid}
+                  >
+                    <View className={`w-full mb-2`}>
+                      <View
+                        className={`py-2 px-6 rounded-lg bg-primary-accent ${
+                          !formik.isValid ? "opacity-50" : "opacity-100"
+                        }`}
                       >
-                        <View className={`w-full mb-2`}>
-                          <View
-                            className={`py-2 px-6 rounded-lg bg-primary-accent ${
-                              isDimensionLayout
-                                ? "flex-col"
-                                : "flex-row gap-x-2"
-                            } ${
-                              !formik.isValid ? "opacity-50" : "opacity-100"
-                            }`}
-                          >
-                            <Text
-                              className={`font-semibold text-center text-lg`}
-                              style={{ color: textColor }}
-                            >
-                              Sign up
-                            </Text>
-                          </View>
-                        </View>
-                      </TouchableOpacity>
-                      <View className={`gap-x-2 flex-row`}>
                         <Text
+                          className={`font-semibold text-center text-lg`}
                           style={{ color: textColor }}
-                          className={`text-base`}
                         >
-                          Already have an account?
+                          Sign up
                         </Text>
-                        <TouchableOpacity
-                          onPress={() => navigation.navigate("LoginUser")}
-                        >
-                          <Text className={`text-primary-accent text-base`}>
-                            Sign in
-                          </Text>
-                        </TouchableOpacity>
                       </View>
                     </View>
-                  </ScrollView>
-                </KeyboardAvoidingView>
-              </View>
+                  </TouchableOpacity>
+                  <View className={`gap-x-2 flex-row`}>
+                    <Text style={{ color: textColor }} className={`text-base`}>
+                      Already have an account?
+                    </Text>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate("LoginUser")}
+                    >
+                      <Text className={`text-primary-accent text-base`}>
+                        Sign in
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </ScrollView>
             </View>
           </SafeAreaView>
         </TouchableWithoutFeedback>
