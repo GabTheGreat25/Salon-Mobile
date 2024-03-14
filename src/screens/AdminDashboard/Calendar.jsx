@@ -208,7 +208,7 @@ export default function () {
               borderColor: borderColor,
               backgroundColor: invertBackgroundColor,
             }}
-            className={`flex-1 flex-grow border px-1 pb-5 rounded-xl`}
+            className={`flex-1 flex-grow border px-1 pb-5 rounded-xl min-w-[100vw]`}
           >
             <View className="flex-row items-center justify-between mb-4">
               <TouchableOpacity onPress={handlePreviousPage}>
