@@ -1,11 +1,12 @@
 import React from "react";
 import { Opening } from "@components";
 import { useNavigation } from "@react-navigation/native";
-import { useSelector } from "react-redux";
+import { useGetHiringsQuery } from "../../state/api/reducer";
 
 export default function MyComponent() {
   const navigation = useNavigation();
-  const hiring = useSelector((state) => state.hiring);
+  const { data } = useGetHiringsQuery();
+  const hiring = data?.details[0];
 
   return (
     <>
@@ -14,10 +15,18 @@ export default function MyComponent() {
         showTitle={true}
         showName={false}
         navigateBack={() => navigation.goBack()}
-        firstButton={hiring.hiringData.isHiring === true ? "Beautician" : null}
+        firstButton={
+          hiring.isHiring && hiring.type === "Beautician"
+            ? "Beautician"
+            : hiring.isHiring && hiring.type === "Receptionist"
+            ? "Receptionist"
+            : null
+        }
         navigateFirstButton={() => {
-          if (hiring.hiringData.isHiring === true) {
+          if (hiring.isHiring && hiring.type === "Beautician") {
             navigation.navigate("SignUpEmployee");
+          } else if (hiring.isHiring && hiring.type === "Receptionist") {
+            navigation.navigate("SignUpReceptionist");
           }
         }}
         secondButton="Customer"
