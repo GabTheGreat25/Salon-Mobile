@@ -8,6 +8,7 @@ export default {
     POINT_SEVENTY_FIVE: 0.75,
     ONE: 1,
     TWENTY: 20,
+    TWENTY_FIVE: 25,
     THIRTY: 30,
     FORTY: 40,
     FIFTY: 50,
