@@ -78,9 +78,10 @@ import {
   ViewApplyingBeautician,
   ViewBeauticianLeave,
   ViewRescheduleAppointment,
-  BeauticianAppointment,
   ViewUser,
   ViewExclusion,
+  EditLeaveDate,
+  ViewCustomerById,
 } from "@screens";
 import {
   TermsConditions,
@@ -175,9 +176,10 @@ export default function () {
                   name="EditTransaction"
                   component={EditTransaction}
                 />
+                <Stack.Screen name="EditLeaveDate" component={EditLeaveDate} />
                 <Stack.Screen
-                  name="BeauticianAppointment"
-                  component={BeauticianAppointment}
+                  name="ViewCustomerById"
+                  component={ViewCustomerById}
                 />
               </Stack.Navigator>
             ) : userRoles.includes("Admin") ? (
