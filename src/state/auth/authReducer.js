@@ -9,7 +9,7 @@ export const authSlice = createSlice({
   reducers: {
     logout(state) {
       state.token = "";
-      state.user = null;
+      state.user = state.user || {};
       state.authenticated = false;
       state.loggedInUserId = null;
     },
@@ -33,10 +33,13 @@ export const authSlice = createSlice({
                 ...payload?.details?.user,
                 requirement: payload?.details?.requirement,
               };
-            } else if (
-              roles.includes("Online Customer") ||
-              roles.includes("Walk-in Customer")
-            ) {
+            } else if (roles.includes("Receptionist")) {
+              state.user = {
+                ...state.user,
+                ...payload?.details?.user,
+                requirement: payload?.details?.requirement,
+              };
+            } else if (roles.includes("Customer")) {
               state.user = {
                 ...state.user,
                 ...payload?.details?.user,
@@ -77,10 +80,13 @@ export const authSlice = createSlice({
                     requirement: payload?.details?.requirement,
                   },
                 };
-              } else if (
-                roles.includes("Online Customer") ||
-                roles.includes("Walk-in Customer")
-              ) {
+              } else if (roles.includes("Receptionist")) {
+                state.user = {
+                  ...state.user,
+                  ...payload?.details?.user,
+                  requirement: payload?.details?.requirement,
+                };
+              } else if (roles.includes("Customer")) {
                 updatedState = {
                   ...updatedState,
                   user: {
