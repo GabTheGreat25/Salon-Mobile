@@ -10,7 +10,9 @@ import {
   EmployeeDashboard,
   EditEmployeeProfile,
   LeaveDateBeautician,
+  GetAllLeaveDate,
   BeauticianAppointment,
+  BeauticianAppointmentHistory,
 } from "@screens";
 import { changeColor, dimensionLayout } from "@utils";
 import { RESOURCE } from "@constants";
@@ -69,7 +71,7 @@ export default function () {
               <UserImage
                 viewWidth={viewWidth}
                 imageSource={{ uri: user?.image[0]?.url }}
-                imageName={user?.name}
+                imageName={`Welcome back, ${user?.name}`}
                 imageRole={user?.roles}
               />
               <DrawerItemList {...props} />
@@ -85,7 +87,7 @@ export default function () {
                     color={textColor}
                   />
                   <Text
-                    className={`text-xl font-base`}
+                    className={`text-lg font-base`}
                     style={{ color: textColor }}
                   >
                     Logout
@@ -169,13 +171,80 @@ export default function () {
           drawerIcon: () => (
             <FontAwesome5
               name="door-open"
+              size={RESOURCE.NUMBER.TWENTY_FIVE}
+              color={textColor}
+            />
+          ),
+        }}
+        component={LeaveDateBeautician}
+      />
+      <Drawer.Screen
+        name="GetAllLeaveDate"
+        options={{
+          drawerActiveBackgroundColor: "#F78FB3",
+          drawerActiveTintColor: textColor,
+          drawerInactiveTintColor: "#FDA7DF",
+          drawerLabel: () => (
+            <Text className={`text-xl font-base`} style={{ color: textColor }}>
+              Edit Leave
+            </Text>
+          ),
+          title: "GetAllLeaveDate",
+          drawerIcon: () => (
+            <Feather
+              name="file-text"
+              size={RESOURCE.NUMBER.THIRTY}
+              color={textColor}
+            />
+          ),
+        }}
+        component={GetAllLeaveDate}
+      />
+      <Drawer.Screen
+        name="BeauticianAppointment"
+        options={{
+          drawerActiveBackgroundColor: "#F78FB3",
+          drawerActiveTintColor: textColor,
+          drawerInactiveTintColor: "#FDA7DF",
+          drawerLabel: () => (
+            <Text className={`text-xl font-base`} style={{ color: textColor }}>
+              My Appointments
+            </Text>
+          ),
+          title: "BeauticianAppointment",
+          drawerIcon: () => (
+            <Feather
+              name="calendar"
               size={RESOURCE.NUMBER.THIRTY}
               color={textColor}
             />
           ),
         }}
         initialParams={{ id: user?._id }}
-        component={LeaveDateBeautician}
+        component={BeauticianAppointment}
+      />
+      <Drawer.Screen
+        name="BeauticianAppointmentHistory"
+        options={{
+          drawerActiveBackgroundColor: "#F78FB3",
+          drawerActiveTintColor: textColor,
+          drawerInactiveTintColor: "#FDA7DF",
+          drawerLabel: () => (
+            <Text className={`text-xl font-base`} style={{ color: textColor }}>
+              My History
+            </Text>
+          ),
+          title: "BeauticianAppointmentHistory",
+          drawerIcon: () => (
+            <Feather
+              name="clock"
+              size={RESOURCE.NUMBER.THIRTY}
+              color={textColor}
+            />
+          ),
+        }}
+        initialParams={{ id: user?._id }}
+        component={BeauticianAppointmentHistory}
       />
     </Drawer.Navigator>
   );
