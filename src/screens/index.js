@@ -88,10 +88,14 @@ import ViewScheduleToday from "./AdminDashboard/viewAppointmentSchedule";
 import ViewApplyingBeautician from "./AdminDashboard/viewConfirmBeauticianById";
 import ViewBeauticianLeave from "./AdminDashboard/viewBeauticianLeave";
 import ViewRescheduleAppointment from "./AdminDashboard/viewRescheduleAppointment";
-import BeauticianAppointment from "./BeauticianAppointment";
+import BeauticianAppointment from "./EmployeeDashboard/beauticianAppointment";
 import ViewUser from "./User/viewUserById";
 import ViewExclusion from "./Exclusion/viewExclusionById";
 import LeaveDateBeautician from "./EmployeeDashboard/leaveDate";
+import GetAllLeaveDate from "./EmployeeDashboard/getAllLeaveDate";
+import EditLeaveDate from "./EmployeeDashboard/editLeaveDate";
+import ViewCustomerById from "./EmployeeDashboard/viewCustomerById";
+import BeauticianAppointmentHistory from "./EmployeeDashboard/beauticianAppointmentHistory";
 
 export {
   Home,
@@ -188,4 +192,8 @@ export {
   ViewUser,
   ViewExclusion,
   LeaveDateBeautician,
+  GetAllLeaveDate,
+  EditLeaveDate,
+  ViewCustomerById,
+  BeauticianAppointmentHistory,
 };
