@@ -26,7 +26,6 @@ export default function () {
   const { backgroundColor, textColor, colorScheme } = changeColor();
 
   const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
-  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDA7DF";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
   const {
@@ -222,9 +221,8 @@ export default function () {
             <View
               style={{
                 borderColor: borderColor,
-                backgroundColor: invertBackgroundColor,
               }}
-              className={`flex-1 flex-grow border px-1 pb-5 rounded-xl my-4 min-w-[100vw]`}
+              className={`flex-1 flex-grow border px-1 pb-5 rounded-xl m-4 min-w-[100vw] bg-primary-default`}
             >
               <View className="flex-row items-center justify-between mb-4">
                 <TouchableOpacity onPress={handlePreviousPage}>
