@@ -70,132 +70,141 @@ export default function ({ route }) {
           <LoadingScreen />
         </View>
       ) : (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <SafeAreaView
-            style={{ backgroundColor }}
-            className={`relative flex-1`}
-          >
-            <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
-            <KeyboardAvoidingView behavior="height">
-              <ScrollView
-                showsVerticalScrollIndicator={false}
-                decelerationRate="fast"
-                scrollEventThrottle={1}
-                className={`px-6`}
-              >
-                <View className="items-center justify-center py-12">
-                  <Image
-                    key={
-                      data?.details?.image[
-                        Math.floor(Math.random() * data?.details?.image?.length)
-                      ]?.public_id
-                    }
-                    source={{
-                      uri: data?.details?.image[
-                        Math.floor(Math.random() * data?.details?.image?.length)
-                      ]?.url,
-                    }}
-                    className={`rounded-full w-60 h-60`}
-                    resizeMode="cover"
-                  />
-                </View>
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-center pb-6 text-3xl`}
+        <>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <SafeAreaView
+              style={{ backgroundColor }}
+              className={`relative flex-1`}
+            >
+              <BackIcon
+                navigateBack={navigation.goBack}
+                textColor={textColor}
+              />
+              <KeyboardAvoidingView behavior="height">
+                <ScrollView
+                  showsVerticalScrollIndicator={false}
+                  decelerationRate="fast"
+                  scrollEventThrottle={1}
+                  className={`px-6`}
                 >
-                  Customer Information
-                </Text>
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-base`}
-                >
-                  User Name
-                </Text>
-                <TextInput
-                  style={{ color: textColor }}
-                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                  autoCapitalize="none"
-                  value={user?.name}
-                  editable={false}
-                />
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-base`}
-                >
-                  Age
-                </Text>
-                <TextInput
-                  style={{ color: textColor }}
-                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                  autoCapitalize="none"
-                  value={user?.age.toString()}
-                  editable={false}
-                />
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-base`}
-                >
-                  Email
-                </Text>
-                <TextInput
-                  style={{ color: textColor }}
-                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                  autoCapitalize="none"
-                  value={user?.email}
-                  editable={false}
-                />
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-base`}
-                >
-                  Mobile Number
-                </Text>
-                <TextInput
-                  style={{ color: textColor }}
-                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                  autoCapitalize="none"
-                  value={user?.contact_number}
-                  editable={false}
-                />
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-base`}
-                >
-                  Chemical Solution Exclusions
-                </Text>
-                <TextInput
-                  style={{
-                    color: textColor,
-                    height: 100,
-                    textAlignVertical: "top",
-                  }}
-                  className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2 ${borderColor}`}
-                  autoCapitalize="none"
-                  multiline={true}
-                  value={filteredExclusions.join(", ")}
-                  editable={false}
-                />
-                {othersMessage && (
-                  <React.Fragment>
-                    <Text
-                      style={{ color: textColor }}
-                      className={`font-semibold text-base`}
-                    >
-                      Type
-                    </Text>
-                    <TextInput
-                      style={{ color: textColor }}
-                      className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                      autoCapitalize="none"
-                      value={othersMessage}
-                      editable={false}
+                  <View className="items-center justify-center py-12">
+                    <Image
+                      key={
+                        data?.details?.image[
+                          Math.floor(
+                            Math.random() * data?.details?.image?.length
+                          )
+                        ]?.public_id
+                      }
+                      source={{
+                        uri: data?.details?.image[
+                          Math.floor(
+                            Math.random() * data?.details?.image?.length
+                          )
+                        ]?.url,
+                      }}
+                      className={`rounded-full w-60 h-60`}
+                      resizeMode="cover"
                     />
-                  </React.Fragment>
-                )}
-              </ScrollView>
-            </KeyboardAvoidingView>
-          </SafeAreaView>
-        </TouchableWithoutFeedback>
+                  </View>
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-center pb-6 text-3xl`}
+                  >
+                    Customer Information
+                  </Text>
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-base`}
+                  >
+                    User Name
+                  </Text>
+                  <TextInput
+                    style={{ color: textColor }}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    autoCapitalize="none"
+                    value={user?.name}
+                    editable={false}
+                  />
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-base`}
+                  >
+                    Age
+                  </Text>
+                  <TextInput
+                    style={{ color: textColor }}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    autoCapitalize="none"
+                    value={user?.age.toString()}
+                    editable={false}
+                  />
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-base`}
+                  >
+                    Email
+                  </Text>
+                  <TextInput
+                    style={{ color: textColor }}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    autoCapitalize="none"
+                    value={user?.email}
+                    editable={false}
+                  />
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-base`}
+                  >
+                    Mobile Number
+                  </Text>
+                  <TextInput
+                    style={{ color: textColor }}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    autoCapitalize="none"
+                    value={user?.contact_number}
+                    editable={false}
+                  />
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-base`}
+                  >
+                    Chemical Solution Exclusions
+                  </Text>
+                  <TextInput
+                    style={{
+                      color: textColor,
+                      height: 100,
+                      textAlignVertical: "top",
+                    }}
+                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2 ${borderColor}`}
+                    autoCapitalize="none"
+                    multiline={true}
+                    value={filteredExclusions.join(", ")}
+                    editable={false}
+                  />
+                  {othersMessage && (
+                    <React.Fragment>
+                      <Text
+                        style={{ color: textColor }}
+                        className={`font-semibold text-base`}
+                      >
+                        Type
+                      </Text>
+                      <TextInput
+                        style={{ color: textColor }}
+                        className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                        autoCapitalize="none"
+                        value={othersMessage}
+                        editable={false}
+                      />
+                    </React.Fragment>
+                  )}
+                </ScrollView>
+              </KeyboardAvoidingView>
+            </SafeAreaView>
+          </TouchableWithoutFeedback>
+        </>
       )}
     </>
   );
