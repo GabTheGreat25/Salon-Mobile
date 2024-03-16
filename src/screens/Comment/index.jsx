@@ -138,104 +138,28 @@ export default function () {
           <LoadingScreen />
         </View>
       ) : (
-        <SafeAreaView style={{ backgroundColor }} className={`relative flex-1`}>
-          <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
-          <View className={`flex-1 items-center justify-center pt-20`}>
-            {paginatedData?.length ? (
-              <ScrollView
-                style={{ backgroundColor }}
-                showsVerticalScrollIndicator={false}
-              >
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                  <DataTable>
-                    <DataTable.Header
-                      style={{
-                        backgroundColor,
-                        borderBottomWidth: 1,
-                        borderBottomColor: borderColor,
-                      }}
-                    >
-                      <DataTable.Title
-                        style={{
-                          justifyContent: "center",
-                          alignItems: "center",
-                          padding: 10,
-                          width: customWidth,
-                        }}
-                      >
-                        <Text style={{ color: textColor }}>ID</Text>
-                      </DataTable.Title>
-                      <DataTable.Title
-                        style={{
-                          justifyContent: "center",
-                          alignItems: "center",
-                          padding: 10,
-                          width: customWidth,
-                        }}
-                      >
-                        <Text style={{ color: textColor }}>Ratings</Text>
-                      </DataTable.Title>
-                      <DataTable.Title
-                        style={{
-                          justifyContent: "center",
-                          alignItems: "center",
-                          padding: 10,
-                          width: customWidth,
-                        }}
-                      >
-                        <Text style={{ color: textColor }}>Description</Text>
-                      </DataTable.Title>
-                      <DataTable.Title
-                        style={{
-                          justifyContent: "center",
-                          alignItems: "center",
-                          padding: 10,
-                          width: customWidth,
-                        }}
-                      >
-                        <Text style={{ color: textColor }}>Suggestion</Text>
-                      </DataTable.Title>
-                      <DataTable.Title
-                        style={{
-                          justifyContent: "center",
-                          alignItems: "center",
-                          padding: 10,
-                          width: customWidth,
-                        }}
-                      >
-                        <Text style={{ color: textColor }}>Customer Name</Text>
-                      </DataTable.Title>
-                      <DataTable.Title
-                        style={{
-                          justifyContent: "center",
-                          alignItems: "center",
-                          padding: 10,
-                          width: customWidth,
-                        }}
-                      >
-                        <Text style={{ color: textColor }}>Images</Text>
-                      </DataTable.Title>
-                      <DataTable.Title
-                        style={{
-                          justifyContent: "center",
-                          alignItems: "center",
-                          padding: 10,
-                          width: customWidth,
-                        }}
-                      >
-                        <Text style={{ color: textColor }}>Actions</Text>
-                      </DataTable.Title>
-                    </DataTable.Header>
-                    {paginatedData?.map((item) => (
-                      <DataTable.Row
-                        key={item?._id}
+        <>
+          <SafeAreaView
+            style={{ backgroundColor }}
+            className={`relative flex-1`}
+          >
+            <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
+            <View className={`flex-1 items-center justify-center pt-20`}>
+              {paginatedData?.length ? (
+                <ScrollView
+                  style={{ backgroundColor }}
+                  showsVerticalScrollIndicator={false}
+                >
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                    <DataTable>
+                      <DataTable.Header
                         style={{
                           backgroundColor,
                           borderBottomWidth: 1,
                           borderBottomColor: borderColor,
                         }}
                       >
-                        <DataTable.Cell
+                        <DataTable.Title
                           style={{
                             justifyContent: "center",
                             alignItems: "center",
@@ -243,15 +167,9 @@ export default function () {
                             width: customWidth,
                           }}
                         >
-                          <Text
-                            style={{ color: textColor }}
-                            numberOfLines={1}
-                            ellipsizeMode="tail"
-                          >
-                            {item?._id}
-                          </Text>
-                        </DataTable.Cell>
-                        <DataTable.Cell
+                          <Text style={{ color: textColor }}>ID</Text>
+                        </DataTable.Title>
+                        <DataTable.Title
                           style={{
                             justifyContent: "center",
                             alignItems: "center",
@@ -259,34 +177,9 @@ export default function () {
                             width: customWidth,
                           }}
                         >
-                          <Text
-                            style={{ color: textColor }}
-                            numberOfLines={1}
-                            ellipsizeMode="tail"
-                          >
-                            {Array.from(
-                              {
-                                length: Math.min(
-                                  5,
-                                  Math.max(0, Math.floor(item?.ratings))
-                                ),
-                              },
-                              (_, index) => (
-                                <Feather
-                                  key={index}
-                                  name={
-                                    index < Math.floor(item?.ratings)
-                                      ? "star"
-                                      : "star-outline"
-                                  }
-                                  size={24}
-                                  color="#feca57"
-                                />
-                              )
-                            )}
-                          </Text>
-                        </DataTable.Cell>
-                        <DataTable.Cell
+                          <Text style={{ color: textColor }}>Ratings</Text>
+                        </DataTable.Title>
+                        <DataTable.Title
                           style={{
                             justifyContent: "center",
                             alignItems: "center",
@@ -294,15 +187,9 @@ export default function () {
                             width: customWidth,
                           }}
                         >
-                          <Text
-                            style={{ color: textColor }}
-                            numberOfLines={1}
-                            ellipsizeMode="tail"
-                          >
-                            {item?.description}
-                          </Text>
-                        </DataTable.Cell>
-                        <DataTable.Cell
+                          <Text style={{ color: textColor }}>Description</Text>
+                        </DataTable.Title>
+                        <DataTable.Title
                           style={{
                             justifyContent: "center",
                             alignItems: "center",
@@ -310,15 +197,9 @@ export default function () {
                             width: customWidth,
                           }}
                         >
-                          <Text
-                            style={{ color: textColor }}
-                            numberOfLines={1}
-                            ellipsizeMode="tail"
-                          >
-                            {item?.suggestion}
-                          </Text>
-                        </DataTable.Cell>
-                        <DataTable.Cell
+                          <Text style={{ color: textColor }}>Suggestion</Text>
+                        </DataTable.Title>
+                        <DataTable.Title
                           style={{
                             justifyContent: "center",
                             alignItems: "center",
@@ -326,106 +207,238 @@ export default function () {
                             width: customWidth,
                           }}
                         >
-                          <Text
-                            style={{ color: textColor }}
-                            numberOfLines={1}
-                            ellipsizeMode="tail"
-                          >
-                            {item?.isAnonymous
-                              ? anonymizeName(
-                                  item?.transaction?.appointment?.customer?.name
-                                )
-                              : item?.transaction?.appointment?.customer?.name}
+                          <Text style={{ color: textColor }}>
+                            Customer Name
                           </Text>
-                        </DataTable.Cell>
-                        <DataTable.Cell
+                        </DataTable.Title>
+                        <DataTable.Title
                           style={{
                             justifyContent: "center",
                             alignItems: "center",
                             padding: 10,
+                            width: customWidth,
                           }}
                         >
-                          {item.image?.length > 0 ? (
-                            <Image
-                              key={
-                                item.image[
-                                  Math.floor(Math.random() * item.image?.length)
-                                ]?.public_id
-                              }
-                              source={{
-                                uri: item.image[
-                                  Math.floor(Math.random() * item.image?.length)
-                                ]?.url,
-                              }}
-                              className={`object-center w-20 h-20 rounded-full`}
-                            />
-                          ) : (
+                          <Text style={{ color: textColor }}>Images</Text>
+                        </DataTable.Title>
+                        <DataTable.Title
+                          style={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: 10,
+                            width: customWidth,
+                          }}
+                        >
+                          <Text style={{ color: textColor }}>Actions</Text>
+                        </DataTable.Title>
+                      </DataTable.Header>
+                      {paginatedData?.map((item) => (
+                        <DataTable.Row
+                          key={item?._id}
+                          style={{
+                            backgroundColor,
+                            borderBottomWidth: 1,
+                            borderBottomColor: borderColor,
+                          }}
+                        >
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
+                          >
                             <Text
                               style={{ color: textColor }}
                               numberOfLines={1}
                               ellipsizeMode="tail"
                             >
-                              No Image
+                              {item?._id}
                             </Text>
-                          )}
-                        </DataTable.Cell>
-                        <DataTable.Cell
-                          style={{
-                            width: customWidth,
-                            justifyContent: "space-around",
-                            alignItems: "center",
-                            padding: 10,
-                          }}
-                        >
-                          <TouchableOpacity
-                            onPress={() => handleViewComment(item?._id)}
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
                           >
-                            <Feather name="eye" size={24} color="green" />
-                          </TouchableOpacity>
-                          <View style={{ width: 10 }} />
-                          <TouchableOpacity
-                            onPress={() => handleDeleteComment(item?._id)}
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {Array.from(
+                                {
+                                  length: Math.min(
+                                    5,
+                                    Math.max(0, Math.floor(item?.ratings))
+                                  ),
+                                },
+                                (_, index) => (
+                                  <Feather
+                                    key={index}
+                                    name={
+                                      index < Math.floor(item?.ratings)
+                                        ? "star"
+                                        : "star-outline"
+                                    }
+                                    size={24}
+                                    color="#feca57"
+                                  />
+                                )
+                              )}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
                           >
-                            <Feather name="delete" size={24} color="red" />
-                          </TouchableOpacity>
-                        </DataTable.Cell>
-                      </DataTable.Row>
-                    ))}
-                  </DataTable>
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {item?.description}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
+                          >
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {item?.suggestion}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
+                          >
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {item?.isAnonymous
+                                ? anonymizeName(
+                                    item?.transaction?.appointment?.customer
+                                      ?.name
+                                  )
+                                : item?.transaction?.appointment?.customer
+                                    ?.name}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                            }}
+                          >
+                            {item.image?.length > 0 ? (
+                              <Image
+                                key={
+                                  item.image[
+                                    Math.floor(
+                                      Math.random() * item.image?.length
+                                    )
+                                  ]?.public_id
+                                }
+                                source={{
+                                  uri: item.image[
+                                    Math.floor(
+                                      Math.random() * item.image?.length
+                                    )
+                                  ]?.url,
+                                }}
+                                className={`object-center w-20 h-20 rounded-full`}
+                              />
+                            ) : (
+                              <Text
+                                style={{ color: textColor }}
+                                numberOfLines={1}
+                                ellipsizeMode="tail"
+                              >
+                                No Image
+                              </Text>
+                            )}
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              width: customWidth,
+                              justifyContent: "space-around",
+                              alignItems: "center",
+                              padding: 10,
+                            }}
+                          >
+                            <TouchableOpacity
+                              onPress={() => handleViewComment(item?._id)}
+                            >
+                              <Feather name="eye" size={24} color="green" />
+                            </TouchableOpacity>
+                            <View style={{ width: 10 }} />
+                            <TouchableOpacity
+                              onPress={() => handleDeleteComment(item?._id)}
+                            >
+                              <Feather name="delete" size={24} color="red" />
+                            </TouchableOpacity>
+                          </DataTable.Cell>
+                        </DataTable.Row>
+                      ))}
+                    </DataTable>
+                  </ScrollView>
                 </ScrollView>
-              </ScrollView>
-            ) : (
-              <View
-                className={`flex-1 justify-center items-center`}
-                style={{ backgroundColor }}
-              >
-                <Text style={{ color: textColor }}>No data available.</Text>
-              </View>
-            )}
-            {paginatedData?.length ? (
-              <View className={`flex items-center flex-row my-6`}>
-                <Button
-                  title="Previous"
-                  onPress={handlePrevPage}
-                  disabled={page === 0}
-                  color="#FDA7DF"
-                />
-                <Text
-                  style={{
-                    color: textColor,
-                  }}
-                  className={`px-20`}
-                >{`Page ${page + 1} of ${totalPageCount}`}</Text>
-                <Button
-                  title="Next"
-                  onPress={handleNextPage}
-                  disabled={page === totalPageCount - 1}
-                  color="#FDA7DF"
-                />
-              </View>
-            ) : null}
-          </View>
-        </SafeAreaView>
+              ) : (
+                <View
+                  className={`flex-1 justify-center items-center`}
+                  style={{ backgroundColor }}
+                >
+                  <Text style={{ color: textColor }}>No data available.</Text>
+                </View>
+              )}
+              {paginatedData?.length ? (
+                <View className={`flex items-center flex-row my-6`}>
+                  <Button
+                    title="Previous"
+                    onPress={handlePrevPage}
+                    disabled={page === 0}
+                    color="#FDA7DF"
+                  />
+                  <Text
+                    style={{
+                      color: textColor,
+                    }}
+                    className={`px-20`}
+                  >{`Page ${page + 1} of ${totalPageCount}`}</Text>
+                  <Button
+                    title="Next"
+                    onPress={handleNextPage}
+                    disabled={page === totalPageCount - 1}
+                    color="#FDA7DF"
+                  />
+                </View>
+              ) : null}
+            </View>
+          </SafeAreaView>
+        </>
       )}
     </>
   );
