@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import {
-  ScrollView,
+  SafeAreaView,
   View,
   Text,
   Image,
@@ -49,7 +49,7 @@ export default function () {
 
   return (
     <>
-      <View style={{ backgroundColor }} className={`flex-1`}>
+      <SafeAreaView style={{ backgroundColor }} className={`flex-1`}>
         <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
         <View
           style={{
@@ -178,7 +178,7 @@ export default function () {
             </View>
           </TouchableOpacity>
         </View>
-      </View>
+      </SafeAreaView>
     </>
   );
 }
