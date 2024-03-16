@@ -233,10 +233,10 @@ export default function () {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <SafeAreaView
             style={{ backgroundColor }}
-            className={`relative flex-1`}
+            className={`relative flex-1 pt-12`}
           >
             <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
-            <View className={`flex-1 pt-12 pb-6`}>
+            <View className={`flex-1 pb-2`}>
               <ScrollView
                 showsVerticalScrollIndicator={false}
                 decelerationRate="fast"
@@ -245,7 +245,7 @@ export default function () {
               >
                 <Text
                   style={{ color: textColor }}
-                  className={`pt-6 pb-2 font-semibold text-center text-3xl`}
+                  className={`pb-4 font-semibold text-center text-3xl`}
                 >
                   Sign up as Beautician
                 </Text>
