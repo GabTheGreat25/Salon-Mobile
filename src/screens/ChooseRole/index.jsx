@@ -16,19 +16,19 @@ export default function MyComponent() {
         showName={false}
         navigateBack={() => navigation.goBack()}
         firstButton={
-          hiring.isHiring && hiring.type === "Beautician"
+          hiring?.isHiring && hiring?.type === "Beautician"
             ? "Beautician"
-            : hiring.isHiring && hiring.type === "Receptionist"
+            : hiring?.isHiring && hiring?.type === "Receptionist"
             ? "Receptionist"
             : null
         }
-        navigateFirstButton={() => {
-          if (hiring.isHiring && hiring.type === "Beautician") {
-            navigation.navigate("SignUpEmployee");
-          } else if (hiring.isHiring && hiring.type === "Receptionist") {
-            navigation.navigate("SignUpReceptionist");
-          }
-        }}
+        navigateFirstButton={() =>
+          hiring?.isHiring && hiring?.type === "Beautician"
+            ? navigation.navigate("SignUpEmployee")
+            : hiring?.isHiring && hiring?.type === "Receptionist"
+            ? navigation.navigate("SignUpReceptionist")
+            : null
+        }
         secondButton="Customer"
         navigateSecondButton={() => navigation.navigate("SignUpCustomer")}
       />
