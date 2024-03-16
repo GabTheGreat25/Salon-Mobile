@@ -7,8 +7,8 @@ import {
   TouchableOpacity,
   Dimensions,
   FlatList,
+  SafeAreaView,
 } from "react-native";
-import SalonFaceWash from "@assets/face-wash.png";
 import { changeColor, dimensionLayout } from "@utils";
 import { BackIcon } from "@helpers";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
@@ -74,7 +74,7 @@ export default function () {
       ) : (
         <>
           <BackIcon navigateBack={handleBack} textColor={textColor} />
-          <View
+          <SafeAreaView
             style={{
               backgroundColor,
             }}
@@ -258,7 +258,7 @@ export default function () {
                 )}
               />
             </View>
-          </View>
+          </SafeAreaView>
         </>
       )}
     </>
