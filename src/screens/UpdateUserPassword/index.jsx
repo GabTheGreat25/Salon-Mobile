@@ -101,161 +101,166 @@ export default function () {
           <LoadingScreen />
         </View>
       ) : (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <SafeAreaView
-            style={{ backgroundColor }}
-            className={`relative flex-1`}
-          >
-            <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
-            <View className={`flex-1 py-12`}>
-              <ScrollView
-                showsVerticalScrollIndicator={false}
-                decelerationRate="fast"
-                scrollEventThrottle={1}
-                className={`px-6`}
-              >
-                <Text
-                  style={{ color: textColor }}
-                  className={`py-6 font-semibold text-center text-3xl`}
+        <>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <SafeAreaView
+              style={{ backgroundColor }}
+              className={`relative flex-1 pt-12`}
+            >
+              <BackIcon
+                navigateBack={navigation.goBack}
+                textColor={textColor}
+              />
+              <View className={`flex-1 pb-2`}>
+                <ScrollView
+                  showsVerticalScrollIndicator={false}
+                  decelerationRate="fast"
+                  scrollEventThrottle={1}
+                  className={`px-6`}
                 >
-                  Update Your Password
-                </Text>
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-base mb-1`}
-                >
-                  Old Password
-                </Text>
-                <View className={`relative`}>
-                  <TextInput
+                  <Text
                     style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                    placeholder="Enter your old password"
-                    placeholderTextColor={textColor}
-                    autoCapitalize="none"
-                    handleTextInputFocus={handleTextInputFocus}
-                    onChangeText={formik.handleChange("oldPassword")}
-                    onBlur={formik.handleBlur("oldPassword")}
-                    value={formik.values.oldPassword}
-                    secureTextEntry={!showOldPassword}
-                  />
-                  <TouchableOpacity
-                    className={`absolute right-4 top-5`}
-                    onPress={toggleOldPasswordVisibility}
+                    className={`pb-4 font-semibold text-center text-3xl`}
                   >
-                    <Feather
-                      name={showOldPassword ? "eye" : "eye-off"}
-                      size={24}
-                      color={textColor}
-                    />
-                  </TouchableOpacity>
-                </View>
-                {formik.touched.oldPassword && formik.errors.oldPassword && (
-                  <Text style={{ color: "red" }}>
-                    {formik.errors.oldPassword}
+                    Update Your Password
                   </Text>
-                )}
-
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-base mb-1`}
-                >
-                  New Password
-                </Text>
-                <View className={`relative`}>
-                  <TextInput
+                  <Text
                     style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                    placeholder="Enter your new password"
-                    placeholderTextColor={textColor}
-                    autoCapitalize="none"
-                    handleTextInputFocus={handleTextInputFocus}
-                    onChangeText={formik.handleChange("newPassword")}
-                    onBlur={formik.handleBlur("newPassword")}
-                    value={formik.values.newPassword}
-                    secureTextEntry={!showPassword}
-                  />
-                  <TouchableOpacity
-                    className={`absolute right-4 top-5`}
-                    onPress={togglePasswordVisibility}
+                    className={`font-semibold text-base mb-1`}
                   >
-                    <Feather
-                      name={showPassword ? "eye" : "eye-off"}
-                      size={24}
-                      color={textColor}
-                    />
-                  </TouchableOpacity>
-                </View>
-                {formik.touched.newPassword && formik.errors.newPassword && (
-                  <Text style={{ color: "red" }}>
-                    {formik.errors.newPassword}
+                    Old Password
                   </Text>
-                )}
-
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-base mb-1`}
-                >
-                  Confirm Password
-                </Text>
-                <View className={`relative`}>
-                  <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                    placeholder="Confirm your password"
-                    placeholderTextColor={textColor}
-                    autoCapitalize="none"
-                    handleTextInputFocus={handleTextInputFocus}
-                    onChangeText={formik.handleChange("confirmPassword")}
-                    onBlur={formik.handleBlur("confirmPassword")}
-                    value={formik.values.confirmPassword}
-                    secureTextEntry={!showConfirmPassword}
-                  />
-                  <TouchableOpacity
-                    className={`absolute right-4 top-5`}
-                    onPress={toggleConfirmPasswordVisibility}
-                  >
-                    <Feather
-                      name={showConfirmPassword ? "eye" : "eye-off"}
-                      size={24}
-                      color={textColor}
+                  <View className={`relative`}>
+                    <TextInput
+                      style={{ color: textColor }}
+                      className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                      placeholder="Enter your old password"
+                      placeholderTextColor={textColor}
+                      autoCapitalize="none"
+                      handleTextInputFocus={handleTextInputFocus}
+                      onChangeText={formik.handleChange("oldPassword")}
+                      onBlur={formik.handleBlur("oldPassword")}
+                      value={formik.values.oldPassword}
+                      secureTextEntry={!showOldPassword}
                     />
-                  </TouchableOpacity>
-                </View>
-                {formik.touched.confirmPassword &&
-                  formik.errors.confirmPassword && (
+                    <TouchableOpacity
+                      className={`absolute right-4 top-5`}
+                      onPress={toggleOldPasswordVisibility}
+                    >
+                      <Feather
+                        name={showOldPassword ? "eye" : "eye-off"}
+                        size={24}
+                        color={textColor}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                  {formik.touched.oldPassword && formik.errors.oldPassword && (
                     <Text style={{ color: "red" }}>
-                      {formik.errors.confirmPassword}
+                      {formik.errors.oldPassword}
                     </Text>
                   )}
 
-                <View
-                  className={`mt-4 items-center justify-center flex-col
-                    `}
-                >
-                  <TouchableOpacity
-                    onPress={formik.handleSubmit}
-                    disabled={!formik.isValid}
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-base mb-1`}
                   >
-                    <View className={`mb-2 flex justify-center items-center`}>
-                      <View
-                        className={`py-2 rounded-lg bg-primary-accent w-[175px]
+                    New Password
+                  </Text>
+                  <View className={`relative`}>
+                    <TextInput
+                      style={{ color: textColor }}
+                      className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                      placeholder="Enter your new password"
+                      placeholderTextColor={textColor}
+                      autoCapitalize="none"
+                      handleTextInputFocus={handleTextInputFocus}
+                      onChangeText={formik.handleChange("newPassword")}
+                      onBlur={formik.handleBlur("newPassword")}
+                      value={formik.values.newPassword}
+                      secureTextEntry={!showPassword}
+                    />
+                    <TouchableOpacity
+                      className={`absolute right-4 top-5`}
+                      onPress={togglePasswordVisibility}
+                    >
+                      <Feather
+                        name={showPassword ? "eye" : "eye-off"}
+                        size={24}
+                        color={textColor}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                  {formik.touched.newPassword && formik.errors.newPassword && (
+                    <Text style={{ color: "red" }}>
+                      {formik.errors.newPassword}
+                    </Text>
+                  )}
+
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-base mb-1`}
+                  >
+                    Confirm Password
+                  </Text>
+                  <View className={`relative`}>
+                    <TextInput
+                      style={{ color: textColor }}
+                      className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                      placeholder="Confirm your password"
+                      placeholderTextColor={textColor}
+                      autoCapitalize="none"
+                      handleTextInputFocus={handleTextInputFocus}
+                      onChangeText={formik.handleChange("confirmPassword")}
+                      onBlur={formik.handleBlur("confirmPassword")}
+                      value={formik.values.confirmPassword}
+                      secureTextEntry={!showConfirmPassword}
+                    />
+                    <TouchableOpacity
+                      className={`absolute right-4 top-5`}
+                      onPress={toggleConfirmPasswordVisibility}
+                    >
+                      <Feather
+                        name={showConfirmPassword ? "eye" : "eye-off"}
+                        size={24}
+                        color={textColor}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                  {formik.touched.confirmPassword &&
+                    formik.errors.confirmPassword && (
+                      <Text style={{ color: "red" }}>
+                        {formik.errors.confirmPassword}
+                      </Text>
+                    )}
+
+                  <View
+                    className={`mt-4 items-center justify-center flex-col
+                    `}
+                  >
+                    <TouchableOpacity
+                      onPress={formik.handleSubmit}
+                      disabled={!formik.isValid}
+                    >
+                      <View className={`mb-2 flex justify-center items-center`}>
+                        <View
+                          className={`py-2 rounded-lg bg-primary-accent w-[175px]
                           } ${!formik.isValid ? "opacity-50" : "opacity-100"}`}
-                      >
-                        <Text
-                          className={`font-semibold text-center text-lg`}
-                          style={{ color: textColor }}
                         >
-                          Submit
-                        </Text>
+                          <Text
+                            className={`font-semibold text-center text-lg`}
+                            style={{ color: textColor }}
+                          >
+                            Submit
+                          </Text>
+                        </View>
                       </View>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              </ScrollView>
-            </View>
-          </SafeAreaView>
-        </TouchableWithoutFeedback>
+                    </TouchableOpacity>
+                  </View>
+                </ScrollView>
+              </View>
+            </SafeAreaView>
+          </TouchableWithoutFeedback>
+        </>
       )}
     </>
   );
