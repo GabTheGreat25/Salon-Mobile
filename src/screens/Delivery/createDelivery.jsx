@@ -170,7 +170,7 @@ export default function () {
             className={`relative flex-1`}
           >
             <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
-            <View className={`flex-1 py-12`}>
+            <View className={`pt-12`}>
               <ScrollView
                 showsVerticalScrollIndicator={false}
                 decelerationRate="fast"
@@ -179,7 +179,7 @@ export default function () {
               >
                 <Text
                   style={{ color: textColor }}
-                  className={`py-6 font-semibold text-center text-3xl`}
+                  className={`pb-6 font-semibold text-center text-3xl`}
                 >
                   Create Delivery
                 </Text>
