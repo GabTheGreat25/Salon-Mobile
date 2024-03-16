@@ -96,76 +96,81 @@ export default function () {
           <LoadingScreen />
         </View>
       ) : (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <SafeAreaView
-            style={{ backgroundColor }}
-            className={`relative flex-1`}
-          >
-            <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
-            <View className={`flex-1 py-12`}>
-              <ScrollView
-                showsVerticalScrollIndicator={false}
-                decelerationRate="fast"
-                scrollEventThrottle={1}
-                className={`px-6`}
-              >
-                <Text
-                  style={{ color: textColor }}
-                  className={`py-6 font-semibold text-center text-3xl`}
+        <>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <SafeAreaView
+              style={{ backgroundColor }}
+              className={`relative flex-1 pt-12`}
+            >
+              <BackIcon
+                navigateBack={navigation.goBack}
+                textColor={textColor}
+              />
+              <View className={`flex-1 pb-2`}>
+                <ScrollView
+                  showsVerticalScrollIndicator={false}
+                  decelerationRate="fast"
+                  scrollEventThrottle={1}
+                  className={`px-6`}
                 >
-                  Create Time
-                </Text>
-
-                <TextInput
-                  style={{ color: textColor }}
-                  className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                  placeholder="Enter time"
-                  placeholderTextColor={textColor}
-                  onFocus={showTimepicker}
-                  value={formik.values.time}
-                />
-                {showTimePicker && (
-                  <DateTimePicker
-                    value={selectedTime}
-                    mode="time"
-                    is24Hour={false}
-                    display="default"
-                    onChange={(event, time) => {
-                      handleTimeChange(event, time);
-                      formik.validateForm().then(() => {
-                        formik.setFieldTouched("time", true);
-                      });
-                    }}
-                  />
-                )}
-                {formik.touched.time && formik.errors.time && (
-                  <Text style={{ color: "red" }}>{formik.errors.time}</Text>
-                )}
-
-                <View className={`my-4 items-center justify-center flex-col`}>
-                  <TouchableOpacity
-                    onPress={formik.handleSubmit}
-                    disabled={!formik.isValid}
+                  <Text
+                    style={{ color: textColor }}
+                    className={`pb-4 font-semibold text-center text-3xl`}
                   >
-                    <View className={`mb-2 flex justify-center items-center`}>
-                      <View
-                        className={`py-2 rounded-lg bg-primary-accent w-[175px]
+                    Create Time
+                  </Text>
+
+                  <TextInput
+                    style={{ color: textColor }}
+                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    placeholder="Enter time"
+                    placeholderTextColor={textColor}
+                    onFocus={showTimepicker}
+                    value={formik.values.time}
+                  />
+                  {showTimePicker && (
+                    <DateTimePicker
+                      value={selectedTime}
+                      mode="time"
+                      is24Hour={false}
+                      display="default"
+                      onChange={(event, time) => {
+                        handleTimeChange(event, time);
+                        formik.validateForm().then(() => {
+                          formik.setFieldTouched("time", true);
+                        });
+                      }}
+                    />
+                  )}
+                  {formik.touched.time && formik.errors.time && (
+                    <Text style={{ color: "red" }}>{formik.errors.time}</Text>
+                  )}
+
+                  <View className={`my-4 items-center justify-center flex-col`}>
+                    <TouchableOpacity
+                      onPress={formik.handleSubmit}
+                      disabled={!formik.isValid}
+                    >
+                      <View className={`mb-2 flex justify-center items-center`}>
+                        <View
+                          className={`py-2 rounded-lg bg-primary-accent w-[175px]
                           } ${!formik.isValid ? "opacity-50" : "opacity-100"}`}
-                      >
-                        <Text
-                          className={`font-semibold text-center text-lg`}
-                          style={{ color: textColor }}
                         >
-                          Submit
-                        </Text>
+                          <Text
+                            className={`font-semibold text-center text-lg`}
+                            style={{ color: textColor }}
+                          >
+                            Submit
+                          </Text>
+                        </View>
                       </View>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              </ScrollView>
-            </View>
-          </SafeAreaView>
-        </TouchableWithoutFeedback>
+                    </TouchableOpacity>
+                  </View>
+                </ScrollView>
+              </View>
+            </SafeAreaView>
+          </TouchableWithoutFeedback>
+        </>
       )}
     </>
   );
