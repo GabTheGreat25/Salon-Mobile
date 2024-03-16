@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Dimensions,
   FlatList,
+  SafeAreaView,
 } from "react-native";
 import { useDispatch } from "react-redux";
 import { changeColor, dimensionLayout } from "@utils";
@@ -93,7 +94,7 @@ export default function () {
             textColor={textColor}
             navigateTo={handleCart}
           />
-          <View
+          <SafeAreaView
             style={{
               backgroundColor,
             }}
@@ -277,7 +278,7 @@ export default function () {
                 )}
               />
             </View>
-          </View>
+          </SafeAreaView>
         </>
       )}
     </>
