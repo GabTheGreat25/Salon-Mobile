@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Modal,
   Button,
+  SafeAreaView,
 } from "react-native";
 import {
   useGetTransactionsQuery,
@@ -203,7 +204,7 @@ export default function () {
         </View>
       ) : (
         <>
-          <View
+          <SafeAreaView
             style={{
               borderColor: borderColor,
               backgroundColor: invertBackgroundColor,
@@ -308,7 +309,7 @@ export default function () {
                 </View>
               </View>
             </Modal>
-          </View>
+          </SafeAreaView>
         </>
       )}
     </>
