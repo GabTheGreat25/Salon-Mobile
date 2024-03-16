@@ -173,117 +173,126 @@ export default function ({ route }) {
           <LoadingScreen />
         </View>
       ) : (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <SafeAreaView
-            style={{ backgroundColor }}
-            className={`relative flex-1`}
-          >
-            <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
-            <KeyboardAvoidingView behavior="height">
-              <ScrollView
-                showsVerticalScrollIndicator={false}
-                decelerationRate="fast"
-                scrollEventThrottle={1}
-                className={`px-6`}
-              >
-                <View className={`pt-10 pb-2`}>
-                  <Text
-                    style={{ color: textColor }}
-                    className={`font-semibold text-center my-[9px] text-3xl`}
-                  >
-                    Change Appointment Beautician
-                  </Text>
-                  <Text
-                    style={{ color: textColor }}
-                    className={`font-semibold text-base`}
-                  >
-                    Customer Name
-                  </Text>
-                  <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                    value={appointment?.customer?.name}
-                    editable={false}
-                  />
-                  <Text
-                    style={{ color: textColor }}
-                    className={`font-semibold text-base`}
-                  >
-                    Appointment Services
-                  </Text>
-                  <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                    value={appointment?.service
-                      ?.map((s) => s?.service_name)
-                      .join(", ")}
-                    editable={false}
-                  />
-
-                  {filteredActiveBeauticians.map((beautician) => (
-                    <View
-                      key={beautician._id}
-                      className="flex flex-row items-start justify-start space-x-2 my-2"
+        <>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <SafeAreaView
+              style={{ backgroundColor }}
+              className={`relative flex-1`}
+            >
+              <BackIcon
+                navigateBack={navigation.goBack}
+                textColor={textColor}
+              />
+              <KeyboardAvoidingView behavior="height">
+                <ScrollView
+                  showsVerticalScrollIndicator={false}
+                  decelerationRate="fast"
+                  scrollEventThrottle={1}
+                  className={`px-6`}
+                >
+                  <View className={`pt-10 pb-2`}>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`font-semibold text-center my-[9px] text-3xl`}
                     >
-                      <TouchableOpacity
-                        onPress={() => handleCheckBoxToggle(beautician._id)}
-                        className={`mr-2`}
+                      Change Appointment Beautician
+                    </Text>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`font-semibold text-base`}
+                    >
+                      Customer Name
+                    </Text>
+                    <TextInput
+                      style={{ color: textColor }}
+                      className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                      value={appointment?.customer?.name}
+                      editable={false}
+                    />
+                    <Text
+                      style={{ color: textColor }}
+                      className={`font-semibold text-base`}
+                    >
+                      Appointment Services
+                    </Text>
+                    <TextInput
+                      style={{ color: textColor }}
+                      className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                      value={appointment?.service
+                        ?.map((s) => s?.service_name)
+                        .join(", ")}
+                      editable={false}
+                    />
+
+                    {filteredActiveBeauticians.map((beautician) => (
+                      <View
+                        key={beautician._id}
+                        className="flex flex-row items-start justify-start space-x-2 my-2"
                       >
-                        <View
-                          style={{
-                            height: 35,
-                            width: 35,
-                            borderColor: textColor,
-                            backgroundColor: backgroundColor,
-                          }}
-                          className={`flex-row justify-center items-center border-2 rounded`}
+                        <TouchableOpacity
+                          onPress={() => handleCheckBoxToggle(beautician._id)}
+                          className={`mr-2`}
                         >
-                          {selectedBeauticians.includes(
-                            beautician._id.toString()
-                          ) && (
-                            <Text
-                              style={{ color: textColor }}
-                              className={`text-2xl`}
-                            >
-                              ✓
-                            </Text>
-                          )}
-                        </View>
-                      </TouchableOpacity>
-                      <View className={`text-center`}>
-                        <Text>
-                          {beautician.name} -{" "}
-                          {beautician?.requirement?.job_type}
-                        </Text>
-                      </View>
-                    </View>
-                  ))}
-
-                  <View className={`mt-4 items-center justify-center flex-col`}>
-                    <TouchableOpacity
-                      onPress={formik.handleSubmit}
-                      disabled={!formik.isValid}
-                    >
-                      <View className={`mb-2 flex justify-center items-center`}>
-                        <View
-                          className={`py-2 rounded-lg bg-primary-accent w-[175px]
-                          } ${!formik.isValid ? "opacity-50" : "opacity-100"}`}
-                        >
-                          <Text
-                            className={`font-semibold text-center text-lg`}
-                            style={{ color: textColor }}
+                          <View
+                            style={{
+                              height: 35,
+                              width: 35,
+                              borderColor: textColor,
+                              backgroundColor: backgroundColor,
+                            }}
+                            className={`flex-row justify-center items-center border-2 rounded`}
                           >
-                            Submit
+                            {selectedBeauticians.includes(
+                              beautician._id.toString()
+                            ) && (
+                              <Text
+                                style={{ color: textColor }}
+                                className={`text-2xl`}
+                              >
+                                ✓
+                              </Text>
+                            )}
+                          </View>
+                        </TouchableOpacity>
+                        <View className={`text-center`}>
+                          <Text>
+                            {beautician.name} -{" "}
+                            {beautician?.requirement?.job_type}
                           </Text>
                         </View>
                       </View>
-                    </TouchableOpacity>
+                    ))}
+
+                    <View
+                      className={`mt-4 items-center justify-center flex-col`}
+                    >
+                      <TouchableOpacity
+                        onPress={formik.handleSubmit}
+                        disabled={!formik.isValid}
+                      >
+                        <View
+                          className={`mb-2 flex justify-center items-center`}
+                        >
+                          <View
+                            className={`py-2 rounded-lg bg-primary-accent w-[175px]
+                          } ${!formik.isValid ? "opacity-50" : "opacity-100"}`}
+                          >
+                            <Text
+                              className={`font-semibold text-center text-lg`}
+                              style={{ color: textColor }}
+                            >
+                              Submit
+                            </Text>
+                          </View>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
                   </View>
-                </View>
-              </ScrollView>
-            </KeyboardAvoidingView>
-          </SafeAreaView>
-        </TouchableWithoutFeedback>
+                </ScrollView>
+              </KeyboardAvoidingView>
+            </SafeAreaView>
+          </TouchableWithoutFeedback>
+        </>
       )}
     </>
   );
