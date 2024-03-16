@@ -20,7 +20,7 @@ module.exports = function (api) {
             "@drawer": "./src/drawer",
             "@env": "./src/env",
             "@constants": "./src/constants",
-            "@settings": "./src/settings"
+            "@settings": "./src/settings",
           },
         },
       ],
