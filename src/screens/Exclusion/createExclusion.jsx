@@ -85,266 +85,271 @@ export default function () {
           <LoadingScreen />
         </View>
       ) : (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <SafeAreaView
-            style={{ backgroundColor }}
-            className={`relative flex-1`}
-          >
-            <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
-            <View className={`flex-1 py-12`}>
-              <ScrollView
-                showsVerticalScrollIndicator={false}
-                decelerationRate="fast"
-                scrollEventThrottle={1}
-                className={`px-6`}
-              >
-                <Text
-                  style={{ color: textColor }}
-                  className={`py-6 font-semibold text-center text-3xl`}
+        <>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <SafeAreaView
+              style={{ backgroundColor }}
+              className={`relative flex-1 pt-12`}
+            >
+              <BackIcon
+                navigateBack={navigation.goBack}
+                textColor={textColor}
+              />
+              <View className={`flex-1 pb-2`}>
+                <ScrollView
+                  showsVerticalScrollIndicator={false}
+                  decelerationRate="fast"
+                  scrollEventThrottle={1}
+                  className={`px-6`}
                 >
-                  Create Exclusion
-                </Text>
-                <TextInput
-                  style={{ color: textColor }}
-                  className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                  placeholder="Enter your exclusion name"
-                  placeholderTextColor={textColor}
-                  autoCapitalize="none"
-                  onChangeText={formik.handleChange("ingredient_name")}
-                  onBlur={formik.handleBlur("ingredient_name")}
-                  value={formik.values.ingredient_name}
-                />
-                {formik.touched.ingredient_name &&
-                  formik.errors.ingredient_name && (
-                    <Text style={{ color: "red" }}>
-                      {formik.errors.ingredient_name}
-                    </Text>
+                  <Text
+                    style={{ color: textColor }}
+                    className={`pb-4 font-semibold text-center text-3xl`}
+                  >
+                    Create Exclusion
+                  </Text>
+                  <TextInput
+                    style={{ color: textColor }}
+                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    placeholder="Enter your exclusion name"
+                    placeholderTextColor={textColor}
+                    autoCapitalize="none"
+                    onChangeText={formik.handleChange("ingredient_name")}
+                    onBlur={formik.handleBlur("ingredient_name")}
+                    value={formik.values.ingredient_name}
+                  />
+                  {formik.touched.ingredient_name &&
+                    formik.errors.ingredient_name && (
+                      <Text style={{ color: "red" }}>
+                        {formik.errors.ingredient_name}
+                      </Text>
+                    )}
+
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-2xl`}
+                  >
+                    Categories
+                  </Text>
+                  <View
+                    className={`flex flex-row justify-start gap-x-4 flex-wrap`}
+                  >
+                    <TouchableOpacity
+                      onPress={() => handleCheckBoxToggle("Hands")}
+                      className={`flex-row py-2`}
+                    >
+                      <View
+                        style={{
+                          height: 35,
+                          width: 35,
+                          borderColor: textColor,
+                          backgroundColor: backgroundColor,
+                        }}
+                        className={`flex-row justify-center items-center border-2 rounded`}
+                      >
+                        {selectedTypes.includes("Hands") && (
+                          <Text
+                            style={{ color: textColor }}
+                            className={`text-2xl`}
+                          >
+                            ✓
+                          </Text>
+                        )}
+                      </View>
+                    </TouchableOpacity>
+                    <View className={`pt-2 pb-6`}>
+                      <Text
+                        style={{ color: textColor }}
+                        className={`text-2xl font-semibold`}
+                      >
+                        Hands
+                      </Text>
+                    </View>
+                    <TouchableOpacity
+                      onPress={() => handleCheckBoxToggle("Hair")}
+                      className={`flex-row py-2`}
+                    >
+                      <View
+                        style={{
+                          height: 35,
+                          width: 35,
+                          borderColor: textColor,
+                          backgroundColor: backgroundColor,
+                        }}
+                        className={`flex-row justify-center items-center border-2 rounded`}
+                      >
+                        {selectedTypes.includes("Hair") && (
+                          <Text
+                            style={{ color: textColor }}
+                            className={`text-2xl`}
+                          >
+                            ✓
+                          </Text>
+                        )}
+                      </View>
+                    </TouchableOpacity>
+                    <View className={`pt-2 pb-6`}>
+                      <Text
+                        style={{ color: textColor }}
+                        className={`text-2xl font-semibold`}
+                      >
+                        Hair
+                      </Text>
+                    </View>
+                    <TouchableOpacity
+                      onPress={() => handleCheckBoxToggle("Feet")}
+                      className={`flex-row py-2`}
+                    >
+                      <View
+                        style={{
+                          height: 35,
+                          width: 35,
+                          borderColor: textColor,
+                          backgroundColor: backgroundColor,
+                        }}
+                        className={`flex-row justify-center items-center border-2 rounded`}
+                      >
+                        {selectedTypes.includes("Feet") && (
+                          <Text
+                            style={{ color: textColor }}
+                            className={`text-2xl`}
+                          >
+                            ✓
+                          </Text>
+                        )}
+                      </View>
+                    </TouchableOpacity>
+                    <View className={`pt-2 pb-6`}>
+                      <Text
+                        style={{ color: textColor }}
+                        className={`text-2xl font-semibold`}
+                      >
+                        Feet
+                      </Text>
+                    </View>
+                    <TouchableOpacity
+                      onPress={() => handleCheckBoxToggle("Facial")}
+                      className={`flex-row py-2`}
+                    >
+                      <View
+                        style={{
+                          height: 35,
+                          width: 35,
+                          borderColor: textColor,
+                          backgroundColor: backgroundColor,
+                        }}
+                        className={`flex-row justify-center items-center border-2 rounded`}
+                      >
+                        {selectedTypes.includes("Face") && (
+                          <Text
+                            style={{ color: textColor }}
+                            className={`text-2xl`}
+                          >
+                            ✓
+                          </Text>
+                        )}
+                      </View>
+                    </TouchableOpacity>
+                    <View className={`pt-2 pb-6`}>
+                      <Text
+                        style={{ color: textColor }}
+                        className={`text-2xl font-semibold`}
+                      >
+                        Facial
+                      </Text>
+                    </View>
+                    <TouchableOpacity
+                      onPress={() => handleCheckBoxToggle("Body")}
+                      className={`flex-row py-2`}
+                    >
+                      <View
+                        style={{
+                          height: 35,
+                          width: 35,
+                          borderColor: textColor,
+                          backgroundColor: backgroundColor,
+                        }}
+                        className={`flex-row justify-center items-center border-2 rounded`}
+                      >
+                        {selectedTypes.includes("Body") && (
+                          <Text
+                            style={{ color: textColor }}
+                            className={`text-2xl`}
+                          >
+                            ✓
+                          </Text>
+                        )}
+                      </View>
+                    </TouchableOpacity>
+                    <View className={`pt-2 pb-6`}>
+                      <Text
+                        style={{ color: textColor }}
+                        className={`text-2xl font-semibold`}
+                      >
+                        Body
+                      </Text>
+                    </View>
+                    <TouchableOpacity
+                      onPress={() => handleCheckBoxToggle("Eyelash")}
+                      className={`flex-row py-2`}
+                    >
+                      <View
+                        style={{
+                          height: 35,
+                          width: 35,
+                          borderColor: textColor,
+                          backgroundColor: backgroundColor,
+                        }}
+                        className={`flex-row justify-center items-center border-2 rounded`}
+                      >
+                        {selectedTypes.includes("Eyelash") && (
+                          <Text
+                            style={{ color: textColor }}
+                            className={`text-2xl`}
+                          >
+                            ✓
+                          </Text>
+                        )}
+                      </View>
+                    </TouchableOpacity>
+                    <View className={`pt-2 pb-6`}>
+                      <Text
+                        style={{ color: textColor }}
+                        className={`text-2xl font-semibold`}
+                      >
+                        Eyelash
+                      </Text>
+                    </View>
+                  </View>
+                  {formik.touched.type && formik.errors.type && (
+                    <Text style={{ color: "red" }}>{formik.errors.type}</Text>
                   )}
 
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-2xl`}
-                >
-                  Categories
-                </Text>
-                <View
-                  className={`flex flex-row justify-start gap-x-4 flex-wrap`}
-                >
-                  <TouchableOpacity
-                    onPress={() => handleCheckBoxToggle("Hands")}
-                    className={`flex-row py-2`}
-                  >
-                    <View
-                      style={{
-                        height: 35,
-                        width: 35,
-                        borderColor: textColor,
-                        backgroundColor: backgroundColor,
-                      }}
-                      className={`flex-row justify-center items-center border-2 rounded`}
+                  <View className={`my-4 items-center justify-center flex-col`}>
+                    <TouchableOpacity
+                      onPress={formik.handleSubmit}
+                      disabled={!formik.isValid}
                     >
-                      {selectedTypes.includes("Hands") && (
-                        <Text
-                          style={{ color: textColor }}
-                          className={`text-2xl`}
-                        >
-                          ✓
-                        </Text>
-                      )}
-                    </View>
-                  </TouchableOpacity>
-                  <View className={`pt-2 pb-6`}>
-                    <Text
-                      style={{ color: textColor }}
-                      className={`text-2xl font-semibold`}
-                    >
-                      Hands
-                    </Text>
-                  </View>
-                  <TouchableOpacity
-                    onPress={() => handleCheckBoxToggle("Hair")}
-                    className={`flex-row py-2`}
-                  >
-                    <View
-                      style={{
-                        height: 35,
-                        width: 35,
-                        borderColor: textColor,
-                        backgroundColor: backgroundColor,
-                      }}
-                      className={`flex-row justify-center items-center border-2 rounded`}
-                    >
-                      {selectedTypes.includes("Hair") && (
-                        <Text
-                          style={{ color: textColor }}
-                          className={`text-2xl`}
-                        >
-                          ✓
-                        </Text>
-                      )}
-                    </View>
-                  </TouchableOpacity>
-                  <View className={`pt-2 pb-6`}>
-                    <Text
-                      style={{ color: textColor }}
-                      className={`text-2xl font-semibold`}
-                    >
-                      Hair
-                    </Text>
-                  </View>
-                  <TouchableOpacity
-                    onPress={() => handleCheckBoxToggle("Feet")}
-                    className={`flex-row py-2`}
-                  >
-                    <View
-                      style={{
-                        height: 35,
-                        width: 35,
-                        borderColor: textColor,
-                        backgroundColor: backgroundColor,
-                      }}
-                      className={`flex-row justify-center items-center border-2 rounded`}
-                    >
-                      {selectedTypes.includes("Feet") && (
-                        <Text
-                          style={{ color: textColor }}
-                          className={`text-2xl`}
-                        >
-                          ✓
-                        </Text>
-                      )}
-                    </View>
-                  </TouchableOpacity>
-                  <View className={`pt-2 pb-6`}>
-                    <Text
-                      style={{ color: textColor }}
-                      className={`text-2xl font-semibold`}
-                    >
-                      Feet
-                    </Text>
-                  </View>
-                  <TouchableOpacity
-                    onPress={() => handleCheckBoxToggle("Facial")}
-                    className={`flex-row py-2`}
-                  >
-                    <View
-                      style={{
-                        height: 35,
-                        width: 35,
-                        borderColor: textColor,
-                        backgroundColor: backgroundColor,
-                      }}
-                      className={`flex-row justify-center items-center border-2 rounded`}
-                    >
-                      {selectedTypes.includes("Face") && (
-                        <Text
-                          style={{ color: textColor }}
-                          className={`text-2xl`}
-                        >
-                          ✓
-                        </Text>
-                      )}
-                    </View>
-                  </TouchableOpacity>
-                  <View className={`pt-2 pb-6`}>
-                    <Text
-                      style={{ color: textColor }}
-                      className={`text-2xl font-semibold`}
-                    >
-                      Facial
-                    </Text>
-                  </View>
-                  <TouchableOpacity
-                    onPress={() => handleCheckBoxToggle("Body")}
-                    className={`flex-row py-2`}
-                  >
-                    <View
-                      style={{
-                        height: 35,
-                        width: 35,
-                        borderColor: textColor,
-                        backgroundColor: backgroundColor,
-                      }}
-                      className={`flex-row justify-center items-center border-2 rounded`}
-                    >
-                      {selectedTypes.includes("Body") && (
-                        <Text
-                          style={{ color: textColor }}
-                          className={`text-2xl`}
-                        >
-                          ✓
-                        </Text>
-                      )}
-                    </View>
-                  </TouchableOpacity>
-                  <View className={`pt-2 pb-6`}>
-                    <Text
-                      style={{ color: textColor }}
-                      className={`text-2xl font-semibold`}
-                    >
-                      Body
-                    </Text>
-                  </View>
-                  <TouchableOpacity
-                    onPress={() => handleCheckBoxToggle("Eyelash")}
-                    className={`flex-row py-2`}
-                  >
-                    <View
-                      style={{
-                        height: 35,
-                        width: 35,
-                        borderColor: textColor,
-                        backgroundColor: backgroundColor,
-                      }}
-                      className={`flex-row justify-center items-center border-2 rounded`}
-                    >
-                      {selectedTypes.includes("Eyelash") && (
-                        <Text
-                          style={{ color: textColor }}
-                          className={`text-2xl`}
-                        >
-                          ✓
-                        </Text>
-                      )}
-                    </View>
-                  </TouchableOpacity>
-                  <View className={`pt-2 pb-6`}>
-                    <Text
-                      style={{ color: textColor }}
-                      className={`text-2xl font-semibold`}
-                    >
-                      Eyelash
-                    </Text>
-                  </View>
-                </View>
-                {formik.touched.type && formik.errors.type && (
-                  <Text style={{ color: "red" }}>{formik.errors.type}</Text>
-                )}
-
-                <View className={`my-4 items-center justify-center flex-col`}>
-                  <TouchableOpacity
-                    onPress={formik.handleSubmit}
-                    disabled={!formik.isValid}
-                  >
-                    <View className={`mb-2 flex justify-center items-center`}>
-                      <View
-                        className={`py-2 rounded-lg bg-primary-accent w-[175px]
+                      <View className={`mb-2 flex justify-center items-center`}>
+                        <View
+                          className={`py-2 rounded-lg bg-primary-accent w-[175px]
                           } ${!formik.isValid ? "opacity-50" : "opacity-100"}`}
-                      >
-                        <Text
-                          className={`font-semibold text-center text-lg`}
-                          style={{ color: textColor }}
                         >
-                          Submit
-                        </Text>
+                          <Text
+                            className={`font-semibold text-center text-lg`}
+                            style={{ color: textColor }}
+                          >
+                            Submit
+                          </Text>
+                        </View>
                       </View>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              </ScrollView>
-            </View>
-          </SafeAreaView>
-        </TouchableWithoutFeedback>
+                    </TouchableOpacity>
+                  </View>
+                </ScrollView>
+              </View>
+            </SafeAreaView>
+          </TouchableWithoutFeedback>
+        </>
       )}
     </>
   );
