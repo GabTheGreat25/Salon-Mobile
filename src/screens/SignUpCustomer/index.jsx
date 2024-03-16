@@ -1,24 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
-  Image,
   View,
   SafeAreaView,
   Text,
   TouchableOpacity,
-  KeyboardAvoidingView,
   ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
-  BackHandler,
   TextInput,
 } from "react-native";
 import { changeColor } from "@utils";
 import { BackIcon } from "@helpers";
 import { useNavigation } from "@react-navigation/native";
-import salonLogo from "@assets/salon-logo.png";
-import salonLogoWhite from "@assets/salon-logo-white.png";
 import { LoadingScreen } from "@components";
-import { dimensionLayout } from "@utils";
 import { Feather } from "@expo/vector-icons";
 import { useFormik } from "formik";
 import { useAddUserMutation } from "../../state/api/reducer";
@@ -26,33 +20,27 @@ import * as ImageManipulator from "expo-image-manipulator";
 import * as ImagePicker from "expo-image-picker";
 import { createCustomerValidation } from "../../validation";
 import Toast from "react-native-toast-message";
+import { TextInputMask } from "react-native-masked-text";
 
 export default function () {
   const navigation = useNavigation();
-  const isDimensionLayout = dimensionLayout();
   const { backgroundColor, textColor, colorScheme } = changeColor();
-  const imageSource = colorScheme === "dark" ? salonLogoWhite : salonLogo;
   const borderColor =
     colorScheme === "dark" ? "border-neutral-light" : "border-neutral-dark";
   const [selectedImages, setSelectedImages] = useState([]);
   const [addUser, { isLoading }] = useAddUserMutation();
 
-  const scroll = isDimensionLayout ? 575 : 500;
-
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
-  const [keyboardOpen, setKeyboardOpen] = useState(false);
-  const [scrollViewHeight, setScrollViewHeight] = useState(scroll);
 
   const formik = useFormik({
     initialValues: {
       name: "",
       email: "",
       password: "",
-      roles: "Online Customer",
+      roles: "Customer",
       contact_number: "",
       description: "",
       allergy: "",
-      product_preference: "",
     },
     validationSchema: createCustomerValidation,
     onSubmit: (values) => {
@@ -77,7 +65,6 @@ export default function () {
       formData.append("roles", values.roles);
       formData.append("description", values.description);
       formData.append("allergy", values.allergy);
-      formData.append("product_preference", values.product_preference);
 
       addUser(formData)
         .unwrap()
@@ -110,41 +97,6 @@ export default function () {
   const togglePasswordVisibility = () => {
     setPasswordVisibility(!isPasswordVisible);
   };
-
-  const handleTextInputFocus = () => {
-    setScrollViewHeight(keyboardOpen ? 650 : scroll);
-  };
-
-  useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      () => {
-        setScrollViewHeight(scroll);
-        return true;
-      }
-    );
-
-    const keyboardDidShowListener = Keyboard.addListener(
-      "keyboardDidShow",
-      () => {
-        setKeyboardOpen(true);
-        setScrollViewHeight(650);
-      }
-    );
-    const keyboardDidHideListener = Keyboard.addListener(
-      "keyboardDidHide",
-      () => {
-        setKeyboardOpen(false);
-        setScrollViewHeight(scroll);
-      }
-    );
-
-    return () => {
-      backHandler.remove();
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
 
   const takePicture = async () => {
     const result = await ImagePicker.launchCameraAsync({
@@ -238,277 +190,367 @@ export default function () {
           <LoadingScreen />
         </View>
       ) : (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <SafeAreaView
-            style={{ backgroundColor }}
-            className={`relative flex-1`}
-          >
-            <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
-            <View
-              className={`justify-start ${
-                isDimensionLayout
-                  ? "flex-col items-center"
-                  : "flex-row items-start"
-              }`}
+        <>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <SafeAreaView
+              style={{ backgroundColor }}
+              className={`relative flex-1 pt-12`}
             >
-              <Image
-                source={imageSource}
-                className={`${
-                  isDimensionLayout
-                    ? "w-[60%] h-[60%]"
-                    : "ml-5 mt-16 w-[40%] h-[55%]"
-                }`}
-                resizeMode="contain"
+              <BackIcon
+                navigateBack={navigation.goBack}
+                textColor={textColor}
               />
-              <View className={`flex-1 items-center justify-start`}>
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-center ${
-                    isDimensionLayout ? "my-[9px] text-3xl" : "my-1 text-xl"
-                  }`}
+              <View className={`flex-1 pb-2`}>
+                <ScrollView
+                  showsVerticalScrollIndicator={false}
+                  decelerationRate="fast"
+                  scrollEventThrottle={1}
+                  className={`px-6`}
                 >
-                  Sign up as Customer
-                </Text>
-                <Text
-                  style={{ color: textColor }}
-                  className={`mb-2 text-sm font-base text-center`}
-                >
-                  Create your account
-                </Text>
-                <KeyboardAvoidingView
-                  behavior="padding"
-                  className={`${
-                    isDimensionLayout ? "h-[450px] w-[300px]" : "w-[375px]"
-                  }`}
-                >
-                  <ScrollView
-                    contentContainerStyle={{ height: scrollViewHeight }}
-                    showsVerticalScrollIndicator={false}
-                    scrollEnabled={scrollViewHeight > 550}
-                    decelerationRate="fast"
-                    scrollEventThrottle={1}
+                  <Text
+                    style={{ color: textColor }}
+                    className={`pb-4 font-semibold text-center text-3xl`}
                   >
-                    <TextInput
-                      style={{ color: textColor }}
-                      className={`border-b mb-3 ${borderColor}`}
-                      placeholder="Enter your name"
-                      placeholderTextColor={textColor}
-                      autoCapitalize="none"
-                      handleTextInputFocus={handleTextInputFocus}
-                      onChangeText={formik.handleChange("name")}
-                      onBlur={formik.handleBlur("name")}
-                      value={formik.values.name}
-                    />
-                    {formik.touched.name && formik.errors.name && (
-                      <Text style={{ color: "red" }}>{formik.errors.name}</Text>
-                    )}
-                    <TextInput
-                      style={{ color: textColor }}
-                      className={`border-b mb-3 ${borderColor}`}
-                      placeholder="Enter your email"
-                      placeholderTextColor={textColor}
-                      autoCapitalize="none"
-                      handleTextInputFocus={handleTextInputFocus}
-                      onChangeText={formik.handleChange("email")}
-                      onBlur={formik.handleBlur("email")}
-                      value={formik.values.email}
-                    />
-                    {formik.touched.email && formik.errors.email && (
-                      <Text style={{ color: "red" }}>
-                        {formik.errors.email}
-                      </Text>
-                    )}
-                    <View className={`relative`}>
-                      <TextInput
-                        style={{ color: textColor }}
-                        className={`border-b ${
-                          isDimensionLayout ? "mb-4" : "mb-3"
-                        } ${borderColor}`}
-                        placeholder="Enter your password"
-                        placeholderTextColor={textColor}
-                        autoCapitalize="none"
-                        handleTextInputFocus={handleTextInputFocus}
-                        onChangeText={formik.handleChange("password")}
-                        onBlur={formik.handleBlur("password")}
-                        value={formik.values.password}
-                        secureTextEntry={!isPasswordVisible}
-                      />
-                      <TouchableOpacity
-                        className={`absolute right-4`}
-                        onPress={togglePasswordVisibility}
-                      >
-                        <Feather
-                          name={isPasswordVisible ? "eye" : "eye-off"}
-                          size={24}
-                          color={textColor}
-                        />
-                      </TouchableOpacity>
-                    </View>
-                    {formik.touched.password && formik.errors.password && (
-                      <Text style={{ color: "red" }}>
-                        {formik.errors.password}
-                      </Text>
-                    )}
-                    <TextInput
-                      style={{ color: textColor }}
-                      className={`border-b ${
-                        dimensionLayout ? "mb-4" : "mb-3"
-                      } ${borderColor}`}
-                      placeholder="Enter your contact number"
-                      placeholderTextColor={textColor}
-                      autoCapitalize="none"
-                      handleTextInputFocus={handleTextInputFocus}
-                      onChangeText={formik.handleChange("contact_number")}
-                      onBlur={formik.handleBlur("contact_number")}
-                      value={formik.values.contact_number}
-                      keyboardType="numeric"
-                    />
-                    {formik.touched.contact_number &&
-                      formik.errors.contact_number && (
-                        <Text style={{ color: "red" }}>
-                          {formik.errors.contact_number}
-                        </Text>
-                      )}
+                    Sign up as Customer
+                  </Text>
+                  <Text
+                    style={{ color: textColor }}
+                    className={`mb-2 text-lg font-base text-center`}
+                  >
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Donec
+                  </Text>
+
+                  <View>
                     <Text
                       style={{ color: textColor }}
-                      className={`${borderColor} font-semibold text-base`}
+                      className={`text-center font-semibold text-xl mb-2`}
                     >
-                      Add your image
+                      Things you need to bring during the interview:
                     </Text>
-                    <View className={`flex-row gap-x-2 my-1`}>
-                      <TouchableOpacity onPress={takePicture}>
+                    <View className={`mb-2`}>
+                      <Text
+                        style={{ color: textColor }}
+                        className={`text-base`}
+                      >
                         <Text
                           style={{ color: textColor }}
-                          className={`${borderColor}`}
+                          className={`font-semibold`}
                         >
-                          Take a Picture
-                        </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity onPress={selectImages}>
-                        <Text
-                          style={{ color: textColor }}
-                          className={`${borderColor}`}
-                        >
-                          Select Images
-                        </Text>
-                      </TouchableOpacity>
-                      {selectedImages?.length > 0 ? (
-                        <Text
-                          style={{ color: textColor }}
-                          className={`${borderColor}`}
-                        >
-                          Add {selectedImages.length} image
-                          {selectedImages.length > 1 ? "s" : ""}
-                        </Text>
-                      ) : (
-                        <Text
-                          style={{ color: textColor }}
-                          className={`${borderColor}`}
-                        >
-                          No Image
-                        </Text>
-                      )}
+                          Resume:
+                        </Text>{" "}
+                        Updated with your contact information, education, and
+                        relevant work experience.
+                      </Text>
                     </View>
-                    <TextInput
-                      style={{ color: textColor }}
-                      className={`border-b mb-3 ${borderColor}`}
-                      placeholder="Tells us about yourself"
-                      placeholderTextColor={textColor}
-                      autoCapitalize="none"
-                      handleTextInputFocus={handleTextInputFocus}
-                      onChangeText={formik.handleChange("description")}
-                      onBlur={formik.handleBlur("description")}
-                      value={formik.values.description}
-                    />
-                    {formik.touched.description &&
-                      formik.errors.description && (
-                        <Text style={{ color: "red" }}>
-                          {formik.errors.description}
-                        </Text>
-                      )}
-                    <TextInput
-                      style={{ color: textColor }}
-                      className={`border-b mb-3 ${borderColor}`}
-                      placeholder="Tells us about your allergy"
-                      placeholderTextColor={textColor}
-                      autoCapitalize="none"
-                      handleTextInputFocus={handleTextInputFocus}
-                      onChangeText={formik.handleChange("allergy")}
-                      onBlur={formik.handleBlur("allergy")}
-                      value={formik.values.allergy}
-                    />
-                    {formik.touched.allergy && formik.errors.allergy && (
+                    <View className={`mb-2`}>
+                      <Text
+                        style={{ color: textColor }}
+                        className={`text-base`}
+                      >
+                        <Text
+                          style={{ color: textColor }}
+                          className={`font-semibold`}
+                        >
+                          Work Samples:
+                        </Text>{" "}
+                        Showcase your work, including photos of hairstyles,
+                        makeovers, or any beauty services you've provided.
+                      </Text>
+                    </View>
+                    <View className={`mb-2`}>
+                      <Text
+                        style={{ color: textColor }}
+                        className={`text-base`}
+                      >
+                        <Text
+                          style={{ color: textColor }}
+                          className={`font-semibold`}
+                        >
+                          Identification:
+                        </Text>{" "}
+                        Valid government-issued photo ID (driver's license,
+                        passport, etc.).
+                      </Text>
+                    </View>
+                  </View>
+
+                  <TextInput
+                    style={{ color: textColor }}
+                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    placeholder="Enter your name"
+                    placeholderTextColor={textColor}
+                    autoCapitalize="none"
+                    onChangeText={formik.handleChange("name")}
+                    onBlur={formik.handleBlur("name")}
+                    value={formik.values.name}
+                  />
+                  {formik.touched.name && formik.errors.name && (
+                    <Text style={{ color: "red" }}>{formik.errors.name}</Text>
+                  )}
+
+                  <TextInput
+                    style={{ color: textColor }}
+                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    placeholder="Enter age"
+                    placeholderTextColor={textColor}
+                    keyboardType="numeric"
+                    onChangeText={formik.handleChange("age")}
+                    onBlur={formik.handleBlur("age")}
+                    value={formik.values.age}
+                  />
+                  {formik.touched.age && formik.errors.age && (
+                    <Text style={{ color: "red" }}>{formik.errors.age}</Text>
+                  )}
+
+                  <TextInput
+                    style={{ color: textColor }}
+                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    placeholder="Enter your email"
+                    placeholderTextColor={textColor}
+                    autoCapitalize="none"
+                    onChangeText={formik.handleChange("email")}
+                    onBlur={formik.handleBlur("email")}
+                    value={formik.values.email}
+                  />
+                  {formik.touched.email && formik.errors.email && (
+                    <Text style={{ color: "red" }}>{formik.errors.email}</Text>
+                  )}
+
+                  <TextInputMask
+                    style={{ color: textColor }}
+                    type={"custom"}
+                    options={{
+                      mask: "9999 - 999 - 9999",
+                    }}
+                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    placeholder="09XX - XXX - XXXX"
+                    placeholderTextColor={textColor}
+                    autoCapitalize="none"
+                    onChange={handlePhoneNumberChange}
+                    onBlur={formik.handleBlur("contact_number")}
+                    value={formik.values.contact_number}
+                    keyboardType="numeric"
+                  />
+                  {formik.touched.contact_number &&
+                    formik.errors.contact_number && (
                       <Text style={{ color: "red" }}>
-                        {formik.errors.allergy}
+                        {formik.errors.contact_number}
                       </Text>
                     )}
+
+                  <View className={`relative`}>
                     <TextInput
                       style={{ color: textColor }}
-                      className={`border-b mb-3 ${borderColor}`}
-                      placeholder="Tells us about your product preference"
+                      className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                      placeholder="Enter your password"
                       placeholderTextColor={textColor}
                       autoCapitalize="none"
-                      handleTextInputFocus={handleTextInputFocus}
-                      onChangeText={formik.handleChange("product_preference")}
-                      onBlur={formik.handleBlur("product_preference")}
-                      value={formik.values.product_preference}
+                      onChangeText={formik.handleChange("password")}
+                      onBlur={formik.handleBlur("password")}
+                      value={formik.values.password}
+                      secureTextEntry={!isPasswordVisible}
                     />
-                    {formik.touched.product_preference &&
-                      formik.errors.product_preference && (
-                        <Text style={{ color: "red" }}>
-                          {formik.errors.product_preference}
-                        </Text>
-                      )}
-                    <View
-                      className={`items-center justify-start ${
-                        isDimensionLayout ? "flex-col" : "flex-row gap-x-2"
-                      }`}
+                    <TouchableOpacity
+                      className={`absolute right-4 top-5`}
+                      onPress={togglePasswordVisibility}
                     >
-                      <TouchableOpacity
-                        onPress={formik.handleSubmit}
-                        disabled={!formik.isValid}
+                      <Feather
+                        name={isPasswordVisible ? "eye" : "eye-off"}
+                        size={24}
+                        color={textColor}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                  {formik.touched.password && formik.errors.password && (
+                    <Text style={{ color: "red" }} className={`mb-3`}>
+                      {formik.errors.password}
+                    </Text>
+                  )}
+
+                  <View className={`relative`}>
+                    <TextInput
+                      style={{ color: textColor }}
+                      className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                      placeholder="Confirm your password"
+                      placeholderTextColor={textColor}
+                      autoCapitalize="none"
+                      onChangeText={formik.handleChange("confirmPassword")}
+                      onBlur={formik.handleBlur("confirmPassword")}
+                      value={formik.values.confirmPassword}
+                      secureTextEntry={!isConfirmPasswordVisible}
+                    />
+                    <TouchableOpacity
+                      className={`absolute right-4 top-5`}
+                      onPress={toggleConfirmPasswordVisibility}
+                    >
+                      <Feather
+                        name={isConfirmPasswordVisible ? "eye" : "eye-off"}
+                        size={24}
+                        color={textColor}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                  {formik.touched.confirmPassword &&
+                    formik.errors.confirmPassword && (
+                      <Text style={{ color: "red" }} className={`mb-3`}>
+                        {formik.errors.confirmPassword}
+                      </Text>
+                    )}
+
+                  <Text
+                    style={{ color: textColor }}
+                    className={`${borderColor} font-semibold text-xl`}
+                  >
+                    Add Your Image
+                  </Text>
+                  <View className={`flex-row gap-x-2 mt-2 mb-6`}>
+                    <TouchableOpacity onPress={takePicture}>
+                      <Text
+                        style={{ color: textColor }}
+                        className={`text-base ${borderColor}`}
                       >
-                        <View className={`w-full mb-2`}>
-                          <View
-                            className={`py-2 px-6 rounded-lg bg-primary-accent ${
-                              isDimensionLayout
-                                ? "flex-col"
-                                : "flex-row gap-x-2"
-                            } ${
-                              !formik.isValid ? "opacity-50" : "opacity-100"
-                            }`}
+                        Take a Picture
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={selectImages}>
+                      <Text
+                        style={{ color: textColor }}
+                        className={`text-base ${borderColor}`}
+                      >
+                        Select Images
+                      </Text>
+                    </TouchableOpacity>
+                    {selectedImages?.length > 0 ? (
+                      <Text
+                        style={{ color: textColor }}
+                        className={`text-base ${borderColor}`}
+                      >
+                        Add {selectedImages.length} image
+                        {selectedImages.length > 1 ? "s" : ""}
+                      </Text>
+                    ) : (
+                      <Text
+                        style={{ color: textColor }}
+                        className={`text-base ${borderColor}`}
+                      >
+                        No Image
+                      </Text>
+                    )}
+                  </View>
+
+                  <Text
+                    style={{ color: textColor }}
+                    className={`${borderColor} font-semibold text-xl`}
+                  >
+                    Terms & Conditions
+                  </Text>
+                  <Text
+                    style={{ color: textColor }}
+                    className={`${borderColor} font-semibold text-base pb-2`}
+                  >
+                    By registering as a beautician on our platform, you
+                    acknowledge and agree to the following terms and conditions.
+                  </Text>
+
+                  <View className={`flex flex-row`}>
+                    <TouchableOpacity
+                      onPress={() => handleTermsAgreementChange()}
+                      className={`flex-row px-4 py-2`}
+                    >
+                      <View
+                        style={{
+                          height: 35,
+                          width: 35,
+                          borderColor: textColor,
+                          backgroundColor,
+                        }}
+                        className={`flex-row justify-center items-center border-2 rounded mr-2 mt-2`}
+                      >
+                        {termsAgreed && (
+                          <Text
+                            style={{ color: textColor }}
+                            className={`text-2xl`}
                           >
-                            <Text
-                              className={`font-semibold text-center text-lg`}
-                              style={{ color: textColor }}
-                            >
-                              Sign up
-                            </Text>
-                          </View>
-                        </View>
-                      </TouchableOpacity>
-                      <View className={`gap-x-2 flex-row`}>
-                        <Text
-                          style={{ color: textColor }}
-                          className={`text-base`}
-                        >
-                          Already have an account?
-                        </Text>
-                        <TouchableOpacity
-                          onPress={() => navigation.navigate("LoginUser")}
-                        >
-                          <Text className={`text-primary-accent text-base`}>
-                            Sign in
+                            ✓
                           </Text>
-                        </TouchableOpacity>
+                        )}
                       </View>
+                    </TouchableOpacity>
+                    <View className={`pt-2 pb-6`}>
+                      <Text
+                        style={{ color: textColor }}
+                        className={`text-base font-semibold`}
+                      >
+                        {`I agree with Lhanlee Beauty Lounge\n`}
+                        <Text
+                          className={`text-base font-semibold underline text-primary-accent`}
+                          onPress={handleTermsAndConditions}
+                        >
+                          terms & conditions
+                        </Text>
+                      </Text>
                     </View>
-                  </ScrollView>
-                </KeyboardAvoidingView>
+                  </View>
+
+                  <View className={`mt-4 items-center justify-start`}>
+                    <TouchableOpacity
+                      onPress={(e) => {
+                        e.preventDefault();
+                        if (!termsAgreed) {
+                          Toast.show({
+                            type: "error",
+                            position: "top",
+                            text1: "Error Creating Beautician",
+                            text2:
+                              "Please agree to the Lhanlee Beauty Lounge Terms and conditions.",
+                            visibilityTime: 3000,
+                            autoHide: true,
+                          });
+                          return;
+                        }
+                        formik.handleSubmit(e);
+                      }}
+                      disabled={!formik.isValid}
+                    >
+                      <View className={`w-full mb-2`}>
+                        <View
+                          className={`py-2 px-6 rounded-lg bg-primary-accent ${
+                            !formik.isValid ? "opacity-50" : "opacity-100"
+                          }`}
+                        >
+                          <Text
+                            className={`font-semibold text-center text-lg`}
+                            style={{ color: textColor }}
+                          >
+                            Sign up
+                          </Text>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                    <View className={`gap-x-2 flex-row`}>
+                      <Text
+                        style={{ color: textColor }}
+                        className={`text-base font-semibold`}
+                      >
+                        Already have an account?
+                      </Text>
+                      <TouchableOpacity
+                        onPress={() => navigation.navigate("LoginUser")}
+                      >
+                        <Text
+                          className={`text-primary-accent text-base font-semibold`}
+                        >
+                          Log in here
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </ScrollView>
               </View>
-            </View>
-          </SafeAreaView>
-        </TouchableWithoutFeedback>
+            </SafeAreaView>
+          </TouchableWithoutFeedback>
+        </>
       )}
     </>
   );
