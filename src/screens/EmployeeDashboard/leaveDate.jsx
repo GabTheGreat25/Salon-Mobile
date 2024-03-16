@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   Dimensions,
   Keyboard,
+  SafeAreaView,
 } from "react-native";
 import { changeColor } from "@utils";
 import { Calendar } from "react-native-calendars";
@@ -115,7 +116,7 @@ export default function () {
 
   return (
     <>
-      <View style={{ backgroundColor }} className={`flex-1`}>
+      <SafeAreaView style={{ backgroundColor }} className={`flex-1`}>
         <ScrollView
           showsVerticalScrollIndicator={false}
           decelerationRate="fast"
@@ -210,7 +211,7 @@ export default function () {
             </View>
           </TouchableOpacity>
         </View>
-      </View>
+      </SafeAreaView>
     </>
   );
 }
