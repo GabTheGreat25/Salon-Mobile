@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
-  Image,
   View,
   SafeAreaView,
   Text,
@@ -87,74 +86,79 @@ export default function ({ route }) {
           <LoadingScreen />
         </View>
       ) : (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <SafeAreaView
-            style={{ backgroundColor }}
-            className={`relative flex-1`}
-          >
-            <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
-            <KeyboardAvoidingView behavior="height">
-              <ScrollView
-                showsVerticalScrollIndicator={false}
-                decelerationRate="fast"
-                scrollEventThrottle={1}
-                className={`px-6`}
-              >
-                <View className="pt-10 pb-2">
-                  <Text
-                    style={{ color: textColor }}
-                    className={`font-semibold text-center pt-12 pb-6 text-3xl`}
-                  >
-                    Edit Brand Details
-                  </Text>
-                  <Text
-                    style={{ color: textColor }}
-                    className={`font-semibold text-base`}
-                  >
-                    Brand Name
-                  </Text>
-                  <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                    placeholder="Enter your brand name"
-                    placeholderTextColor={textColor}
-                    autoCapitalize="none"
-                    onChangeText={formik.handleChange("brand_name")}
-                    onBlur={formik.handleBlur("brand_name")}
-                    value={formik.values.brand_name}
-                  />
-                  {formik.touched.brand_name && formik.errors.brand_name && (
-                    <Text style={{ color: "red" }}>
-                      {formik.errors.brand_name}
-                    </Text>
-                  )}
-
-                  <View className={`flex-col`}>
-                    <TouchableOpacity
-                      onPress={formik.handleSubmit}
-                      disabled={!formik.isValid}
+        <>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <SafeAreaView
+              style={{ backgroundColor }}
+              className={`relative flex-1 pt-12`}
+            >
+              <BackIcon
+                navigateBack={navigation.goBack}
+                textColor={textColor}
+              />
+              <KeyboardAvoidingView behavior="height">
+                <ScrollView
+                  showsVerticalScrollIndicator={false}
+                  decelerationRate="fast"
+                  scrollEventThrottle={1}
+                  className={`px-6`}
+                >
+                  <View className="pb-2">
+                    <Text
+                      style={{ color: textColor }}
+                      className={`font-semibold text-center pb-6 text-3xl`}
                     >
-                      <View className={`my-4 w-full`}>
-                        <View
-                          className={`py-2 rounded-lg bg-primary-accent mx-20 ${
-                            !formik.isValid ? "opacity-50" : "opacity-100"
-                          }`}
-                        >
-                          <Text
-                            className={`font-semibold text-center text-lg`}
-                            style={{ color: textColor }}
+                      Edit Brand Details
+                    </Text>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`font-semibold text-base`}
+                    >
+                      Brand Name
+                    </Text>
+                    <TextInput
+                      style={{ color: textColor }}
+                      className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                      placeholder="Enter your brand name"
+                      placeholderTextColor={textColor}
+                      autoCapitalize="none"
+                      onChangeText={formik.handleChange("brand_name")}
+                      onBlur={formik.handleBlur("brand_name")}
+                      value={formik.values.brand_name}
+                    />
+                    {formik.touched.brand_name && formik.errors.brand_name && (
+                      <Text style={{ color: "red" }}>
+                        {formik.errors.brand_name}
+                      </Text>
+                    )}
+
+                    <View className={`flex-col`}>
+                      <TouchableOpacity
+                        onPress={formik.handleSubmit}
+                        disabled={!formik.isValid}
+                      >
+                        <View className={`my-4 w-full`}>
+                          <View
+                            className={`py-2 rounded-lg bg-primary-accent mx-20 ${
+                              !formik.isValid ? "opacity-50" : "opacity-100"
+                            }`}
                           >
-                            Submit
-                          </Text>
+                            <Text
+                              className={`font-semibold text-center text-lg`}
+                              style={{ color: textColor }}
+                            >
+                              Submit
+                            </Text>
+                          </View>
                         </View>
-                      </View>
-                    </TouchableOpacity>
+                      </TouchableOpacity>
+                    </View>
                   </View>
-                </View>
-              </ScrollView>
-            </KeyboardAvoidingView>
-          </SafeAreaView>
-        </TouchableWithoutFeedback>
+                </ScrollView>
+              </KeyboardAvoidingView>
+            </SafeAreaView>
+          </TouchableWithoutFeedback>
+        </>
       )}
     </>
   );
