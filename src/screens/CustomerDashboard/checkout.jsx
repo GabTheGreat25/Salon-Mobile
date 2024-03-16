@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
+  SafeAreaView,
 } from "react-native";
 import { changeColor, dimensionLayout } from "@utils";
 import { Feather, FontAwesome, Ionicons } from "@expo/vector-icons";
@@ -127,7 +128,7 @@ export default function () {
 
   return (
     <>
-      <View style={{ backgroundColor }} className={`flex-1`}>
+      <SafeAreaView style={{ backgroundColor }} className={`flex-1`}>
         <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -357,7 +358,7 @@ export default function () {
             </View>
           </TouchableOpacity>
         </View>
-      </View>
+      </SafeAreaView>
     </>
   );
 }
