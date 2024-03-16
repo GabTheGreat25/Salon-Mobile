@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
-  Image,
   View,
   SafeAreaView,
   Text,
-  TouchableOpacity,
   KeyboardAvoidingView,
   ScrollView,
   TouchableWithoutFeedback,
@@ -52,88 +50,97 @@ export default function ({ route }) {
           <LoadingScreen />
         </View>
       ) : (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <SafeAreaView
-            style={{ backgroundColor }}
-            className={`relative flex-1`}
-          >
-            <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
-            <KeyboardAvoidingView behavior="height">
-              <ScrollView
-                showsVerticalScrollIndicator={false}
-                decelerationRate="fast"
-                scrollEventThrottle={1}
-                className={`px-6`}
-              >
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-center pt-12 pb-6 text-3xl`}
+        <>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <SafeAreaView
+              style={{ backgroundColor }}
+              className={`relative flex-1 pt-12`}
+            >
+              <BackIcon
+                navigateBack={navigation.goBack}
+                textColor={textColor}
+              />
+              <KeyboardAvoidingView behavior="height">
+                <ScrollView
+                  showsVerticalScrollIndicator={false}
+                  decelerationRate="fast"
+                  scrollEventThrottle={1}
+                  className={`px-6`}
                 >
-                  View Feedback Details
-                </Text>
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-base`}
-                >
-                  Customer Name
-                </Text>
-                <TextInput
-                  style={{ color: textColor }}
-                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                  autoCapitalize="none"
-                  value={
-                    feedback?.isAnonymous
-                      ? anonymizeName(feedback?.name)
-                      : feedback?.name
-                  }
-                />
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-center pb-6 text-3xl`}
+                  >
+                    View Feedback Details
+                  </Text>
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-base`}
+                  >
+                    Customer Name
+                  </Text>
+                  <TextInput
+                    style={{ color: textColor }}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    autoCapitalize="none"
+                    value={
+                      feedback?.isAnonymous
+                        ? anonymizeName(feedback?.name)
+                        : feedback?.name
+                    }
+                    editable={false}
+                  />
 
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-base`}
-                >
-                  Contact Number
-                </Text>
-                <TextInput
-                  style={{ color: textColor }}
-                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                  autoCapitalize="none"
-                  value={feedback?.contact_number}
-                />
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-base`}
+                  >
+                    Mobile Number
+                  </Text>
+                  <TextInput
+                    style={{ color: textColor }}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    autoCapitalize="none"
+                    value={feedback?.contact_number}
+                    editable={false}
+                  />
 
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-base`}
-                >
-                  Email
-                </Text>
-                <TextInput
-                  style={{ color: textColor }}
-                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                  autoCapitalize="none"
-                  value={feedback?.email}
-                />
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-base`}
-                >
-                  Feedback Description
-                </Text>
-                <TextInput
-                  style={{
-                    color: textColor,
-                    height: 100,
-                    textAlignVertical: "top",
-                  }}
-                  className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2 ${borderColor}`}
-                  placeholder="Add Ingredients Here..."
-                  multiline={true}
-                  value={feedback?.description}
-                />
-              </ScrollView>
-            </KeyboardAvoidingView>
-          </SafeAreaView>
-        </TouchableWithoutFeedback>
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-base`}
+                  >
+                    Email
+                  </Text>
+                  <TextInput
+                    style={{ color: textColor }}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    autoCapitalize="none"
+                    value={feedback?.email}
+                    editable={false}
+                  />
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-base`}
+                  >
+                    Feedback Description
+                  </Text>
+                  <TextInput
+                    style={{
+                      color: textColor,
+                      height: 100,
+                      textAlignVertical: "top",
+                    }}
+                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2 ${borderColor}`}
+                    placeholder="Add Ingredients Here..."
+                    multiline={true}
+                    value={feedback?.description}
+                    editable={false}
+                  />
+                </ScrollView>
+              </KeyboardAvoidingView>
+            </SafeAreaView>
+          </TouchableWithoutFeedback>
+        </>
       )}
     </>
   );
