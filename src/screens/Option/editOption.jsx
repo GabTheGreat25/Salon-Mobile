@@ -25,7 +25,6 @@ import { changeColor } from "@utils";
 import { BackIcon } from "@helpers";
 import * as ImageManipulator from "expo-image-manipulator";
 import * as ImagePicker from "expo-image-picker";
-import { Picker } from "@react-native-picker/picker";
 import { useIsFocused } from "@react-navigation/native";
 
 export default function ({ route }) {
@@ -51,7 +50,6 @@ export default function ({ route }) {
   const borderColor =
     colorScheme === "dark" ? "border-neutral-light" : "border-neutral-dark";
   const [selectedImages, setSelectedImages] = useState([]);
-  const [selectedServices, setSelectedServices] = useState([]);
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -212,205 +210,212 @@ export default function ({ route }) {
           <LoadingScreen />
         </View>
       ) : (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <SafeAreaView
-            style={{ backgroundColor }}
-            className={`relative flex-1`}
-          >
-            <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
-            <KeyboardAvoidingView behavior="height">
-              <ScrollView
-                showsVerticalScrollIndicator={false}
-                decelerationRate="fast"
-                scrollEventThrottle={1}
-                className={`px-6`}
-              >
-                <View className="pt-10 pb-2">
-                  <Text
-                    style={{ color: textColor }}
-                    className={`font-semibold text-center pt-12 pb-6 text-3xl`}
-                  >
-                    Edit Add Ons Details
-                  </Text>
-
-                  <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                    placeholder="Enter your option name"
-                    placeholderTextColor={textColor}
-                    autoCapitalize="none"
-                    onChangeText={formik.handleChange("option_name")}
-                    onBlur={formik.handleBlur("option_name")}
-                    value={formik.values.option_name}
-                  />
-                  {formik.touched.option_name && formik.errors.option_name && (
-                    <Text style={{ color: "red" }}>
-                      {formik.errors.option_name}
+        <>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <SafeAreaView
+              style={{ backgroundColor }}
+              className={`relative flex-1 pt-12`}
+            >
+              <BackIcon
+                navigateBack={navigation.goBack}
+                textColor={textColor}
+              />
+              <KeyboardAvoidingView behavior="height">
+                <ScrollView
+                  showsVerticalScrollIndicator={false}
+                  decelerationRate="fast"
+                  scrollEventThrottle={1}
+                  className={`px-6`}
+                >
+                  <View className="pb-2">
+                    <Text
+                      style={{ color: textColor }}
+                      className={`font-semibold text-center pb-4 text-3xl`}
+                    >
+                      Edit Add Ons Details
                     </Text>
-                  )}
 
-                  <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                    placeholder="Enter price"
-                    placeholderTextColor={textColor}
-                    keyboardType="numeric"
-                    onChangeText={(value) =>
-                      formik.handleChange("extraFee")(value.toString())
-                    }
-                    onBlur={formik.handleBlur("extraFee")}
-                    value={formik.values.extraFee.toString()}
-                  />
-                  {formik.touched.extraFee && formik.errors.extraFee && (
-                    <Text style={{ color: "red" }}>
-                      {formik.errors.extraFee}
-                    </Text>
-                  )}
-
-                  <Text
-                    style={{ color: textColor }}
-                    className={`font-semibold text-base`}
-                  >
-                    Services
-                  </Text>
-
-                  <View className="flex flex-row flex-wrap justify-start gap-x-4">
-                    {services?.details?.map((service) => (
-                      <TouchableOpacity
-                        key={service._id}
-                        onPress={() => handleServicePress(service._id)}
-                        className="flex-row py-2 gap-x-2"
-                      >
-                        <View
-                          style={{
-                            height: 20,
-                            width: 20,
-                            borderRadius: 10,
-                            borderWidth: 2,
-                            borderColor: formik.values.service.includes(
-                              service._id
-                            )
-                              ? invertBackgroundColor
-                              : backgroundColor,
-                            backgroundColor: formik.values.service.includes(
-                              service._id
-                            )
-                              ? backgroundColor
-                              : invertBackgroundColor,
-                          }}
-                        >
-                          {formik.values.service.includes(service._id) && (
-                            <View
-                              style={{
-                                height: 10,
-                                width: 10,
-                                borderRadius: 5,
-                                backgroundColor: textColor,
-                                alignSelf: "center",
-                                justifySelf: "center",
-                                marginTop: 2,
-                              }}
-                            />
-                          )}
-                        </View>
-                        <Text
-                          style={{ color: textColor }}
-                          className="text-lg font-semibold"
-                        >
-                          {service.service_name}
+                    <TextInput
+                      style={{ color: textColor }}
+                      className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                      placeholder="Enter your option name"
+                      placeholderTextColor={textColor}
+                      autoCapitalize="none"
+                      onChangeText={formik.handleChange("option_name")}
+                      onBlur={formik.handleBlur("option_name")}
+                      value={formik.values.option_name}
+                    />
+                    {formik.touched.option_name &&
+                      formik.errors.option_name && (
+                        <Text style={{ color: "red" }}>
+                          {formik.errors.option_name}
                         </Text>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
+                      )}
 
-                  <TextInput
-                    style={{
-                      color: textColor,
-                      height: 100,
-                      textAlignVertical: "top",
-                    }}
-                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2 ${borderColor}`}
-                    placeholder="Enter a description"
-                    placeholderTextColor={textColor}
-                    autoCapitalize="none"
-                    multiline={true}
-                    onChangeText={formik.handleChange("description")}
-                    onBlur={formik.handleBlur("description")}
-                    value={formik.values.description}
-                  />
-                  {formik.touched.description && formik.errors.description && (
-                    <Text style={{ color: "red" }}>
-                      {formik.errors.description}
-                    </Text>
-                  )}
-
-                  <Text
-                    style={{ color: textColor }}
-                    className={`${borderColor} font-semibold text-xl`}
-                  >
-                    Add Your Image
-                  </Text>
-                  <View className={`flex-row gap-x-2 mt-2 mb-6`}>
-                    <TouchableOpacity onPress={takePicture}>
-                      <Text
-                        style={{ color: textColor }}
-                        className={`text-base ${borderColor}`}
-                      >
-                        Take a Picture
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={selectImages}>
-                      <Text
-                        style={{ color: textColor }}
-                        className={`text-base ${borderColor}`}
-                      >
-                        Select Images
-                      </Text>
-                    </TouchableOpacity>
-                    {selectedImages?.length > 0 ? (
-                      <Text
-                        style={{ color: textColor }}
-                        className={`text-base ${borderColor}`}
-                      >
-                        Add {selectedImages.length} image
-                        {selectedImages.length > 1 ? "s" : ""}
-                      </Text>
-                    ) : (
-                      <Text
-                        style={{ color: textColor }}
-                        className={`text-base ${borderColor}`}
-                      >
-                        No Image
+                    <TextInput
+                      style={{ color: textColor }}
+                      className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                      placeholder="Enter price"
+                      placeholderTextColor={textColor}
+                      keyboardType="numeric"
+                      onChangeText={(value) =>
+                        formik.handleChange("extraFee")(value.toString())
+                      }
+                      onBlur={formik.handleBlur("extraFee")}
+                      value={formik.values.extraFee.toString()}
+                    />
+                    {formik.touched.extraFee && formik.errors.extraFee && (
+                      <Text style={{ color: "red" }}>
+                        {formik.errors.extraFee}
                       </Text>
                     )}
-                  </View>
 
-                  <View className={`flex-col`}>
-                    <TouchableOpacity
-                      onPress={formik.handleSubmit}
-                      disabled={!formik.isValid}
+                    <Text
+                      style={{ color: textColor }}
+                      className={`font-semibold text-base`}
                     >
-                      <View className={`my-4 w-full`}>
-                        <View
-                          className={`py-2 rounded-lg bg-primary-accent mx-20 ${
-                            !formik.isValid ? "opacity-50" : "opacity-100"
-                          }`}
+                      Services
+                    </Text>
+
+                    <View className="flex flex-row flex-wrap justify-start gap-x-4">
+                      {services?.details?.map((service) => (
+                        <TouchableOpacity
+                          key={service._id}
+                          onPress={() => handleServicePress(service._id)}
+                          className="flex-row py-2 gap-x-2"
                         >
-                          <Text
-                            className={`font-semibold text-center text-lg`}
-                            style={{ color: textColor }}
+                          <View
+                            style={{
+                              height: 20,
+                              width: 20,
+                              borderRadius: 10,
+                              borderWidth: 2,
+                              borderColor: formik.values.service.includes(
+                                service._id
+                              )
+                                ? invertBackgroundColor
+                                : backgroundColor,
+                              backgroundColor: formik.values.service.includes(
+                                service._id
+                              )
+                                ? backgroundColor
+                                : invertBackgroundColor,
+                            }}
                           >
-                            Submit
+                            {formik.values.service.includes(service._id) && (
+                              <View
+                                style={{
+                                  height: 10,
+                                  width: 10,
+                                  borderRadius: 5,
+                                  backgroundColor: textColor,
+                                  alignSelf: "center",
+                                  justifySelf: "center",
+                                  marginTop: 2,
+                                }}
+                              />
+                            )}
+                          </View>
+                          <Text
+                            style={{ color: textColor }}
+                            className="text-lg font-semibold"
+                          >
+                            {service.service_name}
                           </Text>
+                        </TouchableOpacity>
+                      ))}
+                    </View>
+
+                    <TextInput
+                      style={{
+                        color: textColor,
+                        height: 100,
+                        textAlignVertical: "top",
+                      }}
+                      className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2 ${borderColor}`}
+                      placeholder="Enter a description"
+                      placeholderTextColor={textColor}
+                      autoCapitalize="none"
+                      multiline={true}
+                      onChangeText={formik.handleChange("description")}
+                      onBlur={formik.handleBlur("description")}
+                      value={formik.values.description}
+                    />
+                    {formik.touched.description &&
+                      formik.errors.description && (
+                        <Text style={{ color: "red" }}>
+                          {formik.errors.description}
+                        </Text>
+                      )}
+
+                    <Text
+                      style={{ color: textColor }}
+                      className={`${borderColor} font-semibold text-xl`}
+                    >
+                      Add Your Image
+                    </Text>
+                    <View className={`flex-row gap-x-2 mt-2 mb-6`}>
+                      <TouchableOpacity onPress={takePicture}>
+                        <Text
+                          style={{ color: textColor }}
+                          className={`text-base ${borderColor}`}
+                        >
+                          Take a Picture
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={selectImages}>
+                        <Text
+                          style={{ color: textColor }}
+                          className={`text-base ${borderColor}`}
+                        >
+                          Select Images
+                        </Text>
+                      </TouchableOpacity>
+                      {selectedImages?.length > 0 ? (
+                        <Text
+                          style={{ color: textColor }}
+                          className={`text-base ${borderColor}`}
+                        >
+                          Add {selectedImages.length} image
+                          {selectedImages.length > 1 ? "s" : ""}
+                        </Text>
+                      ) : (
+                        <Text
+                          style={{ color: textColor }}
+                          className={`text-base ${borderColor}`}
+                        >
+                          No Image
+                        </Text>
+                      )}
+                    </View>
+
+                    <View className={`flex-col`}>
+                      <TouchableOpacity
+                        onPress={formik.handleSubmit}
+                        disabled={!formik.isValid}
+                      >
+                        <View className={`my-4 w-full`}>
+                          <View
+                            className={`py-2 rounded-lg bg-primary-accent mx-20 ${
+                              !formik.isValid ? "opacity-50" : "opacity-100"
+                            }`}
+                          >
+                            <Text
+                              className={`font-semibold text-center text-lg`}
+                              style={{ color: textColor }}
+                            >
+                              Submit
+                            </Text>
+                          </View>
                         </View>
-                      </View>
-                    </TouchableOpacity>
+                      </TouchableOpacity>
+                    </View>
                   </View>
-                </View>
-              </ScrollView>
-            </KeyboardAvoidingView>
-          </SafeAreaView>
-        </TouchableWithoutFeedback>
+                </ScrollView>
+              </KeyboardAvoidingView>
+            </SafeAreaView>
+          </TouchableWithoutFeedback>
+        </>
       )}
     </>
   );
