@@ -112,75 +112,82 @@ export default function () {
           <LoadingScreen />
         </View>
       ) : (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <SafeAreaView
-            style={{ backgroundColor }}
-            className={`relative flex-1`}
-          >
-            <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
-            <KeyboardAvoidingView
-              behavior="height"
-              className={`flex-1 justify-center items-center flex-col`}
+        <>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <SafeAreaView
+              style={{ backgroundColor }}
+              className={`relative flex-1`}
             >
-              <View
-                className={`w-[300px] h-[300px] justify-center items-center`}
+              <BackIcon
+                navigateBack={navigation.goBack}
+                textColor={textColor}
+              />
+              <KeyboardAvoidingView
+                behavior="height"
+                className={`flex-1 justify-center items-center flex-col`}
               >
-                <Image source={imageSource} resizeMode="contain" />
-              </View>
-              <View className={`items-center justify-start`}>
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold mt-6 text-3xl text-center`}
+                <View
+                  className={`w-[300px] h-[300px] justify-center items-center`}
                 >
-                  Forget Password?
-                </Text>
-                <Text
-                  style={{ color: textColor }}
-                  className={`my-2 text-xl font-base text-center`}
-                >
-                  Please enter your email to reset you password.
-                </Text>
-                <View className={`w-[300px]`}>
-                  <TextInput
+                  <Image source={imageSource} resizeMode="contain" />
+                </View>
+                <View className={`items-center justify-start`}>
+                  <Text
                     style={{ color: textColor }}
-                    className={`border-b mt-4 pb-1 text-lg ${borderColor}`}
-                    placeholder="Enter your email"
-                    placeholderTextColor={textColor}
-                    autoCapitalize="none"
-                    handleTextInputFocus={handleTextInputFocus}
-                    onChangeText={formik.handleChange("email")}
-                    onBlur={formik.handleBlur("email")}
-                    value={formik.values.email}
-                  />
-                  {formik.touched.email && formik.errors.email && (
-                    <Text style={{ color: "red" }}>{formik.errors.email}</Text>
-                  )}
-                  <View className={`items-center flex-col justify-start`}>
-                    <TouchableOpacity
-                      onPress={formik.handleSubmit}
-                      disabled={!formik.isValid}
-                    >
-                      <View className={`w-full mt-1 mb-3`}>
-                        <View
-                          className={`py-[8px] mt-8 px-8 rounded-lg bg-primary-accent ${
-                            !formik.isValid ? "opacity-50" : "opacity-100"
-                          }`}
-                        >
-                          <Text
-                            className={`font-semibold text-center text-lg`}
-                            style={{ color: textColor }}
+                    className={`font-semibold mt-6 text-3xl text-center`}
+                  >
+                    Forget Password?
+                  </Text>
+                  <Text
+                    style={{ color: textColor }}
+                    className={`my-2 text-xl font-base text-center`}
+                  >
+                    Please enter your email to reset you password.
+                  </Text>
+                  <View className={`w-[300px]`}>
+                    <TextInput
+                      style={{ color: textColor }}
+                      className={`border-b mt-4 pb-1 text-lg ${borderColor}`}
+                      placeholder="Enter your email"
+                      placeholderTextColor={textColor}
+                      autoCapitalize="none"
+                      handleTextInputFocus={handleTextInputFocus}
+                      onChangeText={formik.handleChange("email")}
+                      onBlur={formik.handleBlur("email")}
+                      value={formik.values.email}
+                    />
+                    {formik.touched.email && formik.errors.email && (
+                      <Text style={{ color: "red" }}>
+                        {formik.errors.email}
+                      </Text>
+                    )}
+                    <View className={`items-center flex-col justify-start`}>
+                      <TouchableOpacity
+                        onPress={formik.handleSubmit}
+                        disabled={!formik.isValid}
+                      >
+                        <View className={`w-full mt-1 mb-3`}>
+                          <View
+                            className={`py-[8px] mt-8 px-8 rounded-lg bg-primary-accent ${
+                              !formik.isValid ? "opacity-50" : "opacity-100"
+                            }`}
                           >
-                            Continue
-                          </Text>
+                            <Text
+                              className={`font-semibold text-center text-lg`}
+                              style={{ color: textColor }}
+                            >
+                              Continue
+                            </Text>
+                          </View>
                         </View>
-                      </View>
-                    </TouchableOpacity>
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 </View>
-              </View>
-            </KeyboardAvoidingView>
-          </SafeAreaView>
-        </TouchableWithoutFeedback>
+              </KeyboardAvoidingView>
+            </SafeAreaView>
+          </TouchableWithoutFeedback>
+        </>
       )}
     </>
   );
