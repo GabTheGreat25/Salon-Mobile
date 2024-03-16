@@ -160,133 +160,139 @@ export default function ({ route }) {
           <LoadingScreen />
         </View>
       ) : (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <SafeAreaView
-            style={{ backgroundColor }}
-            className={`relative flex-1`}
-          >
-            <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
-            <KeyboardAvoidingView behavior="height">
-              <ScrollView
-                showsVerticalScrollIndicator={false}
-                decelerationRate="fast"
-                scrollEventThrottle={1}
-                className={`p-6`}
-              >
-                {transactions?.image?.length > 0 && (
-                  <View className={`items-center justify-end pt-12`}>
-                    <Image
-                      key={
-                        transactions?.image[
-                          Math.floor(
-                            Math.random() * transactions?.image?.length
-                          )
-                        ]?.public_id
-                      }
-                      source={{
-                        uri: transactions?.image[
-                          Math.floor(
-                            Math.random() * transactions?.image?.length
-                          )
-                        ]?.url,
-                      }}
-                      className={`rounded-full w-60 h-60`}
-                      resizeMode="cover"
-                    />
-                  </View>
-                )}
-                <Text
-                  style={{ color: textColor }}
-                  className={`mt-10 mb-5 font-semibold text-center text-3xl`}
+        <>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <SafeAreaView
+              style={{ backgroundColor }}
+              className={`relative flex-1 pt-12`}
+            >
+              <BackIcon
+                navigateBack={navigation.goBack}
+                textColor={textColor}
+              />
+              <KeyboardAvoidingView behavior="height">
+                <ScrollView
+                  showsVerticalScrollIndicator={false}
+                  decelerationRate="fast"
+                  scrollEventThrottle={1}
+                  className={`px-6 `}
                 >
-                  Edit Transaction Details
-                </Text>
-
-                {transactions?.image?.length > 0 && (
-                  <View className={`flex flex-row`}>
-                    <TouchableOpacity
-                      onPress={() => handleCheckBoxToggle()}
-                      className={`flex-row py-2`}
-                    >
-                      <View
-                        style={{
-                          height: 35,
-                          width: 35,
-                          borderColor: textColor,
-                          backgroundColor: backgroundColor,
-                        }}
-                        className={`flex-row justify-center items-center border-2 rounded mr-3`}
-                      >
-                        {isOpen && (
-                          <Text
-                            style={{ color: textColor }}
-                            className={`text-2xl`}
-                          >
-                            ✓
-                          </Text>
-                        )}
-                      </View>
-                    </TouchableOpacity>
-                    <View className={`pt-2 pb-6`}>
-                      <Text
-                        style={{ color: textColor }}
-                        className={`text-2xl font-semibold`}
-                      >
-                        Valid for Discount
-                      </Text>
-                    </View>
-                  </View>
-                )}
-
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-base`}
-                >
-                  Status
-                </Text>
-                <View
-                  className={`border-[1.5px]  font-normal rounded-full my-3 ${borderColor}`}
-                >
-                  <Picker
-                    selectedValue={formik.values.status}
+                  <Text
                     style={{ color: textColor }}
-                    dropdownIconColor={textColor}
-                    onValueChange={(itemValue) => {
-                      setStatus(itemValue);
-                    }}
+                    className={`pb-6 font-semibold text-center text-3xl`}
                   >
-                    <Picker.Item label="pending" value="pending" />
-                    <Picker.Item label="completed" value="completed" />
-                  </Picker>
-                </View>
-                {formik.touched.status && formik.errors.status && (
-                  <Text style={{ color: "red" }}>{formik.errors.status}</Text>
-                )}
+                    Edit Transaction Details
+                  </Text>
 
-                <View className={`mt-4 items-center justify-center flex-col`}>
-                  <TouchableOpacity
-                    onPress={formik.handleSubmit}
-                    disabled={!formik.isValid}
-                  >
-                    <View className={`mb-2 flex justify-center items-center`}>
-                      <View
-                        className={`py-2 rounded-lg bg-primary-accent w-[175px]
-                          } ${!formik.isValid ? "opacity-50" : "opacity-100"}`}
+                  {transactions?.image?.length > 0 && (
+                    <View className={`items-center justify-end`}>
+                      <Image
+                        key={
+                          transactions?.image[
+                            Math.floor(
+                              Math.random() * transactions?.image?.length
+                            )
+                          ]?.public_id
+                        }
+                        source={{
+                          uri: transactions?.image[
+                            Math.floor(
+                              Math.random() * transactions?.image?.length
+                            )
+                          ]?.url,
+                        }}
+                        className={`rounded-full w-60 h-60`}
+                        resizeMode="cover"
+                      />
+                    </View>
+                  )}
+
+                  {transactions?.image?.length > 0 && (
+                    <View className={`flex flex-row`}>
+                      <TouchableOpacity
+                        onPress={() => handleCheckBoxToggle()}
+                        className={`flex-row py-2`}
                       >
-                        <Text
-                          className={`font-semibold text-center text-lg`}
-                          style={{ color: textColor }}
+                        <View
+                          style={{
+                            height: 35,
+                            width: 35,
+                            borderColor: textColor,
+                            backgroundColor: backgroundColor,
+                          }}
+                          className={`flex-row justify-center items-center border-2 rounded mr-3`}
                         >
-                          Submit
+                          {isOpen && (
+                            <Text
+                              style={{ color: textColor }}
+                              className={`text-2xl`}
+                            >
+                              ✓
+                            </Text>
+                          )}
+                        </View>
+                      </TouchableOpacity>
+                      <View className={`pt-2 pb-6`}>
+                        <Text
+                          style={{ color: textColor }}
+                          className={`text-2xl font-semibold`}
+                        >
+                          Valid for Discount
                         </Text>
                       </View>
                     </View>
-                  </TouchableOpacity>
-                </View>
-              </ScrollView>
-            </KeyboardAvoidingView>
-          </SafeAreaView>
-        </TouchableWithoutFeedback>
+                  )}
+
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-base`}
+                  >
+                    Status
+                  </Text>
+                  <View
+                    className={`border-[1.5px]  font-normal rounded-full my-3 ${borderColor}`}
+                  >
+                    <Picker
+                      selectedValue={formik.values.status}
+                      style={{ color: textColor }}
+                      dropdownIconColor={textColor}
+                      onValueChange={(itemValue) => {
+                        setStatus(itemValue);
+                      }}
+                    >
+                      <Picker.Item label="pending" value="pending" />
+                      <Picker.Item label="completed" value="completed" />
+                    </Picker>
+                  </View>
+                  {formik.touched.status && formik.errors.status && (
+                    <Text style={{ color: "red" }}>{formik.errors.status}</Text>
+                  )}
+
+                  <View className={`mt-4 items-center justify-center flex-col`}>
+                    <TouchableOpacity
+                      onPress={formik.handleSubmit}
+                      disabled={!formik.isValid}
+                    >
+                      <View className={`mb-2 flex justify-center items-center`}>
+                        <View
+                          className={`py-2 rounded-lg bg-primary-accent w-[175px]
+                          } ${!formik.isValid ? "opacity-50" : "opacity-100"}`}
+                        >
+                          <Text
+                            className={`font-semibold text-center text-lg`}
+                            style={{ color: textColor }}
+                          >
+                            Submit
+                          </Text>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                </ScrollView>
+              </KeyboardAvoidingView>
+            </SafeAreaView>
+          </TouchableWithoutFeedback>
+        </>
       )}
     </>
   );
