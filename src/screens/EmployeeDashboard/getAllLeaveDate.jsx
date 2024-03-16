@@ -15,7 +15,6 @@ import {
 } from "../../state/api/reducer";
 import { LoadingScreen } from "@components";
 import Toast from "react-native-toast-message";
-import { BackIcon } from "@helpers";
 import { DataTable } from "react-native-paper";
 import { Feather } from "@expo/vector-icons";
 import { changeColor } from "@utils";
@@ -143,73 +142,27 @@ export default function () {
           <LoadingScreen />
         </View>
       ) : (
-        <SafeAreaView style={{ backgroundColor }} className={`relative flex-1`}>
-          <View className={`flex-1 items-center justify-center`}>
-            {paginatedData?.length ? (
-              <ScrollView
-                style={{ backgroundColor }}
-                showsVerticalScrollIndicator={false}
-              >
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                  <DataTable>
-                    <DataTable.Header
-                      style={{
-                        backgroundColor,
-                        borderBottomWidth: 1,
-                        borderBottomColor: borderColor,
-                      }}
-                    >
-                      <DataTable.Title
-                        style={{
-                          justifyContent: "center",
-                          alignItems: "center",
-                          padding: 10,
-                          width: customWidth,
-                        }}
-                      >
-                        <Text style={{ color: textColor }}>ID</Text>
-                      </DataTable.Title>
-                      <DataTable.Title
-                        style={{
-                          justifyContent: "center",
-                          alignItems: "center",
-                          padding: 10,
-                          width: customWidth,
-                        }}
-                      >
-                        <Text style={{ color: textColor }}>Date</Text>
-                      </DataTable.Title>
-                      <DataTable.Title
-                        style={{
-                          justifyContent: "center",
-                          alignItems: "center",
-                          padding: 10,
-                          width: customWidth,
-                        }}
-                      >
-                        <Text style={{ color: textColor }}>Leave Note</Text>
-                      </DataTable.Title>
-                      <DataTable.Title
-                        style={{
-                          justifyContent: "center",
-                          alignItems: "center",
-                          padding: 10,
-                          width: customWidth,
-                        }}
-                      >
-                        <Text style={{ color: textColor }}>Actions</Text>
-                      </DataTable.Title>
-                    </DataTable.Header>
-                    {paginatedData?.map((item) => (
-                      <DataTable.Row
-                        key={item?._id}
+        <>
+          <SafeAreaView
+            style={{ backgroundColor }}
+            className={`relative flex-1`}
+          >
+            <View className={`flex-1 items-center justify-center`}>
+              {paginatedData?.length ? (
+                <ScrollView
+                  style={{ backgroundColor }}
+                  showsVerticalScrollIndicator={false}
+                >
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                    <DataTable>
+                      <DataTable.Header
                         style={{
                           backgroundColor,
                           borderBottomWidth: 1,
                           borderBottomColor: borderColor,
                         }}
                       >
-                        <DataTable.Cell
+                        <DataTable.Title
                           style={{
                             justifyContent: "center",
                             alignItems: "center",
@@ -217,15 +170,9 @@ export default function () {
                             width: customWidth,
                           }}
                         >
-                          <Text
-                            style={{ color: textColor }}
-                            numberOfLines={1}
-                            ellipsizeMode="tail"
-                          >
-                            {item?._id}
-                          </Text>
-                        </DataTable.Cell>
-                        <DataTable.Cell
+                          <Text style={{ color: textColor }}>ID</Text>
+                        </DataTable.Title>
+                        <DataTable.Title
                           style={{
                             justifyContent: "center",
                             alignItems: "center",
@@ -233,15 +180,9 @@ export default function () {
                             width: customWidth,
                           }}
                         >
-                          <Text
-                            style={{ color: textColor }}
-                            numberOfLines={1}
-                            ellipsizeMode="tail"
-                          >
-                            {format(new Date(item?.date), "yyyy-MM-dd")}
-                          </Text>
-                        </DataTable.Cell>
-                        <DataTable.Cell
+                          <Text style={{ color: textColor }}>Date</Text>
+                        </DataTable.Title>
+                        <DataTable.Title
                           style={{
                             justifyContent: "center",
                             alignItems: "center",
@@ -249,71 +190,134 @@ export default function () {
                             width: customWidth,
                           }}
                         >
-                          <Text
-                            style={{ color: textColor }}
-                            numberOfLines={1}
-                            ellipsizeMode="tail"
-                          >
-                            {item?.leaveNote}
-                          </Text>
-                        </DataTable.Cell>
-                        <DataTable.Cell
+                          <Text style={{ color: textColor }}>Leave Note</Text>
+                        </DataTable.Title>
+                        <DataTable.Title
                           style={{
-                            width: customWidth,
-                            justifyContent: "space-around",
+                            justifyContent: "center",
                             alignItems: "center",
                             padding: 10,
+                            width: customWidth,
                           }}
                         >
-                          <TouchableOpacity
-                            onPress={() => handleEditSchedule(item?._id)}
+                          <Text style={{ color: textColor }}>Actions</Text>
+                        </DataTable.Title>
+                      </DataTable.Header>
+                      {paginatedData?.map((item) => (
+                        <DataTable.Row
+                          key={item?._id}
+                          style={{
+                            backgroundColor,
+                            borderBottomWidth: 1,
+                            borderBottomColor: borderColor,
+                          }}
+                        >
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
                           >
-                            <Feather name="edit" size={24} color="blue" />
-                          </TouchableOpacity>
-                          <View style={{ width: 10 }} />
-                          <TouchableOpacity
-                            onPress={() => handleDeleteSchedule(item?._id)}
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {item?._id}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
                           >
-                            <Feather name="delete" size={24} color="red" />
-                          </TouchableOpacity>
-                        </DataTable.Cell>
-                      </DataTable.Row>
-                    ))}
-                  </DataTable>
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {format(new Date(item?.date), "yyyy-MM-dd")}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
+                          >
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {item?.leaveNote}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              width: customWidth,
+                              justifyContent: "space-around",
+                              alignItems: "center",
+                              padding: 10,
+                            }}
+                          >
+                            <TouchableOpacity
+                              onPress={() => handleEditSchedule(item?._id)}
+                            >
+                              <Feather name="edit" size={24} color="blue" />
+                            </TouchableOpacity>
+                            <View style={{ width: 10 }} />
+                            <TouchableOpacity
+                              onPress={() => handleDeleteSchedule(item?._id)}
+                            >
+                              <Feather name="delete" size={24} color="red" />
+                            </TouchableOpacity>
+                          </DataTable.Cell>
+                        </DataTable.Row>
+                      ))}
+                    </DataTable>
+                  </ScrollView>
                 </ScrollView>
-              </ScrollView>
-            ) : (
-              <View
-                className={`flex-1 justify-center items-center`}
-                style={{ backgroundColor }}
-              >
-                <Text style={{ color: textColor }}>No data available.</Text>
-              </View>
-            )}
-            {paginatedData?.length ? (
-              <View className={`flex items-center flex-row my-6`}>
-                <Button
-                  title="Previous"
-                  onPress={handlePrevPage}
-                  disabled={page === 0}
-                  color="#FDA7DF"
-                />
-                <Text
-                  style={{
-                    color: textColor,
-                  }}
-                  className={`px-20`}
-                >{`Page ${page + 1} of ${totalPageCount}`}</Text>
-                <Button
-                  title="Next"
-                  onPress={handleNextPage}
-                  disabled={page === totalPageCount - 1}
-                  color="#FDA7DF"
-                />
-              </View>
-            ) : null}
-          </View>
-        </SafeAreaView>
+              ) : (
+                <View
+                  className={`flex-1 justify-center items-center`}
+                  style={{ backgroundColor }}
+                >
+                  <Text style={{ color: textColor }}>No data available.</Text>
+                </View>
+              )}
+              {paginatedData?.length ? (
+                <View className={`flex items-center flex-row my-6`}>
+                  <Button
+                    title="Previous"
+                    onPress={handlePrevPage}
+                    disabled={page === 0}
+                    color="#FDA7DF"
+                  />
+                  <Text
+                    style={{
+                      color: textColor,
+                    }}
+                    className={`px-20`}
+                  >{`Page ${page + 1} of ${totalPageCount}`}</Text>
+                  <Button
+                    title="Next"
+                    onPress={handleNextPage}
+                    disabled={page === totalPageCount - 1}
+                    color="#FDA7DF"
+                  />
+                </View>
+              ) : null}
+            </View>
+          </SafeAreaView>
+        </>
       )}
     </>
   );
