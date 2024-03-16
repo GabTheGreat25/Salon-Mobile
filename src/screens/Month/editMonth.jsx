@@ -77,80 +77,85 @@ export default function ({ route }) {
           <LoadingScreen />
         </View>
       ) : (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <SafeAreaView
-            style={{ backgroundColor }}
-            className={`relative flex-1`}
-          >
-            <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
-            <KeyboardAvoidingView behavior="height">
-              <ScrollView
-                showsVerticalScrollIndicator={false}
-                decelerationRate="fast"
-                scrollEventThrottle={1}
-                className={`px-6`}
-              >
-                <View className="pt-10 pb-2">
-                  <Text
-                    style={{ color: textColor }}
-                    className={`font-semibold text-center pt-12 py-6 text-3xl`}
-                  >
-                    Edit Month Details
-                  </Text>
-
-                  <Text
-                    style={{ color: textColor }}
-                    className={`font-semibold text-base`}
-                  >
-                    Message
-                  </Text>
-                  <TextInput
-                    style={{
-                      color: textColor,
-                      height: 100,
-                      textAlignVertical: "top",
-                    }}
-                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2 ${borderColor}`}
-                    placeholder="Enter a message"
-                    placeholderTextColor={textColor}
-                    autoCapitalize="none"
-                    multiline={true}
-                    onChangeText={formik.handleChange("message")}
-                    onBlur={formik.handleBlur("message")}
-                    value={formik.values.message}
-                  />
-                  {formik.touched.message && formik.errors.message && (
-                    <Text style={{ color: "red" }}>
-                      {formik.errors.message}
-                    </Text>
-                  )}
-
-                  <View className={`flex-col`}>
-                    <TouchableOpacity
-                      onPress={formik.handleSubmit}
-                      disabled={!formik.isValid}
+        <>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <SafeAreaView
+              style={{ backgroundColor }}
+              className={`relative flex-1 pt-12`}
+            >
+              <BackIcon
+                navigateBack={navigation.goBack}
+                textColor={textColor}
+              />
+              <KeyboardAvoidingView behavior="height">
+                <ScrollView
+                  showsVerticalScrollIndicator={false}
+                  decelerationRate="fast"
+                  scrollEventThrottle={1}
+                  className={`px-6`}
+                >
+                  <View className="pb-2">
+                    <Text
+                      style={{ color: textColor }}
+                      className={`font-semibold text-center pb-4 text-3xl`}
                     >
-                      <View className={`my-4 w-full`}>
-                        <View
-                          className={`py-2 rounded-lg bg-primary-accent mx-20 ${
-                            !formik.isValid ? "opacity-50" : "opacity-100"
-                          }`}
-                        >
-                          <Text
-                            className={`font-semibold text-center text-lg`}
-                            style={{ color: textColor }}
+                      Edit Month Details
+                    </Text>
+
+                    <Text
+                      style={{ color: textColor }}
+                      className={`font-semibold text-base`}
+                    >
+                      Message
+                    </Text>
+                    <TextInput
+                      style={{
+                        color: textColor,
+                        height: 100,
+                        textAlignVertical: "top",
+                      }}
+                      className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2 ${borderColor}`}
+                      placeholder="Add Message Here..."
+                      placeholderTextColor={textColor}
+                      autoCapitalize="none"
+                      multiline={true}
+                      onChangeText={formik.handleChange("message")}
+                      onBlur={formik.handleBlur("message")}
+                      value={formik.values.message}
+                    />
+                    {formik.touched.message && formik.errors.message && (
+                      <Text style={{ color: "red" }}>
+                        {formik.errors.message}
+                      </Text>
+                    )}
+
+                    <View className={`flex-col`}>
+                      <TouchableOpacity
+                        onPress={formik.handleSubmit}
+                        disabled={!formik.isValid}
+                      >
+                        <View className={`my-4 w-full`}>
+                          <View
+                            className={`py-2 rounded-lg bg-primary-accent mx-20 ${
+                              !formik.isValid ? "opacity-50" : "opacity-100"
+                            }`}
                           >
-                            Submit
-                          </Text>
+                            <Text
+                              className={`font-semibold text-center text-lg`}
+                              style={{ color: textColor }}
+                            >
+                              Submit
+                            </Text>
+                          </View>
                         </View>
-                      </View>
-                    </TouchableOpacity>
+                      </TouchableOpacity>
+                    </View>
                   </View>
-                </View>
-              </ScrollView>
-            </KeyboardAvoidingView>
-          </SafeAreaView>
-        </TouchableWithoutFeedback>
+                </ScrollView>
+              </KeyboardAvoidingView>
+            </SafeAreaView>
+          </TouchableWithoutFeedback>
+        </>
       )}
     </>
   );
