@@ -2,17 +2,14 @@ import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
-  Alert,
   TouchableOpacity,
   ScrollView,
   Dimensions,
   SafeAreaView,
-  Image,
   Button,
 } from "react-native";
 import { useGetAppointmentsQuery } from "../../state/api/reducer";
 import { LoadingScreen } from "@components";
-import { BackIcon } from "@helpers";
 import { DataTable } from "react-native-paper";
 import { Feather } from "@expo/vector-icons";
 import { changeColor } from "@utils";
@@ -90,115 +87,27 @@ export default function () {
           <LoadingScreen />
         </View>
       ) : (
-        <SafeAreaView style={{ backgroundColor }} className={`relative flex-1`}>
-          <View className={`flex-1 items-center justify-center`}>
-            {paginatedData?.length ? (
-              <ScrollView
-                style={{ backgroundColor }}
-                showsVerticalScrollIndicator={false}
-              >
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                  <DataTable>
-                    <DataTable.Header
-                      style={{
-                        backgroundColor,
-                        borderBottomWidth: 1,
-                        borderBottomColor: borderColor,
-                      }}
-                    >
-                      <DataTable.Title
-                        style={{
-                          justifyContent: "center",
-                          alignItems: "center",
-                          padding: 10,
-                          width: customWidth,
-                        }}
-                      >
-                        <Text style={{ color: textColor }}>ID</Text>
-                      </DataTable.Title>
-                      <DataTable.Title
-                        style={{
-                          justifyContent: "center",
-                          alignItems: "center",
-                          padding: 10,
-                          width: customWidth,
-                        }}
-                      >
-                        <Text style={{ color: textColor }}>
-                          Appointment Day
-                        </Text>
-                      </DataTable.Title>
-                      <DataTable.Title
-                        style={{
-                          justifyContent: "center",
-                          alignItems: "center",
-                          padding: 10,
-                          width: customWidth,
-                        }}
-                      >
-                        <Text style={{ color: textColor }}>Price</Text>
-                      </DataTable.Title>
-                      <DataTable.Title
-                        style={{
-                          justifyContent: "center",
-                          alignItems: "center",
-                          padding: 10,
-                          width: customWidth,
-                        }}
-                      >
-                        <Text style={{ color: textColor }}>Service Name</Text>
-                      </DataTable.Title>
-                      <DataTable.Title
-                        style={{
-                          justifyContent: "center",
-                          alignItems: "center",
-                          padding: 10,
-                          width: customWidth,
-                        }}
-                      >
-                        <Text style={{ color: textColor }}>Service Type</Text>
-                      </DataTable.Title>
-                      <DataTable.Title
-                        style={{
-                          justifyContent: "center",
-                          alignItems: "center",
-                          padding: 10,
-                          width: customWidth,
-                        }}
-                      >
-                        <Text style={{ color: textColor }}>Employee Name</Text>
-                      </DataTable.Title>
-                      <DataTable.Title
-                        style={{
-                          justifyContent: "center",
-                          alignItems: "center",
-                          padding: 10,
-                          width: customWidth,
-                        }}
-                      >
-                        <Text style={{ color: textColor }}>Customer Name</Text>
-                      </DataTable.Title>
-                      <DataTable.Title
-                        style={{
-                          justifyContent: "center",
-                          alignItems: "center",
-                          padding: 10,
-                          width: customWidth,
-                        }}
-                      >
-                        <Text style={{ color: textColor }}>Actions</Text>
-                      </DataTable.Title>
-                    </DataTable.Header>
-                    {paginatedData?.map((item) => (
-                      <DataTable.Row
-                        key={item?._id}
+        <>
+          <SafeAreaView
+            style={{ backgroundColor }}
+            className={`relative flex-1`}
+          >
+            <View className={`flex-1 items-center justify-center`}>
+              {paginatedData?.length ? (
+                <ScrollView
+                  style={{ backgroundColor }}
+                  showsVerticalScrollIndicator={false}
+                >
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                    <DataTable>
+                      <DataTable.Header
                         style={{
                           backgroundColor,
                           borderBottomWidth: 1,
                           borderBottomColor: borderColor,
                         }}
                       >
-                        <DataTable.Cell
+                        <DataTable.Title
                           style={{
                             justifyContent: "center",
                             alignItems: "center",
@@ -206,15 +115,9 @@ export default function () {
                             width: customWidth,
                           }}
                         >
-                          <Text
-                            style={{ color: textColor }}
-                            numberOfLines={1}
-                            ellipsizeMode="tail"
-                          >
-                            {item?._id}
-                          </Text>
-                        </DataTable.Cell>
-                        <DataTable.Cell
+                          <Text style={{ color: textColor }}>ID</Text>
+                        </DataTable.Title>
+                        <DataTable.Title
                           style={{
                             justifyContent: "center",
                             alignItems: "center",
@@ -222,29 +125,11 @@ export default function () {
                             width: customWidth,
                           }}
                         >
-                          <Text
-                            style={{ color: textColor }}
-                            numberOfLines={1}
-                            ellipsizeMode="tail"
-                          >
-                            {item?.date && item?.time
-                              ? item.time?.length === 1
-                                ? `${
-                                    new Date(item.date)
-                                      .toISOString()
-                                      .split("T")[0]
-                                  } ${item.time[0]}`
-                                : `${
-                                    new Date(item.date)
-                                      .toISOString()
-                                      .split("T")[0]
-                                  } ${item.time[0]} - ${
-                                    item.time[item.time?.length - 1]
-                                  }`
-                              : ""}
+                          <Text style={{ color: textColor }}>
+                            Appointment Day
                           </Text>
-                        </DataTable.Cell>
-                        <DataTable.Cell
+                        </DataTable.Title>
+                        <DataTable.Title
                           style={{
                             justifyContent: "center",
                             alignItems: "center",
@@ -252,15 +137,9 @@ export default function () {
                             width: customWidth,
                           }}
                         >
-                          <Text
-                            style={{ color: textColor }}
-                            numberOfLines={1}
-                            ellipsizeMode="tail"
-                          >
-                            {`₱${item?.price}`}
-                          </Text>
-                        </DataTable.Cell>
-                        <DataTable.Cell
+                          <Text style={{ color: textColor }}>Price</Text>
+                        </DataTable.Title>
+                        <DataTable.Title
                           style={{
                             justifyContent: "center",
                             alignItems: "center",
@@ -268,19 +147,9 @@ export default function () {
                             width: customWidth,
                           }}
                         >
-                          <Text
-                            style={{ color: textColor }}
-                            numberOfLines={1}
-                            ellipsizeMode="tail"
-                          >
-                            {Array.isArray(item.service)
-                              ? item.service
-                                  .map((service) => service.service_name)
-                                  .join(", ")
-                              : item.service?.service_name}
-                          </Text>
-                        </DataTable.Cell>
-                        <DataTable.Cell
+                          <Text style={{ color: textColor }}>Service Name</Text>
+                        </DataTable.Title>
+                        <DataTable.Title
                           style={{
                             justifyContent: "center",
                             alignItems: "center",
@@ -288,19 +157,9 @@ export default function () {
                             width: customWidth,
                           }}
                         >
-                          <Text
-                            style={{ color: textColor }}
-                            numberOfLines={1}
-                            ellipsizeMode="tail"
-                          >
-                            {Array.isArray(item.service)
-                              ? item.service
-                                  .map((service) => service.type)
-                                  .join(", ")
-                              : item.service?.type}
-                          </Text>
-                        </DataTable.Cell>
-                        <DataTable.Cell
+                          <Text style={{ color: textColor }}>Service Type</Text>
+                        </DataTable.Title>
+                        <DataTable.Title
                           style={{
                             justifyContent: "center",
                             alignItems: "center",
@@ -308,19 +167,11 @@ export default function () {
                             width: customWidth,
                           }}
                         >
-                          <Text
-                            style={{ color: textColor }}
-                            numberOfLines={1}
-                            ellipsizeMode="tail"
-                          >
-                            {Array.isArray(item.beautician)
-                              ? item.beautician
-                                  .map((beautician) => beautician.name)
-                                  .join(", ")
-                              : item.beautician?.name}
+                          <Text style={{ color: textColor }}>
+                            Employee Name
                           </Text>
-                        </DataTable.Cell>
-                        <DataTable.Cell
+                        </DataTable.Title>
+                        <DataTable.Title
                           style={{
                             justifyContent: "center",
                             alignItems: "center",
@@ -328,81 +179,236 @@ export default function () {
                             width: customWidth,
                           }}
                         >
-                          <Text
-                            style={{ color: textColor }}
-                            numberOfLines={1}
-                            ellipsizeMode="tail"
-                          >
-                            {item.customer?.name}
+                          <Text style={{ color: textColor }}>
+                            Customer Name
                           </Text>
-                        </DataTable.Cell>
-                        <DataTable.Cell
+                        </DataTable.Title>
+                        <DataTable.Title
                           style={{
-                            width: customWidth,
-                            justifyContent: "space-around",
+                            justifyContent: "center",
                             alignItems: "center",
                             padding: 10,
+                            width: customWidth,
                           }}
                         >
-                          <TouchableOpacity
-                            onPress={() => {
-                              handleViewBeauticianAppointment(item?._id);
+                          <Text style={{ color: textColor }}>Actions</Text>
+                        </DataTable.Title>
+                      </DataTable.Header>
+                      {paginatedData?.map((item) => (
+                        <DataTable.Row
+                          key={item?._id}
+                          style={{
+                            backgroundColor,
+                            borderBottomWidth: 1,
+                            borderBottomColor: borderColor,
+                          }}
+                        >
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
                             }}
                           >
-                            <Feather name="eye" size={24} color={"green"} />
-                          </TouchableOpacity>
-                          <View style={{ width: 10 }} />
-                          <TouchableOpacity
-                            onPress={() => {
-                              handleEditBeauticianAppoinment(item?._id);
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {item?._id}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
                             }}
                           >
-                            <Feather
-                              name="edit"
-                              size={24}
-                              color={
-                                item.status !== "completed" ? "blue" : "gray"
-                              }
-                            />
-                          </TouchableOpacity>
-                        </DataTable.Cell>
-                      </DataTable.Row>
-                    ))}
-                  </DataTable>
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {item?.date && item?.time
+                                ? item.time?.length === 1
+                                  ? `${
+                                      new Date(item.date)
+                                        .toISOString()
+                                        .split("T")[0]
+                                    } ${item.time[0]}`
+                                  : `${
+                                      new Date(item.date)
+                                        .toISOString()
+                                        .split("T")[0]
+                                    } ${item.time[0]} - ${
+                                      item.time[item.time?.length - 1]
+                                    }`
+                                : ""}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
+                          >
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {`₱${item?.price}`}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
+                          >
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {Array.isArray(item.service)
+                                ? item.service
+                                    .map((service) => service.service_name)
+                                    .join(", ")
+                                : item.service?.service_name}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
+                          >
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {Array.isArray(item.service)
+                                ? item.service
+                                    .map((service) => service.type)
+                                    .join(", ")
+                                : item.service?.type}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
+                          >
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {Array.isArray(item.beautician)
+                                ? item.beautician
+                                    .map((beautician) => beautician.name)
+                                    .join(", ")
+                                : item.beautician?.name}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
+                          >
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {item.customer?.name}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              width: customWidth,
+                              justifyContent: "space-around",
+                              alignItems: "center",
+                              padding: 10,
+                            }}
+                          >
+                            <TouchableOpacity
+                              onPress={() => {
+                                handleViewBeauticianAppointment(item?._id);
+                              }}
+                            >
+                              <Feather name="eye" size={24} color={"green"} />
+                            </TouchableOpacity>
+                            <View style={{ width: 10 }} />
+                            <TouchableOpacity
+                              onPress={() => {
+                                handleEditBeauticianAppoinment(item?._id);
+                              }}
+                            >
+                              <Feather
+                                name="edit"
+                                size={24}
+                                color={
+                                  item.status !== "completed" ? "blue" : "gray"
+                                }
+                              />
+                            </TouchableOpacity>
+                          </DataTable.Cell>
+                        </DataTable.Row>
+                      ))}
+                    </DataTable>
+                  </ScrollView>
                 </ScrollView>
-              </ScrollView>
-            ) : (
-              <View
-                className={`flex-1 justify-center items-center`}
-                style={{ backgroundColor }}
-              >
-                <Text style={{ color: textColor }}>No data available.</Text>
-              </View>
-            )}
-            {paginatedData?.length ? (
-              <View className={`flex items-center flex-row my-6`}>
-                <Button
-                  title="Previous"
-                  onPress={handlePrevPage}
-                  disabled={page === 0}
-                  color="#FDA7DF"
-                />
-                <Text
-                  style={{
-                    color: textColor,
-                  }}
-                  className={`px-20`}
-                >{`Page ${page + 1} of ${totalPageCount}`}</Text>
-                <Button
-                  title="Next"
-                  onPress={handleNextPage}
-                  disabled={page === totalPageCount - 1}
-                  color="#FDA7DF"
-                />
-              </View>
-            ) : null}
-          </View>
-        </SafeAreaView>
+              ) : (
+                <View
+                  className={`flex-1 justify-center items-center`}
+                  style={{ backgroundColor }}
+                >
+                  <Text style={{ color: textColor }}>No data available.</Text>
+                </View>
+              )}
+              {paginatedData?.length ? (
+                <View className={`flex items-center flex-row my-6`}>
+                  <Button
+                    title="Previous"
+                    onPress={handlePrevPage}
+                    disabled={page === 0}
+                    color="#FDA7DF"
+                  />
+                  <Text
+                    style={{
+                      color: textColor,
+                    }}
+                    className={`px-20`}
+                  >{`Page ${page + 1} of ${totalPageCount}`}</Text>
+                  <Button
+                    title="Next"
+                    onPress={handleNextPage}
+                    disabled={page === totalPageCount - 1}
+                    color="#FDA7DF"
+                  />
+                </View>
+              ) : null}
+            </View>
+          </SafeAreaView>
+        </>
       )}
     </>
   );
