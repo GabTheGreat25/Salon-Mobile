@@ -8,6 +8,7 @@ import {
   Modal,
   Button,
   ScrollView,
+  SafeAreaView,
 } from "react-native";
 import {
   useGetTransactionsQuery,
@@ -218,7 +219,7 @@ export default function () {
             showsHorizontalScrollIndicator={false}
             className={`pb-10`}
           >
-            <View
+            <SafeAreaView
               style={{
                 borderColor: borderColor,
               }}
@@ -323,7 +324,7 @@ export default function () {
                   </View>
                 </View>
               </Modal>
-            </View>
+            </SafeAreaView>
           </ScrollView>
         </>
       )}
