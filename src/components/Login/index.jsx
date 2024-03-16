@@ -10,6 +10,7 @@ import {
   Keyboard,
   BackHandler,
   TextInput,
+  ScrollView,
 } from "react-native";
 import { changeColor } from "@utils";
 import { BackIcon } from "@helpers";
@@ -117,126 +118,139 @@ export default function ({
   };
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView
-        style={{ backgroundColor }}
-        className={`relative flex-1 pb-12`}
-      >
-        <BackIcon navigateBack={navigateBack} textColor={textColor} />
-        <KeyboardAvoidingView
-          behavior="height"
-          className={`flex-1 justify-center items-center flex-col`}
+    <>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <SafeAreaView
+          style={{ backgroundColor }}
+          className={`relative flex-1 pb-12`}
         >
-          <View
-            className={`w-[280px] h-[280px] justify-center items-center pt-10`}
+          <BackIcon navigateBack={navigateBack} textColor={textColor} />
+          <KeyboardAvoidingView
+            behavior="height"
+            className={`flex-1 justify-center items-center flex-col`}
           >
-            <Image source={imageSource} resizeMode="contain" />
-          </View>
-          <View className={`items-center justify-start`}>
-            <Text
-              style={{ color: textColor }}
-              className={`font-semibold mt-14 text-3xl text-center`}
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              decelerationRate="fast"
+              scrollEventThrottle={1}
             >
-              {title}
-            </Text>
-            <Text
-              style={{ color: textColor }}
-              className={`my-2 text-xl font-base text-center`}
-            >
-              {description}
-            </Text>
-            <View className={`w-[300px]`}>
-              <TextInput
-                style={{ color: textColor }}
-                className={`border-b mt-4 mb-1 pb-1 text-lg ${borderColor}`}
-                placeholder="Enter your email"
-                placeholderTextColor={textColor}
-                autoCapitalize="none"
-                handleTextInputFocus={handleTextInputFocus}
-                onChangeText={formik.handleChange("email")}
-                onBlur={formik.handleBlur("email")}
-                value={formik.values.email}
-              />
-              {formik.touched.email && formik.errors.email && (
-                <Text style={{ color: "red" }}>{formik.errors.email}</Text>
-              )}
-              <View className={`relative`}>
-                <TextInput
-                  style={{ color: textColor }}
-                  className={`border-b mt-4 mb-1 pb-1 text-lg ${borderColor}`}
-                  placeholder="Enter your password"
-                  placeholderTextColor={textColor}
-                  autoCapitalize="none"
-                  handleTextInputFocus={handleTextInputFocus}
-                  onChangeText={formik.handleChange("password")}
-                  onBlur={formik.handleBlur("password")}
-                  value={formik.values.password}
-                  secureTextEntry={!isPasswordVisible}
-                />
-                <TouchableOpacity
-                  className={`absolute right-4 top-4`}
-                  onPress={togglePasswordVisibility}
-                >
-                  <Feather
-                    name={isPasswordVisible ? "eye" : "eye-off"}
-                    size={24}
-                    color={textColor}
-                  />
-                </TouchableOpacity>
+              <View
+                className={`w-[280px] h-[280px] justify-center items-center pt-10`}
+              >
+                <Image source={imageSource} resizeMode="contain" />
               </View>
-              {formik.touched.password && formik.errors.password && (
-                <Text style={{ color: "red" }}>{formik.errors.password}</Text>
-              )}
-              <View className={`items-center flex-col justify-start`}>
-                <TouchableOpacity
-                  onPress={formik.handleSubmit}
-                  disabled={!formik.isValid}
+              <View className={`items-center justify-start`}>
+                <Text
+                  style={{ color: textColor }}
+                  className={`font-semibold mt-14 text-3xl text-center`}
                 >
-                  <View className={`w-full mt-1 mb-3`}>
-                    <View
-                      className={`py-[8px] px-8 rounded-lg bg-primary-accent ${
-                        !formik.isValid ? "opacity-50" : "opacity-100"
-                      }`}
+                  {title}
+                </Text>
+                <Text
+                  style={{ color: textColor }}
+                  className={`my-2 text-xl font-base text-center`}
+                >
+                  {description}
+                </Text>
+                <View className={`w-[300px]`}>
+                  <TextInput
+                    style={{ color: textColor }}
+                    className={`border-b mt-4 mb-1 pb-1 text-lg ${borderColor}`}
+                    placeholder="Enter your email"
+                    placeholderTextColor={textColor}
+                    autoCapitalize="none"
+                    handleTextInputFocus={handleTextInputFocus}
+                    onChangeText={formik.handleChange("email")}
+                    onBlur={formik.handleBlur("email")}
+                    value={formik.values.email}
+                  />
+                  {formik.touched.email && formik.errors.email && (
+                    <Text style={{ color: "red" }}>{formik.errors.email}</Text>
+                  )}
+                  <View className={`relative`}>
+                    <TextInput
+                      style={{ color: textColor }}
+                      className={`border-b mt-4 mb-1 pb-1 text-lg ${borderColor}`}
+                      placeholder="Enter your password"
+                      placeholderTextColor={textColor}
+                      autoCapitalize="none"
+                      handleTextInputFocus={handleTextInputFocus}
+                      onChangeText={formik.handleChange("password")}
+                      onBlur={formik.handleBlur("password")}
+                      value={formik.values.password}
+                      secureTextEntry={!isPasswordVisible}
+                    />
+                    <TouchableOpacity
+                      className={`absolute right-4 top-4`}
+                      onPress={togglePasswordVisibility}
                     >
+                      <Feather
+                        name={isPasswordVisible ? "eye" : "eye-off"}
+                        size={24}
+                        color={textColor}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                  {formik.touched.password && formik.errors.password && (
+                    <Text style={{ color: "red" }}>
+                      {formik.errors.password}
+                    </Text>
+                  )}
+                  <View className={`items-center flex-col justify-start`}>
+                    <TouchableOpacity
+                      onPress={formik.handleSubmit}
+                      disabled={!formik.isValid}
+                    >
+                      <View className={`w-full mt-2 mb-3`}>
+                        <View
+                          className={`py-[8px] px-8 rounded-lg bg-primary-accent ${
+                            !formik.isValid ? "opacity-50" : "opacity-100"
+                          }`}
+                        >
+                          <Text
+                            className={`font-semibold text-center text-lg`}
+                            style={{ color: textColor }}
+                          >
+                            {buttonTitle}
+                          </Text>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                    {showComponent && (
+                      <TouchableOpacity onPress={linkNavigateTo}>
+                        <Text
+                          className={`mt-2 text-lg underline`}
+                          style={{ color: textColor }}
+                        >
+                          {linkTitle}
+                        </Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                </View>
+                {showComponent && (
+                  <View className={`justify-center items-center`}>
+                    <View className={`flex-row justify-center gap-x-5`}></View>
+                    <View className={`mb-4 mt-16 gap-x-3 flex-row`}>
                       <Text
-                        className={`font-semibold text-center text-lg`}
                         style={{ color: textColor }}
+                        className={`text-base`}
                       >
-                        {buttonTitle}
+                        {footerTitle}
                       </Text>
+                      <TouchableOpacity onPress={footerLink}>
+                        <Text className={`text-primary-accent text-base`}>
+                          {footerLinkTitle}
+                        </Text>
+                      </TouchableOpacity>
                     </View>
                   </View>
-                </TouchableOpacity>
-                {showComponent && (
-                  <TouchableOpacity onPress={linkNavigateTo}>
-                    <Text
-                      className={`mt-2 text-lg underline`}
-                      style={{ color: textColor }}
-                    >
-                      {linkTitle}
-                    </Text>
-                  </TouchableOpacity>
                 )}
               </View>
-            </View>
-            {showComponent && (
-              <View className={`justify-center items-center`}>
-                <View className={`flex-row justify-center gap-x-5`}></View>
-                <View className={`mb-4 mt-16 gap-x-3 flex-row`}>
-                  <Text style={{ color: textColor }} className={`text-base`}>
-                    {footerTitle}
-                  </Text>
-                  <TouchableOpacity onPress={footerLink}>
-                    <Text className={`text-primary-accent text-base`}>
-                      {footerLinkTitle}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            )}
-          </View>
-        </KeyboardAvoidingView>
-      </SafeAreaView>
-    </TouchableWithoutFeedback>
+            </ScrollView>
+          </KeyboardAvoidingView>
+        </SafeAreaView>
+      </TouchableWithoutFeedback>
+    </>
   );
 }
