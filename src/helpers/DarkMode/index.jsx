@@ -1,6 +1,6 @@
 import { TouchableOpacity, Text } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { RESOURCE } from "@constants";
+
 export default function ({ name, color, toggle }) {
   return (
     <>
