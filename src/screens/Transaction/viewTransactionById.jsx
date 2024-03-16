@@ -44,93 +44,105 @@ export default function ({ route }) {
           <LoadingScreen />
         </View>
       ) : (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <SafeAreaView
-            style={{ backgroundColor }}
-            className={`relative flex-1`}
-          >
-            <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
-            <KeyboardAvoidingView behavior="height">
-              <ScrollView
-                showsVerticalScrollIndicator={false}
-                decelerationRate="fast"
-                scrollEventThrottle={1}
-                className={`px-6`}
-              >
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-center pt-12 pb-6 text-3xl`}
+        <>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <SafeAreaView
+              style={{ backgroundColor }}
+              className={`relative flex-1 pt-12`}
+            >
+              <BackIcon
+                navigateBack={navigation.goBack}
+                textColor={textColor}
+              />
+              <KeyboardAvoidingView behavior="height">
+                <ScrollView
+                  showsVerticalScrollIndicator={false}
+                  decelerationRate="fast"
+                  scrollEventThrottle={1}
+                  className={`px-6`}
                 >
-                  View Transaction Details
-                </Text>
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-base`}
-                >
-                  Transaction ID
-                </Text>
-                <TextInput
-                  style={{ color: textColor }}
-                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                  autoCapitalize="none"
-                  value={transaction?._id}
-                />
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-center pb-6 text-3xl`}
+                  >
+                    View Transaction Details
+                  </Text>
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-base`}
+                  >
+                    Transaction ID
+                  </Text>
+                  <TextInput
+                    style={{ color: textColor }}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    autoCapitalize="none"
+                    value={transaction?._id}
+                    editable={false}
+                  />
 
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-base`}
-                >
-                  Appointment Status
-                </Text>
-                <TextInput
-                  style={{ color: textColor }}
-                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                  autoCapitalize="none"
-                  value={transaction?.status}
-                />
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-base`}
+                  >
+                    Appointment Status
+                  </Text>
+                  <TextInput
+                    style={{ color: textColor }}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    autoCapitalize="none"
+                    value={transaction?.status}
+                    editable={false}
+                  />
 
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-base`}
-                >
-                  Payment
-                </Text>
-                <TextInput
-                  style={{ color: textColor }}
-                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                  autoCapitalize="none"
-                  value={transaction?.payment}
-                />
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-base`}
+                  >
+                    Payment
+                  </Text>
+                  <TextInput
+                    style={{ color: textColor }}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    autoCapitalize="none"
+                    value={transaction?.payment}
+                    editable={false}
+                  />
 
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-base`}
-                >
-                  Appointment Discount
-                </Text>
-                <TextInput
-                  style={{ color: textColor }}
-                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                  autoCapitalize="none"
-                  value={transaction?.hasDiscount ? "Discount" : "No Discount"}
-                />
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-base`}
+                  >
+                    Appointment Discount
+                  </Text>
+                  <TextInput
+                    style={{ color: textColor }}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    autoCapitalize="none"
+                    value={
+                      transaction?.hasDiscount ? "Discount" : "No Discount"
+                    }
+                    editable={false}
+                  />
 
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-base`}
-                >
-                  Customer Type
-                </Text>
-                <TextInput
-                  style={{ color: textColor }}
-                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                  autoCapitalize="none"
-                  value={transaction?.customer_type}
-                />
-              </ScrollView>
-            </KeyboardAvoidingView>
-          </SafeAreaView>
-        </TouchableWithoutFeedback>
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-base`}
+                  >
+                    Customer Type
+                  </Text>
+                  <TextInput
+                    style={{ color: textColor }}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    autoCapitalize="none"
+                    value={transaction?.customer_type}
+                    editable={false}
+                  />
+                </ScrollView>
+              </KeyboardAvoidingView>
+            </SafeAreaView>
+          </TouchableWithoutFeedback>
+        </>
       )}
     </>
   );
