@@ -6,10 +6,10 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
+  SafeAreaView,
 } from "react-native";
-import { changeColor, dimensionLayout } from "@utils";
+import { changeColor } from "@utils";
 import { useNavigation } from "@react-navigation/native";
-import { BackIcon } from "@helpers";
 import SalonFaceWash from "@assets/face-wash.png";
 
 const windowWidth = Dimensions.get("window").width;
@@ -19,7 +19,6 @@ export default function () {
   const { textColor, backgroundColor, shadowColor, colorScheme } =
     changeColor();
   const navigation = useNavigation();
-  const isDimensionLayout = dimensionLayout();
   const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDA7DF";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
@@ -77,7 +76,7 @@ export default function () {
 
   return (
     <>
-      <View style={{ backgroundColor }} className={`flex-1`}>
+      <SafeAreaView style={{ backgroundColor }} className={`flex-1`}>
         <ScrollView
           showsVerticalScrollIndicator={false}
           decelerationRate="fast"
@@ -100,9 +99,7 @@ export default function () {
                   height: windowHeight * 0.25,
                   width: windowWidth * 0.925,
                 }}
-                className={`flex-row gap-x-4 rounded-2xl ${
-                  isDimensionLayout ? "mx-1 px-4 pt-4 mb-2" : "mx-3"
-                }`}
+                className={`flex-row gap-x-4 rounded-2xl mx-1 px-4 pt-4 mb-2`}
               >
                 <View className={`flex-col gap-y-2`}>
                   <Image
@@ -112,9 +109,7 @@ export default function () {
                   />
                   <Text
                     style={{ color: invertTextColor }}
-                    className={`text-center ${
-                      isDimensionLayout ? "text-base" : "text-lg px-4 py-6"
-                    } font-semibold`}
+                    className={`text-center text-base font-semibold`}
                   >
                     {item.date}
                   </Text>
@@ -123,18 +118,14 @@ export default function () {
                   <View className={`flex-row`}>
                     <Text
                       style={{ color: invertTextColor }}
-                      className={`text-center ${
-                        isDimensionLayout ? "text-lg" : "text-lg px-4 py-6"
-                      } font-semibold`}
+                      className={`text-center text-lg font-semibold`}
                     >
                       {item.name}
                     </Text>
                     <View className={`flex-1 flex-row justify-end items-start`}>
                       <Text
                         style={{ color: invertTextColor }}
-                        className={`text-center ${
-                          isDimensionLayout ? "text-lg" : "text-lg px-4 py-6"
-                        } font-semibold`}
+                        className={`text-center text-lg font-semibold`}
                       >
                         {item.price}
                       </Text>
@@ -149,9 +140,7 @@ export default function () {
                     >
                       <Text
                         style={{ color: invertTextColor }}
-                        className={`${
-                          isDimensionLayout ? "text-xs" : "text-lg px-4 py-6"
-                        } font-semibold`}
+                        className={`text-xs font-semibold`}
                       >
                         {item.description}
                       </Text>
@@ -163,11 +152,7 @@ export default function () {
                     >
                       <Text
                         style={{ color: invertTextColor }}
-                        className={`${
-                          isDimensionLayout
-                            ? "text-[10px]"
-                            : "text-lg px-4 py-6"
-                        } font-semibold`}
+                        className={`text-[10px] font-semibold`}
                       >
                         {item.buttonOne}
                       </Text>
@@ -177,11 +162,7 @@ export default function () {
                     >
                       <Text
                         style={{ color: invertTextColor }}
-                        className={`${
-                          isDimensionLayout
-                            ? "text-[10px]"
-                            : "text-lg px-4 py-6"
-                        } font-semibold`}
+                        className={`text-[10px] font-semibold`}
                       >
                         {item.buttonTwo}
                       </Text>
@@ -192,7 +173,7 @@ export default function () {
             ))}
           </ScrollView>
         </ScrollView>
-      </View>
+      </SafeAreaView>
     </>
   );
 }
