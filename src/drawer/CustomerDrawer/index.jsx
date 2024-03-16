@@ -6,7 +6,12 @@ import {
   DrawerItemList,
   createDrawerNavigator,
 } from "@react-navigation/drawer";
-import { CustomerDashboard, EditCustomerProfile, PastAppointment, Settings } from "@screens";
+import {
+  CustomerDashboard,
+  EditCustomerProfile,
+  PastAppointment,
+  Settings,
+} from "@screens";
 import { changeColor, dimensionLayout } from "@utils";
 import { RESOURCE } from "@constants";
 import { UserImage } from "@components";
@@ -51,149 +56,163 @@ export default function () {
   };
 
   return (
-    <Drawer.Navigator
-      initialRouteName="CustomerDashboard"
-      drawerContent={(props) => {
-        return (
-          <SafeAreaView>
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              decelerationRate="fast"
-              scrollEventThrottle={1}
-            >
-              <UserImage
-                viewWidth={viewWidth}
-                imageSource={{ uri: user?.image[0]?.url }}
-                imageName={user?.name}
-                imageRole={user?.roles}
-              />
-              <DrawerItemList {...props} />
-              <TouchableOpacity
-                onPress={handleLogout}
-                className={`border-t-[1.25px] my-4 p-[21px]`}
-                style={{ borderColor: textColor }}
+    <>
+      <Drawer.Navigator
+        initialRouteName="CustomerDashboard"
+        drawerContent={(props) => {
+          return (
+            <SafeAreaView>
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                decelerationRate="fast"
+                scrollEventThrottle={1}
               >
-                <View className={`flex flex-row gap-x-8`}>
-                  <Feather
-                    name="log-out"
-                    size={RESOURCE.NUMBER.THIRTY}
-                    color={textColor}
-                  />
-                  <Text
-                    className={`text-xl font-base`}
-                    style={{ color: textColor }}
-                  >
-                    Logout
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            </ScrollView>
-          </SafeAreaView>
-        );
-      }}
-      screenOptions={{
-        drawerStyle: {
-          backgroundColor: backgroundColor,
-          width: viewWidth,
-        },
-        headerStyle: {
-          backgroundColor: backgroundColor,
-          shadowColor: shadowColor,
-        },
-        headerShown: true,
-        headerTitle: () => null,
-        headerTintColor: textColor,
-      }}
-    >
-      <Drawer.Screen
-        name="CustomerDashboard"
-        options={{
-          drawerActiveBackgroundColor: "#F78FB3",
-          drawerActiveTintColor: textColor,
-          drawerInactiveTintColor: "#FDA7DF",
-          drawerLabel: () => (
-            <Text className={`text-xl font-base`} style={{ color: textColor }}>
-              Dashboard
-            </Text>
-          ),
-          title: "CustomerDashboard",
-          drawerIcon: () => (
-            <Feather
-              name="home"
-              size={RESOURCE.NUMBER.THIRTY}
-              color={textColor}
-            />
-          ),
+                <UserImage
+                  viewWidth={viewWidth}
+                  imageSource={{ uri: user?.image[0]?.url }}
+                  imageName={user?.name}
+                  imageRole={user?.roles}
+                />
+                <DrawerItemList {...props} />
+                <TouchableOpacity
+                  onPress={handleLogout}
+                  className={`border-t-[1.25px] my-4 p-[21px]`}
+                  style={{ borderColor: textColor }}
+                >
+                  <View className={`flex flex-row gap-x-8`}>
+                    <Feather
+                      name="log-out"
+                      size={RESOURCE.NUMBER.THIRTY}
+                      color={textColor}
+                    />
+                    <Text
+                      className={`text-xl font-base`}
+                      style={{ color: textColor }}
+                    >
+                      Logout
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </ScrollView>
+            </SafeAreaView>
+          );
         }}
-        component={CustomerDashboard}
-      />
-      <Drawer.Screen
-        name="EditCustomerProfile"
-        options={{
-          drawerActiveBackgroundColor: "#F78FB3",
-          drawerActiveTintColor: textColor,
-          drawerInactiveTintColor: "#FDA7DF",
-          drawerLabel: () => (
-            <Text className={`text-xl font-base`} style={{ color: textColor }}>
-              Edit Profile
-            </Text>
-          ),
-          title: "EditCustomerProfile",
-          drawerIcon: () => (
-            <Feather
-              name="edit"
-              size={RESOURCE.NUMBER.THIRTY}
-              color={textColor}
-            />
-          ),
+        screenOptions={{
+          drawerStyle: {
+            backgroundColor: backgroundColor,
+            width: viewWidth,
+          },
+          headerStyle: {
+            backgroundColor: backgroundColor,
+            shadowColor: shadowColor,
+          },
+          headerShown: true,
+          headerTitle: () => null,
+          headerTintColor: textColor,
         }}
-        component={EditCustomerProfile}
-      />
-      <Drawer.Screen
-        name="PastAppointment"
-        options={{
-          drawerActiveBackgroundColor: "#F78FB3",
-          drawerActiveTintColor: textColor,
-          drawerInactiveTintColor: "#FDA7DF",
-          drawerLabel: () => (
-            <Text className={`text-xl font-base`} style={{ color: textColor }}>
-              Past Appointment
-            </Text>
-          ),
-          title: "PastAppointment",
-          drawerIcon: () => (
-            <MaterialIcons
-              name="history"
-              size={RESOURCE.NUMBER.THIRTY}
-              color={textColor}
-            />
-          ),
-        }}
-        component={PastAppointment}
-      />
+      >
+        <Drawer.Screen
+          name="CustomerDashboard"
+          options={{
+            drawerActiveBackgroundColor: "#F78FB3",
+            drawerActiveTintColor: textColor,
+            drawerInactiveTintColor: "#FDA7DF",
+            drawerLabel: () => (
+              <Text
+                className={`text-xl font-base`}
+                style={{ color: textColor }}
+              >
+                Dashboard
+              </Text>
+            ),
+            title: "CustomerDashboard",
+            drawerIcon: () => (
+              <Feather
+                name="home"
+                size={RESOURCE.NUMBER.THIRTY}
+                color={textColor}
+              />
+            ),
+          }}
+          component={CustomerDashboard}
+        />
+        <Drawer.Screen
+          name="EditCustomerProfile"
+          options={{
+            drawerActiveBackgroundColor: "#F78FB3",
+            drawerActiveTintColor: textColor,
+            drawerInactiveTintColor: "#FDA7DF",
+            drawerLabel: () => (
+              <Text
+                className={`text-xl font-base`}
+                style={{ color: textColor }}
+              >
+                Edit Profile
+              </Text>
+            ),
+            title: "EditCustomerProfile",
+            drawerIcon: () => (
+              <Feather
+                name="edit"
+                size={RESOURCE.NUMBER.THIRTY}
+                color={textColor}
+              />
+            ),
+          }}
+          component={EditCustomerProfile}
+        />
+        <Drawer.Screen
+          name="PastAppointment"
+          options={{
+            drawerActiveBackgroundColor: "#F78FB3",
+            drawerActiveTintColor: textColor,
+            drawerInactiveTintColor: "#FDA7DF",
+            drawerLabel: () => (
+              <Text
+                className={`text-xl font-base`}
+                style={{ color: textColor }}
+              >
+                Past Appointment
+              </Text>
+            ),
+            title: "PastAppointment",
+            drawerIcon: () => (
+              <MaterialIcons
+                name="history"
+                size={RESOURCE.NUMBER.THIRTY}
+                color={textColor}
+              />
+            ),
+          }}
+          component={PastAppointment}
+        />
 
-       <Drawer.Screen
-        name="Settings"
-        options={{
-          drawerActiveBackgroundColor: "#F78FB3",
-          drawerActiveTintColor: textColor,
-          drawerInactiveTintColor: "#FDA7DF",
-          drawerLabel: () => (
-            <Text className={`text-xl font-base`} style={{ color: textColor }}>
-              Settings
-            </Text>
-          ),
-          title: "Settings",
-          drawerIcon: () => (
-            <MaterialIcons
-              name="settings"
-              size={RESOURCE.NUMBER.THIRTY}
-              color={textColor}
-            />
-          ),
-        }}
-        component={Settings}
-      />
-    </Drawer.Navigator>
+        <Drawer.Screen
+          name="Settings"
+          options={{
+            drawerActiveBackgroundColor: "#F78FB3",
+            drawerActiveTintColor: textColor,
+            drawerInactiveTintColor: "#FDA7DF",
+            drawerLabel: () => (
+              <Text
+                className={`text-xl font-base`}
+                style={{ color: textColor }}
+              >
+                Settings
+              </Text>
+            ),
+            title: "Settings",
+            drawerIcon: () => (
+              <MaterialIcons
+                name="settings"
+                size={RESOURCE.NUMBER.THIRTY}
+                color={textColor}
+              />
+            ),
+          }}
+          component={Settings}
+        />
+      </Drawer.Navigator>
+    </>
   );
 }

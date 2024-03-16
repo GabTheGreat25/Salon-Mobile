@@ -58,194 +58,214 @@ export default function () {
   };
 
   return (
-    <Drawer.Navigator
-      initialRouteName="EmployeeDashboard"
-      drawerContent={(props) => {
-        return (
-          <SafeAreaView>
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              decelerationRate="fast"
-              scrollEventThrottle={1}
-            >
-              <UserImage
-                viewWidth={viewWidth}
-                imageSource={{ uri: user?.image[0]?.url }}
-                imageName={`Welcome back, ${user?.name}`}
-                imageRole={user?.roles}
-              />
-              <DrawerItemList {...props} />
-              <TouchableOpacity
-                onPress={handleLogout}
-                className={`border-t-[1.25px] my-4 p-[21px]`}
-                style={{ borderColor: textColor }}
+    <>
+      <Drawer.Navigator
+        initialRouteName="EmployeeDashboard"
+        drawerContent={(props) => {
+          return (
+            <SafeAreaView>
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                decelerationRate="fast"
+                scrollEventThrottle={1}
               >
-                <View className={`flex flex-row gap-x-8`}>
-                  <Feather
-                    name="log-out"
-                    size={RESOURCE.NUMBER.THIRTY}
-                    color={textColor}
-                  />
-                  <Text
-                    className={`text-lg font-base`}
-                    style={{ color: textColor }}
-                  >
-                    Logout
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            </ScrollView>
-          </SafeAreaView>
-        );
-      }}
-      screenOptions={{
-        drawerStyle: {
-          backgroundColor: backgroundColor,
-          width: viewWidth,
-        },
-        headerStyle: {
-          backgroundColor: backgroundColor,
-          shadowColor: shadowColor,
-        },
-        headerShown: true,
-        headerTitle: () => null,
-        headerTintColor: textColor,
-      }}
-    >
-      <Drawer.Screen
-        name="EmployeeDashboard"
-        options={{
-          drawerActiveBackgroundColor: "#F78FB3",
-          drawerActiveTintColor: textColor,
-          drawerInactiveTintColor: "#FDA7DF",
-          drawerLabel: () => (
-            <Text className={`text-xl font-base`} style={{ color: textColor }}>
-              Dashboard
-            </Text>
-          ),
-          title: "EmployeeDashboard",
-          drawerIcon: () => (
-            <Feather
-              name="home"
-              size={RESOURCE.NUMBER.THIRTY}
-              color={textColor}
-            />
-          ),
+                <UserImage
+                  viewWidth={viewWidth}
+                  imageSource={{ uri: user?.image[0]?.url }}
+                  imageName={`Welcome back, ${user?.name}`}
+                  imageRole={user?.roles}
+                />
+                <DrawerItemList {...props} />
+                <TouchableOpacity
+                  onPress={handleLogout}
+                  className={`border-t-[1.25px] my-4 p-[21px]`}
+                  style={{ borderColor: textColor }}
+                >
+                  <View className={`flex flex-row gap-x-8`}>
+                    <Feather
+                      name="log-out"
+                      size={RESOURCE.NUMBER.THIRTY}
+                      color={textColor}
+                    />
+                    <Text
+                      className={`text-lg font-base`}
+                      style={{ color: textColor }}
+                    >
+                      Logout
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </ScrollView>
+            </SafeAreaView>
+          );
         }}
-        component={EmployeeDashboard}
-      />
-      <Drawer.Screen
-        name="EditEmployeeProfile"
-        options={{
-          drawerActiveBackgroundColor: "#F78FB3",
-          drawerActiveTintColor: textColor,
-          drawerInactiveTintColor: "#FDA7DF",
-          drawerLabel: () => (
-            <Text className={`text-xl font-base`} style={{ color: textColor }}>
-              Edit Profile
-            </Text>
-          ),
-          title: "EditEmployeeProfile",
-          drawerIcon: () => (
-            <Feather
-              name="edit"
-              size={RESOURCE.NUMBER.THIRTY}
-              color={textColor}
-            />
-          ),
+        screenOptions={{
+          drawerStyle: {
+            backgroundColor: backgroundColor,
+            width: viewWidth,
+          },
+          headerStyle: {
+            backgroundColor: backgroundColor,
+            shadowColor: shadowColor,
+          },
+          headerShown: true,
+          headerTitle: () => null,
+          headerTintColor: textColor,
         }}
-        component={EditEmployeeProfile}
-      />
-      <Drawer.Screen
-        name="LeaveDateBeautician"
-        options={{
-          drawerActiveBackgroundColor: "#F78FB3",
-          drawerActiveTintColor: textColor,
-          drawerInactiveTintColor: "#FDA7DF",
-          drawerLabel: () => (
-            <Text className={`text-xl font-base`} style={{ color: textColor }}>
-              File Leave
-            </Text>
-          ),
-          title: "LeaveDateBeautician",
-          drawerIcon: () => (
-            <FontAwesome5
-              name="door-open"
-              size={RESOURCE.NUMBER.TWENTY_FIVE}
-              color={textColor}
-            />
-          ),
-        }}
-        component={LeaveDateBeautician}
-      />
-      <Drawer.Screen
-        name="GetAllLeaveDate"
-        options={{
-          drawerActiveBackgroundColor: "#F78FB3",
-          drawerActiveTintColor: textColor,
-          drawerInactiveTintColor: "#FDA7DF",
-          drawerLabel: () => (
-            <Text className={`text-xl font-base`} style={{ color: textColor }}>
-              Edit Leave
-            </Text>
-          ),
-          title: "GetAllLeaveDate",
-          drawerIcon: () => (
-            <Feather
-              name="file-text"
-              size={RESOURCE.NUMBER.THIRTY}
-              color={textColor}
-            />
-          ),
-        }}
-        component={GetAllLeaveDate}
-      />
-      <Drawer.Screen
-        name="BeauticianAppointment"
-        options={{
-          drawerActiveBackgroundColor: "#F78FB3",
-          drawerActiveTintColor: textColor,
-          drawerInactiveTintColor: "#FDA7DF",
-          drawerLabel: () => (
-            <Text className={`text-xl font-base`} style={{ color: textColor }}>
-              My Appointments
-            </Text>
-          ),
-          title: "BeauticianAppointment",
-          drawerIcon: () => (
-            <Feather
-              name="calendar"
-              size={RESOURCE.NUMBER.THIRTY}
-              color={textColor}
-            />
-          ),
-        }}
-        initialParams={{ id: user?._id }}
-        component={BeauticianAppointment}
-      />
-      <Drawer.Screen
-        name="BeauticianAppointmentHistory"
-        options={{
-          drawerActiveBackgroundColor: "#F78FB3",
-          drawerActiveTintColor: textColor,
-          drawerInactiveTintColor: "#FDA7DF",
-          drawerLabel: () => (
-            <Text className={`text-xl font-base`} style={{ color: textColor }}>
-              My History
-            </Text>
-          ),
-          title: "BeauticianAppointmentHistory",
-          drawerIcon: () => (
-            <Feather
-              name="clock"
-              size={RESOURCE.NUMBER.THIRTY}
-              color={textColor}
-            />
-          ),
-        }}
-        initialParams={{ id: user?._id }}
-        component={BeauticianAppointmentHistory}
-      />
-    </Drawer.Navigator>
+      >
+        <Drawer.Screen
+          name="EmployeeDashboard"
+          options={{
+            drawerActiveBackgroundColor: "#F78FB3",
+            drawerActiveTintColor: textColor,
+            drawerInactiveTintColor: "#FDA7DF",
+            drawerLabel: () => (
+              <Text
+                className={`text-xl font-base`}
+                style={{ color: textColor }}
+              >
+                Dashboard
+              </Text>
+            ),
+            title: "EmployeeDashboard",
+            drawerIcon: () => (
+              <Feather
+                name="home"
+                size={RESOURCE.NUMBER.THIRTY}
+                color={textColor}
+              />
+            ),
+          }}
+          component={EmployeeDashboard}
+        />
+        <Drawer.Screen
+          name="EditEmployeeProfile"
+          options={{
+            drawerActiveBackgroundColor: "#F78FB3",
+            drawerActiveTintColor: textColor,
+            drawerInactiveTintColor: "#FDA7DF",
+            drawerLabel: () => (
+              <Text
+                className={`text-xl font-base`}
+                style={{ color: textColor }}
+              >
+                Edit Profile
+              </Text>
+            ),
+            title: "EditEmployeeProfile",
+            drawerIcon: () => (
+              <Feather
+                name="edit"
+                size={RESOURCE.NUMBER.THIRTY}
+                color={textColor}
+              />
+            ),
+          }}
+          component={EditEmployeeProfile}
+        />
+        <Drawer.Screen
+          name="LeaveDateBeautician"
+          options={{
+            drawerActiveBackgroundColor: "#F78FB3",
+            drawerActiveTintColor: textColor,
+            drawerInactiveTintColor: "#FDA7DF",
+            drawerLabel: () => (
+              <Text
+                className={`text-xl font-base`}
+                style={{ color: textColor }}
+              >
+                File Leave
+              </Text>
+            ),
+            title: "LeaveDateBeautician",
+            drawerIcon: () => (
+              <FontAwesome5
+                name="door-open"
+                size={RESOURCE.NUMBER.TWENTY_FIVE}
+                color={textColor}
+              />
+            ),
+          }}
+          component={LeaveDateBeautician}
+        />
+        <Drawer.Screen
+          name="GetAllLeaveDate"
+          options={{
+            drawerActiveBackgroundColor: "#F78FB3",
+            drawerActiveTintColor: textColor,
+            drawerInactiveTintColor: "#FDA7DF",
+            drawerLabel: () => (
+              <Text
+                className={`text-xl font-base`}
+                style={{ color: textColor }}
+              >
+                Edit Leave
+              </Text>
+            ),
+            title: "GetAllLeaveDate",
+            drawerIcon: () => (
+              <Feather
+                name="file-text"
+                size={RESOURCE.NUMBER.THIRTY}
+                color={textColor}
+              />
+            ),
+          }}
+          component={GetAllLeaveDate}
+        />
+        <Drawer.Screen
+          name="BeauticianAppointment"
+          options={{
+            drawerActiveBackgroundColor: "#F78FB3",
+            drawerActiveTintColor: textColor,
+            drawerInactiveTintColor: "#FDA7DF",
+            drawerLabel: () => (
+              <Text
+                className={`text-xl font-base`}
+                style={{ color: textColor }}
+              >
+                My Appointments
+              </Text>
+            ),
+            title: "BeauticianAppointment",
+            drawerIcon: () => (
+              <Feather
+                name="calendar"
+                size={RESOURCE.NUMBER.THIRTY}
+                color={textColor}
+              />
+            ),
+          }}
+          initialParams={{ id: user?._id }}
+          component={BeauticianAppointment}
+        />
+        <Drawer.Screen
+          name="BeauticianAppointmentHistory"
+          options={{
+            drawerActiveBackgroundColor: "#F78FB3",
+            drawerActiveTintColor: textColor,
+            drawerInactiveTintColor: "#FDA7DF",
+            drawerLabel: () => (
+              <Text
+                className={`text-xl font-base`}
+                style={{ color: textColor }}
+              >
+                My History
+              </Text>
+            ),
+            title: "BeauticianAppointmentHistory",
+            drawerIcon: () => (
+              <Feather
+                name="clock"
+                size={RESOURCE.NUMBER.THIRTY}
+                color={textColor}
+              />
+            ),
+          }}
+          initialParams={{ id: user?._id }}
+          component={BeauticianAppointmentHistory}
+        />
+      </Drawer.Navigator>
+    </>
   );
 }
