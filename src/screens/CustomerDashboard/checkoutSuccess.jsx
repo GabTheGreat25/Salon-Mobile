@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  ScrollView,
+  SafeAreaView,
   View,
   Text,
   Image,
@@ -8,7 +8,6 @@ import {
   Dimensions,
 } from "react-native";
 import { changeColor, dimensionLayout } from "@utils";
-import { Feather, FontAwesome, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { BackIcon } from "@helpers";
 import SalonSuccess from "@assets/Success.png";
@@ -30,7 +29,7 @@ export default function () {
 
   return (
     <>
-      <View style={{ backgroundColor }} className={`flex-1`}>
+      <SafeAreaView style={{ backgroundColor }} className={`flex-1`}>
         <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
         <View
           style={{
@@ -97,7 +96,7 @@ export default function () {
             </View>
           </TouchableOpacity>
         </View>
-      </View>
+      </SafeAreaView>
     </>
   );
 }
