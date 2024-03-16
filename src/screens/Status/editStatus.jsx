@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
-  Image,
   View,
   SafeAreaView,
   Text,
@@ -43,8 +42,6 @@ export default function ({ route }) {
     };
     fetchData();
   }, [isFocused]);
-
-  console.log(schedule);
 
   const [updateAbsent, { isLoading }] = useUpdateAbsentMutation();
 
@@ -112,126 +109,133 @@ export default function ({ route }) {
           <LoadingScreen />
         </View>
       ) : (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <SafeAreaView
-            style={{ backgroundColor }}
-            className={`relative flex-1`}
-          >
-            <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
-            <KeyboardAvoidingView behavior="height">
-              <ScrollView
-                showsVerticalScrollIndicator={false}
-                decelerationRate="fast"
-                scrollEventThrottle={1}
-                className={`px-6`}
-              >
-                <View className="pt-10 pb-2">
-                  <Text
-                    style={{ color: textColor }}
-                    className={`font-semibold text-center pt-12 pb-6 text-3xl`}
-                  >
-                    Edit Absence
-                  </Text>
-                  <Text
-                    style={{ color: textColor }}
-                    className={`font-semibold text-base`}
-                  >
-                    Absence Date
-                  </Text>
-
-                  <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                    placeholderTextColor={textColor}
-                    autoCapitalize="none"
-                    editable={false}
-                    value={
-                      formik.values.date
-                        ? new Date(formik.values.date)
-                            .toISOString()
-                            .split("T")[0]
-                        : ""
-                    }
-                  />
-                  {formik.touched.date && formik.errors.date && (
-                    <Text style={{ color: "red" }}>{formik.errors.date}</Text>
-                  )}
-
-                  <Text
-                    style={{ color: textColor }}
-                    className={`font-semibold text-base`}
-                  >
-                    Status
-                  </Text>
-                  <View
-                    className={`border-[1.5px] text-lg font-normal rounded-full my-2 ${borderColor}`}
-                  >
-                    <Picker
-                      selectedValue={formik.values.status}
+        <>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <SafeAreaView
+              style={{ backgroundColor }}
+              className={`relative flex-1 pt-12`}
+            >
+              <BackIcon
+                navigateBack={navigation.goBack}
+                textColor={textColor}
+              />
+              <KeyboardAvoidingView behavior="height">
+                <ScrollView
+                  showsVerticalScrollIndicator={false}
+                  decelerationRate="fast"
+                  scrollEventThrottle={1}
+                  className={`px-6`}
+                >
+                  <View className="pb-2">
+                    <Text
                       style={{ color: textColor }}
-                      dropdownIconColor={textColor}
-                      onValueChange={(itemValue) =>
-                        formik.setFieldValue("status", itemValue)
-                      }
+                      className={`font-semibold text-center pb-4 text-3xl`}
                     >
-                      <Picker.Item label="Update Status" value="" />
-                      <Picker.Item label="leave" value="leave" />
-                      <Picker.Item label="absent" value="absent" />
-                    </Picker>
-                  </View>
-
-                  {formik.touched.status && formik.errors.status && (
-                    <Text style={{ color: "red" }}>{formik.errors.status}</Text>
-                  )}
-
-                  <TextInput
-                    style={{
-                      color: textColor,
-                      height: 100,
-                      textAlignVertical: "top",
-                    }}
-                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2 ${borderColor}`}
-                    placeholder="Beautician's Leave Note"
-                    placeholderTextColor={textColor}
-                    autoCapitalize="none"
-                    multiline={true}
-                    onChangeText={formik.handleChange("leaveNote")}
-                    onBlur={formik.handleBlur("leaveNote")}
-                    value={formik.values.leaveNote}
-                    editable={formik.values.status !== "absent"}
-                  />
-                  {formik.touched.leaveNote && formik.errors.leaveNote && (
-                    <Text style={{ color: "red" }}>
-                      {formik.errors.leaveNote}
+                      Edit Absence
                     </Text>
-                  )}
-
-                  <View className={`flex-col`}>
-                    <TouchableOpacity
-                      onPress={formik.handleSubmit}
-                      disabled={!formik.isValid}
+                    <Text
+                      style={{ color: textColor }}
+                      className={`font-semibold text-base`}
                     >
-                      <View className={`my-4 w-full`}>
-                        <View
-                          className={`py-2 rounded-lg bg-primary-accent mx-20 ${
-                            !formik.isValid ? "opacity-50" : "opacity-100"
-                          }`}
-                        >
-                          <Text
-                            className={`font-semibold text-center text-lg`}
-                            style={{ color: textColor }}
+                      Absence Date
+                    </Text>
+
+                    <TextInput
+                      style={{ color: textColor }}
+                      className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                      placeholderTextColor={textColor}
+                      autoCapitalize="none"
+                      editable={false}
+                      value={
+                        formik.values.date
+                          ? new Date(formik.values.date)
+                              .toISOString()
+                              .split("T")[0]
+                          : ""
+                      }
+                    />
+                    {formik.touched.date && formik.errors.date && (
+                      <Text style={{ color: "red" }}>{formik.errors.date}</Text>
+                    )}
+
+                    <Text
+                      style={{ color: textColor }}
+                      className={`font-semibold text-base`}
+                    >
+                      Status
+                    </Text>
+                    <View
+                      className={`border-[1.5px] text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    >
+                      <Picker
+                        selectedValue={formik.values.status}
+                        style={{ color: textColor }}
+                        dropdownIconColor={textColor}
+                        onValueChange={(itemValue) =>
+                          formik.setFieldValue("status", itemValue)
+                        }
+                      >
+                        <Picker.Item label="Update Status" value="" />
+                        <Picker.Item label="leave" value="leave" />
+                        <Picker.Item label="absent" value="absent" />
+                      </Picker>
+                    </View>
+
+                    {formik.touched.status && formik.errors.status && (
+                      <Text style={{ color: "red" }}>
+                        {formik.errors.status}
+                      </Text>
+                    )}
+
+                    <TextInput
+                      style={{
+                        color: textColor,
+                        height: 100,
+                        textAlignVertical: "top",
+                      }}
+                      className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2 ${borderColor}`}
+                      placeholder="Beautician's Leave Note"
+                      placeholderTextColor={textColor}
+                      autoCapitalize="none"
+                      multiline={true}
+                      onChangeText={formik.handleChange("leaveNote")}
+                      onBlur={formik.handleBlur("leaveNote")}
+                      value={formik.values.leaveNote}
+                      editable={formik.values.status !== "absent"}
+                    />
+                    {formik.touched.leaveNote && formik.errors.leaveNote && (
+                      <Text style={{ color: "red" }}>
+                        {formik.errors.leaveNote}
+                      </Text>
+                    )}
+
+                    <View className={`flex-col`}>
+                      <TouchableOpacity
+                        onPress={formik.handleSubmit}
+                        disabled={!formik.isValid}
+                      >
+                        <View className={`my-4 w-full`}>
+                          <View
+                            className={`py-2 rounded-lg bg-primary-accent mx-20 ${
+                              !formik.isValid ? "opacity-50" : "opacity-100"
+                            }`}
                           >
-                            Submit
-                          </Text>
+                            <Text
+                              className={`font-semibold text-center text-lg`}
+                              style={{ color: textColor }}
+                            >
+                              Submit
+                            </Text>
+                          </View>
                         </View>
-                      </View>
-                    </TouchableOpacity>
+                      </TouchableOpacity>
+                    </View>
                   </View>
-                </View>
-              </ScrollView>
-            </KeyboardAvoidingView>
-          </SafeAreaView>
-        </TouchableWithoutFeedback>
+                </ScrollView>
+              </KeyboardAvoidingView>
+            </SafeAreaView>
+          </TouchableWithoutFeedback>
+        </>
       )}
     </>
   );
