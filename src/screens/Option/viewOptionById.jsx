@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   Image,
   View,
   SafeAreaView,
   Text,
-  TouchableOpacity,
   KeyboardAvoidingView,
   ScrollView,
   TouchableWithoutFeedback,
@@ -15,7 +14,6 @@ import { useGetOptionByIdQuery } from "../../state/api/reducer";
 import { useNavigation } from "@react-navigation/native";
 import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
-import { Picker } from "@react-native-picker/picker";
 import { BackIcon } from "@helpers";
 import { useIsFocused } from "@react-navigation/native";
 
@@ -48,103 +46,119 @@ export default function ({ route }) {
           <LoadingScreen />
         </View>
       ) : (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <SafeAreaView
-            style={{ backgroundColor }}
-            className={`relative flex-1`}
-          >
-            <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
-            <KeyboardAvoidingView behavior="height">
-              <ScrollView
-                showsVerticalScrollIndicator={false}
-                decelerationRate="fast"
-                scrollEventThrottle={1}
-                className={`px-6`}
-              >
-                <View className="items-center justify-center pt-12 pb-6">
-                  <Image
-                    key={
-                      data?.details?.image[
-                        Math.floor(Math.random() * data?.details?.image?.length)
-                      ]?.public_id
-                    }
-                    source={{
-                      uri: data?.details?.image[
-                        Math.floor(Math.random() * data?.details?.image?.length)
-                      ]?.url,
-                    }}
-                    className={`rounded-full w-60 h-60`}
-                    resizeMode="cover"
+        <>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <SafeAreaView
+              style={{ backgroundColor }}
+              className={`relative flex-1 pt-12`}
+            >
+              <BackIcon
+                navigateBack={navigation.goBack}
+                textColor={textColor}
+              />
+              <KeyboardAvoidingView behavior="height">
+                <ScrollView
+                  showsVerticalScrollIndicator={false}
+                  decelerationRate="fast"
+                  scrollEventThrottle={1}
+                  className={`px-6`}
+                >
+                  <View className="items-center justify-center pb-6">
+                    <Image
+                      key={
+                        data?.details?.image[
+                          Math.floor(
+                            Math.random() * data?.details?.image?.length
+                          )
+                        ]?.public_id
+                      }
+                      source={{
+                        uri: data?.details?.image[
+                          Math.floor(
+                            Math.random() * data?.details?.image?.length
+                          )
+                        ]?.url,
+                      }}
+                      className={`rounded-full w-60 h-60`}
+                      resizeMode="cover"
+                    />
+                  </View>
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-center pb-6 text-3xl`}
+                  >
+                    View Adds On Details
+                  </Text>
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-base`}
+                  >
+                    Adds On Name
+                  </Text>
+                  <TextInput
+                    style={{ color: textColor }}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    autoCapitalize="none"
+                    value={option?.option_name}
+                    editable={false}
                   />
-                </View>
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-center pb-6 text-3xl`}
-                >
-                  View Adds On Details
-                </Text>
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-base`}
-                >
-                  Adds On Name
-                </Text>
-                <TextInput
-                  style={{ color: textColor }}
-                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                  autoCapitalize="none"
-                  value={option?.option_name}
-                />
 
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-base`}
-                >
-                  Adds On Services
-                </Text>
-                <TextInput
-                  style={{ color: textColor }}
-                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                  autoCapitalize="none"
-                  value={option?.service
-                    .map((service) => service?.service_name)
-                    .join(", ")}
-                />
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-base`}
-                >
-                  Adds On Description
-                </Text>
-                <TextInput
-                  style={{
-                    color: textColor,
-                    height: 100,
-                    textAlignVertical: "top",
-                  }}
-                  className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2 ${borderColor}`}
-                  placeholder="Add Ingredients Here..."
-                  multiline={true}
-                  value={option?.description}
-                />
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-base`}
-                >
-                  Adds On Price
-                </Text>
-                <TextInput
-                  style={{ color: textColor }}
-                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                  autoCapitalize="none"
-                  value={`₱${
-                    option?.extraFee ? option.extraFee.toString() : ""
-                  }`}
-                />
-              </ScrollView>
-            </KeyboardAvoidingView>
-          </SafeAreaView>
-        </TouchableWithoutFeedback>
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-base`}
+                  >
+                    Adds On Services
+                  </Text>
+                  <TextInput
+                    style={{
+                      color: textColor,
+                      height: 100,
+                      textAlignVertical: "top",
+                    }}
+                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2 ${borderColor}`}
+                    value={option?.service
+                      .map((service) => service?.service_name)
+                      .join(", ")}
+                    editable={false}
+                  />
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-base`}
+                  >
+                    Adds On Description
+                  </Text>
+                  <TextInput
+                    style={{
+                      color: textColor,
+                      height: 100,
+                      textAlignVertical: "top",
+                    }}
+                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2 ${borderColor}`}
+                    placeholder="Add Ingredients Here..."
+                    multiline={true}
+                    value={option?.description}
+                    editable={false}
+                  />
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-base`}
+                  >
+                    Adds On Price
+                  </Text>
+                  <TextInput
+                    style={{ color: textColor }}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    autoCapitalize="none"
+                    value={`₱${
+                      option?.extraFee ? option.extraFee.toString() : ""
+                    }`}
+                    editable={false}
+                  />
+                </ScrollView>
+              </KeyboardAvoidingView>
+            </SafeAreaView>
+          </TouchableWithoutFeedback>
+        </>
       )}
     </>
   );
