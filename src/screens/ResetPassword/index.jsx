@@ -10,6 +10,7 @@ import {
   Keyboard,
   BackHandler,
   TextInput,
+  ScrollView,
 } from "react-native";
 import { changeColor } from "@utils";
 import { BackIcon } from "@helpers";
@@ -130,138 +131,150 @@ export default function () {
           <LoadingScreen />
         </View>
       ) : (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <SafeAreaView
-            style={{ backgroundColor }}
-            className={`relative flex-1`}
-          >
-            <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
-            <KeyboardAvoidingView
-              behavior="height"
-              className={`flex-1 justify-start mt-14 mb-10 items-center flex-col`}
+        <>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <SafeAreaView
+              style={{ backgroundColor }}
+              className={`relative flex-1`}
             >
-              <View
-                className={`w-[300px] h-[300px] justify-center items-center`}
+              <BackIcon
+                navigateBack={navigation.goBack}
+                textColor={textColor}
+              />
+              <KeyboardAvoidingView
+                behavior="height"
+                className={`flex-1 justify-start mt-5 items-center flex-col`}
               >
-                <Image source={imageSource} resizeMode="contain" />
-              </View>
-              <View className={`items-center justify-start`}>
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold mt-6 text-3xl text-center`}
+                <ScrollView
+                  showsVerticalScrollIndicator={false}
+                  decelerationRate="fast"
+                  scrollEventThrottle={1}
                 >
-                  Reset Your Password
-                </Text>
-                <Text
-                  style={{ color: textColor }}
-                  className={`my-2 text-xl font-base text-center`}
-                >
-                  Enter the verification code {"\n"}
-                  sent from you!
-                </Text>
-                <View className={`w-[300px]`}>
-                  <TextInput
-                    style={{ color: textColor }}
-                    className={`border-b my-2 text-lg ${borderColor}`}
-                    placeholder="Enter your verificationCode"
-                    placeholderTextColor={textColor}
-                    autoCapitalize="none"
-                    handleTextInputFocus={handleTextInputFocus}
-                    onChangeText={formik.handleChange("verificationCode")}
-                    onBlur={formik.handleBlur("verificationCode")}
-                    value={formik.values.verificationCode}
-                  />
-                  {formik.touched.verificationCode &&
-                    formik.errors.verificationCode && (
-                      <Text style={{ color: "red" }}>
-                        {formik.errors.verificationCode}
-                      </Text>
-                    )}
-                  <View className={`relative`}>
-                    <TextInput
-                      style={{ color: textColor }}
-                      className={`border-b mb-4 mt-3 text-lg ${borderColor}`}
-                      placeholder="Enter your new password"
-                      placeholderTextColor={textColor}
-                      autoCapitalize="none"
-                      handleTextInputFocus={handleTextInputFocus}
-                      onChangeText={formik.handleChange("newPassword")}
-                      onBlur={formik.handleBlur("newPassword")}
-                      value={formik.values.newPassword}
-                      secureTextEntry={!isNewPasswordVisible}
-                    />
-                    <TouchableOpacity
-                      className={`absolute right-4 top-3`}
-                      onPress={toggleNewPasswordVisibility}
-                    >
-                      <Feather
-                        name={isNewPasswordVisible ? "eye" : "eye-off"}
-                        size={24}
-                        color={textColor}
-                      />
-                    </TouchableOpacity>
+                  <View
+                    className={`w-[300px] h-[300px] justify-center items-center`}
+                  >
+                    <Image source={imageSource} resizeMode="contain" />
                   </View>
-                  {formik.touched.newPassword && formik.errors.newPassword && (
-                    <Text style={{ color: "red" }} className={`mb-3`}>
-                      {formik.errors.newPassword}
+                  <View className={`items-center justify-start`}>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`font-semibold mt-6 text-3xl text-center`}
+                    >
+                      Reset Your Password
                     </Text>
-                  )}
-                  <View className={`relative`}>
-                    <TextInput
+                    <Text
                       style={{ color: textColor }}
-                      className={`border-b mb-4 mt-2  pb-1 text-lg ${borderColor}`}
-                      placeholder="Enter your confirm password"
-                      placeholderTextColor={textColor}
-                      autoCapitalize="none"
-                      handleTextInputFocus={handleTextInputFocus}
-                      onChangeText={formik.handleChange("confirmPassword")}
-                      onBlur={formik.handleBlur("confirmPassword")}
-                      value={formik.values.confirmPassword}
-                      secureTextEntry={!isConfirmPasswordVisible}
-                    />
-                    <TouchableOpacity
-                      className={`absolute right-4 top-3`}
-                      onPress={toggleConfirmPasswordVisibility}
+                      className={`my-2 text-xl font-base text-center`}
                     >
-                      <Feather
-                        name={isConfirmPasswordVisible ? "eye" : "eye-off"}
-                        size={24}
-                        color={textColor}
+                      Enter the verification code {"\n"}
+                      sent from you!
+                    </Text>
+                    <View className={`w-[300px]`}>
+                      <TextInput
+                        style={{ color: textColor }}
+                        className={`border-b my-2 text-lg ${borderColor}`}
+                        placeholder="Enter your verificationCode"
+                        placeholderTextColor={textColor}
+                        autoCapitalize="none"
+                        handleTextInputFocus={handleTextInputFocus}
+                        onChangeText={formik.handleChange("verificationCode")}
+                        onBlur={formik.handleBlur("verificationCode")}
+                        value={formik.values.verificationCode}
                       />
-                    </TouchableOpacity>
-                  </View>
-                  {formik.touched.confirmPassword &&
-                    formik.errors.confirmPassword && (
-                      <Text style={{ color: "red" }} className={`mb-3`}>
-                        {formik.errors.confirmPassword}
-                      </Text>
-                    )}
-                  <View className={`items-center flex-col justify-start`}>
-                    <TouchableOpacity
-                      onPress={formik.handleSubmit}
-                      disabled={!formik.isValid}
-                    >
-                      <View className={`w-full mt-1 mb-3`}>
-                        <View
-                          className={`py-[8px] mt-8 px-8 rounded-lg bg-primary-accent ${
-                            !formik.isValid ? "opacity-50" : "opacity-100"
-                          }`}
-                        >
-                          <Text
-                            className={`font-semibold text-center text-lg`}
-                            style={{ color: textColor }}
-                          >
-                            Submit
+                      {formik.touched.verificationCode &&
+                        formik.errors.verificationCode && (
+                          <Text style={{ color: "red" }}>
+                            {formik.errors.verificationCode}
                           </Text>
-                        </View>
+                        )}
+                      <View className={`relative`}>
+                        <TextInput
+                          style={{ color: textColor }}
+                          className={`border-b mb-4 mt-3 text-lg ${borderColor}`}
+                          placeholder="Enter your new password"
+                          placeholderTextColor={textColor}
+                          autoCapitalize="none"
+                          handleTextInputFocus={handleTextInputFocus}
+                          onChangeText={formik.handleChange("newPassword")}
+                          onBlur={formik.handleBlur("newPassword")}
+                          value={formik.values.newPassword}
+                          secureTextEntry={!isNewPasswordVisible}
+                        />
+                        <TouchableOpacity
+                          className={`absolute right-4 top-3`}
+                          onPress={toggleNewPasswordVisibility}
+                        >
+                          <Feather
+                            name={isNewPasswordVisible ? "eye" : "eye-off"}
+                            size={24}
+                            color={textColor}
+                          />
+                        </TouchableOpacity>
                       </View>
-                    </TouchableOpacity>
+                      {formik.touched.newPassword &&
+                        formik.errors.newPassword && (
+                          <Text style={{ color: "red" }} className={`mb-3`}>
+                            {formik.errors.newPassword}
+                          </Text>
+                        )}
+                      <View className={`relative`}>
+                        <TextInput
+                          style={{ color: textColor }}
+                          className={`border-b mb-4 mt-2  pb-1 text-lg ${borderColor}`}
+                          placeholder="Enter your confirm password"
+                          placeholderTextColor={textColor}
+                          autoCapitalize="none"
+                          handleTextInputFocus={handleTextInputFocus}
+                          onChangeText={formik.handleChange("confirmPassword")}
+                          onBlur={formik.handleBlur("confirmPassword")}
+                          value={formik.values.confirmPassword}
+                          secureTextEntry={!isConfirmPasswordVisible}
+                        />
+                        <TouchableOpacity
+                          className={`absolute right-4 top-3`}
+                          onPress={toggleConfirmPasswordVisibility}
+                        >
+                          <Feather
+                            name={isConfirmPasswordVisible ? "eye" : "eye-off"}
+                            size={24}
+                            color={textColor}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                      {formik.touched.confirmPassword &&
+                        formik.errors.confirmPassword && (
+                          <Text style={{ color: "red" }} className={`mb-3`}>
+                            {formik.errors.confirmPassword}
+                          </Text>
+                        )}
+                      <View className={`items-center flex-col justify-start`}>
+                        <TouchableOpacity
+                          onPress={formik.handleSubmit}
+                          disabled={!formik.isValid}
+                        >
+                          <View className={`w-full mt-1 mb-3`}>
+                            <View
+                              className={`py-[8px] mt-2 px-8 rounded-lg bg-primary-accent ${
+                                !formik.isValid ? "opacity-50" : "opacity-100"
+                              }`}
+                            >
+                              <Text
+                                className={`font-semibold text-center text-lg`}
+                                style={{ color: textColor }}
+                              >
+                                Submit
+                              </Text>
+                            </View>
+                          </View>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
                   </View>
-                </View>
-              </View>
-            </KeyboardAvoidingView>
-          </SafeAreaView>
-        </TouchableWithoutFeedback>
+                </ScrollView>
+              </KeyboardAvoidingView>
+            </SafeAreaView>
+          </TouchableWithoutFeedback>
+        </>
       )}
     </>
   );
