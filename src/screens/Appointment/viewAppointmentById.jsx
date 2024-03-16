@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
-  Image,
   View,
   SafeAreaView,
   Text,
@@ -46,135 +45,147 @@ export default function ({ route }) {
           <LoadingScreen />
         </View>
       ) : (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <SafeAreaView
-            style={{ backgroundColor }}
-            className={`relative flex-1`}
-          >
-            <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
-            <KeyboardAvoidingView behavior="height">
-              <ScrollView
-                showsVerticalScrollIndicator={false}
-                decelerationRate="fast"
-                scrollEventThrottle={1}
-                className={`px-6`}
-              >
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-center py-12 pb-6 text-3xl`}
+        <>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <SafeAreaView
+              style={{ backgroundColor }}
+              className={`relative flex-1 pt-12`}
+            >
+              <BackIcon
+                navigateBack={navigation.goBack}
+                textColor={textColor}
+              />
+              <KeyboardAvoidingView behavior="height">
+                <ScrollView
+                  showsVerticalScrollIndicator={false}
+                  decelerationRate="fast"
+                  scrollEventThrottle={1}
+                  className={`px-6`}
                 >
-                  View Appointment Details
-                </Text>
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-base`}
-                >
-                  Customer Name:
-                </Text>
-                <TextInput
-                  style={{ color: textColor }}
-                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                  autoCapitalize="none"
-                  value={appointment?.customer?.name}
-                />
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-center pb-6 text-3xl`}
+                  >
+                    View Appointment Details
+                  </Text>
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-base`}
+                  >
+                    Customer Name:
+                  </Text>
+                  <TextInput
+                    style={{ color: textColor }}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    autoCapitalize="none"
+                    value={appointment?.customer?.name}
+                    editable={false}
+                  />
 
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-base`}
-                >
-                  Employee Name:
-                </Text>
-                <TextInput
-                  style={{ color: textColor }}
-                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                  autoCapitalize="none"
-                  value={appointment?.beautician
-                    .map((beautician) => beautician?.name)
-                    .join(", ")}
-                />
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-base`}
-                >
-                  Appointment Date:
-                </Text>
-                <TextInput
-                  style={{ color: textColor }}
-                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                  autoCapitalize="none"
-                  value={
-                    appointment?.date
-                      ? new Date(appointment.date).toISOString().split("T")[0]
-                      : ""
-                  }
-                />
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-base`}
-                >
-                  Appointment Time:
-                </Text>
-                <TextInput
-                  style={{ color: textColor }}
-                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                  autoCapitalize="none"
-                  value={
-                    Array.isArray(appointment?.time) &&
-                    appointment.time.length === 1
-                      ? appointment?.time[0]
-                      : `${appointment?.time?.[0]} to ${
-                          appointment?.time?.[appointment?.time?.length - 1]
-                        }`
-                  }
-                />
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-base`}
-                >
-                  Appointment Services:
-                </Text>
-                <TextInput
-                  style={{ color: textColor }}
-                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                  autoCapitalize="none"
-                  value={appointment?.service
-                    .map((service) => service?.service_name)
-                    .join(", ")}
-                />
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-base`}
-                >
-                  Appointment Options:
-                </Text>
-                <TextInput
-                  style={{ color: textColor }}
-                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                  autoCapitalize="none"
-                  value={
-                    appointment?.option
-                      .map((option) => option?.option_name)
-                      .join(", ") || "None"
-                  }
-                />
-                <Text
-                  style={{ color: textColor }}
-                  className={`font-semibold text-base`}
-                >
-                  Appointment Price:
-                </Text>
-                <TextInput
-                  style={{ color: textColor }}
-                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
-                  autoCapitalize="none"
-                  value={`₱${
-                    appointment?.price ? appointment?.price.toString() : ""
-                  }`}
-                />
-              </ScrollView>
-            </KeyboardAvoidingView>
-          </SafeAreaView>
-        </TouchableWithoutFeedback>
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-base`}
+                  >
+                    Employee Name:
+                  </Text>
+                  <TextInput
+                    style={{ color: textColor }}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    autoCapitalize="none"
+                    value={appointment?.beautician
+                      .map((beautician) => beautician?.name)
+                      .join(", ")}
+                    editable={false}
+                  />
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-base`}
+                  >
+                    Appointment Date:
+                  </Text>
+                  <TextInput
+                    style={{ color: textColor }}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    autoCapitalize="none"
+                    value={
+                      appointment?.date
+                        ? new Date(appointment.date).toISOString().split("T")[0]
+                        : ""
+                    }
+                    editable={false}
+                  />
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-base`}
+                  >
+                    Appointment Time:
+                  </Text>
+                  <TextInput
+                    style={{ color: textColor }}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    autoCapitalize="none"
+                    value={
+                      Array.isArray(appointment?.time) &&
+                      appointment.time.length === 1
+                        ? appointment?.time[0]
+                        : `${appointment?.time?.[0]} to ${
+                            appointment?.time?.[appointment?.time?.length - 1]
+                          }`
+                    }
+                    editable={false}
+                  />
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-base`}
+                  >
+                    Appointment Services:
+                  </Text>
+                  <TextInput
+                    style={{ color: textColor }}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    autoCapitalize="none"
+                    value={appointment?.service
+                      .map((service) => service?.service_name)
+                      .join(", ")}
+                    editable={false}
+                  />
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-base`}
+                  >
+                    Appointment Options:
+                  </Text>
+                  <TextInput
+                    style={{ color: textColor }}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    autoCapitalize="none"
+                    value={
+                      appointment?.option
+                        .map((option) => option?.option_name)
+                        .join(", ") || "None"
+                    }
+                    editable={false}
+                  />
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-base`}
+                  >
+                    Appointment Price:
+                  </Text>
+                  <TextInput
+                    style={{ color: textColor }}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    autoCapitalize="none"
+                    value={`₱${
+                      appointment?.price ? appointment?.price.toString() : ""
+                    }`}
+                    editable={false}
+                  />
+                </ScrollView>
+              </KeyboardAvoidingView>
+            </SafeAreaView>
+          </TouchableWithoutFeedback>
+        </>
       )}
     </>
   );
