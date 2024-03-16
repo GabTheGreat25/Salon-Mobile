@@ -218,13 +218,15 @@ export default function ({ route }) {
           <LoadingScreen />
         </View>
       ) : (
-        <SafeAreaView style={{ backgroundColor }} className={`flex-1`}>
-          <FlatList
-            data={data?.details || []}
-            keyExtractor={(item) => item._id}
-            renderItem={({ item }) => <AppointmentItem item={item} />}
-          />
-        </SafeAreaView>
+        <>
+          <SafeAreaView style={{ backgroundColor }} className={`flex-1`}>
+            <FlatList
+              data={data?.details || []}
+              keyExtractor={(item) => item._id}
+              renderItem={({ item }) => <AppointmentItem item={item} />}
+            />
+          </SafeAreaView>
+        </>
       )}
     </>
   );
