@@ -6,12 +6,12 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
+  SafeAreaView,
 } from "react-native";
 import { changeColor, dimensionLayout } from "@utils";
-import { Feather, FontAwesome, Ionicons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { BackIcon } from "@helpers";
-import SalonFaceWash from "@assets/face-wash.png";
 import { useSelector } from "react-redux";
 
 const windowWidth = Dimensions.get("window").width;
@@ -44,7 +44,7 @@ export default function () {
 
   return (
     <>
-      <View style={{ backgroundColor }} className={`flex-1`}>
+      <SafeAreaView style={{ backgroundColor }} className={`flex-1`}>
         <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -239,7 +239,7 @@ export default function () {
             </View>
           </TouchableOpacity>
         </View>
-      </View>
+      </SafeAreaView>
     </>
   );
 }
