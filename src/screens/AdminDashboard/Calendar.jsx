@@ -197,9 +197,7 @@ export default function () {
   return (
     <>
       {transactionLoading || scheduleLoading ? (
-        <View
-          className={`flex-1 justify-center items-center bg-primary-default`}
-        >
+        <View className={`flex-1  min-w-[100vw] bg-primary-default`}>
           <LoadingScreen />
         </View>
       ) : (
