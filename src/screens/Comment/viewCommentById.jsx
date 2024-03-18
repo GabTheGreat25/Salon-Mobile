@@ -16,6 +16,7 @@ import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
 import { BackIcon } from "@helpers";
 import { useIsFocused } from "@react-navigation/native";
+import { Feather } from "@expo/vector-icons";
 
 export default function ({ route }) {
   const { id } = route.params;
@@ -72,7 +73,7 @@ export default function ({ route }) {
                     style={{ color: textColor }}
                     className={`font-semibold text-center pb-6 text-3xl`}
                   >
-                    View Feedback Details
+                    View Comment Details
                   </Text>
                   <View className="items-center justify-center pb-6">
                     <Image
@@ -111,6 +112,7 @@ export default function ({ route }) {
                           )
                         : comment?.transaction?.appointment?.customer?.name
                     }
+                    editable={false}
                   />
 
                   <Text
@@ -129,6 +131,7 @@ export default function ({ route }) {
                     placeholder="Add Ingredients Here..."
                     multiline={true}
                     value={comment?.description}
+                    editable={false}
                   />
 
                   <Text
@@ -147,7 +150,37 @@ export default function ({ route }) {
                     placeholder="Add Ingredients Here..."
                     multiline={true}
                     value={comment?.suggestion}
+                    editable={false}
                   />
+
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-base`}
+                  >
+                    Ratings
+                  </Text>
+                  <Text style={{ color: textColor }}>
+                    {Array.from(
+                      {
+                        length: Math.min(
+                          5,
+                          Math.max(0, Math.floor(comment?.ratings))
+                        ),
+                      },
+                      (_, index) => (
+                        <Feather
+                          key={index}
+                          name={
+                            index < Math.floor(comment?.ratings)
+                              ? "star"
+                              : "star-outline"
+                          }
+                          size={40}
+                          color="#feca57"
+                        />
+                      )
+                    )}
+                  </Text>
                 </ScrollView>
               </KeyboardAvoidingView>
             </SafeAreaView>
