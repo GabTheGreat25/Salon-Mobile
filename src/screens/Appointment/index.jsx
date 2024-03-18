@@ -120,7 +120,9 @@ export default function () {
   };
 
   const filteredData =
-    data?.details?.filter((item) => !deletedIds.includes(item?._id)) || [];
+    data?.details
+      ?.filter((item) => !deletedIds.includes(item?._id))
+      .sort((a, b) => new Date(a.date) - new Date(b.date)) || [];
 
   const totalPageCount = Math.ceil(filteredData.length / itemsPerPage);
   const paginatedData = filteredData.slice(
