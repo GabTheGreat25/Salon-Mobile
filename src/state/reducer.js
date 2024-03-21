@@ -5,6 +5,8 @@ import hiring from "./hiring/hiringReducer";
 import notification from "./notification/notificationReducer";
 import employee from "./auth/employeeReducer";
 import location from "./auth/locationReducer";
+import ingredient from "./ingredient/ingredientReducer";
+import waiver from "./waiver/waiverReducer";
 import { api } from "./api/reducer";
 
 export const rootReducer = combineReducers({
@@ -14,5 +16,7 @@ export const rootReducer = combineReducers({
   notification,
   employee,
   location,
+  ingredient,
+  waiver,
   [api.reducerPath]: api.reducer,
 });
