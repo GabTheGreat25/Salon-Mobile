@@ -20,6 +20,7 @@
     "@reduxjs/toolkit": "^1.9.7",
     "date-fns": "^2.30.0",
     "expo": "~49.0.11",
+    "expo-file-system": "~15.4.5",
     "expo-image-manipulator": "~11.3.0",
     "expo-image-picker": "~14.3.2",
     "expo-status-bar": "~1.6.0",
