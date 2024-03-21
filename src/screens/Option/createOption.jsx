@@ -256,7 +256,7 @@ export default function () {
 
                   <Text
                     style={{ color: textColor }}
-                    className={`font-semibold text-base`}
+                    className={`${borderColor} font-semibold text-xl`}
                   >
                     Services
                   </Text>
