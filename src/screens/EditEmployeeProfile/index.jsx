@@ -196,7 +196,7 @@ export default function () {
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <SafeAreaView
               style={{ backgroundColor }}
-              className={`relative flex-1 justify-start pt-12`}
+              className={`relative flex-1 justify-start pt-6`}
             >
               <ScrollView
                 showsVerticalScrollIndicator={false}
