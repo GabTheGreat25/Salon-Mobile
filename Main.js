@@ -82,12 +82,20 @@ import {
   ViewExclusion,
   EditLeaveDate,
   ViewCustomerById,
+  Hands,
+  Hair,
+  Facial,
+  Body,
+  Feet,
+  Eyelash,
 } from "@screens";
 import {
   TermsConditions,
   PrivacyPolicy,
   Feedback,
   BeauticianRegisterTermsCondition,
+  CustomerTermsCondition,
+  Waiver,
 } from "@settings";
 import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
@@ -123,7 +131,7 @@ export default function () {
         <StatusBar barStyle={barStyle} backgroundColor={backgroundColor} />
         <NavigationContainer>
           {authenticated ? (
-            userRoles.includes("Online Customer") ? (
+            userRoles.includes("Customer") ? (
               <Stack.Navigator
                 initialRouteName="CustomerDrawer"
                 screenOptions={{
@@ -302,6 +310,17 @@ export default function () {
                 name="BeauticianRegisterTermsCondition"
                 component={BeauticianRegisterTermsCondition}
               />
+              <Stack.Screen
+                name="CustomerTermsCondition"
+                component={CustomerTermsCondition}
+              />
+              <Stack.Screen name="Hands" component={Hands} />
+              <Stack.Screen name="Hair" component={Hair} />
+              <Stack.Screen name="Facial" component={Facial} />
+              <Stack.Screen name="Body" component={Body} />
+              <Stack.Screen name="Feet" component={Feet} />
+              <Stack.Screen name="Eyelash" component={Eyelash} />
+              <Stack.Screen name="Waiver" component={Waiver} />
             </Stack.Navigator>
           )}
         </NavigationContainer>
