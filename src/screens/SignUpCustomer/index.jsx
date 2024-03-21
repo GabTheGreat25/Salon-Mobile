@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   SafeAreaView,
@@ -55,7 +55,7 @@ export default function () {
       description: formikValues.description || "",
       allergy: formikValues.allergy || [],
       othersMessage: formikValues.othersMessage || "",
-      eSignature: waiver.waiverData.eSignature || "",
+      eSignature: waiver?.waiverData?.eSignature,
     },
     validationSchema: createCustomerValidation,
     onSubmit: (values) => {
@@ -126,6 +126,13 @@ export default function () {
         });
     },
   });
+
+  useEffect(() => {
+    formik.setValues((prevValues) => ({
+      ...prevValues,
+      eSignature: waiver?.waiverData?.eSignature || "",
+    }));
+  }, [waiver]);
 
   const togglePasswordVisibility = () => {
     setPasswordVisibility(!isPasswordVisible);
@@ -732,7 +739,7 @@ export default function () {
 
                   <TouchableOpacity
                     className={`flex-row pl-2 py-2`}
-                    onPress={() => handleHairLengthChange("Average Hair ")}
+                    onPress={() => handleHairLengthChange("Standard Hair ")}
                   >
                     <View
                       style={{
@@ -743,7 +750,7 @@ export default function () {
                       }}
                       className={`flex-row justify-center items-center border-2 rounded mr-2`}
                     >
-                      {hairLength === "Average Hair " && (
+                      {hairLength === "Standard Hair " && (
                         <Text
                           style={{ color: textColor }}
                           className={`text-xl`}
@@ -759,7 +766,7 @@ export default function () {
                         style={{ color: textColor }}
                         className={`text-xl font-semibold`}
                       >
-                        Average
+                        Standard
                       </Text>
                     </View>
                   </View>
@@ -1174,25 +1181,6 @@ export default function () {
                   )}
                 </View>
 
-                {waiver?.waiverData?.eSignature === "" && (
-                  <View className={`items-start justify-start py-2`}>
-                    <TouchableOpacity onPress={handleWaiver}>
-                      <View className={`w-full mb-2`}>
-                        <View
-                          className={`py-2 px-6 rounded-lg bg-primary-accent`}
-                        >
-                          <Text
-                            className={`font-semibold text-center text-lg`}
-                            style={{ color: textColor }}
-                          >
-                            Add Waiver
-                          </Text>
-                        </View>
-                      </View>
-                    </TouchableOpacity>
-                  </View>
-                )}
-
                 <Text
                   style={{ color: textColor }}
                   className={`${borderColor} font-semibold text-xl pt-1`}
@@ -1233,6 +1221,26 @@ export default function () {
                     </Text>
                   )}
                 </View>
+
+                {selectedImages.length > 0 &&
+                  waiver?.waiverData?.eSignature === "" && (
+                    <View className={`items-start justify-start py-2`}>
+                      <TouchableOpacity onPress={handleWaiver}>
+                        <View className={`w-full mb-2`}>
+                          <View
+                            className={`py-2 px-6 rounded-lg bg-primary-accent`}
+                          >
+                            <Text
+                              className={`font-semibold text-center text-lg`}
+                              style={{ color: textColor }}
+                            >
+                              Add Waiver
+                            </Text>
+                          </View>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+                  )}
 
                 <Text
                   style={{ color: textColor }}
