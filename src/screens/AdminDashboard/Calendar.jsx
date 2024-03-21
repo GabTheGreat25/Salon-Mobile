@@ -61,55 +61,55 @@ export default function () {
   const transactions = transactionData?.details || [];
   const allSchedules = scheduleData?.details || [];
 
-  const completedAndPendingTransactions = transactions.filter(
+  const completedAndPendingTransactions = transactions?.filter(
     (transaction) =>
-      transaction.status === "completed" || transaction.status === "pending"
+      transaction?.status === "completed" || transaction?.status === "pending"
   );
 
   const leaveSchedules =
     allSchedules?.filter(
       (schedule) =>
-        schedule.leaveNoteConfirmed === true && schedule.status === "leave"
+        schedule?.leaveNoteConfirmed === true && schedule?.status === "leave"
     ) || [];
 
   const absentSchedules =
-    allSchedules?.filter((schedule) => schedule.status === "absent") || [];
+    allSchedules?.filter((schedule) => schedule?.status === "absent") || [];
 
   const filteredEvents = [
-    ...completedAndPendingTransactions.map((transaction) => ({
+    ...completedAndPendingTransactions?.map((transaction) => ({
       type: "transaction",
       data: transaction,
       datetime: new Date(
-        transaction.appointment.date +
+        transaction?.appointment?.date +
           "T" +
-          (transaction.appointment.time[0] || "00:00")
+          (transaction?.appointment?.time[0] || "00:00")
       ),
     })),
-    ...leaveSchedules.map((schedule) => ({
+    ...leaveSchedules?.map((schedule) => ({
       type: "leave",
       data: schedule,
-      datetime: new Date(schedule.date),
+      datetime: new Date(schedule?.date),
     })),
-    ...absentSchedules.map((schedule) => ({
+    ...absentSchedules?.map((schedule) => ({
       type: "absent",
       data: schedule,
-      datetime: new Date(schedule.date),
+      datetime: new Date(schedule?.date),
     })),
   ];
 
   filteredEvents.sort((a, b) => {
-    if (!a.data.appointment?.time && b.data.appointment?.time) return -1;
-    if (a.data.appointment?.time && !b.data.appointment?.time) return 1;
+    if (!a?.data?.appointment?.time && b?.data?.appointment?.time) return -1;
+    if (a?.data?.appointment?.time && !b?.data?.appointment?.time) return 1;
 
-    if (a.datetime < b.datetime) return -1;
-    if (a.datetime > b.datetime) return 1;
+    if (a?.datetime < b?.datetime) return -1;
+    if (a?.datetime > b?.datetime) return 1;
 
     return 0;
   });
 
-  const totalPages = Math.ceil(filteredEvents.length / itemsPerPage);
+  const totalPages = Math?.ceil(filteredEvents?.length / itemsPerPage);
 
-  const paginatedEvents = filteredEvents.slice(
+  const paginatedEvents = filteredEvents?.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -150,44 +150,48 @@ export default function () {
         numberOfLines={4}
         ellipsizeMode="tail"
       >
-        {item.type === "transaction" && (
+        {item?.type === "transaction" && (
           <>
             Appointment Details:{"\n"}
-            Status: {item.data?.status}
+            Status: {item?.data?.status}
             {"\n"}
             Service:{" "}
-            {item.data?.appointment?.service
+            {item?.data?.appointment?.service
               .map((s) => s?.service_name)
               .join(", ")}
             {"\n"}
-            Customer: {item.data?.appointment?.customer?.name}
+            Customer: {item?.data?.appointment?.customer?.name}
             {"\n"}
             Employee:{" "}
-            {item.data?.appointment?.beautician?.map((b) => b?.name).join(", ")}
+            {item?.data?.appointment?.beautician
+              ?.map((b) => b?.name)
+              .join(", ")}
             {"\n"}
             Date:{" "}
-            {new Date(item.data?.appointment?.date).toLocaleDateString("en-PH")}
+            {new Date(item?.data?.appointment?.date).toLocaleDateString(
+              "en-PH"
+            )}
             {"\n"}
-            Time: {item.data?.appointment?.time.join(" - ")}
+            Time: {item?.data?.appointment?.time.join(" - ")}
           </>
         )}
 
-        {item.type === "leave" && (
+        {item?.type === "leave" && (
           <>
             Leave {"\n"}
-            Employee: {item.data?.beautician?.name}
+            Employee: {item?.data?.beautician?.name}
             {"\n"}
-            Date: {new Date(item.data?.date).toLocaleDateString("en-PH")}
+            Date: {new Date(item?.data?.date).toLocaleDateString("en-PH")}
             {"\n"}
-            Leave Note: {item.data?.leaveNote}
+            Leave Note: {item?.data?.leaveNote}
           </>
         )}
         {item.type === "absent" && (
           <>
             Absent {"\n"}
-            Employee: {item.data?.beautician?.name}
+            Employee: {item?.data?.beautician?.name}
             {"\n"}
-            Date: {new Date(item.data?.date).toLocaleDateString("en-PH")}
+            Date: {new Date(item?.data?.date).toLocaleDateString("en-PH")}
           </>
         )}
       </Text>
@@ -252,50 +256,51 @@ export default function () {
                     numberOfLines={8}
                     ellipsizeMode="tail"
                   >
-                    {selectedItem && selectedItem.type === "transaction" ? (
+                    {selectedItem && selectedItem?.type === "transaction" ? (
                       <>
                         Appointment Details:{"\n"}
-                        Status: {selectedItem.data?.status}
+                        Status: {selectedItem?.data?.status}
                         {"\n"}
                         Service:{" "}
-                        {selectedItem.data?.appointment?.service
+                        {selectedItem?.data?.appointment?.service
                           .map((s) => s?.service_name)
                           .join(", ")}
                         {"\n"}
                         Customer:{" "}
-                        {selectedItem.data?.appointment?.customer?.name}
+                        {selectedItem?.data?.appointment?.customer?.name}
                         {"\n"}
                         Beautician:{" "}
-                        {selectedItem.data?.appointment?.beautician
+                        {selectedItem?.data?.appointment?.beautician
                           ?.map((b) => b?.name)
                           .join(", ")}
                         {"\n"}
                         Date:{" "}
                         {new Date(
-                          selectedItem.data?.appointment?.date
+                          selectedItem?.data?.appointment?.date
                         ).toLocaleDateString("en-PH")}
                         {"\n"}
-                        Time: {selectedItem.data?.appointment?.time.join(" - ")}
+                        Time:{" "}
+                        {selectedItem?.data?.appointment?.time.join(" - ")}
                       </>
                     ) : selectedItem?.type === "leave" ? (
                       <>
                         Leave Schedule {"\n"}
-                        Employee: {selectedItem.data?.beautician?.name}
+                        Employee: {selectedItem?.data?.beautician?.name}
                         {"\n"}
                         Date:{" "}
-                        {new Date(selectedItem.data?.date).toLocaleDateString(
+                        {new Date(selectedItem?.data?.date).toLocaleDateString(
                           "en-PH"
                         )}
                         {"\n"}
-                        Leave Note: {selectedItem.data?.leaveNote}
+                        Leave Note: {selectedItem?.data?.leaveNote}
                       </>
                     ) : selectedItem?.type === "absent" ? (
                       <>
                         Absent Schedule {"\n"}
-                        Employee: {selectedItem.data?.beautician?.name}
+                        Employee: {selectedItem?.data?.beautician?.name}
                         {"\n"}
                         Date:{" "}
-                        {new Date(selectedItem.data?.date).toLocaleDateString(
+                        {new Date(selectedItem?.data?.date).toLocaleDateString(
                           "en-PH"
                         )}
                       </>
