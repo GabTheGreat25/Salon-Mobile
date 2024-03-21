@@ -1,19 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
   ScrollView,
   SafeAreaView,
   TouchableOpacity,
-  Image,
+  Modal,
 } from "react-native";
 import { BackIcon } from "@helpers";
 import { changeColor } from "@utils";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { waiverSlice } from "../../state/waiver/waiverReducer";
-import * as ImagePicker from "expo-image-picker";
-import * as ImageManipulator from "expo-image-manipulator";
+import SignatureScreen from "react-native-signature-canvas";
 
 export default function () {
   const navigation = useNavigation();
@@ -22,51 +21,45 @@ export default function () {
 
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
-  const [signatureImage, setSignatureImage] = useState(null);
+  const ref = useRef();
+  const [clearCalled, setClearCalled] = useState(false);
+  const [show, setShow] = useState(false);
+  const [signatureProvided, setSignatureProvided] = useState(false);
+  const showSignature = () => setShow(true);
 
-  const pickImageFromCamera = async () => {
-    let result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
+  const handleSignature = (signature) => {
+    setShow(false);
+    setSignatureProvided(true);
+    dispatch(waiverSlice.actions.waiverForm(signature));
+    navigation.goBack();
+  };
 
-    if (!result.canceled) {
-      setSignatureImage(result.assets[0].uri);
+  const handleClear = () => {
+    if (!clearCalled) {
+      setClearCalled(true);
+      ref.current?.clearSignature();
+      dispatch(waiverSlice.actions.resetWaiver());
     }
   };
 
-  const pickImageFromStorage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      setSignatureImage(result.assets[0].uri);
+  useEffect(() => {
+    let timeoutId;
+    if (clearCalled) {
+      timeoutId = setTimeout(() => {
+        setClearCalled(false);
+      }, 500);
     }
-  };
 
-  const saveImage = async () => {
-    if (signatureImage) {
-      let resizedImage = await ImageManipulator.manipulateAsync(
-        signatureImage,
-        [{ resize: { width: 250 } }],
-        { compress: 0.5, format: "png", base64: true }
-      );
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [clearCalled]);
 
-      const base64Data = `data:image/png;base64,${resizedImage.base64}`;
-      dispatch(waiverSlice.actions.waiverForm(base64Data));
-      navigation.goBack();
+  const handleEnd = () => {
+    if (!signatureProvided) {
+      return;
     }
-  };
-
-  const removeImage = () => {
-    setSignatureImage(null);
-    dispatch(waiverSlice.actions.resetWaiver());
+    ref.current.readSignature();
   };
 
   return (
@@ -124,65 +117,30 @@ export default function () {
             >
               {`Assumption of Risk:\nI acknowledge that salon services may involve inherent risks, including but not limited to chemical exposure, burns, or other injuries. I voluntarily assume all risks associated with receiving salon services and waive any claims against Lhanlee Beauty Lounge and its staff for any injuries or damages incurred. Signature: By signing below, I acknowledge that I have read, understood, and agree to the terms of this waiver agreement. I consent to receive salon services knowing the risks involved.`}
             </Text>
-            {!signatureImage && (
-              <View
-                className={`pt-3 flex-row item-center justify-center flex-wrap gap-x-6`}
-              >
-                <TouchableOpacity
-                  style={{ backgroundColor }}
-                  className={`py-2 px-6 rounded-lg`}
-                  onPress={pickImageFromCamera}
-                >
-                  <Text style={{ color: textColor }} className={`text-base`}>
-                    Take Picture
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={{ backgroundColor }}
-                  className={`py-2 px-6 rounded-lg`}
-                  onPress={pickImageFromStorage}
-                >
-                  <Text style={{ color: textColor }} className={`text-base`}>
-                    Select Image
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            )}
-            {signatureImage && (
-              <View className={`items-center justify-center`}>
-                <Image
-                  source={{ uri: signatureImage }}
-                  style={{ width: 250, height: 100 }}
-                  className={`rounded-lg pb-1`}
+            {show && (
+              <Modal>
+                <SignatureScreen
+                  ref={ref}
+                  onEnd={handleEnd}
+                  onOK={handleSignature}
+                  onClear={handleClear}
+                  backgroundColor="#FDA7DF"
                 />
-              </View>
+              </Modal>
             )}
-            {signatureImage && (
-              <View
-                className={`pt-3 flex-row item-center justify-center flex-wrap gap-x-6`}
+            <View
+              className={` pt-3 flex-row justify-center items-center gap-x-6`}
+            >
+              <TouchableOpacity
+                style={{ backgroundColor }}
+                className={`py-2 px-6 rounded-lg`}
+                onPress={showSignature}
               >
-                <TouchableOpacity
-                  style={{ backgroundColor }}
-                  className={`py-2 px-6 rounded-lg`}
-                  onPress={saveImage}
-                  disabled={!signatureImage}
-                >
-                  <Text style={{ color: textColor }} className={`text-base`}>
-                    Save Image
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={{ backgroundColor }}
-                  className={`py-2 px-[15px] rounded-lg`}
-                  onPress={removeImage}
-                  disabled={!signatureImage}
-                >
-                  <Text style={{ color: textColor }} className={`text-base`}>
-                    Remove Image
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            )}
+                <Text style={{ color: textColor }} className={`text-lg`}>
+                  Add signature
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </ScrollView>
       </SafeAreaView>
