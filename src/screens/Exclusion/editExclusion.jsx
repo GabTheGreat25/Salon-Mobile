@@ -60,7 +60,6 @@ export default function ({ route }) {
       updateExclusion({ id: data?.details?._id, payload: values })
         .unwrap()
         .then((response) => {
-          s;
           refetch();
           Toast.show({
             type: "success",
