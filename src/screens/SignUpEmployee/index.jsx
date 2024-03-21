@@ -21,7 +21,7 @@ import {
 } from "../../state/api/reducer";
 import * as ImageManipulator from "expo-image-manipulator";
 import * as ImagePicker from "expo-image-picker";
-import { createEmployeeValidation } from "../../validation";
+import { createBeauticianValidation } from "../../validation";
 import Toast from "react-native-toast-message";
 import { Picker } from "@react-native-picker/picker";
 import { TextInputMask } from "react-native-masked-text";
@@ -58,7 +58,7 @@ export default function () {
       date: hiring?.date,
       time: hiring?.time,
     },
-    validationSchema: createEmployeeValidation,
+    validationSchema: createBeauticianValidation,
     onSubmit: (values) => {
       const formData = new FormData();
 
@@ -89,7 +89,7 @@ export default function () {
         .then((response) => {
           setSelectedImages([]);
           dispatch(employeeSlice.actions.clearFormData());
-          navigation.navigate("Home");
+          navigation.navigate("LoginUser");
           formik.resetForm();
           Toast.show({
             type: "success",
