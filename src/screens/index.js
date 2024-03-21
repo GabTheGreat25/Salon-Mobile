@@ -96,6 +96,12 @@ import GetAllLeaveDate from "./EmployeeDashboard/getAllLeaveDate";
 import EditLeaveDate from "./EmployeeDashboard/editLeaveDate";
 import ViewCustomerById from "./EmployeeDashboard/viewCustomerById";
 import BeauticianAppointmentHistory from "./EmployeeDashboard/beauticianAppointmentHistory";
+import Hands from "./Ingredients/Hands";
+import Hair from "./Ingredients/Hair";
+import Facial from "./Ingredients/Facial";
+import Body from "./Ingredients/Body";
+import Feet from "./Ingredients/Feet";
+import Eyelash from "./Ingredients/Eyelash";
 
 export {
   Home,
@@ -196,4 +202,10 @@ export {
   EditLeaveDate,
   ViewCustomerById,
   BeauticianAppointmentHistory,
+  Hands,
+  Hair,
+  Facial,
+  Body,
+  Feet,
+  Eyelash,
 };
