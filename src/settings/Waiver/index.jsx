@@ -31,7 +31,7 @@ export default function () {
     setShow(false);
     setSignatureProvided(true);
     dispatch(waiverSlice.actions.waiverForm(signature));
-    navigation.goBack();
+    navigation.navigate("SignUpCustomer");
   };
 
   const handleClear = () => {
