@@ -102,6 +102,8 @@ import Facial from "./Ingredients/Facial";
 import Body from "./Ingredients/Body";
 import Feet from "./Ingredients/Feet";
 import Eyelash from "./Ingredients/Eyelash";
+import Schedule from "./Schedule";
+import CustomerComment from "./Comment/customerComment";
 
 export {
   Home,
@@ -208,4 +210,6 @@ export {
   Body,
   Feet,
   Eyelash,
+  Schedule,
+  CustomerComment,
 };
