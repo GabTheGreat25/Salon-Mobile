@@ -34,8 +34,6 @@ import {
   Employee,
   ChooseDate,
   CheckoutSuccess,
-  PastAppointment,
-  Settings,
   Receipt,
   Appointment,
   EditAppointment,
@@ -155,10 +153,6 @@ export default function () {
                 <Stack.Screen name="PaymentOption" component={PaymentOption} />
                 <Stack.Screen name="Employee" component={Employee} />
                 <Stack.Screen name="ChooseDate" component={ChooseDate} />
-                <Stack.Screen
-                  name="PastAppointment"
-                  component={PastAppointment}
-                />
                 <Stack.Screen name="Receipt" component={Receipt} />
                 <Stack.Screen
                   name="CheckoutSuccess"
