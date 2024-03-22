@@ -107,7 +107,7 @@ export default function () {
     data?.details
       ?.filter((item) => !deletedIds.includes(item?._id))
       .sort(
-        (a, b) => new Date(a.appointment.date) - new Date(b.appointment.date)
+        (a, b) => new Date(a.appointment?.date) - new Date(b.appointment?.date)
       ) || [];
 
   const totalPageCount = Math.ceil(filteredData.length / itemsPerPage);
