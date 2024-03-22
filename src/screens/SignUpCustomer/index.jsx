@@ -40,7 +40,6 @@ export default function () {
   const [isConfirmPasswordVisible, setConfirmPasswordVisibility] =
     useState(false);
   const waiver = useSelector((state) => state.waiver);
-  console.log(waiver);
   const formikValues = useSelector((state) => state.location.formData);
 
   const formik = useFormik({
