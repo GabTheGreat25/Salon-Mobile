@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   ScrollView,
   View,
@@ -10,170 +10,208 @@ import {
 } from "react-native";
 import { changeColor } from "@utils";
 import { useNavigation } from "@react-navigation/native";
-import SalonFaceWash from "@assets/face-wash.png";
+import { useSelector, useDispatch } from "react-redux";
+import { useGetTransactionsQuery } from "../../state/api/reducer";
+import { useFormik } from "formik";
+import { LoadingScreen } from "@components";
+import { useIsFocused } from "@react-navigation/native";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function () {
-  const { textColor, backgroundColor, shadowColor, colorScheme } =
-    changeColor();
-  const navigation = useNavigation();
+  const { backgroundColor, colorScheme } = changeColor();
+  // const navigation = useNavigation();
+  // const dispatch = useDispatch();
+  const isFocused = useIsFocused();
+
+  const auth = useSelector((state) => state.auth.user);
+
   const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDA7DF";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
-  const handlePress = () => {
-    navigation.navigate("Checkout");
-  };
+  const { data, isLoading, refetch } = useGetTransactionsQuery();
+  const transactions = data?.details || [];
 
-  const items = [
-    {
-      name: "Face Wash",
-      image: SalonFaceWash,
-      date: "28 Jan, 09:32",
-      price: "₱ 559.00",
-      description: ` Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia dolor molestias, nihil eligendi incidunt ducimus accusantium. Voluptatum quae, unde consectet ur accusamus iusto, excepturi dolore deleniti incidunt, dignissimos dolor veniam alias? Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia dolor molestias, nihil eligendi incidunt ducimus accusantium. Voluptatum quae, unde consectet ur accusamus iusto, excepturi dolore deleniti incidunt, dignissimos dolor veniam alias?`,
-      buttonOne: "Reappoint Service",
-      buttonTwo: "Add Feedback",
-    },
-    {
-      name: "Face Wash",
-      image: SalonFaceWash,
-      date: "28 Jan, 09:32",
-      price: "₱ 559.00",
-      description: ` Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia dolor molestias, nihil eligendi incidunt ducimus accusantium. Voluptatum quae, unde consectet ur accusamus iusto, excepturi dolore deleniti incidunt, dignissimos dolor veniam alias? Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia dolor molestias, nihil eligendi incidunt ducimus accusantium. Voluptatum quae, unde consectet ur accusamus iusto, excepturi dolore deleniti incidunt, dignissimos dolor veniam alias?`,
-      buttonOne: "Reappoint Service",
-      buttonTwo: "Add Feedback",
-    },
-    {
-      name: "Face Wash",
-      image: SalonFaceWash,
-      date: "28 Jan, 09:32",
-      price: "₱ 559.00",
-      description: ` Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia dolor molestias, nihil eligendi incidunt ducimus accusantium. Voluptatum quae, unde consectet ur accusamus iusto, excepturi dolore deleniti incidunt, dignissimos dolor veniam alias? Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia dolor molestias, nihil eligendi incidunt ducimus accusantium. Voluptatum quae, unde consectet ur accusamus iusto, excepturi dolore deleniti incidunt, dignissimos dolor veniam alias?`,
-      buttonOne: "Reappoint Service",
-      buttonTwo: "Add Feedback",
-    },
-    {
-      name: "Face Wash",
-      image: SalonFaceWash,
-      date: "28 Jan, 09:32",
-      price: "₱ 559.00",
-      description: ` Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia dolor molestias, nihil eligendi incidunt ducimus accusantium. Voluptatum quae, unde consectet ur accusamus iusto, excepturi dolore deleniti incidunt, dignissimos dolor veniam alias? Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia dolor molestias, nihil eligendi incidunt ducimus accusantium. Voluptatum quae, unde consectet ur accusamus iusto, excepturi dolore deleniti incidunt, dignissimos dolor veniam alias?`,
-      buttonOne: "Reappoint Service",
-      buttonTwo: "Add Feedback",
-    },
-    {
-      name: "Face Wash",
-      image: SalonFaceWash,
-      date: "28 Jan, 09:32",
-      price: "₱ 559.00",
-      description: ` Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia dolor molestias, nihil eligendi incidunt ducimus accusantium. Voluptatum quae, unde consectet ur accusamus iusto, excepturi dolore deleniti incidunt, dignissimos dolor veniam alias? Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia dolor molestias, nihil eligendi incidunt ducimus accusantium. Voluptatum quae, unde consectet ur accusamus iusto, excepturi dolore deleniti incidunt, dignissimos dolor veniam alias?`,
-      buttonOne: "Reappoint Service",
-      buttonTwo: "Add Feedback",
-    },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isFocused) refetch();
+    };
+    fetchData();
+  }, [isFocused]);
+
+  const filteredTransactions = transactions.filter((transaction) => {
+    const appointmentCustomerID = transaction.appointment?.customer?._id;
+    const isCompletedOrCancelled =
+      transaction?.status === "completed" ||
+      transaction?.status === "cancelled";
+
+    return appointmentCustomerID === auth?._id && isCompletedOrCancelled;
+  });
 
   return (
     <>
-      <SafeAreaView style={{ backgroundColor }} className={`flex-1`}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          decelerationRate="fast"
-          scrollEventThrottle={1}
-          style={{
-            backgroundColor,
-          }}
-          className={`px-3 flex-1 mt-4`}
+      {isLoading ? (
+        <View
+          className={`flex-1 justify-center items-center bg-primary-default`}
         >
-          <ScrollView
-            decelerationRate="fast"
-            scrollEventThrottle={1}
-            showsVerticalScrollIndicator={false}
-          >
-            {items.map((item, index) => (
-              <View
-                key={index}
-                style={{
-                  backgroundColor: invertBackgroundColor,
-                  height: windowHeight * 0.25,
-                  width: windowWidth * 0.925,
-                }}
-                className={`flex-row gap-x-4 rounded-2xl mx-1 px-4 pt-4 mb-2`}
+          <LoadingScreen />
+        </View>
+      ) : (
+        <>
+          <SafeAreaView style={{ backgroundColor }} className={`flex-1`}>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              decelerationRate="fast"
+              scrollEventThrottle={1}
+              style={{
+                backgroundColor,
+              }}
+              className={`px-3 flex-1 mt-4`}
+            >
+              <ScrollView
+                decelerationRate="fast"
+                scrollEventThrottle={1}
+                showsVerticalScrollIndicator={false}
               >
-                <View className={`flex-col gap-y-2`}>
-                  <Image
-                    source={item.image}
-                    resizeMode="cover"
-                    className={`h-[100px] w-[100px] rounded-full`}
-                  />
-                  <Text
-                    style={{ color: invertTextColor }}
-                    className={`text-center text-base font-semibold`}
+                {filteredTransactions.map((transaction) => (
+                  <View
+                    key={transaction?._id}
+                    style={{
+                      backgroundColor: invertBackgroundColor,
+                      height: windowHeight * 0.26,
+                      width: windowWidth * 0.925,
+                    }}
+                    className={`flex-row gap-x-4 rounded-2xl mx-1 px-4 pt-4 mb-2`}
                   >
-                    {item.date}
-                  </Text>
-                </View>
-                <View className={`flex-1 flex-col`}>
-                  <View className={`flex-row`}>
-                    <Text
-                      style={{ color: invertTextColor }}
-                      className={`text-center text-lg font-semibold`}
-                    >
-                      {item.name}
-                    </Text>
-                    <View className={`flex-1 flex-row justify-end items-start`}>
+                    <View className={`flex-col gap-y-2`}>
+                      {transaction.appointment.service.map((service) =>
+                        service.image.map(() => (
+                          <Image
+                            key={service.public_id}
+                            source={{
+                              uri: service.image[
+                                Math.floor(Math.random() * service.image.length)
+                              ].url,
+                            }}
+                            resizeMode="cover"
+                            className={`h-[100px] w-[100px] rounded-full`}
+                          />
+                        ))
+                      )}
                       <Text
                         style={{ color: invertTextColor }}
-                        className={`text-center text-lg font-semibold`}
+                        className={`text-center text-base font-semibold`}
                       >
-                        {item.price}
+                        {` ${
+                          transaction?.appointment?.date
+                            ? new Date(transaction.appointment.date)
+                                .toISOString()
+                                .split("T")[0]
+                            : ""
+                        }\n at ${
+                          transaction?.appointment?.time?.length > 0
+                            ? transaction.appointment.time.length === 1
+                              ? `${transaction?.appointment?.time[0]}`
+                              : `${transaction?.appointment?.time[0]} to\n ${
+                                  transaction?.appointment?.time[
+                                    transaction?.appointment?.time.length - 1
+                                  ]
+                                }`
+                            : ""
+                        }`}
                       </Text>
                     </View>
-                  </View>
-                  <View className={`pt-3`}>
-                    <ScrollView
-                      decelerationRate="fast"
-                      scrollEventThrottle={1}
-                      showsVerticalScrollIndicator={false}
-                      style={{ maxHeight: "60%" }}
-                    >
-                      <Text
-                        style={{ color: invertTextColor }}
-                        className={`text-xs font-semibold`}
+                    <View className={`flex-1 flex-col`}>
+                      <View className={`flex-row`}>
+                        <Text
+                          style={{ color: invertTextColor }}
+                          className={`text-center text-lg font-semibold capitalize`}
+                        >
+                          Status: {transaction.status}
+                        </Text>
+                        <View
+                          className={`flex-1 flex-row justify-end items-start`}
+                        >
+                          <Text
+                            style={{ color: invertTextColor }}
+                            className={`text-center text-lg font-semibold`}
+                          >
+                            ₱{transaction?.appointment?.price.toFixed(0)}
+                          </Text>
+                        </View>
+                      </View>
+                      <View className={`pt-1`}>
+                        <Text
+                          style={{ color: invertTextColor }}
+                          className={`text-lg font-semibold`}
+                        >
+                          Services:{" "}
+                          {transaction?.appointment?.service?.map(
+                            (service, index) =>
+                              (service?.service_name.length > 15
+                                ? service?.service_name.slice(0, 15) + "..."
+                                : service?.service_name) +
+                              (index <
+                              transaction.appointment.service?.length - 1
+                                ? ", "
+                                : "")
+                          )}
+                        </Text>
+                        <Text
+                          style={{ color: invertTextColor }}
+                          className={`text-lg font-semibold`}
+                        >
+                          AddOns:{" "}
+                          {transaction?.appointment?.option?.length > 0
+                            ? transaction.appointment.option.map(
+                                (addon, index) => (
+                                  <React.Fragment key={addon._id}>
+                                    {addon.option_name.length > 15
+                                      ? addon.option_name.slice(0, 15) + "..."
+                                      : addon.option_name}
+                                    {index <
+                                    transaction.appointment.option.length - 1
+                                      ? ", "
+                                      : ""}
+                                  </React.Fragment>
+                                )
+                              )
+                            : "None"}
+                        </Text>
+                      </View>
+                      <View
+                        className={`mt-6 items-end justify-end gap-x-3 flex-row`}
                       >
-                        {item.description}
-                      </Text>
-                    </ScrollView>
+                        <TouchableOpacity
+                          className={`px-6 py-2 rounded-lg bg-primary-accent`}
+                        >
+                          <Text
+                            style={{ color: invertTextColor }}
+                            className={`text-lg font-semibold`}
+                          >
+                            Rate
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          className={`px-4 py-2 rounded-lg bg-secondary-accent`}
+                        >
+                          <Text
+                            style={{ color: invertTextColor }}
+                            className={`text-lg font-semibold`}
+                          >
+                            Receipt
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
                   </View>
-                  <View className={`flex-1 gap-x-2 flex-row`}>
-                    <TouchableOpacity
-                      className={`px-4 py-2 rounded-2xl bg-primary-accent  self-start`}
-                    >
-                      <Text
-                        style={{ color: invertTextColor }}
-                        className={`text-[10px] font-semibold`}
-                      >
-                        {item.buttonOne}
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      className={`px-4 py-2 rounded-2xl bg-secondary-accent  self-start`}
-                    >
-                      <Text
-                        style={{ color: invertTextColor }}
-                        className={`text-[10px] font-semibold`}
-                      >
-                        {item.buttonTwo}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </View>
-            ))}
-          </ScrollView>
-        </ScrollView>
-      </SafeAreaView>
+                ))}
+              </ScrollView>
+            </ScrollView>
+          </SafeAreaView>
+        </>
+      )}
     </>
   );
 }
