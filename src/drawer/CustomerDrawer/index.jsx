@@ -1,5 +1,5 @@
 import React from "react";
-import { Feather, MaterialIcons } from "@expo/vector-icons";
+import { Feather, MaterialIcons, Entypo } from "@expo/vector-icons";
 import { Dimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
@@ -11,6 +11,8 @@ import {
   EditCustomerProfile,
   PastAppointment,
   Settings,
+  Schedule,
+  CustomerComment,
 } from "@screens";
 import { changeColor, dimensionLayout } from "@utils";
 import { RESOURCE } from "@constants";
@@ -162,6 +164,31 @@ export default function () {
           component={EditCustomerProfile}
         />
         <Drawer.Screen
+          name="Schedule"
+          options={{
+            drawerActiveBackgroundColor: "#F78FB3",
+            drawerActiveTintColor: textColor,
+            drawerInactiveTintColor: "#FDA7DF",
+            drawerLabel: () => (
+              <Text
+                className={`text-xl font-base`}
+                style={{ color: textColor }}
+              >
+                Schedule
+              </Text>
+            ),
+            title: "Schedule",
+            drawerIcon: () => (
+              <Feather
+                name="calendar"
+                size={RESOURCE.NUMBER.THIRTY}
+                color={textColor}
+              />
+            ),
+          }}
+          component={Schedule}
+        />
+        <Drawer.Screen
           name="PastAppointment"
           options={{
             drawerActiveBackgroundColor: "#F78FB3",
@@ -172,7 +199,7 @@ export default function () {
                 className={`text-xl font-base`}
                 style={{ color: textColor }}
               >
-                Past Appointment
+                History
               </Text>
             ),
             title: "PastAppointment",
@@ -186,9 +213,8 @@ export default function () {
           }}
           component={PastAppointment}
         />
-
         <Drawer.Screen
-          name="Settings"
+          name="CustomerComment"
           options={{
             drawerActiveBackgroundColor: "#F78FB3",
             drawerActiveTintColor: textColor,
@@ -198,19 +224,19 @@ export default function () {
                 className={`text-xl font-base`}
                 style={{ color: textColor }}
               >
-                Settings
+                Comments
               </Text>
             ),
-            title: "Settings",
+            title: "CustomerComment",
             drawerIcon: () => (
-              <MaterialIcons
-                name="settings"
+              <Entypo
+                name="chat"
                 size={RESOURCE.NUMBER.THIRTY}
                 color={textColor}
               />
             ),
           }}
-          component={Settings}
+          component={CustomerComment}
         />
       </Drawer.Navigator>
     </>
