@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ScrollView,
   View,
@@ -7,23 +7,26 @@ import {
   TouchableOpacity,
   Dimensions,
   SafeAreaView,
+  Alert,
 } from "react-native";
 import { changeColor } from "@utils";
 import { useNavigation } from "@react-navigation/native";
-import { useGetCommentsQuery } from "../../state/api/reducer";
-import { useFormik } from "formik";
+import {
+  useGetCommentsQuery,
+  useDeleteCommentMutation,
+} from "../../state/api/reducer";
 import { LoadingScreen } from "@components";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import noPhoto from "@assets/no-photo.jpg";
 import { Feather } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
+import { saveDeletedId, getDeletedIds } from "../../helpers/DeleteItem";
+import Toast from "react-native-toast-message";
 
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
 
 export default function () {
-  const { textColor, backgroundColor, shadowColor, colorScheme } =
-    changeColor();
+  const { backgroundColor, colorScheme } = changeColor();
   const navigation = useNavigation();
   const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDA7DF";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
@@ -42,6 +45,59 @@ export default function () {
     fetchData();
   }, [isFocused]);
 
+  const [deleteComment, { isLoading: isDeleting }] = useDeleteCommentMutation();
+  const [deletedIds, setDeletedIds] = useState([]);
+
+  useEffect(() => {
+    const fetchDeletedIds = async () => {
+      const ids = await getDeletedIds();
+      setDeletedIds(ids);
+    };
+
+    fetchDeletedIds();
+  }, []);
+
+  const handleDeleteComment = (id) => {
+    Alert.alert(
+      "Delete Comment",
+      "Are you sure you want to delete this comment?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Delete",
+          onPress: async () => {
+            try {
+              const response = await deleteComment(id).unwrap();
+              await saveDeletedId(id);
+              setDeletedIds((prevIds) => [...prevIds, id]);
+              refetch();
+              Toast.show({
+                type: "success",
+                position: "top",
+                text1: "Comment Successfully Deleted",
+                text2: `${response?.message}`,
+                visibilityTime: 3000,
+                autoHide: true,
+              });
+            } catch (error) {
+              Toast.show({
+                type: "error",
+                position: "top",
+                text1: "Error Deleting Comment",
+                text2: `${error?.data?.error?.message}`,
+                visibilityTime: 3000,
+                autoHide: true,
+              });
+            }
+          },
+        },
+      ]
+    );
+  };
+
   const filteredComments = comments.filter((comment) => {
     const appointmentCustomerID =
       comment?.transaction?.appointment?.customer?._id;
@@ -49,9 +105,16 @@ export default function () {
     return appointmentCustomerID === authID;
   });
 
+  const filteredDeletedComments =
+    filteredComments?.filter((item) => !deletedIds.includes(item?._id)) || [];
+
+  const handleEditComment = (id) => {
+    navigation.navigate("EditComment", { id });
+  };
+
   return (
     <>
-      {isLoading ? (
+      {isLoading || isDeleting ? (
         <View
           className={`flex-1 justify-center items-center bg-primary-default`}
         >
@@ -74,15 +137,14 @@ export default function () {
                 scrollEventThrottle={1}
                 showsVerticalScrollIndicator={false}
               >
-                {filteredComments.map((comment) => (
+                {filteredDeletedComments.map((comment) => (
                   <View
                     key={comment?._id}
                     style={{
                       backgroundColor: invertBackgroundColor,
-                      height: windowHeight * 0.6,
                       width: windowWidth * 0.925,
                     }}
-                    className={`flex-col items-start justify-start rounded-2xl mx-1 px-4 mb-2`}
+                    className={`flex-col items-start justify-start rounded-2xl mx-1 px-4 mb-2 h-full pb-2`}
                   >
                     <View className={`flex-col pt-4 self-center`}>
                       {comment?.transaction.appointment.service.map(
@@ -155,9 +217,7 @@ export default function () {
                             <Feather
                               key={`empty-${index}`}
                               name="star"
-                              color={
-                                colorScheme === "dark" ? "#212B36" : "#e5e5e5"
-                              }
+                              color={"gray"}
                               size={30}
                             />
                           )
@@ -202,6 +262,9 @@ export default function () {
                       <View className={`mt-6 gap-x-2 flex-row mx-1`}>
                         <TouchableOpacity
                           className={`px-4 py-2 rounded-lg bg-primary-accent`}
+                          onPress={() => {
+                            handleEditComment(comment?._id);
+                          }}
                         >
                           <Text
                             style={{ color: invertTextColor }}
@@ -212,6 +275,7 @@ export default function () {
                         </TouchableOpacity>
                         <TouchableOpacity
                           className={`px-4 py-2 rounded-lg bg-secondary-accent`}
+                          onPress={() => handleDeleteComment(comment?._id)}
                         >
                           <Text
                             style={{ color: invertTextColor }}
