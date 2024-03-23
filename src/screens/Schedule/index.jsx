@@ -64,22 +64,18 @@ export default function () {
               style={{
                 backgroundColor,
               }}
-              className={`px-3 flex-1 mt-4`}
+              className={`px-3 flex-1 my-4`}
             >
-              <ScrollView
-                decelerationRate="fast"
-                scrollEventThrottle={1}
-                showsVerticalScrollIndicator={false}
-              >
-                {filteredTransactions.map((transaction) => (
-                  <View
-                    key={transaction?._id}
-                    style={{
-                      backgroundColor: invertBackgroundColor,
-                      width: windowWidth * 0.925,
-                    }}
-                    className={`flex-row gap-x-4 rounded-2xl mx-1 px-4 pt-4 mb-2 h-full pb-2`}
-                  >
+              {filteredTransactions.map((transaction) => (
+                <View
+                  key={transaction?._id}
+                  style={{
+                    backgroundColor: invertBackgroundColor,
+                    width: windowWidth * 0.925,
+                  }}
+                  className={`rounded-lg p-4 my-4`}
+                >
+                  <View className={`flex-row gap-x-4`}>
                     <View className={`flex-col gap-y-2`}>
                       {transaction.appointment.service.map((service) =>
                         service.image.map(() => (
@@ -190,8 +186,8 @@ export default function () {
                       </View>
                     </View>
                   </View>
-                ))}
-              </ScrollView>
+                </View>
+              ))}
             </ScrollView>
           </SafeAreaView>
         </>
