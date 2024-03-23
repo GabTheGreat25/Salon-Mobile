@@ -87,6 +87,7 @@ import {
   Feet,
   Eyelash,
   EditComment,
+  CreateComment,
 } from "@screens";
 import {
   TermsConditions,
@@ -160,6 +161,7 @@ export default function () {
                   component={CheckoutSuccess}
                 />
                 <Stack.Screen name="EditComment" component={EditComment} />
+                <Stack.Screen name="CreateComment" component={CreateComment} />
               </Stack.Navigator>
             ) : userRoles.includes("Beautician") ? (
               <Stack.Navigator
