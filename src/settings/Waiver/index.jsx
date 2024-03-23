@@ -119,13 +119,15 @@ export default function () {
             </Text>
             {show && (
               <Modal>
-                <SignatureScreen
-                  ref={ref}
-                  onEnd={handleEnd}
-                  onOK={handleSignature}
-                  onClear={handleClear}
-                  backgroundColor="#FDA7DF"
-                />
+                <View className={`flex-1 relative top-[200px] rounded-lg px-4`}>
+                  <SignatureScreen
+                    ref={ref}
+                    onEnd={handleEnd}
+                    onOK={handleSignature}
+                    onClear={handleClear}
+                    backgroundColor="#FDA7DF"
+                  />
+                </View>
               </Modal>
             )}
             <View
