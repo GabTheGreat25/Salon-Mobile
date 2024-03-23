@@ -17,7 +17,6 @@ import {
 } from "../../state/api/reducer";
 import { LoadingScreen } from "@components";
 import { useSelector } from "react-redux";
-import noPhoto from "@assets/no-photo.jpg";
 import { Feather } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
 import { saveDeletedId, getDeletedIds } from "../../helpers/DeleteItem";
@@ -130,42 +129,34 @@ export default function () {
               style={{
                 backgroundColor,
               }}
-              className={`px-3 flex-1 mt-4`}
+              className={`px-3 flex-1 my-4`}
             >
-              <ScrollView
-                decelerationRate="fast"
-                scrollEventThrottle={1}
-                showsVerticalScrollIndicator={false}
-              >
-                {filteredDeletedComments.map((comment) => (
-                  <View
-                    key={comment?._id}
-                    style={{
-                      backgroundColor: invertBackgroundColor,
-                      width: windowWidth * 0.925,
-                    }}
-                    className={`flex-col items-start justify-start rounded-2xl mx-1 px-4 mb-2 h-full pb-2`}
-                  >
+              {filteredDeletedComments.map((comment) => (
+                <View
+                  key={comment?._id}
+                  style={{
+                    backgroundColor: invertBackgroundColor,
+                    width: windowWidth * 0.925,
+                  }}
+                  className={`rounded-2xl p-4 mt-4 mb-2`}
+                >
+                  <View className={`flex-col`}>
                     <View className={`flex-col pt-4 self-center`}>
-                      {comment?.transaction.appointment.service.map(
-                        (comment, index) => (
-                          <Image
-                            key={index}
-                            source={{
-                              uri:
-                                comment?.image && comment?.image.length
-                                  ? comment?.image[
-                                      Math.floor(
-                                        Math.random() * comment?.image?.length
-                                      )
-                                    ]?.url
-                                  : noPhoto,
-                            }}
-                            resizeMode="cover"
-                            className={`h-[150px] w-[300px]`}
-                          />
-                        )
-                      )}
+                      <Image
+                        key={comment?.public_id || "no-photo"}
+                        source={{
+                          uri:
+                            comment?.image.length > 0
+                              ? comment.image[
+                                  Math.floor(
+                                    Math.random() * comment.image.length
+                                  )
+                                ].url
+                              : "https://www.nuvali.ph/wp-content/themes/consultix/images/no-image-found-360x250.png",
+                        }}
+                        resizeMode="cover"
+                        className={`h-[150px] w-[300px]`}
+                      />
                       <Text
                         style={{ color: invertTextColor }}
                         className={`text-center text-lg font-semibold pt-4`}
@@ -237,7 +228,7 @@ export default function () {
                           style={{ color: invertTextColor }}
                           className={`text-lg font-semibold`}
                         >
-                          Description:{" "}
+                          Suggestion:{" "}
                           {comment?.suggestion.length > 25
                             ? comment?.suggestion.substring(0, 25) + "..."
                             : comment?.suggestion}
@@ -287,8 +278,8 @@ export default function () {
                       </View>
                     </View>
                   </View>
-                ))}
-              </ScrollView>
+                </View>
+              ))}
             </ScrollView>
           </SafeAreaView>
         </>
