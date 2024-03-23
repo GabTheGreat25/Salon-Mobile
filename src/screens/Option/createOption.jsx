@@ -27,8 +27,7 @@ export default function () {
   const navigation = useNavigation();
   const { backgroundColor, textColor, colorScheme } = changeColor();
 
-  const borderColor =
-    colorScheme === "dark" ? "border-neutral-light" : "border-neutral-dark";
+  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
   const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
   const [addOption, { isLoading }] = useAddOptionMutation();
   const { data: services, isLoading: serviceLoading } = useGetServicesQuery();

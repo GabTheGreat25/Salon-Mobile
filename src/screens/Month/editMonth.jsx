@@ -31,8 +31,7 @@ export default function ({ route }) {
   const [updateMonth, { isLoading }] = useUpdateMonthMutation();
 
   const { backgroundColor, textColor, colorScheme } = changeColor();
-  const borderColor =
-    colorScheme === "dark" ? "border-neutral-light" : "border-neutral-dark";
+  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
 
   const formik = useFormik({
     enableReinitialize: true,

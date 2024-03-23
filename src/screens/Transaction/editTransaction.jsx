@@ -49,8 +49,7 @@ export default function ({ route }) {
   const [updateTransaction, { isLoading }] = useUpdateTransactionMutation();
 
   const { backgroundColor, textColor, colorScheme } = changeColor();
-  const borderColor =
-    colorScheme === "dark" ? "border-neutral-light" : "border-neutral-dark";
+  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
 
   const [isOpen, setOpen] = useState(transactions?.hasDiscount || false);
   const [status, setStatus] = useState(transactions?.status || "pending");

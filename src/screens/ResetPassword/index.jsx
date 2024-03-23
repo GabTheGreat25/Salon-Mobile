@@ -28,8 +28,7 @@ export default function () {
   const navigation = useNavigation();
   const { backgroundColor, textColor, colorScheme } = changeColor();
   const imageSource = colorScheme === "dark" ? salonLogoWhite : salonLogo;
-  const borderColor =
-    colorScheme === "dark" ? "border-neutral-light" : "border-neutral-dark";
+  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
   const [keyboardOpen, setKeyboardOpen] = useState(false);
 
   const [resetPassword, { isLoading }] = useResetPasswordMutation();

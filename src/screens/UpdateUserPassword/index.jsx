@@ -25,8 +25,7 @@ import { useSelector } from "react-redux";
 export default function () {
   const navigation = useNavigation();
   const { backgroundColor, textColor, colorScheme } = changeColor();
-  const borderColor =
-    colorScheme === "dark" ? "border-neutral-light" : "border-neutral-dark";
+  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
 
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
