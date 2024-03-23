@@ -7,22 +7,23 @@ import {
   TouchableOpacity,
   Dimensions,
   SafeAreaView,
+  Alert,
 } from "react-native";
 import { changeColor } from "@utils";
 import { useNavigation } from "@react-navigation/native";
-import { useSelector, useDispatch } from "react-redux";
-import { useGetTransactionsQuery } from "../../state/api/reducer";
-import { useFormik } from "formik";
+import { useSelector } from "react-redux";
+import {
+  useGetTransactionsQuery,
+  useGetCommentsQuery,
+} from "../../state/api/reducer";
 import { LoadingScreen } from "@components";
 import { useIsFocused } from "@react-navigation/native";
 
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
 
 export default function () {
   const { backgroundColor, colorScheme } = changeColor();
-  // const navigation = useNavigation();
-  // const dispatch = useDispatch();
+  const navigation = useNavigation();
   const isFocused = useIsFocused();
 
   const auth = useSelector((state) => state.auth.user);
@@ -33,9 +34,19 @@ export default function () {
   const { data, isLoading, refetch } = useGetTransactionsQuery();
   const transactions = data?.details || [];
 
+  const {
+    data: commentsData,
+    isLoading: commentsLoading,
+    refetch: commentRefetch,
+  } = useGetCommentsQuery();
+  const comments = commentsData?.details || [];
+
   useEffect(() => {
     const fetchData = async () => {
-      if (isFocused) refetch();
+      if (isFocused) {
+        refetch();
+        commentRefetch();
+      }
     };
     fetchData();
   }, [isFocused]);
@@ -49,9 +60,22 @@ export default function () {
     return appointmentCustomerID === auth?._id && isCompletedOrCancelled;
   });
 
+  const comment = (transactionId) => {
+    const transactionComments = comments?.filter(
+      (comment) => comment.transaction._id === transactionId.toString()
+    );
+    if (transactionComments && transactionComments.length > 0) {
+      Alert.alert("Warning", "This transaction already has a comment.");
+    } else {
+      navigation.navigate("CreateComment", {
+        transactionId: transactionId.toString(),
+      });
+    }
+  };
+
   return (
     <>
-      {isLoading ? (
+      {isLoading || commentsLoading ? (
         <View
           className={`flex-1 justify-center items-center bg-primary-default`}
         >
@@ -67,22 +91,18 @@ export default function () {
               style={{
                 backgroundColor,
               }}
-              className={`px-3 flex-1 mt-4`}
+              className={`px-3 flex-1 my-4`}
             >
-              <ScrollView
-                decelerationRate="fast"
-                scrollEventThrottle={1}
-                showsVerticalScrollIndicator={false}
-              >
-                {filteredTransactions.map((transaction) => (
-                  <View
-                    key={transaction?._id}
-                    style={{
-                      backgroundColor: invertBackgroundColor,
-                      width: windowWidth * 0.925,
-                    }}
-                    className={`flex-row gap-x-4 rounded-2xl mx-1 px-4 pt-4 mb-2 h-full pb-2`}
-                  >
+              {filteredTransactions.map((transaction) => (
+                <View
+                  key={transaction?._id}
+                  style={{
+                    backgroundColor: invertBackgroundColor,
+                    width: windowWidth * 0.925,
+                  }}
+                  className={`rounded-lg p-4 my-4`}
+                >
+                  <View className={`flex-row gap-x-4`}>
                     <View className={`flex-col gap-y-2`}>
                       {transaction.appointment.service.map((service) =>
                         service.image.map(() => (
@@ -183,6 +203,7 @@ export default function () {
                         className={`mt-6 items-end justify-end gap-x-3 flex-row`}
                       >
                         <TouchableOpacity
+                          onPress={() => comment(transaction?._id)}
                           className={`px-6 py-2 rounded-lg bg-primary-accent`}
                         >
                           <Text
@@ -205,8 +226,8 @@ export default function () {
                       </View>
                     </View>
                   </View>
-                ))}
-              </ScrollView>
+                </View>
+              ))}
             </ScrollView>
           </SafeAreaView>
         </>
