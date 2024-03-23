@@ -72,7 +72,7 @@ export default function ({ route }) {
       formData.append("suggestion", values.suggestion);
       formData.append("isAnonymous", values.isAnonymous);
 
-      updateComment({ id: data?.details?._id, payload: values })
+      updateComment({ id: data?.details?._id, payload: formData })
         .unwrap()
         .then((response) => {
           refetch();
@@ -330,7 +330,7 @@ export default function ({ route }) {
                       <View className={`pt-2 pb-6`}>
                         <Text
                           style={{ color: textColor }}
-                          className={`text-3xl font-semibold`}
+                          className={`text-xl font-semibold`}
                         >
                           {isOpen ? "Anonymous" : "Make my comment Anonymous"}
                         </Text>
