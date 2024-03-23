@@ -104,6 +104,7 @@ import Feet from "./Ingredients/Feet";
 import Eyelash from "./Ingredients/Eyelash";
 import Schedule from "./Schedule";
 import CustomerComment from "./Comment/customerComment";
+import EditComment from "./Comment/editComment";
 
 export {
   Home,
@@ -212,4 +213,5 @@ export {
   Eyelash,
   Schedule,
   CustomerComment,
+  EditComment,
 };
