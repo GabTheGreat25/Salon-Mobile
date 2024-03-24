@@ -333,7 +333,7 @@ export default function () {
                       style={{ color: textColor }}
                       className={`${borderColor} font-semibold text-xl`}
                     >
-                      Update Your Image
+                      Upload Your Image
                     </Text>
                     <View className={`flex-row gap-x-2 mt-2 mb-6`}>
                       <TouchableOpacity onPress={takePicture}>
