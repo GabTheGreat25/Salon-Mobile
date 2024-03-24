@@ -118,8 +118,10 @@ export default function () {
               {`Assumption of Risk:\nI acknowledge that salon services may involve inherent risks, including but not limited to chemical exposure, burns, or other injuries. I voluntarily assume all risks associated with receiving salon services and waive any claims against Lhanlee Beauty Lounge and its staff for any injuries or damages incurred. Signature: By signing below, I acknowledge that I have read, understood, and agree to the terms of this waiver agreement. I consent to receive salon services knowing the risks involved.`}
             </Text>
             {show && (
-              <Modal>
-                <View className={`flex-1 relative top-[200px] rounded-lg px-4`}>
+              <Modal animationType="slide">
+                <View
+                  className={`flex-1 relative top-[200px] rounded-lg px-4 `}
+                >
                   <SignatureScreen
                     ref={ref}
                     onEnd={handleEnd}
