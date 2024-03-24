@@ -50,7 +50,7 @@ export default function ({ route }) {
       ratings: data?.details?.ratings || 1,
       description: data?.details?.description || "",
       suggestion: data?.details?.suggestion || "",
-      isAnonymous: data?.details?.isAnonymous || "",
+      isAnonymous: data?.details?.isAnonymous || false,
     },
     validationSchema: editCommentValidation,
     onSubmit: (values) => {
