@@ -18,9 +18,14 @@ import MovingSale from "@assets/moving-sale.gif";
 import { changeColor } from "@utils";
 import { Feather, FontAwesome, Ionicons, AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { useGetServicesQuery } from "../../state/api/reducer";
+import {
+  useGetServicesQuery,
+  useGetCommentsQuery,
+  useGetExclusionsQuery,
+} from "../../state/api/reducer";
 import { LoadingScreen } from "@components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useSelector } from "react-redux";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -38,9 +43,127 @@ export default function () {
 
   const { data, isLoading } = useGetServicesQuery();
 
-  const items = data?.details || [];
+  const services = data?.details || [];
 
-  const latestService = items
+  const { data: commentsData, isLoading: commentsLoading } =
+    useGetCommentsQuery();
+  const comments = commentsData?.details || [];
+
+  const allServices = services.map((service) => {
+    const matchingComments = comments.filter((comment) =>
+      comment.transaction?.appointment?.service?.some(
+        (s) => s._id === service._id
+      )
+    );
+
+    const ratings = matchingComments.flatMap((comment) => comment.ratings);
+    const count = ratings?.length;
+
+    const averageRating =
+      count > 0 ? ratings.reduce((sum, rating) => sum + rating, 0) / count : 0;
+
+    return {
+      ...service,
+      ratings: averageRating,
+    };
+  });
+
+  const { data: exclusionData, isLoading: exclusionLoading } =
+    useGetExclusionsQuery();
+  const exclusions = exclusionData?.details;
+
+  const auth = useSelector((state) => state.auth.user);
+
+  const filteredExclusions = exclusions
+    ?.filter(
+      (exclusion) =>
+        auth?.information?.allergy &&
+        auth.information.allergy.includes(exclusion._id)
+    )
+    .flatMap((exclusion) => exclusion.ingredient_name.trim().toLowerCase());
+
+  const newItems = allServices.filter((service) => {
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+
+    const hideMonthsJsProm = [0, 1, 4, 5, 6, 7, 8, 9, 10, 11];
+    const hideMonthsGraduation = [0, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11];
+
+    const hideValentinesDay = currentMonth !== 1;
+    const hideChristmas = currentMonth !== 11;
+    const hideHalloween = currentMonth !== 9;
+    const hideNewYear = currentMonth !== 0;
+    const hideJsProm = hideMonthsJsProm.includes(currentMonth);
+    const hideGraduation = hideMonthsGraduation.includes(currentMonth);
+
+    const hasNewProduct =
+      service.product &&
+      service.product.length === 1 &&
+      service.product.some((product) => product.isNew === true);
+
+    if (!hasNewProduct) return false;
+
+    const isExcluded = service.product?.some((product) => {
+      const productIngredients =
+        product.ingredients?.toLowerCase().split(", ") || [];
+
+      return filteredExclusions?.some((exclusion) =>
+        productIngredients.includes(exclusion)
+      );
+    });
+
+    return !(
+      isExcluded ||
+      (service.occassion === "Valentines" && hideValentinesDay) ||
+      (service.occassion === "Christmas" && hideChristmas) ||
+      (service.occassion === "Halloween" && hideHalloween) ||
+      (service.occassion === "New Year" && hideNewYear) ||
+      (service.occassion === "Js Prom" && hideJsProm) ||
+      (service.occassion === "Graduation" && hideGraduation)
+    );
+  });
+
+  const bundleItems = allServices.filter((service) => {
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+
+    const hideMonthsJsProm = [0, 1, 4, 5, 6, 7, 8, 9, 10, 11];
+    const hideMonthsGraduation = [0, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11];
+
+    const hideValentinesDay = currentMonth !== 1;
+    const hideChristmas = currentMonth !== 11;
+    const hideHalloween = currentMonth !== 9;
+    const hideNewYear = currentMonth !== 0;
+    const hideJsProm = hideMonthsJsProm.includes(currentMonth);
+    const hideGraduation = hideMonthsGraduation.includes(currentMonth);
+
+    const hasNewBundle =
+      service.product &&
+      service.product.length > 1 &&
+      service.product?.some((product) => product.isNew === true);
+
+    if (!hasNewBundle) return false;
+
+    const isExcluded = service.product?.some((product) => {
+      const productIngredients =
+        product.ingredients?.toLowerCase().split(", ") || [];
+      return filteredExclusions?.some((exclusion) =>
+        productIngredients.includes(exclusion)
+      );
+    });
+
+    return !(
+      isExcluded ||
+      (service.occassion === "Valentines" && hideValentinesDay) ||
+      (service.occassion === "Christmas" && hideChristmas) ||
+      (service.occassion === "Halloween" && hideHalloween) ||
+      (service.occassion === "New Year" && hideNewYear) ||
+      (service.occassion === "Js Prom" && hideJsProm) ||
+      (service.occassion === "Graduation" && hideGraduation)
+    );
+  });
+
+  const latestService = services
     ?.filter((service) => service?.created_at)
     ?.sort((a, b) => new Date(b?.created_at) - new Date(a?.created_at))[0];
 
@@ -78,7 +201,7 @@ export default function () {
 
   return (
     <>
-      {isLoading ? (
+      {isLoading || commentsLoading || exclusionLoading ? (
         <View
           className={`flex-1 justify-center items-center bg-primary-default`}
         >
@@ -295,15 +418,15 @@ export default function () {
               <View className={`flex-row px-4`}>
                 <Text
                   style={{ color: textColor }}
-                  className={`text-base font-semibold p-2`}
+                  className={`text-lg font-semibold p-2`}
                 >
-                  Limited offers
+                  New Services
                 </Text>
                 <TouchableOpacity onPress={handlePress} className={`flex-1`}>
                   <View className={`flex-row justify-end items-center`}>
                     <Text
                       style={{ color: textColor }}
-                      className={`text-base font-semibold p-2`}
+                      className={`text-lg font-semibold p-2`}
                     >
                       View All
                     </Text>
@@ -313,18 +436,27 @@ export default function () {
               </View>
 
               <FlatList
-                data={items}
+                data={newItems}
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 decelerationRate="fast"
                 scrollEventThrottle={1}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item, index }) => (
-                  <View key={index} className={`flex-row px-[22px]`}>
+                keyExtractor={(item) => item._id}
+                renderItem={({ item }) => (
+                  <View key={item._id} className={`flex-row px-[22px]`}>
                     <View className={`flex-col`}>
                       <View className={`relative`}>
                         <Image
-                          source={{ uri: item?.image?.[0]?.url }}
+                          key={
+                            item.image[
+                              Math.floor(Math.random() * item.image?.length)
+                            ]?.public_id
+                          }
+                          source={{
+                            uri: item.image[
+                              Math.floor(Math.random() * item.image?.length)
+                            ]?.url,
+                          }}
                           resizeMode="cover"
                           style={{
                             height: windowHeight * 0.25,
@@ -346,45 +478,56 @@ export default function () {
                         <View className={`flex-col`}>
                           <Text
                             style={{ color: textColor }}
-                            className={`text-base font-semibold`}
+                            className={`text-xl font-semibold`}
                           >
-                            {item?.service_name}
+                            {item?.service_name.length > 30
+                              ? `${item?.service_name.substring(0, 30)}...`
+                              : item?.service_name}
                           </Text>
                           <Text
                             style={{ color: textColor }}
                             className={`text-2xl font-semibold py-1`}
                           >
-                            {item?.price}
+                            ₱{item?.price}
                           </Text>
                         </View>
                         <View
                           className={`flex-1 flex-row justify-end items-start`}
                         >
-                          <FontAwesome name="star" size={20} color="#f1c40f" />
                           <Text
                             style={{ color: textColor }}
-                            className={`text-base font-semibold px-2`}
+                            className={`text-2xl font-semibold px-2`}
                           >
-                            4.5
+                            {item?.ratings !== 0
+                              ? item?.ratings.toFixed(2)
+                              : "0"}
                           </Text>
+                          <View className={`pt-1`}>
+                            <FontAwesome
+                              name="star"
+                              size={25}
+                              color={item?.ratings !== 0 ? "#f1c40f" : "gray"}
+                            />
+                          </View>
                         </View>
                       </View>
                     </View>
                   </View>
                 )}
               />
+
               <View className={`flex-row px-4`}>
                 <Text
                   style={{ color: textColor }}
-                  className={`text-base font-semibold p-2`}
+                  className={`text-lg font-semibold p-2`}
                 >
-                  Best offers
+                  Bundle Services
                 </Text>
                 <TouchableOpacity onPress={handlePress} className={`flex-1`}>
                   <View className={`flex-row justify-end items-center`}>
                     <Text
                       style={{ color: textColor }}
-                      className={`text-base font-semibold p-2`}
+                      className={`text-lg font-semibold p-2`}
                     >
                       View All
                     </Text>
@@ -394,18 +537,27 @@ export default function () {
               </View>
 
               <FlatList
-                data={items.slice().reverse()}
+                data={bundleItems}
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 decelerationRate="fast"
                 scrollEventThrottle={1}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item, index }) => (
-                  <View key={index} className={`flex-row px-[22px]`}>
+                keyExtractor={(item) => item._id}
+                renderItem={({ item }) => (
+                  <View key={item._id} className={`flex-row px-[22px]`}>
                     <View className={`flex-col`}>
                       <View className={`relative`}>
                         <Image
-                          source={{ uri: item?.image?.[0]?.url }}
+                          key={
+                            item.image[
+                              Math.floor(Math.random() * item.image?.length)
+                            ]?.public_id
+                          }
+                          source={{
+                            uri: item.image[
+                              Math.floor(Math.random() * item.image?.length)
+                            ]?.url,
+                          }}
                           resizeMode="cover"
                           style={{
                             height: windowHeight * 0.25,
@@ -427,27 +579,37 @@ export default function () {
                         <View className={`flex-col`}>
                           <Text
                             style={{ color: textColor }}
-                            className={`text-base font-semibold`}
+                            className={`text-xl font-semibold`}
                           >
-                            {item?.service_name}
+                            {item?.service_name.length > 30
+                              ? `${item?.service_name.substring(0, 30)}...`
+                              : item?.service_name}
                           </Text>
                           <Text
                             style={{ color: textColor }}
                             className={`text-2xl font-semibold py-1`}
                           >
-                            {item?.price}
+                            ₱{item?.price}
                           </Text>
                         </View>
                         <View
                           className={`flex-1 flex-row justify-end items-start`}
                         >
-                          <FontAwesome name="star" size={20} color="#f1c40f" />
                           <Text
                             style={{ color: textColor }}
-                            className={`text-base font-semibold px-2`}
+                            className={`text-2xl font-semibold px-2`}
                           >
-                            4.5
+                            {item?.ratings !== 0
+                              ? item?.ratings.toFixed(2)
+                              : "0"}
                           </Text>
+                          <View className={`pt-1`}>
+                            <FontAwesome
+                              name="star"
+                              size={25}
+                              color={item?.ratings !== 0 ? "#f1c40f" : "gray"}
+                            />
+                          </View>
                         </View>
                       </View>
                     </View>
