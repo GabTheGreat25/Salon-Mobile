@@ -106,6 +106,7 @@ import Schedule from "./Schedule";
 import CustomerComment from "./Comment/customerComment";
 import EditComment from "./Comment/editComment";
 import CreateComment from "./Comment/createComment";
+import ReceiptHistory from "./Transaction/receipt";
 
 export {
   Home,
@@ -216,4 +217,5 @@ export {
   CustomerComment,
   EditComment,
   CreateComment,
+  ReceiptHistory,
 };
