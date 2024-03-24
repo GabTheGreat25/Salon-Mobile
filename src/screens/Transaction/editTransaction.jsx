@@ -9,7 +9,6 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
-  TextInput,
 } from "react-native";
 import {
   useUpdateTransactionMutation,
