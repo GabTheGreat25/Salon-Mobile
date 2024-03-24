@@ -73,6 +73,10 @@ export default function () {
     }
   };
 
+  const handleReceipt = (id) => {
+    navigation.navigate("ReceiptHistory", { id });
+  };
+
   return (
     <>
       {isLoading || commentsLoading ? (
@@ -214,6 +218,7 @@ export default function () {
                           </Text>
                         </TouchableOpacity>
                         <TouchableOpacity
+                          onPress={() => handleReceipt(transaction?._id)}
                           className={`px-4 py-2 rounded-lg bg-secondary-accent`}
                         >
                           <Text
