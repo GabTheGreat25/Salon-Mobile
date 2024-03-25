@@ -9,27 +9,122 @@ import {
   FlatList,
   SafeAreaView,
 } from "react-native";
-import { changeColor, dimensionLayout } from "@utils";
+import { useDispatch } from "react-redux";
+import { changeColor } from "@utils";
 import { BackIcon } from "@helpers";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { useGetServicesQuery } from "../../state/api/reducer";
+import {
+  useGetCommentsQuery,
+  useGetExclusionsQuery,
+} from "../../state/api/reducer";
 import { LoadingScreen } from "@components";
+import { appointmentSlice } from "../../state/appointment/appointmentReducer";
+import { useSelector } from "react-redux";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function () {
+  const auth = useSelector((state) => state.auth.user);
+
   const { textColor, backgroundColor, colorScheme } = changeColor();
   const route = useRoute();
   const navigation = useNavigation();
-  const isDimensionLayout = dimensionLayout();
   const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
-  const { data, isLoading } = useGetServicesQuery();
+  const { data, isLoading } = useGetCommentsQuery();
 
-  const items = data?.details || [];
+  const comments = data?.details || [];
+
+  const servicesById = new Map();
+
+  const serviceCountMap = new Map();
+
+  const allServices = comments.flatMap((comment) =>
+    (comment.transaction?.appointment?.service || []).map((service) => ({
+      ...service,
+      ratings: comment.ratings,
+    }))
+  );
+
+  allServices.forEach((service) => {
+    const { _id, ratings } = service;
+
+    if (_id) {
+      if (servicesById.has(_id)) {
+        servicesById.get(_id).ratings.push(ratings);
+        servicesById.get(_id).count += 1;
+      } else
+        servicesById.set(_id, { ...service, ratings: [ratings], count: 1 });
+
+      serviceCountMap.set(_id, (serviceCountMap.get(_id) || 0) + 1);
+    }
+  });
+
+  const mergedServices = Array.from(servicesById.values()).map((service) => ({
+    ...service,
+    ratings:
+      service.ratings.reduce((sum, rating) => sum + rating, 0) / service.count,
+  }));
+
+  const filteredServices = mergedServices.filter(
+    (service) => service.ratings >= 1 && service.ratings <= 5
+  );
+
+  const sortedServices = filteredServices.sort(
+    (a, b) => b?.ratings - a?.ratings
+  );
+
+  const { data: exclusion, isLoading: exclusionLoading } =
+    useGetExclusionsQuery();
+  const exclusions = exclusion?.details;
+
+  const filteredExclusions = exclusions
+    ?.filter(
+      (exclusion) =>
+        auth?.information?.allergy &&
+        auth.information.allergy.includes(exclusion._id)
+    )
+    .flatMap((exclusion) => exclusion.ingredient_name.trim().toLowerCase());
+
+  const newItems = sortedServices.filter((service) => {
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+
+    const hideMonthsJsProm = [0, 1, 4, 5, 6, 7, 8, 9, 10, 11];
+    const hideMonthsGraduation = [0, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11];
+
+    const hideValentinesDay = currentMonth !== 1;
+    const hideChristmas = currentMonth !== 11;
+    const hideHalloween = currentMonth !== 9;
+    const hideNewYear = currentMonth !== 0;
+    const hideJsProm = hideMonthsJsProm.includes(currentMonth);
+    const hideGraduation = hideMonthsGraduation.includes(currentMonth);
+
+    const hasNewProduct = service?.product && Array.isArray(service.product);
+
+    if (!hasNewProduct) return false;
+
+    const isExcluded = service.product?.some((product) => {
+      const productIngredients =
+        product.ingredients?.toLowerCase().split(", ") || [];
+      return filteredExclusions?.some((exclusion) =>
+        productIngredients.includes(exclusion)
+      );
+    });
+
+    return !(
+      isExcluded ||
+      (service.occassion === "Valentines" && hideValentinesDay) ||
+      (service.occassion === "Christmas" && hideChristmas) ||
+      (service.occassion === "Halloween" && hideHalloween) ||
+      (service.occassion === "New Year" && hideNewYear) ||
+      (service.occassion === "Js Prom" && hideJsProm) ||
+      (service.occassion === "Graduation" && hideGraduation)
+    );
+  });
 
   const handlePress = () => {
     navigation.navigate("Cart");
@@ -65,7 +160,7 @@ export default function () {
 
   return (
     <>
-      {isLoading ? (
+      {isLoading || exclusionLoading ? (
         <View
           className={`flex-1 justify-center items-center bg-primary-default`}
         >
@@ -78,15 +173,9 @@ export default function () {
             style={{
               backgroundColor,
             }}
-            className={`px-3 flex-1 pt-20`}
+            className={`px-3 flex-1 pt-16 pb-20`}
           >
-            <View
-              className={`flex-1 ${
-                isDimensionLayout
-                  ? "flex-col justify-center items-center"
-                  : "flex-row justify-start items-start"
-              }`}
-            >
+            <View className={`justify-center items-center`}>
               <ScrollView
                 decelerationRate="fast"
                 scrollEventThrottle={1}
@@ -94,13 +183,7 @@ export default function () {
                 showsHorizontalScrollIndicator={false}
                 className={`mb-5`}
               >
-                <View
-                  className={`${
-                    isDimensionLayout
-                      ? "flex-row gap-x-2"
-                      : "pt-10 pr-8 justify-center items-center flex-col gap-y-2"
-                  }`}
-                >
+                <View className={`flex-row gap-x-2`}>
                   <TouchableOpacity onPress={handleRelevance}>
                     <View
                       style={{
@@ -119,7 +202,7 @@ export default function () {
                               : invertTextColor,
                         }}
                       >
-                        Relevance
+                        All Services
                       </Text>
                     </View>
                   </TouchableOpacity>
@@ -163,7 +246,7 @@ export default function () {
                               : invertTextColor,
                         }}
                       >
-                        Most Recent
+                        Latest
                       </Text>
                     </View>
                   </TouchableOpacity>
@@ -192,23 +275,34 @@ export default function () {
                 </View>
               </ScrollView>
               <FlatList
-                data={items}
+                data={newItems}
                 showsVerticalScrollIndicator={false}
                 decelerationRate="fast"
                 scrollEventThrottle={1}
-                keyExtractor={(item, index) => index.toString()}
-                ListFooterComponent={<View style={{ paddingBottom: 24 }} />}
-                renderItem={({ item, index }) => (
-                  <View
-                    key={index}
-                    className={`${
-                      isDimensionLayout ? "flex-col" : "flex-row"
-                    } px-[10px]`}
-                  >
+                keyExtractor={(item) => item._id}
+                ListFooterComponent={<View className={`pb-6`} />}
+                renderItem={({ item }) => (
+                  <View key={item._id} className={`flex-row px-[10px]`}>
                     <View className={`flex-col`}>
-                      <View className={`relative`}>
+                      <TouchableOpacity
+                        className={`relative`}
+                        onPress={() =>
+                          navigation.navigate("customerViewServiceById", {
+                            id: item?._id,
+                          })
+                        }
+                      >
                         <Image
-                          source={{ uri: item?.image?.[0]?.url }}
+                          key={
+                            item.image[
+                              Math.floor(Math.random() * item.image?.length)
+                            ]?.public_id
+                          }
+                          source={{
+                            uri: item.image[
+                              Math.floor(Math.random() * item.image?.length)
+                            ]?.url,
+                          }}
                           resizeMode="cover"
                           style={{
                             height: windowHeight * 0.25,
@@ -225,32 +319,42 @@ export default function () {
                             />
                           </View>
                         </TouchableOpacity>
-                      </View>
+                      </TouchableOpacity>
                       <View className={`flex-row pt-2`}>
                         <View className={`flex-col`}>
                           <Text
                             style={{ color: textColor }}
-                            className={`text-base font-semibold`}
+                            className={`text-xl font-semibold`}
                           >
-                            {item?.service_name}
+                            {item?.service_name.length > 30
+                              ? `${item?.service_name.substring(0, 30)}...`
+                              : item?.service_name}
                           </Text>
                           <Text
                             style={{ color: textColor }}
                             className={`text-2xl font-semibold py-1`}
                           >
-                            {item?.price}
+                            ₱{item?.price}
                           </Text>
                         </View>
                         <View
                           className={`flex-1 flex-row justify-end items-start`}
                         >
-                          <FontAwesome name="star" size={20} color="#f1c40f" />
                           <Text
                             style={{ color: textColor }}
-                            className={`text-base font-semibold px-2`}
+                            className={`text-2xl font-semibold px-2`}
                           >
-                            4.5
+                            {item?.ratings !== 0
+                              ? item?.ratings.toFixed(1)
+                              : "0"}
                           </Text>
+                          <View className={`pt-1`}>
+                            <FontAwesome
+                              name="star"
+                              size={25}
+                              color={item?.ratings !== 0 ? "#f1c40f" : "gray"}
+                            />
+                          </View>
                         </View>
                       </View>
                     </View>
