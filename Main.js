@@ -89,6 +89,7 @@ import {
   EditComment,
   CreateComment,
   ReceiptHistory,
+  customerViewServiceById,
 } from "@screens";
 import {
   TermsConditions,
@@ -166,6 +167,10 @@ export default function () {
                 <Stack.Screen
                   name="ReceiptHistory"
                   component={ReceiptHistory}
+                />
+                <Stack.Screen
+                  name="customerViewServiceById"
+                  component={customerViewServiceById}
                 />
               </Stack.Navigator>
             ) : userRoles.includes("Beautician") ? (
