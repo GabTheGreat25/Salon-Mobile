@@ -107,6 +107,7 @@ import CustomerComment from "./Comment/customerComment";
 import EditComment from "./Comment/editComment";
 import CreateComment from "./Comment/createComment";
 import ReceiptHistory from "./Transaction/receipt";
+import customerViewServiceById from "./Service/customerViewServiceById";
 
 export {
   Home,
@@ -218,4 +219,5 @@ export {
   EditComment,
   CreateComment,
   ReceiptHistory,
+  customerViewServiceById,
 };
