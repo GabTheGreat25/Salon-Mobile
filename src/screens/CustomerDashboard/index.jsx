@@ -283,7 +283,9 @@ export default function () {
                         </Text>
                         <TouchableOpacity
                           onPress={() =>
-                            navigate(`/customer/service/${latestService?._id}`)
+                            navigation.navigate("customerViewServiceById", {
+                              id: latestService._id,
+                            })
                           }
                           style={{
                             backgroundColor: invertBackgroundColor,
@@ -309,18 +311,18 @@ export default function () {
               scrollEventThrottle={1}
             >
               <View className={`flex-row justify-center items-center pt-5`}>
-                <View
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("Relevance")}
                   style={{
                     shadowColor,
-                    backgroundColor: invertBackgroundColor,
                     height: windowHeight * 0.23,
                     width: windowWidth * 0.45,
                   }}
-                  className={`rounded flex-col shadow-2xl mx-1`}
+                  className={`rounded flex-col shadow-2xl mx-1 bg-primary-default`}
                 >
                   <View className={`justify-start items-start h-1/2 pt-5 px-4`}>
                     <Text
-                      style={{ color: invertTextColor }}
+                      style={{ color: textColor }}
                       className={`flex-1 text-lg p-1 font-semibold`}
                     >
                       {`Pick our\nbest offers!`}
@@ -333,16 +335,16 @@ export default function () {
                       className={`h-full w-full`}
                     />
                   </View>
-                </View>
+                </TouchableOpacity>
 
-                <View
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("Budget")}
                   style={{
                     shadowColor,
-                    backgroundColor: invertBackgroundColor,
                     height: windowHeight * 0.23,
                     width: windowWidth * 0.45,
                   }}
-                  className={`rounded flex-col shadow-2xl mx-1`}
+                  className={`rounded flex-col shadow-2xl mx-1 bg-primary-default`}
                 >
                   <View className={`justify-end items-center h-1/2`}>
                     <Image
@@ -353,24 +355,24 @@ export default function () {
                   </View>
                   <View className={`justify-center items-center h-1/2 pt-5`}>
                     <Text
-                      style={{ color: invertTextColor }}
+                      style={{ color: textColor }}
                       className={`flex-1 text-lg p-1 font-semibold`}
                     >
                       Check Our Budget Friendly Offers!
                     </Text>
                   </View>
-                </View>
+                </TouchableOpacity>
               </View>
 
               <View className={`flex-row justify-center items-center py-2`}>
-                <View
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("MostRecent")}
                   style={{
                     shadowColor,
-                    backgroundColor: invertBackgroundColor,
                     height: windowHeight * 0.12,
                     width: windowWidth * 0.454,
                   }}
-                  className={`rounded flex-row shadow-2xl mx-1`}
+                  className={`rounded flex-row shadow-2xl mx-1 bg-primary-default`}
                 >
                   <View className={`flex-1`}>
                     <Image
@@ -381,25 +383,25 @@ export default function () {
                   </View>
                   <View className={`justify-start items-start`}>
                     <Text
-                      style={{ color: invertTextColor }}
+                      style={{ color: textColor }}
                       className={`text-base py-4 px-2  font-semibold`}
                     >
                       {`Check Our\nLatest Trends`}
                     </Text>
                   </View>
-                </View>
-                <View
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("Popular")}
                   style={{
                     shadowColor,
-                    backgroundColor: invertBackgroundColor,
                     height: windowHeight * 0.12,
                     width: windowWidth * 0.454,
                   }}
-                  className={`rounded flex-row shadow-2xl mx-1`}
+                  className={`rounded flex-row shadow-2xl mx-1 bg-primary-default`}
                 >
                   <View className={`justify-start items-start`}>
                     <Text
-                      style={{ color: invertTextColor }}
+                      style={{ color: textColor }}
                       className={`text-base py-4 px-2 font-semibold`}
                     >
                       {`Check Our\nMost Popular`}
@@ -412,7 +414,7 @@ export default function () {
                       className={`h-full w-full`}
                     />
                   </View>
-                </View>
+                </TouchableOpacity>
               </View>
 
               <View className={`flex-row px-4`}>
@@ -445,7 +447,14 @@ export default function () {
                 renderItem={({ item }) => (
                   <View key={item._id} className={`flex-row px-[22px]`}>
                     <View className={`flex-col`}>
-                      <View className={`relative`}>
+                      <TouchableOpacity
+                        className={`relative`}
+                        onPress={() =>
+                          navigation.navigate("customerViewServiceById", {
+                            id: item?._id,
+                          })
+                        }
+                      >
                         <Image
                           key={
                             item.image[
@@ -473,7 +482,7 @@ export default function () {
                             />
                           </View>
                         </TouchableOpacity>
-                      </View>
+                      </TouchableOpacity>
                       <View className={`flex-row pt-2`}>
                         <View className={`flex-col`}>
                           <Text
@@ -499,7 +508,7 @@ export default function () {
                             className={`text-2xl font-semibold px-2`}
                           >
                             {item?.ratings !== 0
-                              ? item?.ratings.toFixed(2)
+                              ? item?.ratings.toFixed(1)
                               : "0"}
                           </Text>
                           <View className={`pt-1`}>
@@ -546,7 +555,14 @@ export default function () {
                 renderItem={({ item }) => (
                   <View key={item._id} className={`flex-row px-[22px]`}>
                     <View className={`flex-col`}>
-                      <View className={`relative`}>
+                      <TouchableOpacity
+                        onPress={() =>
+                          navigation.navigate("customerViewServiceById", {
+                            id: item?._id,
+                          })
+                        }
+                        className={`relative`}
+                      >
                         <Image
                           key={
                             item.image[
@@ -574,7 +590,7 @@ export default function () {
                             />
                           </View>
                         </TouchableOpacity>
-                      </View>
+                      </TouchableOpacity>
                       <View className={`flex-row pt-2`}>
                         <View className={`flex-col`}>
                           <Text
@@ -600,7 +616,7 @@ export default function () {
                             className={`text-2xl font-semibold px-2`}
                           >
                             {item?.ratings !== 0
-                              ? item?.ratings.toFixed(2)
+                              ? item?.ratings.toFixed(1)
                               : "0"}
                           </Text>
                           <View className={`pt-1`}>
