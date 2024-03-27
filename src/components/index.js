@@ -5,6 +5,7 @@ import LoadingScreen from "./LoadingScreen";
 import UserImage from "./UserImage";
 import ListData from "./ListData";
 import CircleCrud from "./CircleCrud";
+import Sidebar from "./Sidebar";
 
 export {
   Welcome,
@@ -14,4 +15,5 @@ export {
   UserImage,
   ListData,
   CircleCrud,
+  Sidebar,
 };
