@@ -12,14 +12,14 @@ import {
 import { useDispatch } from "react-redux";
 import { changeColor } from "@utils";
 import { BackIcon } from "@helpers";
-import { FontAwesome, Ionicons } from "@expo/vector-icons";
+import { FontAwesome, Ionicons, Feather } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   useGetServicesQuery,
   useGetCommentsQuery,
   useGetExclusionsQuery,
 } from "../../state/api/reducer";
-import { LoadingScreen } from "@components";
+import { LoadingScreen, Sidebar } from "@components";
 import { appointmentSlice } from "../../state/appointment/appointmentReducer";
 import { useSelector } from "react-redux";
 
@@ -124,23 +124,6 @@ export default function () {
       })
     );
   };
-
-  const handleRelevance = () => {
-    navigation.navigate("Relevance");
-  };
-
-  const handlePopular = () => {
-    navigation.navigate("Popular");
-  };
-
-  const handleMostRecent = () => {
-    navigation.navigate("MostRecent");
-  };
-
-  const handleBudget = () => {
-    navigation.navigate("Budget");
-  };
-
   const [selectedOption, setSelectedOption] = useState("Relevance");
 
   useEffect(() => {
@@ -157,6 +140,111 @@ export default function () {
     navigation.navigate("Cart");
   };
 
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const handleSidebarToggle = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const handleSidebarClose = () => {
+    setIsSidebarOpen(false);
+  };
+
+  const [isFilterApplied, setIsFilterApplied] = useState(false);
+  const [visibleFilteredItems, setVisibleFilteredItems] = useState([]);
+
+  const handleApplyFilters = (filters) => {
+    const filteredServices = allServices.filter((service) => {
+      if (
+        filters.searchInput &&
+        !service.service_name
+          .toLowerCase()
+          .includes(filters.searchInput.toLowerCase())
+      ) {
+        return false;
+      }
+
+      const servicePrice = parseFloat(service.price);
+      if (
+        filters.priceRange &&
+        ((filters.priceRange.min &&
+          servicePrice < parseFloat(filters.priceRange.min)) ||
+          (filters.priceRange.max &&
+            servicePrice > parseFloat(filters.priceRange.max)))
+      ) {
+        return false;
+      }
+
+      if (
+        filters.ratings &&
+        filters.ratings > 0 &&
+        service.ratings < parseFloat(filters.ratings)
+      ) {
+        return false;
+      }
+
+      if (filters.categories && Array.isArray(service.type)) {
+        const filterCategories = filters.categories
+          .split(",")
+          .map((category) => category.trim().toLowerCase());
+
+        const serviceTypes = service.type.map((type) =>
+          type.trim().toLowerCase()
+        );
+
+        if (
+          !filterCategories.includes("all") &&
+          !filterCategories.includes("All") &&
+          !serviceTypes.some((type) => filterCategories.includes(type))
+        ) {
+          return false;
+        }
+      }
+
+      if (
+        filters.occassion &&
+        service.occassion &&
+        service.occassion.trim().toLowerCase() !==
+          filters.occassion.toLowerCase()
+      ) {
+        return false;
+      }
+
+      const isExcluded = service.product?.some((product) => {
+        const productIngredients =
+          product.ingredients?.toLowerCase().split(", ") || [];
+        return filteredExclusions?.some((exclusion) =>
+          productIngredients.includes(exclusion)
+        );
+      });
+
+      return !isExcluded;
+    });
+
+    setIsFilterApplied(true);
+    setVisibleFilteredItems(filteredServices);
+  };
+
+  const handleRelevance = () => {
+    navigation.navigate("Relevance");
+    setIsFilterApplied(false);
+  };
+
+  const handlePopular = () => {
+    navigation.navigate("Popular");
+    setIsFilterApplied(false);
+  };
+
+  const handleMostRecent = () => {
+    navigation.navigate("MostRecent");
+    setIsFilterApplied(false);
+  };
+
+  const handleBudget = () => {
+    navigation.navigate("Budget");
+    setIsFilterApplied(false);
+  };
+
   return (
     <>
       {isLoading || commentsLoading || exclusionLoading ? (
@@ -167,17 +255,30 @@ export default function () {
         </View>
       ) : (
         <>
-          <BackIcon
-            navigateBack={handleBack}
-            textColor={textColor}
-            navigateTo={handleCart}
-          />
           <SafeAreaView
             style={{
               backgroundColor,
             }}
-            className={`px-3 flex-1 py-16`}
+            className={`relative px-3 flex-1 py-16`}
           >
+            <BackIcon
+              navigateBack={handleBack}
+              textColor={textColor}
+              navigateTo={handleCart}
+            />
+            <View
+              style={{ backgroundColor }}
+              className={`absolute left-10 top-[14px]`}
+            >
+              <TouchableOpacity onPress={handleSidebarToggle}>
+                <Feather name="menu" size={30} color={textColor} />
+              </TouchableOpacity>
+            </View>
+            <Sidebar
+              isOpen={isSidebarOpen}
+              onClose={handleSidebarClose}
+              setFilters={handleApplyFilters}
+            />
             <View className={`justify-center items-center`}>
               <ScrollView
                 decelerationRate="fast"
@@ -195,7 +296,7 @@ export default function () {
                             ? "#FDA7DF"
                             : invertBackgroundColor,
                       }}
-                      className={`rounded-2xl px-4 py-2`}
+                      className={`rounded-full px-4 py-2`}
                     >
                       <Text
                         style={{
@@ -204,6 +305,7 @@ export default function () {
                               ? textColor
                               : invertTextColor,
                         }}
+                        className={`text-base font-semibold`}
                       >
                         All Services
                       </Text>
@@ -217,7 +319,7 @@ export default function () {
                             ? "#FDA7DF"
                             : invertBackgroundColor,
                       }}
-                      className={`rounded-2xl px-4 py-2`}
+                      className={`rounded-full px-4 py-2`}
                     >
                       <Text
                         style={{
@@ -226,6 +328,7 @@ export default function () {
                               ? textColor
                               : invertTextColor,
                         }}
+                        className={`text-base font-semibold`}
                       >
                         Popular
                       </Text>
@@ -239,7 +342,7 @@ export default function () {
                             ? "#FDA7DF"
                             : invertBackgroundColor,
                       }}
-                      className={`rounded-2xl px-4 py-2`}
+                      className={`rounded-full px-4 py-2`}
                     >
                       <Text
                         style={{
@@ -248,6 +351,7 @@ export default function () {
                               ? textColor
                               : invertTextColor,
                         }}
+                        className={`text-base font-semibold`}
                       >
                         Latest
                       </Text>
@@ -261,7 +365,7 @@ export default function () {
                             ? "#FDA7DF"
                             : invertBackgroundColor,
                       }}
-                      className={`rounded-2xl px-4 py-2`}
+                      className={`rounded-full px-4 py-2`}
                     >
                       <Text
                         style={{
@@ -270,6 +374,7 @@ export default function () {
                               ? textColor
                               : invertTextColor,
                         }}
+                        className={`text-base font-semibold`}
                       >
                         Budget
                       </Text>
@@ -277,92 +382,181 @@ export default function () {
                   </TouchableOpacity>
                 </View>
               </ScrollView>
-              <FlatList
-                data={newItems}
-                showsVerticalScrollIndicator={false}
-                decelerationRate="fast"
-                scrollEventThrottle={1}
-                keyExtractor={(item) => item._id}
-                renderItem={({ item }) => (
-                  <View key={item._id} className={`flex-row px-[10px]`}>
-                    <View className={`flex-col`}>
-                      <TouchableOpacity
-                        className={`relative`}
-                        onPress={() =>
-                          navigation.navigate("customerViewServiceById", {
-                            id: item?._id,
-                          })
-                        }
-                      >
-                        <Image
-                          key={
-                            item.image[
-                              Math.floor(Math.random() * item.image?.length)
-                            ]?.public_id
+              {isFilterApplied ? (
+                <FlatList
+                  data={visibleFilteredItems}
+                  showsVerticalScrollIndicator={false}
+                  decelerationRate="fast"
+                  scrollEventThrottle={1}
+                  keyExtractor={(item) => item._id}
+                  renderItem={({ item }) => (
+                    <View key={item._id} className={`flex-row px-[10px]`}>
+                      <View className={`flex-col`}>
+                        <TouchableOpacity
+                          className={`relative`}
+                          onPress={() =>
+                            navigation.navigate("customerViewServiceById", {
+                              id: item?._id,
+                            })
                           }
-                          source={{
-                            uri: item.image[
-                              Math.floor(Math.random() * item.image?.length)
-                            ]?.url,
-                          }}
-                          resizeMode="cover"
-                          style={{
-                            height: windowHeight * 0.25,
-                            width: windowWidth * 0.9,
-                            borderRadius: 20,
-                          }}
-                        />
-                        <TouchableOpacity onPress={handlePress}>
-                          <View className={`absolute left-[315px] bottom-2`}>
-                            <Ionicons
-                              name="add-circle-sharp"
-                              size={50}
-                              color={textColor}
-                            />
-                          </View>
-                        </TouchableOpacity>
-                      </TouchableOpacity>
-                      <View className={`flex-row pt-2`}>
-                        <View className={`flex-col`}>
-                          <Text
-                            style={{ color: textColor }}
-                            className={`text-xl font-semibold`}
-                          >
-                            {item?.service_name.length > 30
-                              ? `${item?.service_name.substring(0, 30)}...`
-                              : item?.service_name}
-                          </Text>
-                          <Text
-                            style={{ color: textColor }}
-                            className={`text-2xl font-semibold py-1`}
-                          >
-                            ₱{item?.price}
-                          </Text>
-                        </View>
-                        <View
-                          className={`flex-1 flex-row justify-end items-start`}
                         >
-                          <Text
-                            style={{ color: textColor }}
-                            className={`text-2xl font-semibold px-2`}
+                          <Image
+                            key={
+                              item.image[
+                                Math.floor(Math.random() * item.image?.length)
+                              ]?.public_id
+                            }
+                            source={{
+                              uri: item.image[
+                                Math.floor(Math.random() * item.image?.length)
+                              ]?.url,
+                            }}
+                            resizeMode="cover"
+                            style={{
+                              height: windowHeight * 0.25,
+                              width: windowWidth * 0.9,
+                              borderRadius: 20,
+                            }}
+                          />
+                          <TouchableOpacity onPress={handlePress}>
+                            <View className={`absolute left-[315px] bottom-2`}>
+                              <Ionicons
+                                name="add-circle-sharp"
+                                size={50}
+                                color={textColor}
+                              />
+                            </View>
+                          </TouchableOpacity>
+                        </TouchableOpacity>
+                        <View className={`flex-row pt-2`}>
+                          <View className={`flex-col`}>
+                            <Text
+                              style={{ color: textColor }}
+                              className={`text-xl font-semibold`}
+                            >
+                              {item?.service_name.length > 30
+                                ? `${item?.service_name.substring(0, 30)}...`
+                                : item?.service_name}
+                            </Text>
+                            <Text
+                              style={{ color: textColor }}
+                              className={`text-2xl font-semibold py-1`}
+                            >
+                              ₱{item?.price}
+                            </Text>
+                          </View>
+                          <View
+                            className={`flex-1 flex-row justify-end items-start`}
                           >
-                            {item?.ratings !== 0
-                              ? item?.ratings.toFixed(1)
-                              : "0"}
-                          </Text>
-                          <View className={`pt-1`}>
-                            <FontAwesome
-                              name="star"
-                              size={25}
-                              color={item?.ratings !== 0 ? "#f1c40f" : "gray"}
-                            />
+                            <Text
+                              style={{ color: textColor }}
+                              className={`text-2xl font-semibold px-2`}
+                            >
+                              {item?.ratings !== 0
+                                ? item?.ratings.toFixed(1)
+                                : "0"}
+                            </Text>
+                            <View className={`pt-1`}>
+                              <FontAwesome
+                                name="star"
+                                size={25}
+                                color={item?.ratings !== 0 ? "#f1c40f" : "gray"}
+                              />
+                            </View>
                           </View>
                         </View>
                       </View>
                     </View>
-                  </View>
-                )}
-              />
+                  )}
+                />
+              ) : (
+                <FlatList
+                  data={newItems}
+                  showsVerticalScrollIndicator={false}
+                  decelerationRate="fast"
+                  scrollEventThrottle={1}
+                  keyExtractor={(item) => item._id}
+                  renderItem={({ item }) => (
+                    <View key={item._id} className={`flex-row px-[10px]`}>
+                      <View className={`flex-col`}>
+                        <TouchableOpacity
+                          className={`relative`}
+                          onPress={() =>
+                            navigation.navigate("customerViewServiceById", {
+                              id: item?._id,
+                            })
+                          }
+                        >
+                          <Image
+                            key={
+                              item.image[
+                                Math.floor(Math.random() * item.image?.length)
+                              ]?.public_id
+                            }
+                            source={{
+                              uri: item.image[
+                                Math.floor(Math.random() * item.image?.length)
+                              ]?.url,
+                            }}
+                            resizeMode="cover"
+                            style={{
+                              height: windowHeight * 0.25,
+                              width: windowWidth * 0.9,
+                              borderRadius: 20,
+                            }}
+                          />
+                          <TouchableOpacity onPress={handlePress}>
+                            <View className={`absolute left-[315px] bottom-2`}>
+                              <Ionicons
+                                name="add-circle-sharp"
+                                size={50}
+                                color={textColor}
+                              />
+                            </View>
+                          </TouchableOpacity>
+                        </TouchableOpacity>
+                        <View className={`flex-row pt-2`}>
+                          <View className={`flex-col`}>
+                            <Text
+                              style={{ color: textColor }}
+                              className={`text-xl font-semibold`}
+                            >
+                              {item?.service_name.length > 30
+                                ? `${item?.service_name.substring(0, 30)}...`
+                                : item?.service_name}
+                            </Text>
+                            <Text
+                              style={{ color: textColor }}
+                              className={`text-2xl font-semibold py-1`}
+                            >
+                              ₱{item?.price}
+                            </Text>
+                          </View>
+                          <View
+                            className={`flex-1 flex-row justify-end items-start`}
+                          >
+                            <Text
+                              style={{ color: textColor }}
+                              className={`text-2xl font-semibold px-2`}
+                            >
+                              {item?.ratings !== 0
+                                ? item?.ratings.toFixed(1)
+                                : "0"}
+                            </Text>
+                            <View className={`pt-1`}>
+                              <FontAwesome
+                                name="star"
+                                size={25}
+                                color={item?.ratings !== 0 ? "#f1c40f" : "gray"}
+                              />
+                            </View>
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                  )}
+                />
+              )}
             </View>
           </SafeAreaView>
         </>
