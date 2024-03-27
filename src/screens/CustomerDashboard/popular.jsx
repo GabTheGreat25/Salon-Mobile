@@ -173,7 +173,7 @@ export default function () {
             style={{
               backgroundColor,
             }}
-            className={`px-3 flex-1 pt-16 pb-20`}
+            className={`px-3 flex-1 py-16`}
           >
             <View className={`justify-center items-center`}>
               <ScrollView
