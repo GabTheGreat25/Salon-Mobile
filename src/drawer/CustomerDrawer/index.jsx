@@ -75,10 +75,18 @@ export default function () {
               >
                 <UserImage
                   viewWidth={viewWidth}
-                  imageSource={{ uri: user?.image[0]?.url }}
+                  imageSource={{
+                    uri:
+                      user?.image && user.image.length
+                        ? user.image[
+                            Math.floor(Math.random() * user.image.length)
+                          ].url
+                        : null,
+                  }}
                   imageName={user?.name}
                   imageRole={user?.roles}
                 />
+
                 <DrawerItemList {...props} />
                 <TouchableOpacity
                   onPress={handleLogout}
