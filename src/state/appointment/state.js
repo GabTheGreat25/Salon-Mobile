@@ -1,17 +1,22 @@
 export const initialState = {
-  appointmentData: {
-    employee: "",
-    customer: "",
-    service: "",
-    service_name: "",
-    product_name: "",
-    image: [],
-    date: "",
-    time: "",
-    price: 0,
-    extraFee: 0,
-    note: "",
-    status: "pending",
-    payment: "",
-  },
+  appointmentData: [
+    {
+      service_id: "",
+      service_name: "",
+      options: [
+        {
+          option_id: "",
+          option_name: "",
+          per_price: 0,
+          extraFee: 0,
+        },
+      ],
+      type: [],
+      duration: 0,
+      description: "",
+      product_name: "",
+      image: [],
+      price: 0,
+    },
+  ],
 };
