@@ -135,10 +135,6 @@ export default function () {
     navigation.navigate("CustomerDrawer");
   };
 
-  const handleCart = () => {
-    navigation.navigate("Cart");
-  };
-
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleSidebarToggle = () => {
@@ -260,11 +256,7 @@ export default function () {
             }}
             className={`px-3 flex-1 py-16`}
           >
-            <BackIcon
-              navigateBack={handleBack}
-              textColor={textColor}
-              navigateTo={handleCart}
-            />
+            <BackIcon navigateBack={handleBack} textColor={textColor} />
             <View
               style={{ backgroundColor }}
               className={`absolute left-10 top-[14px]`}
