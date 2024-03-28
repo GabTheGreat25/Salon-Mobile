@@ -7,6 +7,7 @@ import employee from "./auth/employeeReducer";
 import location from "./auth/locationReducer";
 import ingredient from "./ingredient/ingredientReducer";
 import waiver from "./waiver/waiverReducer";
+import fee from "./appointment/hasAppointmentReducer";
 import { api } from "./api/reducer";
 
 export const rootReducer = combineReducers({
@@ -18,5 +19,6 @@ export const rootReducer = combineReducers({
   location,
   ingredient,
   waiver,
+  fee,
   [api.reducerPath]: api.reducer,
 });
