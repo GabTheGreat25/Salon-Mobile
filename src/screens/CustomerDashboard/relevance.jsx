@@ -115,9 +115,13 @@ export default function () {
   const handlePress = (selectedProduct) => {
     dispatch(
       appointmentSlice.actions.setService({
-        service: selectedProduct?._id || "",
+        service_id: selectedProduct?._id || "",
         service_name: selectedProduct?.service_name || "",
-        product_name: selectedProduct?.product.product_name || "",
+        type: selectedProduct?.type || [],
+        duration: selectedProduct?.duration || 0,
+        description: selectedProduct?.description || "",
+        product_name:
+          selectedProduct?.product?.map((p) => p.product_name).join(", ") || "",
         price: selectedProduct?.price || 0,
         extraFee: selectedProduct?.extraFee || 0,
         image: selectedProduct?.image || [],
@@ -134,10 +138,6 @@ export default function () {
 
   const handleBack = () => {
     navigation.navigate("CustomerDrawer");
-  };
-
-  const handleCart = () => {
-    navigation.navigate("Cart");
   };
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -261,11 +261,7 @@ export default function () {
             }}
             className={`relative px-3 flex-1 py-16`}
           >
-            <BackIcon
-              navigateBack={handleBack}
-              textColor={textColor}
-              navigateTo={handleCart}
-            />
+            <BackIcon navigateBack={handleBack} textColor={textColor} />
             <View
               style={{ backgroundColor }}
               className={`absolute left-10 top-[14px]`}
@@ -418,7 +414,7 @@ export default function () {
                               borderRadius: 20,
                             }}
                           />
-                          <TouchableOpacity onPress={handlePress}>
+                          <TouchableOpacity onPress={() => handlePress(item)}>
                             <View className={`absolute left-[315px] bottom-2`}>
                               <Ionicons
                                 name="add-circle-sharp"
@@ -505,7 +501,7 @@ export default function () {
                               borderRadius: 20,
                             }}
                           />
-                          <TouchableOpacity onPress={handlePress}>
+                          <TouchableOpacity onPress={() => handlePress(item)}>
                             <View className={`absolute left-[315px] bottom-2`}>
                               <Ionicons
                                 name="add-circle-sharp"
