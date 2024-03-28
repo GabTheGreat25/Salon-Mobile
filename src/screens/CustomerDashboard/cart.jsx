@@ -8,11 +8,14 @@ import {
   Dimensions,
   SafeAreaView,
 } from "react-native";
-import { changeColor, dimensionLayout } from "@utils";
+import { changeColor } from "@utils";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { BackIcon } from "@helpers";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { decreaseCount } from "../../state/appointment/appointmentReducer";
+import { feeSlice } from "../../state/appointment/hasAppointmentReducer";
+import Toast from "react-native-toast-message";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -21,25 +24,28 @@ export default function () {
   const { textColor, backgroundColor, shadowColor, colorScheme } =
     changeColor();
   const navigation = useNavigation();
-  const isDimensionLayout = dimensionLayout();
-  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDA7DF";
-  const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
+  const dispatch = useDispatch();
 
-  const selectedService = useSelector((state) => state?.appointment);
+  const appointment = useSelector((state) => state?.appointment);
 
-  const appointmentData = selectedService?.appointmentData;
-  const dataAsArray = appointmentData ? [appointmentData] : [];
-
-  const items = dataAsArray.map((item) => ({
-    name: item.service_name,
-    product: item.product_name,
-    price: item.price,
-    extraFee: item.extraFee,
-    image: item?.image,
-  }));
+  const appointmentData = appointment?.appointmentData;
+  const appointmentCount = appointment?.count;
 
   const handlePress = () => {
+    dispatch(feeSlice.actions.hasFee());
     navigation.navigate("Checkout");
+  };
+
+  const handleTrashClick = (serviceId) => {
+    dispatch(decreaseCount(serviceId));
+    Toast.show({
+      type: "success",
+      position: "top",
+      text1: "Deleted Item",
+      text2: "Successfully Remove In Cart",
+      visibilityTime: 3000,
+      autoHide: true,
+    });
   };
 
   return (
@@ -50,92 +56,85 @@ export default function () {
           showsVerticalScrollIndicator={false}
           decelerationRate="fast"
           scrollEventThrottle={1}
-          style={{
-            backgroundColor,
-          }}
-          className={`px-3 flex-1 mt-20`}
+          className={`mt-12`}
         >
           <ScrollView
+            showsVerticalScrollIndicator={false}
             decelerationRate="fast"
             scrollEventThrottle={1}
-            showsVerticalScrollIndicator={false}
+            className={`px-3 pb-6`}
           >
-            {items?.map((item, index) => (
+            {appointmentData?.map((appointment) => (
               <View
-                key={index}
+                key={appointment?.service_id}
                 style={{
-                  backgroundColor: invertBackgroundColor,
-                  height: windowHeight * 0.25,
+                  backgroundColor: "#FDA7DF",
                   width: windowWidth * 0.925,
                 }}
-                className={`flex-row ${
-                  isDimensionLayout ? "mx-1 px-4 pt-4 mb-2" : "mx-3"
-                }`}
+                className={`rounded-2xl p-4 mt-4 mb-2`}
               >
-                <View className={`flex-1 flex-col`}>
-                  <View className={`flex-row gap-x-2`}>
-                    <Feather name="home" size={20} color={invertTextColor} />
+                <View className={`flex-col`}>
+                  <View className={`flex-col pt-4 self-center`}>
+                    <Image
+                      source={{
+                        uri: appointment?.image[
+                          Math.floor(Math.random() * appointment?.image?.length)
+                        ]?.url,
+                      }}
+                      resizeMode="cover"
+                      className={`h-[150px] w-[300px]`}
+                    />
                     <Text
-                      style={{ color: invertTextColor }}
-                      className={`text-base font-semibold`}
+                      style={{ color: textColor }}
+                      className={`text-center text-lg font-semibold pt-4`}
                     >
-                      Lhanlee Beauty Lounge
+                      Name: {appointment?.service_name}
                     </Text>
-                    <View className={`flex-1 justify-end items-end`}>
-                      <Feather
-                        name="trash-2"
-                        size={20}
-                        color={invertTextColor}
-                      />
-                    </View>
-                  </View>
-                  <View
-                    style={{
-                      borderBottomColor: invertTextColor,
-                      borderBottomWidth: 1,
-                      marginTop: 5,
-                    }}
-                  />
-                  <View className={`flex-row`}>
-                    <View className={`flex-1 justify-center items-center pt-5`}>
-                      <Image
-                        source={{ uri: item?.image?.[0]?.url }}
-                        resizeMode="cover"
-                        className={`h-[100px] w-[100px] rounded-full`}
-                      />
-                    </View>
-                    <View
-                      className={`flex-1 flex-col justify-center items-start`}
+                    <Text
+                      style={{ color: textColor }}
+                      className={`flex-wrap text-center text-lg font-semibold`}
                     >
+                      {appointment?.duration} | ₱{appointment?.price}
+                    </Text>
+                  </View>
+                  <View className={`flex-col pt-2`}>
+                    <View className={`pt-1`}>
                       <Text
-                        style={{ color: invertTextColor }}
-                        className={` ${
-                          isDimensionLayout
-                            ? "text-2xl pl-2 pr-1 pt-4"
-                            : "text-lg px-4 py-6"
-                        } font-semibold`}
+                        style={{ color: textColor }}
+                        className={`text-lg font-semibold`}
                       >
-                        {item.name}
+                        Product Use: {appointment?.product_name}
                       </Text>
                       <Text
-                        style={{ color: invertTextColor }}
-                        className={` ${
-                          isDimensionLayout
-                            ? "text-base pl-2 pr-1"
-                            : "text-lg px-4 py-6"
-                        } font-semibold`}
+                        style={{ color: textColor }}
+                        className={`text-lg font-semibold`}
                       >
-                        {item.product}
+                        Description: {appointment?.description}
                       </Text>
                       <Text
-                        style={{ color: invertTextColor }}
-                        className={` ${
-                          isDimensionLayout
-                            ? "text-2xl pl-2 pr-1 pt-4"
-                            : "text-lg px-4 py-6"
-                        } font-semibold`}
+                        style={{ color: textColor }}
+                        className={`text-lg flex-wrap text-start font-semibold`}
                       >
-                        ₱{item.price}
+                        For: {appointment?.type.join(", ")}
+                      </Text>
+                      <Text
+                        style={{ color: textColor }}
+                        className={`text-lg font-semibold`}
+                      >
+                        Add Ons:{" "}
+                        {appointment?.option_name?.length > 0
+                          ? appointment?.option_name
+                              .split(", ")
+                              .map((option, index) => (
+                                <span key={index}>
+                                  {option} - ₱{appointment?.per_price[index]}
+                                  {index !==
+                                    appointment?.option_name.split(", ")
+                                      .length -
+                                      1 && ", "}
+                                </span>
+                              ))
+                          : "None"}
                       </Text>
                     </View>
                   </View>
@@ -146,49 +145,57 @@ export default function () {
         </ScrollView>
         <View
           style={{
+            shadowColor,
             backgroundColor,
-            height: windowHeight * 0.25,
+            height: windowHeight * 0.28,
             width: windowWidth,
           }}
-          className={`flex-col px-10`}
+          className={`flex-col px-10 shadow-2xl`}
         >
           <View className={`flex-row pt-4 pb-2`}>
-            <Text
-              style={{ color: textColor }}
-              className={`${
-                isDimensionLayout ? "text-base" : "text-lg px-4 py-6"
-              } font-semibold`}
-            >
-              SubTotal
-            </Text>
+            <View className={`flex-col`}>
+              <Text
+                style={{ color: textColor }}
+                className={`text-xl font-semibold`}
+              >
+                Order Summary
+              </Text>
+              <Text
+                style={{ color: textColor }}
+                className={`text-lg font-semibold`}
+              >
+                Subtotal ({appointmentCount}{" "}
+                {appointmentCount === 1 ? "item" : "items"})
+              </Text>
+            </View>
             <View className={`flex-1 justify-start items-end`}>
               <Text
                 style={{ color: textColor }}
-                className={`${
-                  isDimensionLayout ? "text-base" : "text-lg px-4 py-6"
-                } font-semibold`}
+                className={`text-lg font-semibold`}
               >
-                {items?.map((item) => `₱${item.price.toFixed(2)}`)}
+                ₱
+                {appointmentData
+                  ?.map((appointment) => appointment?.price)
+                  .reduce((total, amount) => total + amount, 0)}
               </Text>
             </View>
           </View>
           <View className={`flex-row pb-2`}>
             <Text
               style={{ color: textColor }}
-              className={`${
-                isDimensionLayout ? "text-base" : "text-lg px-4 py-6"
-              } font-light`}
+              className={`text-lg font-semibold`}
             >
               Extra Fee
             </Text>
             <View className={`flex-1 justify-start items-end`}>
               <Text
                 style={{ color: textColor }}
-                className={`${
-                  isDimensionLayout ? "text-base" : "text-lg px-4 py-6"
-                } font-light`}
+                className={`text-lg font-semibold`}
               >
-                {items?.map((item) => `₱${item?.extraFee?.toFixed(2)}`)}
+                ₱
+                {appointmentData
+                  ?.map((appointment) => appointment?.extraFee)
+                  .reduce((total, amount) => total + amount, 0)}
               </Text>
             </View>
           </View>
@@ -200,39 +207,30 @@ export default function () {
             }}
           />
           <View className={`flex-row pt-4 pb-2`}>
-            <Text
-              style={{ color: textColor }}
-              className={`${
-                isDimensionLayout ? "text-lg" : "text-lg px-4 py-6"
-              } font-bold`}
-            >
+            <Text style={{ color: textColor }} className={`text-lg font-bold`}>
               Total
             </Text>
             <View className={`flex-1 justify-start items-end`}>
               <Text
                 style={{ color: textColor }}
-                className={`${
-                  isDimensionLayout ? "text-lg" : "text-lg px-4 py-6"
-                } font-bold`}
+                className={`text-lg font-semibold`}
               >
-                {items?.map(
-                  (item) => `₱${(item.price + item?.extraFee)?.toFixed(2)}`
-                )}
+                ₱
+                {appointmentData
+                  ?.map(
+                    (appointment) => appointment?.price + appointment?.extraFee
+                  )
+                  .reduce((total, amount) => total + amount, 0)}
               </Text>
             </View>
           </View>
           <TouchableOpacity onPress={handlePress}>
             <View
-              style={{
-                backgroundColor: invertBackgroundColor,
-              }}
-              className={`justify-center items-center rounded-md py-2`}
+              className={`justify-center items-center rounded-md py-2 bg-primary-default`}
             >
               <Text
-                style={{ color: invertTextColor }}
-                className={`text-center ${
-                  isDimensionLayout ? "text-lg" : "text-lg px-4 py-6"
-                } font-bold`}
+                style={{ color: textColor }}
+                className={`text-center text-lg font-bold`}
               >
                 Checkout
               </Text>
