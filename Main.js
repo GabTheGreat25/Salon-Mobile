@@ -331,8 +331,8 @@ export default function () {
               <Stack.Screen name="Waiver" component={Waiver} />
             </Stack.Navigator>
           )}
+          <DarkMode toggle={toggleColorScheme} name={icon} color={textColor} />
         </NavigationContainer>
-        <DarkMode toggle={toggleColorScheme} name={icon} color={textColor} />
       </>
       {/* )} */}
     </>
