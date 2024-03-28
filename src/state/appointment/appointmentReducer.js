@@ -1,53 +1,47 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { api } from "../api/reducer";
 import { initialState } from "./state";
+import Toast from "react-native-toast-message";
 
 export const appointmentSlice = createSlice({
   name: "appointment",
   initialState,
   reducers: {
-    setService(state, action) {
-      state.appointmentData.service = action.payload.service;
-      state.appointmentData.price = action.payload.price;
-      state.appointmentData.extraFee = action.payload.extraFee;
-      state.appointmentData.service_name = action.payload.service_name;
-      state.appointmentData.product_name = action.payload.product_name;
-      state.appointmentData.image = action.payload.image;
-      state.count += 1;
-    },
-    setDateTime(state, action) {
-      state.appointmentData.date = action.payload.date;
-      state.appointmentData.time = action.payload.time;
-    },
-    setEmployee(state, action) {
-      state.appointmentData.employee = action.payload;
-    },
-    setNote(state, action) {
-      state.appointmentData.note = action.payload;
-    },
-    setPayment(state, action) {
-      state.appointmentData.payment = action.payload;
-    },
-    setCustomer(state, action) {
-      state.appointmentData.customer = action.payload;
+    setService: (state, action) => {
+      const newService = action.payload;
+
+      const existingService = state.appointmentData.find(
+        (service) => service.service_id === newService.service_id
+      );
+
+      if (!existingService) {
+        state.appointmentData.push(newService);
+        state.count += 1;
+      } else
+        Toast.show({
+          type: "error",
+          position: "top",
+          text1: "Warning",
+          text2: "Service is already in the cart",
+          visibilityTime: 3000,
+          autoHide: true,
+        });
     },
     clearAppointmentData(state) {
-      state.appointmentData = {
-        employee: "",
-        customer: "",
-        service: "",
-        service_name: "",
-        product_name: "",
-        image: [],
-        date: "",
-        time: "",
-        price: 0,
-        extraFee: 0,
-        note: "",
-        status: "pending",
-        payment: "",
-      };
+      state.appointmentData = [];
       state.count = 0;
+    },
+    decreaseCount: (state, action) => {
+      const serviceIdToRemove = action.payload;
+
+      const indexToRemove = state.appointmentData.findIndex(
+        (service) => service.service_id === serviceIdToRemove
+      );
+
+      if (indexToRemove !== -1) {
+        state.appointmentData.splice(indexToRemove, 1);
+        state.count -= 1;
+      }
     },
   },
   extraReducers: (builder) => {
@@ -56,26 +50,14 @@ export const appointmentSlice = createSlice({
       (state, { payload }) => {
         if (payload?.success === true) {
           const { appointment } = payload.details;
-          console.log("Appointment added:", appointment);
-          state.appointmentData = {
-            ...state.appointmentData,
-            ...appointment,
-          };
-
-          console.log("State after adding appointment:", state);
+          state.appointmentData.push(appointment);
         }
       }
     );
   },
 });
 
-export const {
-  setService,
-  setDateTime,
-  setEmployee,
-  setNote,
-  setCustomer,
-  clearAppointmentData,
-} = appointmentSlice.actions;
+export const { setService, clearAppointmentData, decreaseCount } =
+  appointmentSlice.actions;
 
 export default appointmentSlice.reducer;
