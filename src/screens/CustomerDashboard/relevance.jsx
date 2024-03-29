@@ -9,7 +9,6 @@ import {
   FlatList,
   SafeAreaView,
 } from "react-native";
-import { useDispatch } from "react-redux";
 import { changeColor } from "@utils";
 import { BackIcon } from "@helpers";
 import { FontAwesome, Ionicons, Feather } from "@expo/vector-icons";
@@ -21,7 +20,7 @@ import {
 } from "../../state/api/reducer";
 import { LoadingScreen, Sidebar } from "@components";
 import { appointmentSlice } from "../../state/appointment/appointmentReducer";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -30,9 +29,9 @@ export default function () {
   const auth = useSelector((state) => state.auth.user);
 
   const { textColor, backgroundColor, colorScheme } = changeColor();
-  const dispatch = useDispatch();
   const route = useRoute();
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
@@ -128,6 +127,7 @@ export default function () {
       })
     );
   };
+
   const [selectedOption, setSelectedOption] = useState("Relevance");
 
   useEffect(() => {

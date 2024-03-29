@@ -9,7 +9,6 @@ import {
   FlatList,
   SafeAreaView,
 } from "react-native";
-import { useDispatch } from "react-redux";
 import { changeColor } from "@utils";
 import { BackIcon } from "@helpers";
 import { FontAwesome, Ionicons, Feather } from "@expo/vector-icons";
@@ -21,7 +20,7 @@ import {
 } from "../../state/api/reducer";
 import { LoadingScreen, Sidebar } from "@components";
 import { appointmentSlice } from "../../state/appointment/appointmentReducer";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -32,6 +31,7 @@ export default function () {
   const { textColor, backgroundColor, colorScheme } = changeColor();
   const route = useRoute();
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
@@ -115,15 +115,20 @@ export default function () {
   const handlePress = (selectedProduct) => {
     dispatch(
       appointmentSlice.actions.setService({
-        service: selectedProduct?._id || "",
+        service_id: selectedProduct?._id || "",
         service_name: selectedProduct?.service_name || "",
-        product_name: selectedProduct?.product.product_name || "",
+        type: selectedProduct?.type || [],
+        duration: selectedProduct?.duration || 0,
+        description: selectedProduct?.description || "",
+        product_name:
+          selectedProduct?.product?.map((p) => p.product_name).join(", ") || "",
         price: selectedProduct?.price || 0,
         extraFee: selectedProduct?.extraFee || 0,
         image: selectedProduct?.image || [],
       })
     );
   };
+
   const [selectedOption, setSelectedOption] = useState("MostRecent");
 
   useEffect(() => {
@@ -410,7 +415,7 @@ export default function () {
                               borderRadius: 20,
                             }}
                           />
-                          <TouchableOpacity onPress={handlePress}>
+                          <TouchableOpacity onPress={() => handlePress(item)}>
                             <View className={`absolute left-[315px] bottom-2`}>
                               <Ionicons
                                 name="add-circle-sharp"
@@ -497,7 +502,7 @@ export default function () {
                               borderRadius: 20,
                             }}
                           />
-                          <TouchableOpacity onPress={handlePress}>
+                          <TouchableOpacity onPress={() => handlePress(item)}>
                             <View className={`absolute left-[315px] bottom-2`}>
                               <Ionicons
                                 name="add-circle-sharp"
