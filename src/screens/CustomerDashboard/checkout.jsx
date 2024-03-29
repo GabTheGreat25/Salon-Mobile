@@ -8,7 +8,7 @@ import {
   Dimensions,
   SafeAreaView,
 } from "react-native";
-import { changeColor, dimensionLayout } from "@utils";
+import { changeColor } from "@utils";
 import { Feather, FontAwesome, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { BackIcon } from "@helpers";
@@ -17,54 +17,56 @@ import { useAddAppointmentMutation } from "../../state/api/reducer";
 import { useSelector, useDispatch } from "react-redux";
 import Toast from "react-native-toast-message";
 import { appointmentSlice } from "../../state/appointment/appointmentReducer";
+
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function () {
-  const { textColor, backgroundColor, shadowColor, colorScheme } =
-    changeColor();
+  const { textColor, backgroundColor, shadowColor } = changeColor();
   const navigation = useNavigation();
-  const isDimensionLayout = dimensionLayout();
-  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDA7DF";
-  const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
-  const selectedService = useSelector((state) => state?.appointment);
+  const appointment = useSelector((state) => state?.appointment);
+
   const selectedServiceTwo = useSelector(
     (state) => state?.appointment?.appointmentData?.service
   );
+  console.log(selectedServiceTwo);
+
   const selectedPayment = useSelector(
-    (state) => state?.appointment?.appointmentData?.payment?.type
+    (state) => state?.transaction?.transactionData?.payment
   );
   console.log(selectedPayment);
+
+  const selectedCustomerType = useSelector(
+    (state) => state?.transaction?.transactionData?.customerType
+  );
+  console.log(selectedCustomerType);
+
+  const image = useSelector(
+    (state) => state?.transaction?.transactionData?.image
+  );
+  console.log(image);
+
   const selectedEmployee = useSelector(
-    (state) => state?.appointment?.appointmentData?.employee?._id
+    (state) => state?.appointment?.transactionData?.employee?._id
   );
   console.log(selectedEmployee);
 
   const selectedDate = useSelector(
-    (state) => state?.appointment?.appointmentData?.date
+    (state) => state?.transaction?.transactionData?.date
   );
   console.log(selectedDate);
-
   const selectedTime = useSelector(
-    (state) => state?.appointment?.appointmentData?.time
+    (state) => state?.transaction?.transactionData?.time
   );
   console.log(selectedTime);
 
   const dispatch = useDispatch();
 
-  const appointmentData = selectedService?.appointmentData;
-  const dataAsArray = appointmentData ? [appointmentData] : [];
+  const appointmentData = appointment?.appointmentData;
 
   const auth = useSelector((state) => state.auth);
   const [addAppointment, { isLoading }] = useAddAppointmentMutation();
-  const items = dataAsArray.map((item) => ({
-    name: item.service_name,
-    product: item.product_name,
-    price: item.price,
-    extraFee: item.extraFee,
-    image: item?.image,
-  }));
 
   const formik = useFormik({
     initialValues: {
@@ -73,8 +75,11 @@ export default function () {
       customer: auth.user._id,
       date: selectedDate,
       time: selectedTime,
-      price: items?.reduce((total, item) => total + item.price, 0),
-      extraFee: items?.reduce((total, item) => total + item.extraFee, 0),
+      price: appointmentData?.reduce((total, item) => total + item.price, 0),
+      extraFee: appointmentData?.reduce(
+        (total, item) => total + item.extraFee,
+        0
+      ),
       note: "",
       payment: selectedPayment,
       status: "pending",
@@ -97,7 +102,6 @@ export default function () {
           navigation.navigate("CheckoutSuccess");
         })
         .catch((error) => {
-          console.log(error?.data?.error?.message);
           Toast.show({
             type: "error",
             position: "top",
@@ -111,6 +115,18 @@ export default function () {
   });
 
   const handlePayment = () => {
+    if (!selectedDate || !selectedTime || selectedTime.length === 0) {
+      Toast.show({
+        type: "error",
+        position: "top",
+        text1: "Warning",
+        text2: "Please select a date and time first",
+        visibilityTime: 3000,
+        autoHide: true,
+      });
+      return;
+    }
+
     navigation.navigate("PaymentOption");
   };
 
@@ -119,9 +135,17 @@ export default function () {
   };
 
   const handleDateTime = () => {
-    navigation.navigate("ChooseDate");
+    if (appointment.count === 0) {
+      Toast.show({
+        type: "error",
+        position: "top",
+        text1: "Warning",
+        text2: "Please Add Service First",
+        visibilityTime: 3000,
+        autoHide: true,
+      });
+    } else navigation.navigate("ChooseDate");
   };
-
   const handleSuccess = () => {
     navigation.navigate("CheckoutSuccess");
   };
@@ -137,121 +161,138 @@ export default function () {
           style={{
             backgroundColor,
           }}
-          className={`px-3 flex-1 mt-20`}
+          className={`px-4 mt-14`}
         >
           <ScrollView
             decelerationRate="fast"
             scrollEventThrottle={1}
             showsVerticalScrollIndicator={false}
+            className={`pb-6`}
           >
             <View
               style={{
-                backgroundColor: invertBackgroundColor,
                 height: windowHeight * 0.15,
                 width: windowWidth * 0.925,
               }}
-              className={`flex-col ${
-                isDimensionLayout ? "mx-1 px-4 pt-4 mb-2" : "mx-3"
-              }`}
+              className={`flex-col justify-center px-4 mb-1 bg-primary-default rounded-2xl`}
             >
               <Text
-                style={{ color: invertTextColor }}
-                className={`text-base font-semibold`}
+                style={{ color: textColor }}
+                className={`text-lg font-semibold`}
               >
                 Appointment Schedule
               </Text>
               <View className={`flex-row`}>
                 <Text
-                  style={{ color: invertTextColor }}
+                  style={{ color: textColor }}
                   className={`text-base font-semibold`}
                 >
-                  {selectedDate} |{selectedTime}
+                  {selectedDate ? selectedDate : "Add Date"} |{" "}
+                  {selectedTime && selectedTime.length > 0
+                    ? selectedTime.length > 1
+                      ? `${selectedTime[0]} to ${
+                          selectedTime[selectedTime.length - 1]
+                        }`
+                      : selectedTime[0]
+                    : "Add Time"}
                 </Text>
                 <TouchableOpacity onPress={handleDateTime} className={`flex-1`}>
                   <View className={`flex-row justify-end items-end`}>
-                    <Feather
-                      name="chevron-right"
-                      size={40}
-                      color={invertTextColor}
-                    />
+                    <Feather name="chevron-right" size={40} color={textColor} />
                   </View>
                 </TouchableOpacity>
               </View>
               <TouchableOpacity onPress={handleDateTime}>
                 <Text
-                  style={{ color: invertTextColor }}
-                  className={`text-2xl font-semibold`}
+                  style={{ color: textColor }}
+                  className={`text-xl font-semibold`}
                 >
                   Select Date & Time
                 </Text>
               </TouchableOpacity>
             </View>
-            <View
-              style={{
-                backgroundColor: invertBackgroundColor,
-                height: windowHeight * 0.25,
-                width: windowWidth * 0.925,
-              }}
-              className={`flex-row ${
-                isDimensionLayout ? "mx-1 px-4 mb-2" : "mx-3"
-              }`}
-            >
-              {items.map((item, index) => (
-                <View key={index} className={`flex-1 flex-col`}>
-                  <View className={`flex-row`}>
-                    <View className={`flex-1 justify-center items-center pt-5`}>
-                      <Image
-                        source={{ uri: item?.image?.[0]?.url }}
-                        resizeMode="cover"
-                        className={`h-[100px] w-[100px] rounded-full`}
-                      />
-                    </View>
-                    <View
-                      className={`flex-1 flex-col justify-center items-start`}
+            {appointmentData?.map((appointment, index) => (
+              <View
+                key={index}
+                style={{
+                  backgroundColor: "#FDA7DF",
+                  width: windowWidth * 0.925,
+                }}
+                className={`rounded-2xl px-4 pb-4 pt-1 mt-4 mb-2`}
+              >
+                <View className={`flex-col`}>
+                  <View className={`flex-col pt-4 self-center`}>
+                    <Image
+                      source={{
+                        uri: appointment?.image[
+                          Math.floor(Math.random() * appointment?.image?.length)
+                        ]?.url,
+                      }}
+                      resizeMode="cover"
+                      className={`h-[150px] w-[300px]`}
+                    />
+                    <Text
+                      style={{ color: textColor }}
+                      className={`text-center text-lg font-semibold pt-4`}
                     >
+                      Name: {appointment?.service_name}
+                    </Text>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`flex-wrap text-center text-lg font-semibold`}
+                    >
+                      {appointment?.duration} | ₱{appointment?.price}
+                    </Text>
+                  </View>
+                  <View className={`flex-col pt-2`}>
+                    <View className={`pt-1`}>
                       <Text
-                        style={{ color: invertTextColor }}
-                        className={` ${
-                          isDimensionLayout
-                            ? "text-2xl pl-2 pr-1 pt-4"
-                            : "text-lg px-4 py-6"
-                        } font-semibold`}
+                        style={{ color: textColor }}
+                        className={`text-lg font-semibold`}
                       >
-                        {item.name}
+                        Product Use: {appointment?.product_name}
                       </Text>
                       <Text
-                        style={{ color: invertTextColor }}
-                        className={` ${
-                          isDimensionLayout
-                            ? "text-base pl-2 pr-1 pt-2"
-                            : "text-lg px-4 py-6"
-                        } font-semibold`}
+                        style={{ color: textColor }}
+                        className={`text-lg font-semibold`}
                       >
-                        {item.product}
+                        Description: {appointment?.description}
                       </Text>
                       <Text
-                        style={{ color: invertTextColor }}
-                        className={` ${
-                          isDimensionLayout
-                            ? "text-2xl pl-2 pr-1 pt-4"
-                            : "text-lg px-4 py-6"
-                        } font-semibold`}
+                        style={{ color: textColor }}
+                        className={`text-lg flex-wrap text-start font-semibold`}
                       >
-                        ₱{item.price}
+                        For: {appointment?.type.join(", ")}
+                      </Text>
+                      <Text
+                        style={{ color: textColor }}
+                        className={`text-lg font-semibold`}
+                      >
+                        Add Ons:{" "}
+                        {appointment?.option_name?.length > 0
+                          ? appointment?.option_name
+                              .split(", ")
+                              .map(
+                                (option, index) =>
+                                  `${option} - ₱${
+                                    appointment?.per_price[index]
+                                  }${
+                                    index !==
+                                    appointment?.option_name.split(", ")
+                                      .length -
+                                      1
+                                      ? ", "
+                                      : ""
+                                  }`
+                              )
+                              .join("")
+                          : "None"}
                       </Text>
                     </View>
                   </View>
-                  <View
-                    style={{
-                      borderBottomColor: invertTextColor,
-                      borderBottomWidth: 1,
-                      marginTop: 5,
-                      paddingVertical: 10,
-                    }}
-                  />
                 </View>
-              ))}
-            </View>
+              </View>
+            ))}
           </ScrollView>
         </ScrollView>
         <View
@@ -265,9 +306,7 @@ export default function () {
           <View className={`flex-row justify-center items-center pt-4 pb-2`}>
             <Text
               style={{ color: textColor }}
-              className={`${
-                isDimensionLayout ? "text-sm" : "text-lg px-4 py-6"
-              } font-semibold`}
+              className={`text-sm font-semibold`}
             >
               Payment Option
             </Text>
@@ -275,9 +314,7 @@ export default function () {
               <TouchableOpacity onPress={handlePayment}>
                 <View className={`flex-row`}>
                   <Text
-                    className={`${
-                      isDimensionLayout ? "text-base" : "text-lg px-4 py-6"
-                    } font-medium text-primary-default`}
+                    className={`text-base font-medium text-primary-default`}
                   >
                     Select Payment Method
                   </Text>
@@ -290,9 +327,7 @@ export default function () {
             <Feather name="user" size={25} color={textColor} />
             <Text
               style={{ color: textColor }}
-              className={`${
-                isDimensionLayout ? "text-sm" : "text-lg px-4 py-6"
-              } font-medium`}
+              className={`text-sm font-medium`}
             >
               Pick A Beautician
             </Text>
@@ -300,9 +335,7 @@ export default function () {
               <TouchableOpacity onPress={handleEmployee}>
                 <View className={`flex-row`}>
                   <Text
-                    className={`${
-                      isDimensionLayout ? "text-base" : "text-lg px-4 py-6"
-                    } font-medium text-primary-default`}
+                    className={`text-base font-medium text-primary-default`}
                   >
                     Select Beautician
                   </Text>
@@ -319,39 +352,30 @@ export default function () {
             }}
           />
           <View className={`flex-row pt-4 pb-2`}>
-            <Text
-              style={{ color: textColor }}
-              className={`${
-                isDimensionLayout ? "text-lg" : "text-lg px-4 py-6"
-              } font-bold`}
-            >
+            <Text style={{ color: textColor }} className={`text-lg font-bold`}>
               Total
             </Text>
             <View className={`flex-1 justify-start items-end`}>
               <Text
                 style={{ color: textColor }}
-                className={`${
-                  isDimensionLayout ? "text-lg" : "text-lg px-4 py-6"
-                } font-bold`}
+                className={`text-lg font-bold`}
               >
-                {items?.map(
-                  (item) => `₱${(item.price + item?.extraFee)?.toFixed(2)}`
-                )}
+                ₱
+                {appointmentData
+                  ?.map(
+                    (appointment) => appointment?.price + appointment?.extraFee
+                  )
+                  .reduce((total, amount) => total + amount, 0)}
               </Text>
             </View>
           </View>
           <TouchableOpacity onPress={formik.handleSubmit}>
             <View
-              style={{
-                backgroundColor: invertBackgroundColor,
-              }}
-              className={`justify-center items-center rounded-md py-2`}
+              className={`justify-center items-center rounded-md py-2 bg-primary-default`}
             >
               <Text
-                style={{ color: invertTextColor }}
-                className={`text-center ${
-                  isDimensionLayout ? "text-lg" : "text-lg px-4 py-6"
-                } font-bold`}
+                style={{ color: textColor }}
+                className={`text-center text-lg font-bold`}
               >
                 Confirm
               </Text>
