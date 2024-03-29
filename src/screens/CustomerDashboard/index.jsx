@@ -25,7 +25,8 @@ import {
 } from "../../state/api/reducer";
 import { LoadingScreen } from "@components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { appointmentSlice } from "../../state/appointment/appointmentReducer";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -34,13 +35,30 @@ export default function () {
   const { textColor, backgroundColor, shadowColor, colorScheme } =
     changeColor();
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
-  const handlePress = () => {
+  const handleViewAll = () => {
     navigation.navigate("Relevance");
   };
 
+  const handlePress = (selectedProduct) => {
+    dispatch(
+      appointmentSlice.actions.setService({
+        service_id: selectedProduct?._id || "",
+        service_name: selectedProduct?.service_name || "",
+        type: selectedProduct?.type || [],
+        duration: selectedProduct?.duration || 0,
+        description: selectedProduct?.description || "",
+        product_name:
+          selectedProduct?.product?.map((p) => p.product_name).join(", ") || "",
+        price: selectedProduct?.price || 0,
+        extraFee: selectedProduct?.extraFee || 0,
+        image: selectedProduct?.image || [],
+      })
+    );
+  };
   const { data, isLoading } = useGetServicesQuery();
 
   const services = data?.details || [];
@@ -424,7 +442,7 @@ export default function () {
                 >
                   New Services
                 </Text>
-                <TouchableOpacity onPress={handlePress} className={`flex-1`}>
+                <TouchableOpacity onPress={handleViewAll} className={`flex-1`}>
                   <View className={`flex-row justify-end items-center`}>
                     <Text
                       style={{ color: textColor }}
@@ -473,7 +491,7 @@ export default function () {
                             borderRadius: 20,
                           }}
                         />
-                        <TouchableOpacity onPress={handlePress}>
+                        <TouchableOpacity onPress={() => handlePress(item)}>
                           <View className={`absolute left-[315px] bottom-2`}>
                             <Ionicons
                               name="add-circle-sharp"
@@ -532,7 +550,7 @@ export default function () {
                 >
                   Bundle Services
                 </Text>
-                <TouchableOpacity onPress={handlePress} className={`flex-1`}>
+                <TouchableOpacity onPress={handleViewAll} className={`flex-1`}>
                   <View className={`flex-row justify-end items-center`}>
                     <Text
                       style={{ color: textColor }}
@@ -581,7 +599,7 @@ export default function () {
                             borderRadius: 20,
                           }}
                         />
-                        <TouchableOpacity onPress={handlePress}>
+                        <TouchableOpacity onPress={() => handlePress(item)}>
                           <View className={`absolute left-[315px] bottom-2`}>
                             <Ionicons
                               name="add-circle-sharp"
