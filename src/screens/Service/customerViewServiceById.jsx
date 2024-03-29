@@ -8,7 +8,6 @@ import {
   Dimensions,
   SafeAreaView,
   Modal,
-  Button,
 } from "react-native";
 import {
   useGetServiceByIdQuery,
@@ -21,12 +20,15 @@ import { BackIcon } from "@helpers";
 import { useIsFocused } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
+import { appointmentSlice } from "../../state/appointment/appointmentReducer";
+import { useDispatch } from "react-redux";
 
 const windowWidth = Dimensions.get("window").width;
 
 export default function ({ route }) {
   const { id } = route.params;
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const isFocused = useIsFocused();
 
   const { data, isLoading, refetch } = useGetServiceByIdQuery(id);
@@ -116,6 +118,44 @@ export default function ({ route }) {
     setModalVisible(false);
   };
 
+  const handlePress = (selectedProduct) => {
+    const optionNames = selectedOptions.map(
+      (optionId) =>
+        options.find((option) => option._id === optionId)?.option_name || ""
+    );
+    const extraFee = selectedOptions.reduce(
+      (sum, optionId) =>
+        sum +
+        (options.find((option) => option._id === optionId)?.extraFee || 0),
+      0
+    );
+
+    const perPrices = selectedOptions.map((optionId) => {
+      const option = options.find((option) => option._id === optionId);
+      return option ? option.extraFee : 0;
+    });
+
+    dispatch(
+      appointmentSlice.actions.setService({
+        service_id: selectedProduct?._id || "",
+        service_name: selectedProduct?.service_name || "",
+        type: selectedProduct?.type || [],
+        duration: selectedProduct?.duration || 0,
+        description: selectedProduct?.description || "",
+        product_name:
+          selectedProduct?.product?.map((p) => p.product_name).join(", ") || "",
+        price: selectedProduct?.price || 0,
+        image: selectedProduct?.image || [],
+        option_id: selectedOptions || [],
+        option_name: optionNames.join(", "),
+        per_price: perPrices || 0,
+        extraFee: extraFee || 0,
+      })
+    );
+
+    setSelectedOptions([]);
+  };
+
   return (
     <>
       {isLoading || commentsLoading || exclusionsLoading ? (
@@ -135,7 +175,7 @@ export default function ({ route }) {
               style={{
                 backgroundColor,
               }}
-              className={`px-3 flex-1 my-4`}
+              className={`px-3 flex-1 mt-6 mb-4`}
             >
               <View
                 style={{
@@ -246,6 +286,7 @@ export default function ({ route }) {
                     </View>
                     <View className={`mt-6 items-center justify-center`}>
                       <TouchableOpacity
+                        onPress={() => handlePress(service)}
                         className={`px-6 py-2 rounded-lg bg-primary-accent`}
                       >
                         <Text
