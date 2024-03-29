@@ -17,7 +17,7 @@ export const appointmentSlice = createSlice({
       if (!existingService) {
         state.appointmentData.push(newService);
         state.count += 1;
-      } else
+      } else {
         Toast.show({
           type: "error",
           position: "top",
@@ -26,6 +26,7 @@ export const appointmentSlice = createSlice({
           visibilityTime: 3000,
           autoHide: true,
         });
+      }
     },
     clearAppointmentData(state) {
       state.appointmentData = [];
