@@ -8,6 +8,7 @@ import location from "./auth/locationReducer";
 import ingredient from "./ingredient/ingredientReducer";
 import waiver from "./waiver/waiverReducer";
 import fee from "./appointment/hasAppointmentReducer";
+import transaction from "./transaction/transactionReducer";
 import { api } from "./api/reducer";
 
 export const rootReducer = combineReducers({
@@ -20,5 +21,6 @@ export const rootReducer = combineReducers({
   ingredient,
   waiver,
   fee,
+  transaction,
   [api.reducerPath]: api.reducer,
 });
