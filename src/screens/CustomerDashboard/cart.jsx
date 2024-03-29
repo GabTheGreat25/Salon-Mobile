@@ -40,9 +40,9 @@ export default function () {
     dispatch(decreaseCount(serviceId));
     Toast.show({
       type: "success",
-      position: "top",
+      position: "bottom",
       text1: "Deleted Item",
-      text2: "Successfully Remove In Cart",
+      text2: "Successfully Removed In Cart",
       visibilityTime: 3000,
       autoHide: true,
     });
@@ -64,15 +64,39 @@ export default function () {
             scrollEventThrottle={1}
             className={`px-3 pb-6`}
           >
-            {appointmentData?.map((appointment) => (
+            {appointmentData?.map((appointment, index) => (
               <View
-                key={appointment?.service_id}
+                key={index}
                 style={{
                   backgroundColor: "#FDA7DF",
                   width: windowWidth * 0.925,
                 }}
                 className={`rounded-2xl p-4 mt-4 mb-2`}
               >
+                <View className={`flex-1 flex-col`}>
+                  <View className={`flex-row gap-x-2`}>
+                    <Feather name="home" size={20} color={textColor} />
+                    <Text
+                      style={{ color: textColor }}
+                      className={`text-base font-semibold`}
+                    >
+                      Lhanlee Beauty Lounge
+                    </Text>
+                    <TouchableOpacity
+                      onPress={() => handleTrashClick(appointment?.service_id)}
+                      className={`flex-1 justify-end items-end`}
+                    >
+                      <Feather name="trash-2" size={20} color={textColor} />
+                    </TouchableOpacity>
+                  </View>
+                  <View
+                    style={{
+                      borderBottomColor: textColor,
+                      borderBottomWidth: 1,
+                      marginTop: 5,
+                    }}
+                  />
+                </View>
                 <View className={`flex-col`}>
                   <View className={`flex-col pt-4 self-center`}>
                     <Image
