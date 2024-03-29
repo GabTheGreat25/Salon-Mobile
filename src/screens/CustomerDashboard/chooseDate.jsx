@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   ScrollView,
   View,
@@ -7,208 +7,390 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
-import { changeColor, dimensionLayout } from "@utils";
+import { changeColor } from "@utils";
 import { useNavigation } from "@react-navigation/native";
 import { BackIcon } from "@helpers";
 import { Calendar } from "react-native-calendars";
-import { useDispatch } from "react-redux";
-import { appointmentSlice } from "../../state/appointment/appointmentReducer";
+import { useDispatch, useSelector } from "react-redux";
+import { transactionSlice } from "../../state/transaction/transactionReducer";
+import {
+  useGetTimesQuery,
+  useGetAppointmentsQuery,
+} from "../../state/api/reducer";
+import Toast from "react-native-toast-message";
+import { useIsFocused } from "@react-navigation/native";
+import { LoadingScreen } from "@components";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function () {
-  const { textColor, backgroundColor, shadowColor, colorScheme } =
-    changeColor();
+  const appointment = useSelector((state) => state?.appointment);
+  const selectedDate = useSelector(
+    (state) => state?.transaction?.transactionData?.date
+  );
+  const selectedTime = useSelector(
+    (state) => state?.transaction?.transactionData?.time
+  );
+
+  const appointmentData = appointment?.appointmentData;
+
+  const { textColor, backgroundColor, colorScheme } = changeColor();
   const navigation = useNavigation();
-  const isDimensionLayout = dimensionLayout();
+  const isFocused = useIsFocused();
+
   const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDB9E5";
   const revertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
+  const {
+    data: time,
+    isLoading: timeLoading,
+    refetch: timeRefetch,
+  } = useGetTimesQuery();
+  const { data, isLoading, refetch } = useGetAppointmentsQuery();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isFocused) refetch();
+      timeRefetch();
+    };
+    fetchData();
+  }, [isFocused]);
+
   const currentDate = new Date();
-  const nextMonthDate = new Date(currentDate);
-  nextMonthDate.setMonth(currentDate.getMonth() + 1);
+  const next21Days = new Date(currentDate);
+  next21Days.setDate(currentDate.getDate() + 21);
+
+  const nextday = new Date(currentDate);
+  nextday.setDate(currentDate.getDate() + 1);
+
+  const minDate = useMemo(() => {
+    return nextday.toISOString().split("T")[0];
+  }, [nextday]);
 
   const maxDate = useMemo(() => {
-    return nextMonthDate.toISOString().split("T")[0];
-  }, [nextMonthDate]);
+    return next21Days.toISOString().split("T")[0];
+  }, [next21Days]);
+
+  const [selectedDateTime, setSelectedDateTime] = useState({
+    date: selectedDate || null,
+    time: selectedTime || [],
+  });
 
   const [markedDates, setMarkedDates] = useState({});
-  const [selectedDateTime, setSelectedDateTime] = useState({
-    date: null,
-    time: null,
-  });
+
+  useEffect(() => {
+    if (selectedDateTime.date) {
+      setMarkedDates((prevMarkedDates) => ({
+        ...prevMarkedDates,
+        [selectedDateTime.date]: {
+          selected: true,
+          selectedColor: "#F78FB3",
+        },
+      }));
+    }
+  }, [selectedDateTime.date]);
 
   const dispatch = useDispatch();
 
   const handleDayPress = (day) => {
     const updatedMarkedDates = {
       [day.dateString]: {
-        selected: true,
+        selected: !markedDates[day.dateString]?.selected,
         selectedColor: "#F78FB3",
       },
     };
+
+    if (!markedDates[day.dateString]?.selected) {
+      setSelectedDateTime({ date: day.dateString, time: [] });
+    } else {
+      setSelectedDateTime({ date: null, time: [] });
+    }
+
     setMarkedDates(updatedMarkedDates);
-    setSelectedDateTime((prev) => ({ ...prev, date: day.dateString }));
   };
 
   const handleTimePress = (time) => {
-    setSelectedDateTime((prev) => ({ ...prev, time }));
+    if (!selectedDateTime.date) {
+      Toast.show({
+        type: "error",
+        position: "top",
+        text1: "Warning",
+        text2: "Please select a date first",
+        visibilityTime: 3000,
+        autoHide: true,
+      });
+      return;
+    }
+
+    const isSelected = selectedDateTime.time.includes(time);
+
+    const conflict = data?.details?.some((appointment) => {
+      const formDate = new Date(selectedDateTime.date)
+        .toISOString()
+        .split("T")[0];
+      const existingDate = new Date(appointment.date)
+        .toISOString()
+        .split("T")[0];
+
+      if (existingDate !== formDate) {
+        return false;
+      }
+
+      return appointment.time.includes(time);
+    });
+
+    if (conflict) {
+      Toast.show({
+        type: "error",
+        position: "top",
+        text1: "Warning",
+        text2: "Appointment slot is already booked by another customer.",
+        visibilityTime: 5000,
+        autoHide: true,
+      });
+      return;
+    }
+
+    const totalDuration = appointmentData.reduce((total, service) => {
+      const durationParts = service?.duration.split(" ");
+      const minDuration = parseInt(durationParts[2]) || 0;
+
+      const isMinutes = durationParts.includes("minutes");
+      const durationInHours = isMinutes ? minDuration / 60 : minDuration;
+
+      return total + (isNaN(durationInHours) ? 0 : durationInHours);
+    }, 0);
+
+    let updatedTimes;
+
+    if (isSelected) {
+      updatedTimes = selectedDateTime.time.filter((t) => t !== time);
+    } else {
+      const currentTime = selectedDateTime.time || [];
+
+      const totalRoundedUp = Math.ceil(totalDuration);
+      const hourText = totalRoundedUp === 1 ? "hour" : "hours";
+
+      if (currentTime.length + 1 <= totalRoundedUp) {
+        const isConsecutive =
+          currentTime.length === 0 || checkConsecutive(currentTime, time);
+
+        if (!isConsecutive) {
+          Toast.show({
+            type: "error",
+            position: "top",
+            text1: "Warning",
+            text2: "Please select consecutive time slots",
+            visibilityTime: 3000,
+            autoHide: true,
+          });
+          return;
+        }
+
+        updatedTimes = [...currentTime, time];
+      } else {
+        Toast.show({
+          type: "error",
+          position: "top",
+          text1: "Warning",
+          text2: `Cannot select more than ${totalRoundedUp} ${hourText}`,
+          visibilityTime: 3000,
+          autoHide: true,
+        });
+        return;
+      }
+    }
+
+    setSelectedDateTime((prev) => ({ ...prev, time: updatedTimes }));
   };
 
-  const hideArrows = currentDate.getMonth() === nextMonthDate.getMonth();
+  const checkConsecutive = (times, newTime) => {
+    if (times.length === 0) {
+      return true;
+    }
 
-  const items = [
-    {
-      time: "10:00 AM",
-    },
-    {
-      time: "12:00 PM",
-    },
-    {
-      time: "01:00 PM",
-    },
-    {
-      time: "03:00 PM",
-    },
-    {
-      time: "05:00 PM",
-    },
-  ];
+    const extractHour = (time) => {
+      const [hours] = time.split(":");
+      return parseInt(hours);
+    };
+
+    const lastTime = times[times.length - 1];
+    const lastTimeHour = extractHour(lastTime);
+    const newTimeHour = extractHour(newTime);
+
+    return newTimeHour === lastTimeHour + 1;
+  };
+
+  const hideArrows = currentDate.getMonth() === next21Days.getMonth();
 
   const handlePress = () => {
-    dispatch(appointmentSlice.actions.setDateTime(selectedDateTime));
+    if (!selectedDateTime.date || selectedDateTime.time.length === 0) {
+      Toast.show({
+        type: "error",
+        position: "top",
+        text1: "Warning",
+        text2: "Please select a date and time",
+        visibilityTime: 3000,
+        autoHide: true,
+      });
+      return;
+    }
+
+    const totalDuration = appointmentData.reduce((total, service) => {
+      const durationParts = service?.duration.split(" ");
+      const minDuration = parseInt(durationParts[2]) || 0;
+
+      const isMinutes = durationParts.includes("minutes");
+      const durationInHours = isMinutes ? minDuration / 60 : minDuration;
+
+      return total + (isNaN(durationInHours) ? 0 : durationInHours);
+    }, 0);
+
+    const totalRoundedUp = Math.ceil(totalDuration);
+    const hourText = totalRoundedUp === 1 ? "hour" : "hours";
+
+    if (selectedDateTime.time.length !== totalRoundedUp) {
+      Toast.show({
+        type: "error",
+        position: "top",
+        text1: "Warning",
+        text2: `Please select exactly ${totalRoundedUp} ${hourText}`,
+        visibilityTime: 3000,
+        autoHide: true,
+      });
+      return;
+    }
+
+    dispatch(transactionSlice.actions.setDateTime(selectedDateTime));
     navigation.navigate("Checkout");
   };
 
   return (
     <>
-      <SafeAreaView style={{ backgroundColor }} className={`flex-1`}>
-        <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          decelerationRate="fast"
-          scrollEventThrottle={1}
-          style={{
-            backgroundColor,
-          }}
-          className={`px-3 flex-col flex-1 mt-20`}
+      {isLoading || timeLoading ? (
+        <View
+          className={`flex-1 justify-center items-center bg-primary-default`}
         >
-          <View>
-            <Text
-              style={{ color: textColor }}
-              className={`text-2xl text-center pb-4 font-semibold`}
-            >
-              Select date and time
-            </Text>
-            <Calendar
+          <LoadingScreen />
+        </View>
+      ) : (
+        <>
+          <SafeAreaView style={{ backgroundColor }} className={`flex-1`}>
+            <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              decelerationRate="fast"
+              scrollEventThrottle={1}
               style={{
-                backgroundColor: invertBackgroundColor,
+                backgroundColor,
               }}
-              className={`${
-                isDimensionLayout ? "mx-1 px-4 py-4 mb-2 rounded" : "mx-3"
-              }`}
-              onDayPress={handleDayPress}
-              markedDates={markedDates}
-              markingType={"simple"}
-              theme={{
-                calendarBackground: "invertBackgroundColor",
-                monthTextColor: "black",
-                textSectionTitleColor: "black",
-                todayTextColor: "#BE2EDD",
-                arrowColor: "black",
-              }}
-              minDate={currentDate.toISOString().split("T")[0]}
-              maxDate={maxDate}
-              hideExtraDays={true}
-              hideArrows={hideArrows ? true : false}
-              horizontal={true}
-              pagingEnabled={true}
-            />
-          </View>
-          <Text
-            style={{ color: textColor }}
-            className={`text-2xl text-center pb-4 font-semibold`}
-          >
-            Available Time Slot
-          </Text>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            decelerationRate="fast"
-            scrollEventThrottle={1}
-            style={{
-              backgroundColor: invertBackgroundColor,
-              height: windowHeight * 0.175,
-              width: windowWidth * 0.925,
-            }}
-            className={`flex-row rounded ${
-              isDimensionLayout ? "mx-1 px-4 pt-4 mb-2" : "mx-3"
-            }`}
-          >
-            {items.map((item, index) => (
-              <TouchableOpacity
-                key={index}
-                onPress={() => handleTimePress(item.time)}
-                activeOpacity={1}
+              className={`px-3 flex-col pt-12`}
+            >
+              <View>
+                <Text
+                  style={{ color: textColor }}
+                  className={`text-2xl text-center pb-4 font-semibold`}
+                >
+                  Select date and time
+                </Text>
+                <Calendar
+                  className={`mx-1 px-4 py-4 mb-2 rounded-xl bg-primary-default`}
+                  onDayPress={handleDayPress}
+                  markedDates={markedDates}
+                  markingType={"simple"}
+                  theme={{
+                    calendarBackground: "#FDB9E5",
+                    monthTextColor: invertTextColor,
+                    textSectionTitleColor: invertTextColor,
+                    todayTextColor: invertTextColor,
+                    arrowColor: invertTextColor,
+                  }}
+                  minDate={minDate}
+                  maxDate={maxDate}
+                  hideExtraDays={true}
+                  hideArrows={hideArrows ? true : false}
+                  horizontal={true}
+                  pagingEnabled={true}
+                />
+              </View>
+              <Text
+                style={{ color: textColor }}
+                className={`text-2xl text-center pb-4 font-semibold`}
               >
+                Available Time Slot
+              </Text>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                decelerationRate="fast"
+                scrollEventThrottle={1}
+                style={{
+                  backgroundColor: invertBackgroundColor,
+                  height: windowHeight * 0.175,
+                  width: windowWidth * 0.925,
+                }}
+                className={`flex-row rounded mx-1 px-4 pt-4 mb-2`}
+              >
+                {time?.details?.map(({ _id, time }) => (
+                  <TouchableOpacity
+                    key={_id}
+                    onPress={() => handleTimePress(time)}
+                    activeOpacity={1}
+                  >
+                    <View
+                      style={{
+                        backgroundColor: selectedDateTime.time.includes(time)
+                          ? revertBackgroundColor
+                          : backgroundColor,
+                        height: windowHeight * 0.075,
+                        width: windowWidth * 0.35,
+                      }}
+                      className={`rounded justify-center items-center text-center mr-8 mt-7 mb-2`}
+                    >
+                      <Text
+                        style={{
+                          color: selectedDateTime.time.includes(time)
+                            ? invertTextColor
+                            : textColor,
+                        }}
+                        className={`text-lg text-center font-semibold`}
+                      >
+                        {time}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </ScrollView>
+            <View
+              style={{
+                backgroundColor,
+                height: windowHeight * 0.1,
+                width: windowWidth,
+              }}
+              className={`flex-col px-10 py-5`}
+            >
+              <TouchableOpacity onPress={handlePress}>
                 <View
                   style={{
-                    backgroundColor:
-                      selectedDateTime.time === item.time
-                        ? revertBackgroundColor
-                        : backgroundColor,
-                    height: windowHeight * 0.075,
-                    width: windowWidth * 0.35,
+                    backgroundColor: invertBackgroundColor,
                   }}
-                  className={`rounded justify-center items-center text-center ${
-                    isDimensionLayout ? "mr-8 mt-7 mb-2" : "mx-3"
-                  }`}
+                  className={`justify-center items-center rounded-md py-2`}
                 >
                   <Text
-                    style={{
-                      color:
-                        selectedDateTime.time === item.time
-                          ? invertTextColor
-                          : textColor,
-                    }}
-                    className={`text-lg text-center font-semibold`}
+                    style={{ color: invertTextColor }}
+                    className={`text-center text-lg font-bold`}
                   >
-                    {item.time}
+                    Confirm
                   </Text>
                 </View>
               </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </ScrollView>
-        <View
-          style={{
-            backgroundColor,
-            height: windowHeight * 0.1,
-            width: windowWidth,
-          }}
-          className={`flex-col px-10 py-5`}
-        >
-          <TouchableOpacity onPress={handlePress}>
-            <View
-              style={{
-                backgroundColor: invertBackgroundColor,
-              }}
-              className={`justify-center items-center rounded-md py-2`}
-            >
-              <Text
-                style={{ color: invertTextColor }}
-                className={`text-center ${
-                  isDimensionLayout ? "text-lg" : "text-lg px-4 py-6"
-                } font-bold`}
-              >
-                Confirm
-              </Text>
             </View>
-          </TouchableOpacity>
-        </View>
-      </SafeAreaView>
+          </SafeAreaView>
+        </>
+      )}
     </>
   );
 }
