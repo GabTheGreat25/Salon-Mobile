@@ -3,48 +3,215 @@ import {
   SafeAreaView,
   View,
   Text,
-  Image,
   TouchableOpacity,
   Dimensions,
 } from "react-native";
-import { changeColor, dimensionLayout } from "@utils";
+import { changeColor } from "@utils";
 import { useNavigation } from "@react-navigation/native";
 import { BackIcon } from "@helpers";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import GcashWhite from "@assets/Gcash-white.png";
-import GcashDark from "@assets/Gcash-dark.png";
-import { useDispatch } from "react-redux";
-import { appointmentSlice } from "../../state/appointment/appointmentReducer";
+import { useSelector, useDispatch } from "react-redux";
+import { transactionSlice } from "../../state/transaction/transactionReducer";
+import * as ImagePicker from "expo-image-picker";
+import * as ImageManipulator from "expo-image-manipulator";
+import Toast from "react-native-toast-message";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function () {
+  const selectedPayment = useSelector(
+    (state) => state?.transaction?.transactionData?.payment
+  );
+  const selectedCustomerType = useSelector(
+    (state) => state?.transaction?.transactionData?.customerType
+  );
+  const image = useSelector(
+    (state) => state?.transaction?.transactionData?.image
+  );
+
   const dispatch = useDispatch();
   const { textColor, backgroundColor, colorScheme } = changeColor();
   const navigation = useNavigation();
-  const isDimensionLayout = dimensionLayout();
   const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDA7DF";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
-  const GcashImage = colorScheme === "dark" ? GcashDark : GcashWhite;
+  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
 
-  const [isCashChecked, setCashChecked] = useState(false);
-  const [isGcashChecked, setGcashChecked] = useState(false);
+  const [isCashChecked, setCashChecked] = useState(
+    selectedPayment === "Cash" || false
+  );
+  const [isGcashChecked, setGcashChecked] = useState(
+    selectedPayment === "Maya" || false
+  );
 
-  const handleCheckBoxToggle = (checkboxType) => {
-    if (checkboxType === "cash") {
+  const [isPwdChecked, setPwdChecked] = useState(
+    selectedCustomerType === "Pwd" || false
+  );
+  const [isSeniorChecked, setSeniorChecked] = useState(
+    selectedCustomerType === "Senior" || false
+  );
+
+  const handlePayment = (paymentType) => {
+    if (paymentType === "Cash") {
       setCashChecked(!isCashChecked);
       setGcashChecked(false);
-      dispatch(appointmentSlice.actions.setPayment({ type: "Cash" }));
-    } else if (checkboxType === "gcash") {
+    } else if (paymentType === "Maya") {
       setGcashChecked(!isGcashChecked);
       setCashChecked(false);
-      dispatch(appointmentSlice.actions.setPayment({ type: "Gcash" }));
     }
   };
 
-  const handlePress = () => {
+  const handleType = (customerType) => {
+    if (customerType === "Pwd") {
+      if (isPwdChecked) {
+        setPwdChecked(false);
+        if (!isSeniorChecked) {
+          dispatch(transactionSlice.actions.setType(""));
+          dispatch(transactionSlice.actions.setImage([]));
+          setSelectedImages([]);
+        }
+      } else {
+        setPwdChecked(true);
+        setSeniorChecked(false);
+      }
+    } else if (customerType === "Senior") {
+      if (isSeniorChecked) {
+        setSeniorChecked(false);
+        if (!isPwdChecked) {
+          dispatch(transactionSlice.actions.setType(""));
+          dispatch(transactionSlice.actions.setImage([]));
+          setSelectedImages([]);
+        }
+      } else {
+        setSeniorChecked(true);
+        setPwdChecked(false);
+      }
+    }
+  };
+
+  const handlePress = async () => {
+    if ((isPwdChecked || isSeniorChecked) && selectedImages.length === 0) {
+      Toast.show({
+        type: "error",
+        position: "top",
+        text1: "Warning",
+        text2: "Please upload an image when selecting PWD or Senior Citizen",
+        visibilityTime: 3000,
+        autoHide: true,
+      });
+      return;
+    }
+
+    if (isCashChecked) {
+      dispatch(transactionSlice.actions.setPayment("Cash"));
+    } else if (isGcashChecked) {
+      dispatch(transactionSlice.actions.setPayment("Maya"));
+    }
+
+    if (isPwdChecked) {
+      dispatch(transactionSlice.actions.setType("Pwd"));
+    } else if (isSeniorChecked) {
+      dispatch(transactionSlice.actions.setType("Senior"));
+    }
+
+    if (selectedImages.length > 0) {
+      const imageURIs = selectedImages.map((image) => image.uri);
+      dispatch(transactionSlice.actions.setImage(imageURIs));
+    }
+
     navigation.navigate("Checkout");
+  };
+
+  const [selectedImages, setSelectedImages] = useState(image || []);
+
+  const takePicture = async () => {
+    if (image) {
+      setSelectedImages([]);
+    }
+
+    const result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      aspect: [3, 2],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      const newImage = result.assets[0];
+
+      const manipulatorOptions = {
+        compress: 0.5,
+        format: ImageManipulator.SaveFormat.JPEG,
+      };
+
+      try {
+        const manipulatedImage = await ImageManipulator.manipulateAsync(
+          newImage.uri,
+          [],
+          manipulatorOptions
+        );
+
+        if (manipulatedImage) {
+          setSelectedImages([manipulatedImage]);
+        }
+      } catch (error) {
+        Toast.show({
+          type: "error",
+          position: "top",
+          text1: "Error Adding Image",
+          text2: `${error}`,
+          visibilityTime: 3000,
+          autoHide: true,
+        });
+      }
+    }
+  };
+
+  const selectImages = async () => {
+    if (image) {
+      setSelectedImages([]);
+    }
+
+    let results = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      aspect: [3, 2],
+      quality: 1,
+      allowsMultipleSelection: true,
+    });
+
+    if (!results.canceled) {
+      const selectedAssets = results.assets;
+
+      const manipulatorOptions = {
+        compress: 0.5,
+        format: ImageManipulator.SaveFormat.JPEG,
+      };
+
+      const newImages = [];
+
+      for (const selectedAsset of selectedAssets) {
+        try {
+          const manipulatedImage = await ImageManipulator.manipulateAsync(
+            selectedAsset.uri,
+            [],
+            manipulatorOptions
+          );
+
+          if (manipulatedImage) {
+            newImages.push(manipulatedImage);
+          }
+        } catch (error) {
+          Toast.show({
+            type: "error",
+            position: "top",
+            text1: "Error Adding Image",
+            text2: `${error}`,
+            visibilityTime: 3000,
+            autoHide: true,
+          });
+        }
+      }
+
+      setSelectedImages([...newImages]);
+    }
   };
 
   return (
@@ -55,20 +222,19 @@ export default function () {
           style={{
             backgroundColor,
           }}
-          className={`px-3 flex-col flex-1 mt-20`}
+          className={`px-3 flex-1 flex-col pt-16`}
         >
           <View
             style={{
-              backgroundColor: invertBackgroundColor,
               height: windowHeight * 0.175,
               width: windowWidth * 0.925,
             }}
-            className={`${isDimensionLayout ? "mx-1 px-4 pt-4 mb-2" : "mx-3"}`}
+            className={`mx-1 px-4 pt-4 mb-2 bg-primary-default rounded-lg`}
           >
             <View className={`flex-row`}>
               <TouchableOpacity
                 className={`flex-row px-4 py-2`}
-                onPress={() => handleCheckBoxToggle("cash")}
+                onPress={() => handlePayment("Cash")}
               >
                 <View
                   style={{
@@ -89,12 +255,7 @@ export default function () {
                   )}
                 </View>
               </TouchableOpacity>
-              <View className={`flex-row gap-x-2 justify-start items-start`}>
-                <MaterialCommunityIcons
-                  name="cash"
-                  size={50}
-                  color={invertTextColor}
-                />
+              <View className={`justify-start items-start`}>
                 <View className={`pt-2`}>
                   <Text
                     style={{ color: invertTextColor }}
@@ -115,7 +276,7 @@ export default function () {
             <View className={`flex-row pt-2`}>
               <TouchableOpacity
                 className={`flex-row px-4 py-2`}
-                onPress={() => handleCheckBoxToggle("gcash")}
+                onPress={() => handlePayment("Maya")}
               >
                 <View
                   style={{
@@ -136,21 +297,157 @@ export default function () {
                   )}
                 </View>
               </TouchableOpacity>
-              <View className={`flex-row gap-x-4 justify-start items-start`}>
-                <View className={`pt-3 pl-2`}>
-                  <Image source={GcashImage} className={`w-[36px] h-[30px]`} />
-                </View>
+              <View className={`justify-start items-start`}>
                 <View className={`pt-2`}>
                   <Text
                     style={{ color: invertTextColor }}
                     className={`text-3xl font-semibold`}
                   >
-                    GCash
+                    Maya
                   </Text>
                 </View>
               </View>
             </View>
           </View>
+
+          <View
+            style={{
+              height: windowHeight * 0.175,
+              width: windowWidth * 0.925,
+            }}
+            className={`mx-1 px-4 pt-4 my-2 bg-primary-default rounded-lg`}
+          >
+            <View className={`flex-row`}>
+              <TouchableOpacity
+                className={`flex-row px-4 py-2`}
+                onPress={() => handleType("Pwd")}
+              >
+                <View
+                  style={{
+                    height: 35,
+                    width: 35,
+                    borderColor: invertTextColor,
+                    backgroundColor: invertBackgroundColor,
+                  }}
+                  className={`flex-row justify-center items-center border-2 rounded mr-2`}
+                >
+                  {isPwdChecked && (
+                    <Text
+                      style={{ color: invertTextColor }}
+                      className={`text-2xl`}
+                    >
+                      ✓
+                    </Text>
+                  )}
+                </View>
+              </TouchableOpacity>
+              <View className={`justify-start items-start`}>
+                <View className={`pt-2`}>
+                  <Text
+                    style={{ color: invertTextColor }}
+                    className={`text-3xl font-semibold`}
+                  >
+                    Pwd
+                  </Text>
+                </View>
+              </View>
+            </View>
+            <View
+              style={{
+                borderBottomColor: invertTextColor,
+                borderBottomWidth: 1,
+                marginTop: 5,
+              }}
+            />
+            <View className={`flex-row pt-2`}>
+              <TouchableOpacity
+                className={`flex-row px-4 py-2`}
+                onPress={() => handleType("Senior")}
+              >
+                <View
+                  style={{
+                    height: 35,
+                    width: 35,
+                    borderColor: invertTextColor,
+                    backgroundColor: invertBackgroundColor,
+                  }}
+                  className={`flex-row justify-center items-center border-2 rounded mr-2`}
+                >
+                  {isSeniorChecked && (
+                    <Text
+                      style={{ color: invertTextColor }}
+                      className={`text-2xl`}
+                    >
+                      ✓
+                    </Text>
+                  )}
+                </View>
+              </TouchableOpacity>
+              <View className={`justify-start items-start`}>
+                <View className={`pt-2`}>
+                  <Text
+                    style={{ color: invertTextColor }}
+                    className={`text-3xl font-semibold`}
+                  >
+                    Senior
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </View>
+
+          {isPwdChecked || isSeniorChecked ? (
+            <>
+              <View
+                style={{
+                  height: windowHeight * 0.12,
+                  width: windowWidth * 0.925,
+                }}
+                className={`mx-1 px-4 pt-4 my-2 bg-primary-default rounded-lg`}
+              >
+                <Text
+                  style={{ color: textColor }}
+                  className={`${borderColor} font-semibold text-xl`}
+                >
+                  Upload Your Image
+                </Text>
+                <View className={`flex-row gap-x-2 mt-2 mb-6`}>
+                  <TouchableOpacity onPress={takePicture}>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`text-base ${borderColor}`}
+                    >
+                      Take a Picture
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={selectImages}>
+                    <Text
+                      style={{ color: textColor }}
+                      className={`text-base ${borderColor}`}
+                    >
+                      Select Images
+                    </Text>
+                  </TouchableOpacity>
+                  {selectedImages?.length > 0 ? (
+                    <Text
+                      style={{ color: textColor }}
+                      className={`text-base ${borderColor}`}
+                    >
+                      Add {selectedImages.length} image
+                      {selectedImages.length > 1 ? "s" : ""}
+                    </Text>
+                  ) : (
+                    <Text
+                      style={{ color: textColor }}
+                      className={`text-base ${borderColor}`}
+                    >
+                      No Image
+                    </Text>
+                  )}
+                </View>
+              </View>
+            </>
+          ) : null}
         </View>
         <View
           style={{
@@ -169,9 +466,7 @@ export default function () {
             >
               <Text
                 style={{ color: invertTextColor }}
-                className={`text-center ${
-                  isDimensionLayout ? "text-lg" : "text-lg px-4 py-6"
-                } font-bold`}
+                className={`text-center text-lg font-bold`}
               >
                 Confirm
               </Text>
