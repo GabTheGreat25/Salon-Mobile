@@ -14,6 +14,7 @@ import { useNavigation } from "@react-navigation/native";
 import { BackIcon } from "@helpers";
 import { useSelector, useDispatch } from "react-redux";
 import { decreaseCount } from "../../state/appointment/appointmentReducer";
+import { clearTransactionData } from "../../state/transaction/transactionReducer";
 import { feeSlice } from "../../state/appointment/hasAppointmentReducer";
 import Toast from "react-native-toast-message";
 
@@ -21,8 +22,7 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function () {
-  const { textColor, backgroundColor, shadowColor, colorScheme } =
-    changeColor();
+  const { textColor, backgroundColor, shadowColor } = changeColor();
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
@@ -38,6 +38,7 @@ export default function () {
 
   const handleTrashClick = (serviceId) => {
     dispatch(decreaseCount(serviceId));
+    dispatch(clearTransactionData());
     Toast.show({
       type: "success",
       position: "bottom",
@@ -149,15 +150,20 @@ export default function () {
                         {appointment?.option_name?.length > 0
                           ? appointment?.option_name
                               .split(", ")
-                              .map((option, index) => (
-                                <span key={index}>
-                                  {option} - ₱{appointment?.per_price[index]}
-                                  {index !==
+                              .map(
+                                (option, index) =>
+                                  `${option} - ₱${
+                                    appointment?.per_price[index]
+                                  }${
+                                    index !==
                                     appointment?.option_name.split(", ")
                                       .length -
-                                      1 && ", "}
-                                </span>
-                              ))
+                                      1
+                                      ? ", "
+                                      : ""
+                                  }`
+                              )
+                              .join("")
                           : "None"}
                       </Text>
                     </View>
