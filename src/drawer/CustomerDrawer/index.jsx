@@ -21,6 +21,7 @@ import { Text, TouchableOpacity, View, ScrollView } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../state/auth/authReducer";
 import { clearAppointmentData } from "../../state/appointment/appointmentReducer";
+import { clearTransactionData } from "../../state/transaction/transactionReducer";
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -40,6 +41,7 @@ export default function () {
     try {
       AsyncStorage.removeItem("modalShown");
       dispatch(clearAppointmentData());
+      dispatch(clearTransactionData());
       dispatch(logout());
       Toast.show({
         type: "success",

@@ -17,8 +17,16 @@ export const transactionSlice = createSlice({
         },
       };
     },
-    setEmployee(state, action) {
-      state.transactionData.employee = action.payload;
+    setBeautician(state, action) {
+      const beautician = action.payload;
+
+      return {
+        ...state,
+        transactionData: {
+          ...state.transactionData,
+          beautician: beautician,
+        },
+      };
     },
     setPayment(state, action) {
       state.transactionData.payment = action.payload;
@@ -37,17 +45,18 @@ export const transactionSlice = createSlice({
         },
       };
     },
-
     setCustomer(state, action) {
       state.transactionData.customer = action.payload;
     },
     clearTransactionData(state) {
       state.transactionData = {
-        employee: "",
+        beautician: [],
         customer: "",
         date: "",
         time: [],
         payment: "",
+        customerType: "",
+        image: [],
       };
     },
   },
@@ -56,7 +65,7 @@ export const transactionSlice = createSlice({
 export const {
   clearTransactionData,
   setDateTime,
-  setEmployee,
+  setBeautician,
   setPayment,
   setType,
   setImage,

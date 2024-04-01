@@ -1,6 +1,6 @@
 export const initialState = {
   transactionData: {
-    employee: "",
+    beautician: [],
     customer: "",
     date: "",
     time: [],

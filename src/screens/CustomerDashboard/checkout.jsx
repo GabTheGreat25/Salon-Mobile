@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   ScrollView,
   View,
@@ -16,7 +16,8 @@ import { useFormik } from "formik";
 import { useAddAppointmentMutation } from "../../state/api/reducer";
 import { useSelector, useDispatch } from "react-redux";
 import Toast from "react-native-toast-message";
-import { appointmentSlice } from "../../state/appointment/appointmentReducer";
+import { clearAppointmentData } from "../../state/appointment/appointmentReducer";
+import { clearTransactionData } from "../../state/transaction/transactionReducer";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -26,93 +27,208 @@ export default function () {
   const navigation = useNavigation();
 
   const appointment = useSelector((state) => state?.appointment);
+  // console.log("appointment", appointment);
 
-  const selectedServiceTwo = useSelector(
-    (state) => state?.appointment?.appointmentData?.service
+  const hasAppointmentFee = useSelector(
+    (state) => state?.fee?.hasAppointmentFee ?? null
   );
-  console.log(selectedServiceTwo);
+  // console.log("hasAppointmentFee", hasAppointmentFee);
 
   const selectedPayment = useSelector(
-    (state) => state?.transaction?.transactionData?.payment
+    (state) => state?.transaction?.transactionData?.payment ?? null
   );
-  console.log(selectedPayment);
+  // console.log("selectedPayment", selectedPayment);
 
   const selectedCustomerType = useSelector(
-    (state) => state?.transaction?.transactionData?.customerType
+    (state) => state?.transaction?.transactionData?.customerType ?? null
   );
-  console.log(selectedCustomerType);
+  // console.log("selectedCustomerType", selectedCustomerType);
 
-  const image = useSelector(
-    (state) => state?.transaction?.transactionData?.image
+  const selectedImage = useSelector(
+    (state) => state?.transaction?.transactionData?.image ?? null
   );
-  console.log(image);
+  // console.log("selectedImage", selectedImage);
 
-  const selectedEmployee = useSelector(
-    (state) => state?.appointment?.transactionData?.employee?._id
+  const selectedBeautician = useSelector(
+    (state) => state?.transaction?.transactionData?.beautician ?? null
   );
-  console.log(selectedEmployee);
+  // console.log("selectedBeautician", selectedBeautician);
 
   const selectedDate = useSelector(
-    (state) => state?.transaction?.transactionData?.date
+    (state) => state?.transaction?.transactionData?.date ?? null
   );
-  console.log(selectedDate);
+  // console.log("selectedDate", selectedDate);
+
   const selectedTime = useSelector(
-    (state) => state?.transaction?.transactionData?.time
+    (state) => state?.transaction?.transactionData?.time ?? null
   );
-  console.log(selectedTime);
+  // console.log("selectedTime", selectedTime);
 
   const dispatch = useDispatch();
 
-  const appointmentData = appointment?.appointmentData;
+  const appointmentData =
+    appointment && appointment.appointmentData
+      ? appointment.appointmentData
+      : [];
 
-  const auth = useSelector((state) => state.auth);
-  const [addAppointment, { isLoading }] = useAddAppointmentMutation();
+  // console.log("appointmentData", appointmentData);
+
+  // console.log(
+  //   "options",
+  //   appointmentData?.flatMap((service) =>
+  //     Array.isArray(service.option_id)
+  //       ? service.option_id.filter(Boolean)
+  //       : [service.option_id].filter(Boolean)
+  //   ) || []
+  // );
+
+  const auth = useSelector((state) => state?.auth);
+  const [addAppointment, { isLoading, refetch }] = useAddAppointmentMutation();
+
+  const totalPrice = appointmentData
+    ?.map((appointment) => appointment?.price)
+    ?.reduce((total, amount) => total + amount, 0);
+
+  // console.log("totalPrice", totalPrice);
+
+  const extraFee = appointmentData
+    ?.map((appointment) => appointment?.extraFee)
+    ?.reduce((total, amount) => total + amount, 0);
+
+  // console.log("extraFee", extraFee);
+
+  const getInitialValues = () => {
+    console.log("auth", auth);
+    console.log("appointmentData", appointmentData);
+    console.log("totalPrice", totalPrice);
+    console.log("extraFee", extraFee);
+    console.log("hasAppointmentFee", hasAppointmentFee);
+    console.log("selectedBeautician", selectedBeautician);
+    console.log("selectedDate", selectedDate);
+    console.log("selectedTime", selectedTime);
+    console.log("selectedPayment", selectedPayment);
+    console.log("selectedCustomerType", selectedCustomerType);
+    console.log("selectedImage", selectedImage);
+
+    const sanitizedService = appointmentData
+      ?.map((service) => service?.service_id)
+      ?.filter(Boolean);
+
+    const price = (totalPrice ?? 0) + (extraFee ?? 0);
+
+    const initialValues = {
+      customer: auth?.user?._id ?? null,
+      service: sanitizedService ?? null,
+      option:
+        appointmentData
+          ?.flatMap((service) =>
+            Array.isArray(service?.option_id)
+              ? service?.option_id?.filter(Boolean)
+              : [service?.option_id]?.filter(Boolean)
+          )
+          ?.filter(Boolean) ?? null,
+      price: price,
+      hasAppointmentFee: !!hasAppointmentFee,
+      status: "pending",
+      beautician: selectedBeautician ?? null,
+      date: selectedDate ?? null,
+      time: selectedTime ?? null,
+      payment: selectedPayment ?? null,
+      image: selectedImage ?? null,
+      customer_type: selectedCustomerType ?? null,
+    };
+
+    console.log("initialValues", initialValues);
+    return initialValues;
+  };
 
   const formik = useFormik({
-    initialValues: {
-      service: selectedServiceTwo,
-      employee: selectedEmployee,
-      customer: auth.user._id,
-      date: selectedDate,
-      time: selectedTime,
-      price: appointmentData?.reduce((total, item) => total + item.price, 0),
-      extraFee: appointmentData?.reduce(
-        (total, item) => total + item.extraFee,
-        0
-      ),
-      note: "",
-      payment: selectedPayment,
-      status: "pending",
-    },
+    initialValues: getInitialValues(),
     onSubmit: (values) => {
-      console.log(values);
-      addAppointment(values)
-        .unwrap()
-        .then((response) => {
-          dispatch(appointmentSlice.actions.clearAppointmentData());
-          formik.resetForm();
-          Toast.show({
-            type: "success",
-            position: "top",
-            text1: "Transaction Successfully Created",
-            text2: `${response?.message}`,
-            visibilityTime: 3000,
-            autoHide: true,
-          });
-          navigation.navigate("CheckoutSuccess");
-        })
-        .catch((error) => {
-          Toast.show({
-            type: "error",
-            position: "top",
-            text1: "Error Creating Transaction",
-            text2: `${error?.data?.error?.message}`,
-            visibilityTime: 3000,
-            autoHide: true,
-          });
+      console.log("values", values);
+
+      const formData = new FormData();
+
+      selectedImage?.forEach((image) => {
+        const imageName = image.split("/").pop();
+        const imageType = "image/" + imageName.split(".").pop();
+
+        formData.append("image", {
+          uri: image,
+          name: imageName,
+          type: imageType,
         });
+      });
+
+      if (Array.isArray(values?.beautician)) {
+        values.beautician.forEach((item) =>
+          formData.append("beautician[]", item ?? null)
+        );
+      } else formData.append("beautician", values?.beautician ?? null);
+
+      formData.append("customer", values?.customer ?? null);
+
+      if (Array.isArray(values?.service)) {
+        values.service.forEach((item) =>
+          formData.append("service[]", item ?? null)
+        );
+      } else formData.append("service", values?.service ?? null);
+
+      if (Array.isArray(values?.option)) {
+        values.option.forEach((item) =>
+          formData.append("option[]", item ?? null)
+        );
+      } else formData.append("option", values?.option ?? null);
+
+      formData.append("date", values?.date ?? null);
+
+      if (Array.isArray(values?.time)) {
+        values.time.forEach((item) => formData.append("time[]", item ?? null));
+      } else formData.append("time", values?.time ?? null);
+
+      formData.append("payment", values?.payment ?? null);
+      formData.append("price", values?.price ?? null);
+      formData.append("hasAppointmentFee", values?.hasAppointmentFee ?? null);
+      if (
+        values.customer_type !== undefined &&
+        values.customer_type !== null &&
+        values.customer_type !== ""
+      ) {
+        formData.append("customer_type", values.customer_type ?? null);
+      }
+
+      formData.append("status", values?.status ?? null);
+
+      console.log("formData", formData);
+
+      addAppointment(formData).then((response) => {
+        console.log("response", response.error);
+        dispatch(clearAppointmentData());
+        dispatch(clearTransactionData());
+        formik.resetForm();
+        Toast.show({
+          type: "success",
+          position: "top",
+          text1: "Transaction Successfully Created",
+          text2: "Please pay the exact amount of your transaction.",
+          visibilityTime: 3000,
+          autoHide: true,
+        });
+        navigation.navigate("CustomerDrawer");
+      });
     },
   });
+
+  useEffect(() => {
+    formik.setValues(getInitialValues());
+  }, [
+    selectedBeautician,
+    selectedDate,
+    selectedTime,
+    selectedPayment,
+    selectedCustomerType,
+    selectedImage,
+  ]);
 
   const handlePayment = () => {
     if (!selectedDate || !selectedTime || selectedTime.length === 0) {
@@ -130,8 +246,19 @@ export default function () {
     navigation.navigate("PaymentOption");
   };
 
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
+
   const handleEmployee = () => {
-    navigation.navigate("Employee");
+    if (selectedAppointment === null) {
+      Toast.show({
+        type: "error",
+        position: "top",
+        text1: "Warning",
+        text2: "Please select a service first",
+        visibilityTime: 3000,
+        autoHide: true,
+      });
+    } else navigation.navigate("Employee", { selectedAppointment });
   };
 
   const handleDateTime = () => {
@@ -211,88 +338,102 @@ export default function () {
                 </Text>
               </TouchableOpacity>
             </View>
-            {appointmentData?.map((appointment, index) => (
-              <View
-                key={index}
-                style={{
-                  backgroundColor: "#FDA7DF",
-                  width: windowWidth * 0.925,
-                }}
-                className={`rounded-2xl px-4 pb-4 pt-1 mt-4 mb-2`}
-              >
-                <View className={`flex-col`}>
-                  <View className={`flex-col pt-4 self-center`}>
-                    <Image
-                      source={{
-                        uri: appointment?.image[
-                          Math.floor(Math.random() * appointment?.image?.length)
-                        ]?.url,
-                      }}
-                      resizeMode="cover"
-                      className={`h-[150px] w-[300px]`}
-                    />
-                    <Text
-                      style={{ color: textColor }}
-                      className={`text-center text-lg font-semibold pt-4`}
-                    >
-                      Name: {appointment?.service_name}
-                    </Text>
-                    <Text
-                      style={{ color: textColor }}
-                      className={`flex-wrap text-center text-lg font-semibold`}
-                    >
-                      {appointment?.duration} | ₱{appointment?.price}
-                    </Text>
-                  </View>
-                  <View className={`flex-col pt-2`}>
-                    <View className={`pt-1`}>
+            {appointmentData &&
+              appointmentData.map((appointment, index) => (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => {
+                    const newSelectedAppointment =
+                      selectedAppointment === appointment.type
+                        ? null
+                        : appointment.type;
+                    // console.log("Selected Appointment:", newSelectedAppointment);
+                    setSelectedAppointment(newSelectedAppointment);
+                  }}
+                  style={{
+                    backgroundColor:
+                      selectedAppointment === appointment.type
+                        ? "#F78FB3"
+                        : "#FDA7DF",
+                    width: windowWidth * 0.925,
+                  }}
+                  className={`rounded-2xl px-4 pb-4 pt-1 mt-4 mb-2`}
+                >
+                  <View className={`flex-col`}>
+                    <View className={`flex-col pt-4 self-center`}>
+                      <Image
+                        source={{
+                          uri: appointment?.image[
+                            Math.floor(
+                              Math.random() * appointment?.image?.length
+                            )
+                          ]?.url,
+                        }}
+                        resizeMode="cover"
+                        className={`h-[150px] w-[300px]`}
+                      />
                       <Text
                         style={{ color: textColor }}
-                        className={`text-lg font-semibold`}
+                        className={`text-center text-lg font-semibold pt-4`}
                       >
-                        Product Use: {appointment?.product_name}
+                        Name: {appointment?.service_name}
                       </Text>
                       <Text
                         style={{ color: textColor }}
-                        className={`text-lg font-semibold`}
+                        className={`flex-wrap text-center text-lg font-semibold`}
                       >
-                        Description: {appointment?.description}
-                      </Text>
-                      <Text
-                        style={{ color: textColor }}
-                        className={`text-lg flex-wrap text-start font-semibold`}
-                      >
-                        For: {appointment?.type.join(", ")}
-                      </Text>
-                      <Text
-                        style={{ color: textColor }}
-                        className={`text-lg font-semibold`}
-                      >
-                        Add Ons:{" "}
-                        {appointment?.option_name?.length > 0
-                          ? appointment?.option_name
-                              .split(", ")
-                              .map(
-                                (option, index) =>
-                                  `${option} - ₱${
-                                    appointment?.per_price[index]
-                                  }${
-                                    index !==
-                                    appointment?.option_name.split(", ")
-                                      .length -
-                                      1
-                                      ? ", "
-                                      : ""
-                                  }`
-                              )
-                              .join("")
-                          : "None"}
+                        {appointment?.duration} | ₱{appointment?.price}
                       </Text>
                     </View>
+                    <View className={`flex-col pt-2`}>
+                      <View className={`pt-1`}>
+                        <Text
+                          style={{ color: textColor }}
+                          className={`text-lg font-semibold`}
+                        >
+                          Product Use: {appointment?.product_name}
+                        </Text>
+                        <Text
+                          style={{ color: textColor }}
+                          className={`text-lg font-semibold`}
+                        >
+                          Description: {appointment?.description}
+                        </Text>
+                        <Text
+                          style={{ color: textColor }}
+                          className={`text-lg flex-wrap text-start font-semibold`}
+                        >
+                          For: {appointment?.type.join(", ")}
+                        </Text>
+                        <Text
+                          style={{ color: textColor }}
+                          className={`text-lg font-semibold`}
+                        >
+                          Add Ons:{" "}
+                          {appointment?.option_name?.length > 0
+                            ? appointment?.option_name
+                                .split(", ")
+                                .map(
+                                  (option, index) =>
+                                    `${option} - ₱${
+                                      appointment?.per_price[index]
+                                    }${
+                                      index !==
+                                      appointment?.option_name.split(", ")
+                                        .length -
+                                        1
+                                        ? ", "
+                                        : ""
+                                    }`
+                                )
+                                .join("")
+                            : "None"}
+                        </Text>
+                      </View>
+                    </View>
                   </View>
-                </View>
-              </View>
-            ))}
+                </TouchableOpacity>
+              ))}
           </ScrollView>
         </ScrollView>
         <View
@@ -363,7 +504,7 @@ export default function () {
                 ₱
                 {appointmentData
                   ?.map(
-                    (appointment) => appointment?.price + appointment?.extraFee
+                    (appointment) => appointment.price + appointment.extraFee
                   )
                   .reduce((total, amount) => total + amount, 0)}
               </Text>

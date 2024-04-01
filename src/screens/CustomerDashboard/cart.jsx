@@ -28,7 +28,7 @@ export default function () {
 
   const appointment = useSelector((state) => state?.appointment);
 
-  const appointmentData = appointment?.appointmentData;
+  const appointmentData = appointment?.appointmentData || [];
   const appointmentCount = appointment?.count;
 
   const handlePress = () => {
