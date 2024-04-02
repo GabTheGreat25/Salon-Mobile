@@ -65,112 +65,134 @@ export default function () {
             scrollEventThrottle={1}
             className={`px-3 pb-6`}
           >
-            {appointmentData?.map((appointment, index) => (
-              <View
-                key={index}
-                style={{
-                  backgroundColor: "#FDA7DF",
-                  width: windowWidth * 0.925,
-                }}
-                className={`rounded-2xl p-4 mt-4 mb-2`}
-              >
-                <View className={`flex-1 flex-col`}>
-                  <View className={`flex-row gap-x-2`}>
-                    <Feather name="home" size={20} color={textColor} />
-                    <Text
-                      style={{ color: textColor }}
-                      className={`text-base font-semibold`}
-                    >
-                      Lhanlee Beauty Lounge
-                    </Text>
-                    <TouchableOpacity
-                      onPress={() => handleTrashClick(appointment?.service_id)}
-                      className={`flex-1 justify-end items-end`}
-                    >
-                      <Feather name="trash-2" size={20} color={textColor} />
-                    </TouchableOpacity>
-                  </View>
-                  <View
-                    style={{
-                      borderBottomColor: textColor,
-                      borderBottomWidth: 1,
-                      marginTop: 5,
-                    }}
-                  />
-                </View>
-                <View className={`flex-col`}>
-                  <View className={`flex-col pt-4 self-center`}>
-                    <Image
-                      source={{
-                        uri: appointment?.image[
-                          Math.floor(Math.random() * appointment?.image?.length)
-                        ]?.url,
+            {appointmentData &&
+            Array.isArray(appointmentData) &&
+            appointmentData.length > 0 ? (
+              appointmentData?.map((appointment, index) => (
+                <View
+                  key={index ?? null}
+                  style={{
+                    backgroundColor: "#FDA7DF",
+                    width: windowWidth * 0.925,
+                  }}
+                  className={`rounded-2xl p-4 mt-4 mb-2`}
+                >
+                  <View className={`flex-1 flex-col`}>
+                    <View className={`flex-row gap-x-2`}>
+                      <Feather name="home" size={20} color={textColor} />
+                      <Text
+                        style={{ color: textColor }}
+                        className={`text-base font-semibold`}
+                      >
+                        Lhanlee Beauty Lounge
+                      </Text>
+                      <TouchableOpacity
+                        onPress={() =>
+                          handleTrashClick(appointment?.service_id)
+                        }
+                        className={`flex-1 justify-end items-end`}
+                      >
+                        <Feather name="trash-2" size={20} color={textColor} />
+                      </TouchableOpacity>
+                    </View>
+                    <View
+                      style={{
+                        borderBottomColor: textColor,
+                        borderBottomWidth: 1,
+                        marginTop: 5,
                       }}
-                      resizeMode="cover"
-                      className={`h-[150px] w-[300px]`}
                     />
-                    <Text
-                      style={{ color: textColor }}
-                      className={`text-center text-lg font-semibold pt-4`}
-                    >
-                      Name: {appointment?.service_name}
-                    </Text>
-                    <Text
-                      style={{ color: textColor }}
-                      className={`flex-wrap text-center text-lg font-semibold`}
-                    >
-                      {appointment?.duration} | ₱{appointment?.price}
-                    </Text>
                   </View>
-                  <View className={`flex-col pt-2`}>
-                    <View className={`pt-1`}>
+                  <View className={`flex-col`}>
+                    <View className={`flex-col pt-4 self-center`}>
+                      <Image
+                        source={{
+                          uri:
+                            appointment?.image?.length > 0
+                              ? appointment?.image[
+                                  Math.floor(
+                                    Math.random() * appointment?.image?.length
+                                  )
+                                ]?.url
+                              : null,
+                        }}
+                        resizeMode="cover"
+                        className={`h-[150px] w-[300px]`}
+                      />
                       <Text
                         style={{ color: textColor }}
-                        className={`text-lg font-semibold`}
+                        className={`text-center text-lg font-semibold pt-4`}
                       >
-                        Product Use: {appointment?.product_name}
+                        Name: {appointment?.service_name ?? null}
                       </Text>
                       <Text
                         style={{ color: textColor }}
-                        className={`text-lg font-semibold`}
+                        className={`flex-wrap text-center text-lg font-semibold`}
                       >
-                        Description: {appointment?.description}
+                        {appointment?.duration ?? null} | ₱
+                        {appointment?.price ?? null}
                       </Text>
-                      <Text
-                        style={{ color: textColor }}
-                        className={`text-lg flex-wrap text-start font-semibold`}
-                      >
-                        For: {appointment?.type.join(", ")}
-                      </Text>
-                      <Text
-                        style={{ color: textColor }}
-                        className={`text-lg font-semibold`}
-                      >
-                        Add Ons:{" "}
-                        {appointment?.option_name?.length > 0
-                          ? appointment?.option_name
-                              .split(", ")
-                              .map(
-                                (option, index) =>
-                                  `${option} - ₱${
-                                    appointment?.per_price[index]
-                                  }${
-                                    index !==
-                                    appointment?.option_name.split(", ")
-                                      .length -
-                                      1
-                                      ? ", "
-                                      : ""
-                                  }`
-                              )
-                              .join("")
-                          : "None"}
-                      </Text>
+                    </View>
+                    <View className={`flex-col pt-2`}>
+                      <View className={`pt-1`}>
+                        <Text
+                          style={{ color: textColor }}
+                          className={`text-lg font-semibold`}
+                        >
+                          Product Use: {appointment?.product_name ?? null}
+                        </Text>
+                        <Text
+                          style={{ color: textColor }}
+                          className={`text-lg font-semibold`}
+                        >
+                          Description: {appointment?.description ?? null}
+                        </Text>
+                        <Text
+                          style={{ color: textColor }}
+                          className={`text-lg flex-wrap text-start font-semibold`}
+                        >
+                          For:{" "}
+                          {Array.isArray(appointment?.type)
+                            ? appointment?.type.join(", ")
+                            : "None"}
+                        </Text>
+                        <Text
+                          style={{ color: textColor }}
+                          className={`text-lg font-semibold`}
+                        >
+                          Add Ons:{" "}
+                          {appointment?.option_name?.length > 0
+                            ? appointment?.option_name
+                                .split(", ")
+                                .map(
+                                  (option, index) =>
+                                    `${option} - ₱${
+                                      appointment?.per_price[index]
+                                    }${
+                                      index !==
+                                      appointment?.option_name.split(", ")
+                                        .length -
+                                        1
+                                        ? ", "
+                                        : ""
+                                    }`
+                                )
+                                .join("")
+                            : "None"}
+                        </Text>
+                      </View>
                     </View>
                   </View>
                 </View>
+              ))
+            ) : (
+              <View
+                className={`flex-1 justify-center items-center`}
+                style={{ backgroundColor }}
+              >
+                <Text style={{ color: textColor }}>No data available.</Text>
               </View>
-            ))}
+            )}
           </ScrollView>
         </ScrollView>
         <View
