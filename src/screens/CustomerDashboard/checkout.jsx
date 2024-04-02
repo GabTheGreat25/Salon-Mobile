@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   ScrollView,
   View,
@@ -9,7 +9,7 @@ import {
   SafeAreaView,
 } from "react-native";
 import { changeColor } from "@utils";
-import { Feather, FontAwesome, Ionicons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { BackIcon } from "@helpers";
 import { useFormik } from "formik";
@@ -18,6 +18,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Toast from "react-native-toast-message";
 import { clearAppointmentData } from "../../state/appointment/appointmentReducer";
 import { clearTransactionData } from "../../state/transaction/transactionReducer";
+import { createTransactionValidation } from "../../validation";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -27,208 +28,146 @@ export default function () {
   const navigation = useNavigation();
 
   const appointment = useSelector((state) => state?.appointment);
-  // console.log("appointment", appointment);
 
   const hasAppointmentFee = useSelector(
-    (state) => state?.fee?.hasAppointmentFee ?? null
+    (state) => state?.fee?.hasAppointmentFee
   );
-  // console.log("hasAppointmentFee", hasAppointmentFee);
 
   const selectedPayment = useSelector(
-    (state) => state?.transaction?.transactionData?.payment ?? null
+    (state) => state?.transaction?.transactionData?.payment
   );
-  // console.log("selectedPayment", selectedPayment);
 
   const selectedCustomerType = useSelector(
-    (state) => state?.transaction?.transactionData?.customerType ?? null
+    (state) => state?.transaction?.transactionData?.customerType
   );
-  // console.log("selectedCustomerType", selectedCustomerType);
 
   const selectedImage = useSelector(
-    (state) => state?.transaction?.transactionData?.image ?? null
+    (state) => state?.transaction?.transactionData?.image
   );
-  // console.log("selectedImage", selectedImage);
 
   const selectedBeautician = useSelector(
-    (state) => state?.transaction?.transactionData?.beautician ?? null
+    (state) => state?.transaction?.transactionData?.beautician
   );
-  // console.log("selectedBeautician", selectedBeautician);
 
   const selectedDate = useSelector(
-    (state) => state?.transaction?.transactionData?.date ?? null
+    (state) => state?.transaction?.transactionData?.date
   );
-  // console.log("selectedDate", selectedDate);
 
   const selectedTime = useSelector(
-    (state) => state?.transaction?.transactionData?.time ?? null
+    (state) => state?.transaction?.transactionData?.time
   );
-  // console.log("selectedTime", selectedTime);
 
   const dispatch = useDispatch();
 
-  const appointmentData =
-    appointment && appointment.appointmentData
-      ? appointment.appointmentData
-      : [];
-
-  // console.log("appointmentData", appointmentData);
-
-  // console.log(
-  //   "options",
-  //   appointmentData?.flatMap((service) =>
-  //     Array.isArray(service.option_id)
-  //       ? service.option_id.filter(Boolean)
-  //       : [service.option_id].filter(Boolean)
-  //   ) || []
-  // );
+  const appointmentData = appointment?.appointmentData || [];
 
   const auth = useSelector((state) => state?.auth);
-  const [addAppointment, { isLoading, refetch }] = useAddAppointmentMutation();
+  const [addAppointment, { isLoading }] = useAddAppointmentMutation();
 
   const totalPrice = appointmentData
     ?.map((appointment) => appointment?.price)
     ?.reduce((total, amount) => total + amount, 0);
 
-  // console.log("totalPrice", totalPrice);
-
   const extraFee = appointmentData
     ?.map((appointment) => appointment?.extraFee)
     ?.reduce((total, amount) => total + amount, 0);
 
-  // console.log("extraFee", extraFee);
-
-  const getInitialValues = () => {
-    console.log("auth", auth);
-    console.log("appointmentData", appointmentData);
-    console.log("totalPrice", totalPrice);
-    console.log("extraFee", extraFee);
-    console.log("hasAppointmentFee", hasAppointmentFee);
-    console.log("selectedBeautician", selectedBeautician);
-    console.log("selectedDate", selectedDate);
-    console.log("selectedTime", selectedTime);
-    console.log("selectedPayment", selectedPayment);
-    console.log("selectedCustomerType", selectedCustomerType);
-    console.log("selectedImage", selectedImage);
-
-    const sanitizedService = appointmentData
-      ?.map((service) => service?.service_id)
-      ?.filter(Boolean);
-
-    const price = (totalPrice ?? 0) + (extraFee ?? 0);
-
-    const initialValues = {
-      customer: auth?.user?._id ?? null,
-      service: sanitizedService ?? null,
-      option:
-        appointmentData
-          ?.flatMap((service) =>
-            Array.isArray(service?.option_id)
-              ? service?.option_id?.filter(Boolean)
-              : [service?.option_id]?.filter(Boolean)
-          )
-          ?.filter(Boolean) ?? null,
-      price: price,
-      hasAppointmentFee: !!hasAppointmentFee,
-      status: "pending",
-      beautician: selectedBeautician ?? null,
-      date: selectedDate ?? null,
-      time: selectedTime ?? null,
-      payment: selectedPayment ?? null,
-      image: selectedImage ?? null,
-      customer_type: selectedCustomerType ?? null,
-    };
-
-    console.log("initialValues", initialValues);
-    return initialValues;
-  };
-
   const formik = useFormik({
-    initialValues: getInitialValues(),
-    onSubmit: (values) => {
-      console.log("values", values);
-
+    enableReinitialize: true,
+    initialValues: {
+      customer: auth?.user?._id || "",
+      service: appointmentData?.map((service) => service?.service_id) || [],
+      option: appointmentData?.flatMap((service) =>
+        Array.isArray(service?.option_id)
+          ? service?.option_id?.filter(Boolean)
+          : [service?.option_id]?.filter(Boolean) || []
+      ),
+      price: totalPrice + extraFee || 0,
+      hasAppointmentFee: hasAppointmentFee || false,
+      status: "pending",
+      beautician: selectedBeautician || [],
+      date: selectedDate || "",
+      time: selectedTime || [],
+      payment: selectedPayment || "",
+      image: selectedImage || [],
+      customer_type: selectedCustomerType || "Customer",
+    },
+    validationSchema: createTransactionValidation,
+    onSubmit: async (values) => {
       const formData = new FormData();
 
-      selectedImage?.forEach((image) => {
-        const imageName = image.split("/").pop();
-        const imageType = "image/" + imageName.split(".").pop();
+      if (selectedImage.some((img) => img === undefined || img === null)) {
+        Toast.show({
+          type: "error",
+          position: "top",
+          text1: "Error",
+          text2: "Please select an image.",
+          visibilityTime: 3000,
+          autoHide: true,
+        });
+        return;
+      }
 
-        formData.append("image", {
+      selectedImage?.forEach((image) => {
+        const imageName = image?.split("/")?.pop();
+        const imageType = "image/" + imageName?.split(".")?.pop();
+
+        formData?.append("image", {
           uri: image,
           name: imageName,
           type: imageType,
         });
       });
-
-      if (Array.isArray(values?.beautician)) {
-        values.beautician.forEach((item) =>
-          formData.append("beautician[]", item ?? null)
+      if (Array?.isArray(values?.beautician)) {
+        values?.beautician.forEach((item) =>
+          formData?.append("beautician[]", item)
         );
-      } else formData.append("beautician", values?.beautician ?? null);
+      } else formData.append("beautician", values?.beautician);
+      formData?.append("customer", values?.customer);
+      if (Array?.isArray(values?.service)) {
+        values?.service?.forEach((item) => formData?.append("service[]", item));
+      } else formData?.append("service", values?.service);
+      if (Array?.isArray(values?.option)) {
+        values?.option?.forEach((item) => formData.append("option[]", item));
+      } else formData?.append("option", values?.option);
+      formData?.append("date", values?.date);
+      if (Array?.isArray(values?.time)) {
+        values?.time?.forEach((item) => formData?.append("time[]", item));
+      } else formData?.append("time", values?.time);
+      formData?.append("payment", values?.payment);
+      formData?.append("price", values?.price);
+      formData?.append("hasAppointmentFee", values?.hasAppointmentFee);
+      formData?.append("customer_type", values?.customer_type);
+      formData?.append("status", values?.status);
 
-      formData.append("customer", values?.customer ?? null);
-
-      if (Array.isArray(values?.service)) {
-        values.service.forEach((item) =>
-          formData.append("service[]", item ?? null)
-        );
-      } else formData.append("service", values?.service ?? null);
-
-      if (Array.isArray(values?.option)) {
-        values.option.forEach((item) =>
-          formData.append("option[]", item ?? null)
-        );
-      } else formData.append("option", values?.option ?? null);
-
-      formData.append("date", values?.date ?? null);
-
-      if (Array.isArray(values?.time)) {
-        values.time.forEach((item) => formData.append("time[]", item ?? null));
-      } else formData.append("time", values?.time ?? null);
-
-      formData.append("payment", values?.payment ?? null);
-      formData.append("price", values?.price ?? null);
-      formData.append("hasAppointmentFee", values?.hasAppointmentFee ?? null);
-      if (
-        values.customer_type !== undefined &&
-        values.customer_type !== null &&
-        values.customer_type !== ""
-      ) {
-        formData.append("customer_type", values.customer_type ?? null);
-      }
-
-      formData.append("status", values?.status ?? null);
-
-      console.log("formData", formData);
-
-      addAppointment(formData).then((response) => {
-        console.log("response", response.error);
-        dispatch(clearAppointmentData());
-        dispatch(clearTransactionData());
-        formik.resetForm();
-        Toast.show({
-          type: "success",
-          position: "top",
-          text1: "Transaction Successfully Created",
-          text2: "Please pay the exact amount of your transaction.",
-          visibilityTime: 3000,
-          autoHide: true,
+      addAppointment(formData)
+        .unwrap()
+        .then((response) => {
+          dispatch(clearAppointmentData());
+          dispatch(clearTransactionData());
+          formik.resetForm();
+          Toast.show({
+            type: "success",
+            position: "top",
+            text1: "Transaction Successfully Created",
+            text2: `${response?.message}`,
+            visibilityTime: 3000,
+            autoHide: true,
+          });
+          navigation.navigate("CustomerDrawer");
+        })
+        .catch((error) => {
+          Toast.show({
+            type: "error",
+            position: "top",
+            text1: "Error Creating Transaction Details",
+            text2: `${error?.data?.error?.message}`,
+            visibilityTime: 3000,
+            autoHide: true,
+          });
         });
-        navigation.navigate("CustomerDrawer");
-      });
     },
   });
-
-  useEffect(() => {
-    formik.setValues(getInitialValues());
-  }, [
-    selectedBeautician,
-    selectedDate,
-    selectedTime,
-    selectedPayment,
-    selectedCustomerType,
-    selectedImage,
-  ]);
 
   const handlePayment = () => {
     if (!selectedDate || !selectedTime || selectedTime.length === 0) {
@@ -272,9 +211,6 @@ export default function () {
         autoHide: true,
       });
     } else navigation.navigate("ChooseDate");
-  };
-  const handleSuccess = () => {
-    navigation.navigate("CheckoutSuccess");
   };
 
   return (
@@ -339,20 +275,21 @@ export default function () {
               </TouchableOpacity>
             </View>
             {appointmentData &&
-              appointmentData.map((appointment, index) => (
+            Array.isArray(appointmentData) &&
+            appointmentData.length > 0 ? (
+              appointmentData?.map((appointment, index) => (
                 <TouchableOpacity
-                  key={index}
+                  key={index ?? null}
                   onPress={() => {
                     const newSelectedAppointment =
-                      selectedAppointment === appointment.type
+                      selectedAppointment === appointment?.type
                         ? null
-                        : appointment.type;
-                    // console.log("Selected Appointment:", newSelectedAppointment);
+                        : appointment?.type;
                     setSelectedAppointment(newSelectedAppointment);
                   }}
                   style={{
                     backgroundColor:
-                      selectedAppointment === appointment.type
+                      selectedAppointment === appointment?.type
                         ? "#F78FB3"
                         : "#FDA7DF",
                     width: windowWidth * 0.925,
@@ -363,11 +300,14 @@ export default function () {
                     <View className={`flex-col pt-4 self-center`}>
                       <Image
                         source={{
-                          uri: appointment?.image[
-                            Math.floor(
-                              Math.random() * appointment?.image?.length
-                            )
-                          ]?.url,
+                          uri:
+                            appointment?.image?.length > 0
+                              ? appointment?.image[
+                                  Math.floor(
+                                    Math.random() * appointment?.image?.length
+                                  )
+                                ]?.url
+                              : null,
                         }}
                         resizeMode="cover"
                         className={`h-[150px] w-[300px]`}
@@ -382,7 +322,8 @@ export default function () {
                         style={{ color: textColor }}
                         className={`flex-wrap text-center text-lg font-semibold`}
                       >
-                        {appointment?.duration} | ₱{appointment?.price}
+                        {appointment?.duration ?? null} | ₱
+                        {appointment?.price ?? null}
                       </Text>
                     </View>
                     <View className={`flex-col pt-2`}>
@@ -391,19 +332,22 @@ export default function () {
                           style={{ color: textColor }}
                           className={`text-lg font-semibold`}
                         >
-                          Product Use: {appointment?.product_name}
+                          Product Use: {appointment?.product_name ?? null}
                         </Text>
                         <Text
                           style={{ color: textColor }}
                           className={`text-lg font-semibold`}
                         >
-                          Description: {appointment?.description}
+                          Description: {appointment?.description ?? null}
                         </Text>
                         <Text
                           style={{ color: textColor }}
                           className={`text-lg flex-wrap text-start font-semibold`}
                         >
-                          For: {appointment?.type.join(", ")}
+                          For:{" "}
+                          {Array.isArray(appointment?.type)
+                            ? appointment?.type.join(", ")
+                            : "None"}
                         </Text>
                         <Text
                           style={{ color: textColor }}
@@ -433,7 +377,15 @@ export default function () {
                     </View>
                   </View>
                 </TouchableOpacity>
-              ))}
+              ))
+            ) : (
+              <View
+                className={`flex-1 justify-center items-center`}
+                style={{ backgroundColor }}
+              >
+                <Text style={{ color: textColor }}>No data available.</Text>
+              </View>
+            )}
           </ScrollView>
         </ScrollView>
         <View
@@ -504,15 +456,20 @@ export default function () {
                 ₱
                 {appointmentData
                   ?.map(
-                    (appointment) => appointment.price + appointment.extraFee
+                    (appointment) => appointment?.price + appointment?.extraFee
                   )
-                  .reduce((total, amount) => total + amount, 0)}
+                  ?.reduce((total, amount) => total + amount, 0)}
               </Text>
             </View>
           </View>
-          <TouchableOpacity onPress={formik.handleSubmit}>
+          <TouchableOpacity
+            onPress={formik?.handleSubmit}
+            disabled={!formik.isValid}
+          >
             <View
-              className={`justify-center items-center rounded-md py-2 bg-primary-default`}
+              className={`justify-center items-center rounded-md py-2 bg-primary-default ${
+                !formik.isValid ? "opacity-50" : "opacity-100"
+              }`}
             >
               <Text
                 style={{ color: textColor }}
