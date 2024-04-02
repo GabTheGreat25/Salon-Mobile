@@ -12,8 +12,8 @@ export const transactionSlice = createSlice({
         ...state,
         transactionData: {
           ...state.transactionData,
-          time: time,
-          date: date,
+          time: time || [],
+          date: date || "",
         },
       };
     },
@@ -24,15 +24,15 @@ export const transactionSlice = createSlice({
         ...state,
         transactionData: {
           ...state.transactionData,
-          beautician: beautician,
+          beautician: beautician || [],
         },
       };
     },
     setPayment(state, action) {
-      state.transactionData.payment = action.payload;
+      state.transactionData.payment = action.payload || "";
     },
     setType(state, action) {
-      state.transactionData.customerType = action.payload;
+      state.transactionData.customerType = action.payload || "";
     },
     setImage(state, action) {
       const images = action.payload;
@@ -41,12 +41,12 @@ export const transactionSlice = createSlice({
         ...state,
         transactionData: {
           ...state.transactionData,
-          image: images,
+          image: images || [],
         },
       };
     },
     setCustomer(state, action) {
-      state.transactionData.customer = action.payload;
+      state.transactionData.customer = action.payload || "";
     },
     clearTransactionData(state) {
       state.transactionData = {
