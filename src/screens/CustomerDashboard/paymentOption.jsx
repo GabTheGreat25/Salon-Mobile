@@ -50,6 +50,9 @@ export default function () {
     selectedCustomerType === "Senior" || false
   );
 
+  const [selectedImages, setSelectedImages] = useState(image || []);
+  console.log(selectedImages);
+
   const handlePayment = (paymentType) => {
     if (paymentType === "Cash") {
       setCashChecked(!isCashChecked);
@@ -101,6 +104,19 @@ export default function () {
       return;
     }
 
+    if (selectedImages.some((img) => img === undefined || img === null)) {
+      Toast.show({
+        type: "error",
+        position: "top",
+        text1: "Error",
+        text2:
+          "The images are corrupted. Please upload a new one and try again.",
+        visibilityTime: 3000,
+        autoHide: true,
+      });
+      return;
+    }
+
     if (isCashChecked) {
       dispatch(transactionSlice.actions.setPayment("Cash"));
     } else if (isGcashChecked) {
@@ -111,17 +127,13 @@ export default function () {
       dispatch(transactionSlice.actions.setType("Pwd"));
     } else if (isSeniorChecked) {
       dispatch(transactionSlice.actions.setType("Senior"));
-    }
+    } else dispatch(transactionSlice.actions.setType("Customer"));
 
-    if (selectedImages.length > 0) {
-      const imageURIs = selectedImages.map((image) => image.uri);
-      dispatch(transactionSlice.actions.setImage(imageURIs));
-    }
+    const imageURIs = selectedImages.map((image) => image.uri);
+    dispatch(transactionSlice.actions.setImage(imageURIs));
 
     navigation.navigate("Checkout");
   };
-
-  const [selectedImages, setSelectedImages] = useState(image || []);
 
   const takePicture = async () => {
     if (image) {
