@@ -147,7 +147,7 @@ export default function ({ route }) {
         price: selectedProduct?.price || 0,
         image: selectedProduct?.image || [],
         option_id: selectedOptions || [],
-        option_name: optionNames.join(", "),
+        option_name: optionNames.join(", ") || "",
         per_price: perPrices || 0,
         extraFee: extraFee || 0,
       })
