@@ -51,7 +51,6 @@ export default function () {
   );
 
   const [selectedImages, setSelectedImages] = useState(image || []);
-  console.log(selectedImages);
 
   const handlePayment = (paymentType) => {
     if (paymentType === "Cash") {
