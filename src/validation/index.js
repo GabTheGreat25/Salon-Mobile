@@ -34,6 +34,7 @@ import createMonthValidation from "./createMonth";
 import editMonthValidation from "./editMonth";
 import createOptionValidation from "./createOption";
 import editOptionValidation from "./editOption";
+import createTransactionValidation from "./createTransaction";
 
 export {
   createTestValidation,
@@ -72,4 +73,5 @@ export {
   editMonthValidation,
   createOptionValidation,
   editOptionValidation,
+  createTransactionValidation,
 };
