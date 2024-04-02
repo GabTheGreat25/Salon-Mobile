@@ -15,11 +15,8 @@ export const appointmentSlice = createSlice({
       );
 
       if (!existingService) {
-        return {
-          ...state,
-          appointmentData: [...state.appointmentData, newService],
-          count: state.count + 1,
-        };
+        state.appointmentData.push(newService);
+        state.count = state.appointmentData.length;
       } else {
         Toast.show({
           type: "error",
@@ -29,7 +26,6 @@ export const appointmentSlice = createSlice({
           visibilityTime: 3000,
           autoHide: true,
         });
-        return state;
       }
     },
     clearAppointmentData(state) {
