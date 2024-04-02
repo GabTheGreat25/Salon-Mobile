@@ -13,13 +13,6 @@
     "preview3": {
       "developmentClient": true
     },
-    "preview4": {
-      "distribution": "internal"
-    },
-    "production": {
-      "env": {
-        "EXPO_PUBLIC_API_URL": "https://salon-api-b2m0.onrender.com/api/v1/"
-      }
-    }
+    "production": {}
   }
 }
