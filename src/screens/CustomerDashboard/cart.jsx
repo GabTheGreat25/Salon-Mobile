@@ -29,6 +29,9 @@ export default function () {
   const appointment = useSelector((state) => state?.appointment);
 
   const appointmentData = appointment?.appointmentData || [];
+  const filteredAppointmentData = appointmentData.filter(
+    (appointment) => appointment.price !== 0
+  );
   const appointmentCount = appointment?.count;
 
   const handlePress = () => {
@@ -65,10 +68,10 @@ export default function () {
             scrollEventThrottle={1}
             className={`px-3 pb-6`}
           >
-            {appointmentData &&
-            Array.isArray(appointmentData) &&
-            appointmentData.length > 0 ? (
-              appointmentData?.map((appointment, index) => (
+            {filteredAppointmentData &&
+            Array.isArray(filteredAppointmentData) &&
+            filteredAppointmentData.length > 0 ? (
+              filteredAppointmentData?.map((appointment, index) => (
                 <View
                   key={index ?? null}
                   style={{
@@ -226,7 +229,7 @@ export default function () {
                 className={`text-lg font-semibold`}
               >
                 ₱
-                {appointmentData
+                {filteredAppointmentData
                   ?.map((appointment) => appointment?.price)
                   .reduce((total, amount) => total + amount, 0)}
               </Text>
@@ -245,7 +248,7 @@ export default function () {
                 className={`text-lg font-semibold`}
               >
                 ₱
-                {appointmentData
+                {filteredAppointmentData
                   ?.map((appointment) => appointment?.extraFee)
                   .reduce((total, amount) => total + amount, 0)}
               </Text>
@@ -268,7 +271,7 @@ export default function () {
                 className={`text-lg font-semibold`}
               >
                 ₱
-                {appointmentData
+                {filteredAppointmentData
                   ?.map(
                     (appointment) => appointment?.price + appointment?.extraFee
                   )

@@ -60,15 +60,18 @@ export default function () {
   const dispatch = useDispatch();
 
   const appointmentData = appointment?.appointmentData || [];
+  const filteredAppointmentData = appointmentData.filter(
+    (appointment) => appointment.price !== 0
+  );
 
   const auth = useSelector((state) => state?.auth);
   const [addAppointment, { isLoading }] = useAddAppointmentMutation();
 
-  const totalPrice = appointmentData
+  const totalPrice = filteredAppointmentData
     ?.map((appointment) => appointment?.price)
     ?.reduce((total, amount) => total + amount, 0);
 
-  const extraFee = appointmentData
+  const extraFee = filteredAppointmentData
     ?.map((appointment) => appointment?.extraFee)
     ?.reduce((total, amount) => total + amount, 0);
 
@@ -76,8 +79,9 @@ export default function () {
     enableReinitialize: true,
     initialValues: {
       customer: auth?.user?._id || "",
-      service: appointmentData?.map((service) => service?.service_id) || [],
-      option: appointmentData?.flatMap((service) =>
+      service:
+        filteredAppointmentData?.map((service) => service?.service_id) || [],
+      option: filteredAppointmentData?.flatMap((service) =>
         Array.isArray(service?.option_id)
           ? service?.option_id?.filter(Boolean)
           : [service?.option_id]?.filter(Boolean) || []
@@ -274,10 +278,10 @@ export default function () {
                 </Text>
               </TouchableOpacity>
             </View>
-            {appointmentData &&
-            Array.isArray(appointmentData) &&
-            appointmentData.length > 0 ? (
-              appointmentData?.map((appointment, index) => (
+            {filteredAppointmentData &&
+            Array.isArray(filteredAppointmentData) &&
+            filteredAppointmentData.length > 0 ? (
+              filteredAppointmentData?.map((appointment, index) => (
                 <TouchableOpacity
                   key={index ?? null}
                   onPress={() => {
@@ -454,7 +458,7 @@ export default function () {
                 className={`text-lg font-bold`}
               >
                 ₱
-                {appointmentData
+                {filteredAppointmentData
                   ?.map(
                     (appointment) => appointment?.price + appointment?.extraFee
                   )
