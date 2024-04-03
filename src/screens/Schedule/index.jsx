@@ -1,12 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ScrollView,
   View,
   Text,
+  TextInput,
   Image,
   TouchableOpacity,
   Dimensions,
   SafeAreaView,
+  Modal,
 } from "react-native";
 import { changeColor } from "@utils";
 import { useNavigation } from "@react-navigation/native";
@@ -15,18 +17,25 @@ import { useGetTransactionsQuery } from "../../state/api/reducer";
 import { useFormik } from "formik";
 import { LoadingScreen } from "@components";
 import { useIsFocused } from "@react-navigation/native";
+import { rebookCustomerValidation } from "../../validation";
+import { reasonSlice } from "../../state/editSchedule/reasonReducer";
+import Toast from "react-native-toast-message";
 
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
 
 export default function () {
-  const { backgroundColor, colorScheme } = changeColor();
-  // const navigation = useNavigation();
-  // const dispatch = useDispatch();
+  const { backgroundColor, textColor, colorScheme } = changeColor();
+  const navigation = useNavigation();
+
+  const reason = useSelector((state) => state.reason);
+  console.log(reason);
+
+  const dispatch = useDispatch();
   const isFocused = useIsFocused();
 
   const auth = useSelector((state) => state.auth.user);
 
+  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
   const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDA7DF";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
@@ -45,6 +54,83 @@ export default function () {
     const isPending = transaction?.status === "pending";
     return appointmentCustomerID === auth?._id && isPending;
   });
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [editedTransactionId, setEditedTransactionId] = useState(null);
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      rebookReason: "",
+      messageReason: "",
+    },
+    validationSchema: rebookCustomerValidation,
+    onSubmit: (values) => {
+      dispatch(
+        reasonSlice.actions.reasonForm({
+          rebookReason: values.rebookReason,
+          messageReason: values.messageReason,
+        })
+      );
+      setSelectedRebookReason("");
+      setModalVisible(false);
+      navigation.navigate("EditSchedule", {
+        id: editedTransactionId,
+      });
+    },
+  });
+
+  const [selectedRebookReason, setSelectedRebookReason] = useState(
+    formik.values.rebookReason || ""
+  );
+
+  const radioOptions = [
+    { label: "Schedule Conflict", value: "Schedule Conflict" },
+    { label: "Change Of Plans", value: "Change Of Plans" },
+    { label: "Emergency", value: "Emergency" },
+    { label: "Travel Conflict", value: "Travel Conflict" },
+    { label: "Personal Reasons", value: "Personal Reasons" },
+    { label: "Others", value: "Others" },
+  ];
+
+  const handleRadioOptions = (option) => {
+    formik.setFieldValue("rebookReason", option.value);
+    setSelectedRebookReason(option.value);
+  };
+
+  const handleReason = (transactionId) => {
+    const today = new Date();
+    today.setDate(today.getDate() + 1);
+
+    const selectedTransaction = transactions.find(
+      (transaction) => transaction.appointment?._id === transactionId
+    );
+
+    const appointmentDate = new Date(selectedTransaction?.appointment?.date);
+    const rescheduleDate = new Date(today);
+    rescheduleDate.setDate(today.getDate() + 3);
+
+    const formattedAppointmentDate = appointmentDate
+      .toISOString()
+      .split("T")[0];
+    const formattedRescheduleDate = rescheduleDate.toISOString().split("T")[0];
+
+    if (formattedAppointmentDate >= formattedRescheduleDate) {
+      setEditedTransactionId(transactionId);
+      setModalVisible(true);
+    } else
+      Toast.show({
+        type: "error",
+        position: "top",
+        text1: "Warning",
+        text2: `You cannot reschedule within the next 3 days.`,
+        visibilityTime: 3000,
+        autoHide: true,
+      });
+  };
 
   return (
     <>
@@ -174,13 +260,46 @@ export default function () {
                       </View>
                       <View className={`items-end justify-end mt-[22px]`}>
                         <TouchableOpacity
-                          className={`px-4 py-2 rounded-lg bg-primary-accent`}
+                          onPress={() => {
+                            if (
+                              transaction?.appointment?.isRescheduled === true
+                            ) {
+                              Toast.show({
+                                type: "error",
+                                position: "top",
+                                text1: "Warning",
+                                text2: `You cannot reschedule because you already edited the appointment.`,
+                                visibilityTime: 3000,
+                                autoHide: true,
+                              });
+                            } else {
+                              handleReason(transaction?.appointment?._id);
+                            }
+                          }}
+                          className={`px-4 py-2 rounded-lg  ${
+                            transaction?.appointment?.hasAppointmentFee === true
+                              ? "bg-primary-accent"
+                              : ""
+                          }`}
                         >
                           <Text
                             style={{ color: invertTextColor }}
                             className={`text-lg font-semibold`}
                           >
-                            Reschedule
+                            {transaction?.appointment?.hasAppointmentFee ===
+                            true ? (
+                              <Text
+                                style={{ color: invertTextColor }}
+                                className={`text-lg font-semibold`}
+                              >
+                                {transaction?.appointment?.isRescheduled ===
+                                true
+                                  ? "Already Rescheduled"
+                                  : "Reschedule"}
+                              </Text>
+                            ) : (
+                              ""
+                            )}
                           </Text>
                         </TouchableOpacity>
                       </View>
@@ -189,6 +308,156 @@ export default function () {
                 </View>
               ))}
             </ScrollView>
+            <View>
+              {modalVisible && (
+                <Modal
+                  animationType="slide"
+                  transparent={true}
+                  visible={modalVisible}
+                  onRequestClose={handleCloseModal}
+                >
+                  <View
+                    style={{
+                      backgroundColor: "rgba(0,0,0,0.6)",
+                    }}
+                    className={`items-center justify-center flex-1`}
+                  >
+                    <View
+                      style={{
+                        backgroundColor,
+                        width: "80%",
+                      }}
+                      className={`p-4 rounded-lg`}
+                    >
+                      <Text
+                        style={{ color: textColor }}
+                        className={`text-2xl text-center font-semibold pb-4`}
+                      >
+                        Reason for Rescheduling
+                      </Text>
+                      <View className={`flex-col flex-wrap gap-x-1`}>
+                        {radioOptions.map((option) => (
+                          <TouchableOpacity
+                            key={option.value}
+                            className={`flex-row pl-2 py-2 items-center`}
+                            onPress={() => {
+                              handleRadioOptions(option);
+                            }}
+                          >
+                            <View
+                              style={{
+                                height: 25,
+                                width: 25,
+                                borderWidth: 2,
+                                borderColor:
+                                  formik.values.rebookReason === option.value
+                                    ? invertBackgroundColor
+                                    : backgroundColor,
+                                backgroundColor:
+                                  formik.values.rebookReason === option.value
+                                    ? backgroundColor
+                                    : invertBackgroundColor,
+                              }}
+                              className={`rounded-full`}
+                            >
+                              {selectedRebookReason === option.value && (
+                                <View
+                                  style={{
+                                    height: 12,
+                                    width: 12,
+                                    backgroundColor: textColor,
+                                    alignSelf: "center",
+                                    justifySelf: "center",
+                                    marginTop: 4,
+                                  }}
+                                  className={`rounded-full`}
+                                />
+                              )}
+                            </View>
+                            <View
+                              className={`flex-row justify-center items-center`}
+                            >
+                              <View className={`pl-2`}>
+                                <Text
+                                  style={{ color: textColor }}
+                                  className={`text-xl font-semibold`}
+                                >
+                                  {option.label}
+                                </Text>
+                              </View>
+                            </View>
+                          </TouchableOpacity>
+                        ))}
+                        {formik.touched.rebookReason &&
+                          formik.errors.rebookReason && (
+                            <Text style={{ color: "red" }}>
+                              {formik.errors.rebookReason}
+                            </Text>
+                          )}
+                      </View>
+                      <Text
+                        style={{ color: textColor }}
+                        className={`font-semibold text-xl`}
+                      >
+                        Reason for Rescheduling
+                      </Text>
+                      <TextInput
+                        style={{
+                          color: textColor,
+                          height: 100,
+                          textAlignVertical: "top",
+                        }}
+                        className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2 ${borderColor}`}
+                        placeholder="Tell us about yourself..."
+                        placeholderTextColor={textColor}
+                        autoCapitalize="none"
+                        multiline={true}
+                        onChangeText={formik.handleChange("messageReason")}
+                        onBlur={formik.handleBlur("messageReason")}
+                        value={formik.values.messageReason}
+                      />
+                      {formik.touched.messageReason &&
+                        formik.errors.messageReason && (
+                          <Text style={{ color: "red" }}>
+                            {formik.errors.messageReason}
+                          </Text>
+                        )}
+                      <View
+                        className={`flex-row gap-x-3 items-center justify-center pt-4`}
+                      >
+                        <TouchableOpacity
+                          onPress={formik.handleSubmit}
+                          disabled={!formik.isValid}
+                        >
+                          <View
+                            className={`py-2 rounded-lg bg-primary-accent px-6
+                          } ${!formik.isValid ? "opacity-50" : "opacity-100"}`}
+                          >
+                            <Text
+                              className={`font-semibold text-center text-lg`}
+                              style={{ color: textColor }}
+                            >
+                              Submit
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={handleCloseModal}
+                          className={`bg-primary-accent rounded-lg`}
+                        >
+                          <Text
+                            style={{ color: textColor }}
+                            className={`text-lg font-semibold py-2 px-7`}
+                          >
+                            Close
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </View>
+                </Modal>
+              )}
+            </View>
           </SafeAreaView>
         </>
       )}
