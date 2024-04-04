@@ -28,7 +28,6 @@ export default function () {
   const navigation = useNavigation();
 
   const reason = useSelector((state) => state.reason);
-  console.log(reason);
 
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
