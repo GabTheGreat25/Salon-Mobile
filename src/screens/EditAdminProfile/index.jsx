@@ -225,7 +225,11 @@ export default function () {
                     autoCapitalize="none"
                     onChangeText={formik.handleChange("name")}
                     onBlur={formik.handleBlur("name")}
-                    value={formik.values.name}
+                    value={
+                      formik.values.name.length > 17
+                        ? `${formik.values.name.substring(0, 17)}...`
+                        : formik.values.name
+                    }
                   />
                   {formik.touched.name && formik.errors.name && (
                     <Text style={{ color: "red" }}>{formik.errors.name}</Text>
