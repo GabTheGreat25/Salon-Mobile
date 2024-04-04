@@ -91,6 +91,8 @@ import {
   ReceiptHistory,
   customerViewServiceById,
   EditSchedule,
+  EditChooseDate,
+  EditBeautician,
 } from "@screens";
 import {
   TermsConditions,
@@ -180,6 +182,14 @@ export default function () {
                     component={customerViewServiceById}
                   />
                   <Stack.Screen name="EditSchedule" component={EditSchedule} />
+                  <Stack.Screen
+                    name="EditChooseDate"
+                    component={EditChooseDate}
+                  />
+                  <Stack.Screen
+                    name="EditBeautician"
+                    component={EditBeautician}
+                  />
                 </Stack.Navigator>
               ) : userRoles.includes("Beautician") ? (
                 <Stack.Navigator
