@@ -93,6 +93,8 @@ import {
   EditSchedule,
   EditChooseDate,
   EditBeautician,
+  ReceptionistEditLeaveDate,
+  SignUpReceptionist,
 } from "@screens";
 import {
   TermsConditions,
@@ -101,11 +103,17 @@ import {
   BeauticianRegisterTermsCondition,
   CustomerTermsCondition,
   Waiver,
+  ReceptionistRegisterTermsCondition,
 } from "@settings";
 import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
 import { DarkMode } from "@helpers";
-import { AdminDrawer, EmployeeDrawer, CustomerDrawer } from "@drawer";
+import {
+  AdminDrawer,
+  EmployeeDrawer,
+  CustomerDrawer,
+  ReceptionistDrawer,
+} from "@drawer";
 
 const Stack = createStackNavigator();
 
@@ -217,6 +225,26 @@ export default function () {
                   <Stack.Screen
                     name="ViewCustomerById"
                     component={ViewCustomerById}
+                  />
+                </Stack.Navigator>
+              ) : userRoles.includes("Receptionist") ? (
+                <Stack.Navigator
+                  initialRouteName="ReceptionistDrawer"
+                  screenOptions={{
+                    headerShown: false,
+                  }}
+                >
+                  <Stack.Screen
+                    name="ReceptionistDrawer"
+                    component={ReceptionistDrawer}
+                  />
+                  <Stack.Screen
+                    name="UpdateUserPassword"
+                    component={UpdateUserPassword}
+                  />
+                  <Stack.Screen
+                    name="ReceptionistEditLeaveDate"
+                    component={ReceptionistEditLeaveDate}
                   />
                 </Stack.Navigator>
               ) : userRoles.includes("Admin") ? (
@@ -351,6 +379,10 @@ export default function () {
                   component={SignUpEmployee}
                 />
                 <Stack.Screen
+                  name="SignUpReceptionist"
+                  component={SignUpReceptionist}
+                />
+                <Stack.Screen
                   name="ForgetPassword"
                   component={ForgetPassword}
                 />
@@ -368,6 +400,10 @@ export default function () {
                 <Stack.Screen
                   name="BeauticianRegisterTermsCondition"
                   component={BeauticianRegisterTermsCondition}
+                />
+                <Stack.Screen
+                  name="ReceptionistRegisterTermsCondition"
+                  component={ReceptionistRegisterTermsCondition}
                 />
                 <Stack.Screen
                   name="CustomerTermsCondition"
