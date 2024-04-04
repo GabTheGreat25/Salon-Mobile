@@ -27,7 +27,7 @@ export default {
   COMMENT_ID_ROUTE: "/comment/:id",
   EDIT_COMMENT_ID_ROUTE: "/comment/edit/:id",
   APPOINTMENTS_ROUTE: "/appointments",
-  APPOINTMENT_ID_ROUTE: "/appointment/:id",
+  APPOINTMENT_ID_ROUTE: "appointment/:id",
   EDIT_APPOINTMENT_ID_ROUTE: "/appointment/edit/:id",
   ACTIVATE_APPOINTMENT_ID_ROUTE: "/appointment/activate/:id",
   SCHEDULE_EDIT_APPOINTMENT_ID_ROUTE: "/appointment/schedule/edit/:id",
