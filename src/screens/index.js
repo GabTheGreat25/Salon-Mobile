@@ -111,6 +111,12 @@ import customerViewServiceById from "./Service/customerViewServiceById";
 import EditSchedule from "./Schedule/editSchedule";
 import EditChooseDate from "./Schedule/editChooseDate";
 import EditBeautician from "./Schedule/editBeautician";
+import ReceptionistDashboard from "./ReceptionistDashboard";
+import EditReceptionistProfile from "./EditReceptionistProfile";
+import ReceptionistLeaveDate from "./ReceptionistDashboard/leaveDate";
+import ReceptionistGetAllLeaveDate from "./ReceptionistDashboard/getAllLeaveDate";
+import ReceptionistEditLeaveDate from "./ReceptionistDashboard/editLeaveDate";
+import SignUpReceptionist from "./SignUpReceptionist";
 
 export {
   Home,
@@ -226,4 +232,10 @@ export {
   EditSchedule,
   EditChooseDate,
   EditBeautician,
+  ReceptionistDashboard,
+  EditReceptionistProfile,
+  ReceptionistLeaveDate,
+  ReceptionistGetAllLeaveDate,
+  ReceptionistEditLeaveDate,
+  SignUpReceptionist,
 };
