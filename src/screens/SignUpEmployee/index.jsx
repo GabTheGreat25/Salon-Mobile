@@ -93,7 +93,7 @@ export default function () {
           Toast.show({
             type: "success",
             position: "top",
-            text1: "Employee Successfully Created",
+            text1: "Beautician Successfully Created",
             text2: `${response?.message}`,
             visibilityTime: 3000,
             autoHide: true,
