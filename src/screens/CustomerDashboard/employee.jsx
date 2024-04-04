@@ -134,7 +134,6 @@ export default function () {
   };
 
   const handlePress = () => {
-    // Get the services required by the selected beauticians
     const servicesRequiredByBeauticians = pickedBeauticians.map(
       (beauticianId) => {
         const beauticianData = activeBeautician.find(
@@ -144,10 +143,8 @@ export default function () {
       }
     );
 
-    // Flatten the array of services
     const allServicesRequired = servicesRequiredByBeauticians.flat();
 
-    // Check if all selected services are covered by the picked beauticians
     const servicesNotCovered = selectedAppointment.filter(
       (service) => !allServicesRequired.includes(service)
     );
