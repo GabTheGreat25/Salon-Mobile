@@ -36,6 +36,7 @@ import createOptionValidation from "./createOption";
 import editOptionValidation from "./editOption";
 import createTransactionValidation from "./createTransaction";
 import rebookCustomerValidation from "./rebookCustomer";
+import createReceptionistValidation from "./createReceptionist";
 
 export {
   createTestValidation,
@@ -76,4 +77,5 @@ export {
   editOptionValidation,
   createTransactionValidation,
   rebookCustomerValidation,
+  createReceptionistValidation,
 };
