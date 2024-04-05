@@ -95,6 +95,16 @@ import {
   EditBeautician,
   ReceptionistEditLeaveDate,
   SignUpReceptionist,
+  ReceptionistCustomer,
+  CustomerReceptionistViewServiceById,
+  ReceptionistBudget,
+  ReceptionistPopular,
+  ReceptionistMostRecent,
+  ReceptionistRelevance,
+  ReceptionistCheckout,
+  ReceptionistChooseDate,
+  ReceptionistPaymentOption,
+  ReceptionistEmployee,
 } from "@screens";
 import {
   TermsConditions,
@@ -245,6 +255,47 @@ export default function () {
                   <Stack.Screen
                     name="ReceptionistEditLeaveDate"
                     component={ReceptionistEditLeaveDate}
+                  />
+                  <Stack.Screen
+                    name="ReceptionistCustomer"
+                    component={ReceptionistCustomer}
+                  />
+                  <Stack.Screen
+                    name="CustomerReceptionistViewServiceById"
+                    component={CustomerReceptionistViewServiceById}
+                  />
+                  <Stack.Screen
+                    name="ReceptionistBudget"
+                    component={ReceptionistBudget}
+                  />
+                  <Stack.Screen
+                    name="ReceptionistPopular"
+                    component={ReceptionistPopular}
+                  />
+                  <Stack.Screen
+                    name="ReceptionistMostRecent"
+                    component={ReceptionistMostRecent}
+                  />
+                  <Stack.Screen
+                    name="ReceptionistRelevance"
+                    component={ReceptionistRelevance}
+                  />
+                  <Stack.Screen name="Cart" component={Cart} />
+                  <Stack.Screen
+                    name="ReceptionistCheckout"
+                    component={ReceptionistCheckout}
+                  />
+                  <Stack.Screen
+                    name="ReceptionistChooseDate"
+                    component={ReceptionistChooseDate}
+                  />
+                  <Stack.Screen
+                    name="ReceptionistPaymentOption"
+                    component={ReceptionistPaymentOption}
+                  />
+                  <Stack.Screen
+                    name="ReceptionistEmployee"
+                    component={ReceptionistEmployee}
                   />
                 </Stack.Navigator>
               ) : userRoles.includes("Admin") ? (
