@@ -27,6 +27,9 @@ export default function () {
   const dispatch = useDispatch();
 
   const appointment = useSelector((state) => state?.appointment);
+  const roles = useSelector((state) => state?.auth?.user.roles);
+
+  const isReceptionist = roles?.includes("Receptionist");
 
   const appointmentData = appointment?.appointmentData || [];
   const filteredAppointmentData = appointmentData.filter(
@@ -36,7 +39,7 @@ export default function () {
 
   const handlePress = () => {
     dispatch(feeSlice.actions.hasFee());
-    navigation.navigate("Checkout");
+    navigation.navigate(isReceptionist ? "ReceptionistCheckout" : "Checkout");
   };
 
   const handleTrashClick = (serviceId) => {
