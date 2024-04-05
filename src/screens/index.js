@@ -117,6 +117,16 @@ import ReceptionistLeaveDate from "./ReceptionistDashboard/leaveDate";
 import ReceptionistGetAllLeaveDate from "./ReceptionistDashboard/getAllLeaveDate";
 import ReceptionistEditLeaveDate from "./ReceptionistDashboard/editLeaveDate";
 import SignUpReceptionist from "./SignUpReceptionist";
+import ReceptionistCustomer from "./ReceptionistDashboard/customer";
+import CustomerReceptionistViewServiceById from "./ReceptionistDashboard/customerReceptionistViewServiceById";
+import ReceptionistBudget from "./ReceptionistDashboard/budget";
+import ReceptionistPopular from "./ReceptionistDashboard/popular";
+import ReceptionistMostRecent from "./ReceptionistDashboard/mostRecent";
+import ReceptionistRelevance from "./ReceptionistDashboard/relevance";
+import ReceptionistCheckout from "./ReceptionistDashboard/checkout";
+import ReceptionistChooseDate from "./ReceptionistDashboard/chooseDate";
+import ReceptionistPaymentOption from "./ReceptionistDashboard/paymentOption";
+import ReceptionistEmployee from "./ReceptionistDashboard/employee";
 
 export {
   Home,
@@ -238,4 +248,14 @@ export {
   ReceptionistGetAllLeaveDate,
   ReceptionistEditLeaveDate,
   SignUpReceptionist,
+  ReceptionistCustomer,
+  CustomerReceptionistViewServiceById,
+  ReceptionistBudget,
+  ReceptionistPopular,
+  ReceptionistMostRecent,
+  ReceptionistRelevance,
+  ReceptionistCheckout,
+  ReceptionistChooseDate,
+  ReceptionistPaymentOption,
+  ReceptionistEmployee,
 };
