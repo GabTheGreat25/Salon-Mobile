@@ -13,6 +13,7 @@ export default function ({ name, color, toggle }) {
   const count = useSelector((state) => state.appointment.count);
 
   const isCustomer = userRoles?.includes("Customer");
+  const isReceptionist = userRoles?.includes("Receptionist");
 
   const handleCart = () => {
     navigation.navigate("Cart");
@@ -20,7 +21,7 @@ export default function ({ name, color, toggle }) {
 
   return (
     <>
-      {isCustomer && authenticated === true ? (
+      {(isCustomer || isReceptionist) && authenticated === true ? (
         <>
           <TouchableOpacity
             className="absolute z-[1000] right-5 top-4"
