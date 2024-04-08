@@ -21,9 +21,9 @@ import {
 import { LoadingScreen, Sidebar } from "@components";
 import { appointmentSlice } from "../../state/appointment/appointmentReducer";
 import { useSelector, useDispatch } from "react-redux";
+import { useIsFocused } from "@react-navigation/native";
 
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
 
 export default function () {
   const auth = useSelector((state) => state.auth.user);
@@ -35,12 +35,37 @@ export default function () {
   const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
-  const { data: servicesData, isLoading: servicesLoading } =
-    useGetServicesQuery();
+  const isFocused = useIsFocused();
+
+  const {
+    data: servicesData,
+    isLoading: servicesLoading,
+    refetch,
+  } = useGetServicesQuery();
   const services = servicesData?.details || [];
 
-  const { data: commentsData, isLoading } = useGetCommentsQuery();
+  const {
+    data: commentsData,
+    isLoading,
+    refetch: refetchComments,
+  } = useGetCommentsQuery();
   const comments = commentsData?.details || [];
+
+  const {
+    data,
+    isLoading: exclusionLoading,
+    refetch: refetchExclusions,
+  } = useGetExclusionsQuery();
+  const exclusions = data?.details;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isFocused) {
+        await Promise.all([refetch(), refetchComments(), refetchExclusions()]);
+      }
+    };
+    fetchData();
+  }, [isFocused]);
 
   const allServices = services.map((service) => {
     const matchingComments = comments.filter((comment) =>
@@ -60,9 +85,6 @@ export default function () {
       ratings: averageRating,
     };
   });
-
-  const { data, isLoading: exclusionLoading } = useGetExclusionsQuery();
-  const exclusions = data?.details;
 
   const filteredExclusions = exclusions
     ?.filter(
@@ -290,7 +312,7 @@ export default function () {
                       style={{
                         backgroundColor:
                           selectedOption === "Relevance"
-                            ? "#FDA7DF"
+                            ? "#FFB6C1"
                             : invertBackgroundColor,
                       }}
                       className={`rounded-full px-4 py-2`}
@@ -313,7 +335,7 @@ export default function () {
                       style={{
                         backgroundColor:
                           selectedOption === "Popular"
-                            ? "#FDA7DF"
+                            ? "#FFB6C1"
                             : invertBackgroundColor,
                       }}
                       className={`rounded-full px-4 py-2`}
@@ -336,7 +358,7 @@ export default function () {
                       style={{
                         backgroundColor:
                           selectedOption === "MostRecent"
-                            ? "#FDA7DF"
+                            ? "#FFB6C1"
                             : invertBackgroundColor,
                       }}
                       className={`rounded-full px-4 py-2`}
@@ -359,7 +381,7 @@ export default function () {
                       style={{
                         backgroundColor:
                           selectedOption === "Budget"
-                            ? "#FDA7DF"
+                            ? "#FFB6C1"
                             : invertBackgroundColor,
                       }}
                       className={`rounded-full px-4 py-2`}
@@ -410,13 +432,16 @@ export default function () {
                             }}
                             resizeMode="cover"
                             style={{
-                              height: windowHeight * 0.25,
+                              height: 200,
                               width: windowWidth * 0.9,
                               borderRadius: 20,
                             }}
                           />
-                          <TouchableOpacity onPress={() => handlePress(item)}>
-                            <View className={`absolute left-[315px] bottom-2`}>
+                          <TouchableOpacity
+                            onPress={() => handlePress(item)}
+                            className={`relative`}
+                          >
+                            <View className={`absolute left-2 bottom-2`}>
                               <Ionicons
                                 name="add-circle-sharp"
                                 size={50}
@@ -497,13 +522,16 @@ export default function () {
                             }}
                             resizeMode="cover"
                             style={{
-                              height: windowHeight * 0.25,
+                              height: 200,
                               width: windowWidth * 0.9,
                               borderRadius: 20,
                             }}
                           />
-                          <TouchableOpacity onPress={() => handlePress(item)}>
-                            <View className={`absolute left-[315px] bottom-2`}>
+                          <TouchableOpacity
+                            onPress={() => handlePress(item)}
+                            className={`relative`}
+                          >
+                            <View className={`absolute left-2 bottom-2`}>
                               <Ionicons
                                 name="add-circle-sharp"
                                 size={50}
