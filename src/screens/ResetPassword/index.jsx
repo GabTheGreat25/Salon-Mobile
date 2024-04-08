@@ -26,9 +26,9 @@ import { Feather } from "@expo/vector-icons";
 
 export default function () {
   const navigation = useNavigation();
-  const { backgroundColor, textColor, colorScheme } = changeColor();
+  const { backgroundColor, textColor, borderColor, colorScheme } =
+    changeColor();
   const imageSource = colorScheme === "dark" ? salonLogoWhite : salonLogo;
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
   const [keyboardOpen, setKeyboardOpen] = useState(false);
 
   const [resetPassword, { isLoading }] = useResetPasswordMutation();
@@ -170,8 +170,8 @@ export default function () {
                     </Text>
                     <View className={`w-[300px]`}>
                       <TextInput
-                        style={{ color: textColor }}
-                        className={`border-b my-2 text-lg ${borderColor}`}
+                        style={{ color: textColor, borderColor }}
+                        className={`border-b my-2 text-lg`}
                         placeholder="Enter your verificationCode"
                         placeholderTextColor={textColor}
                         autoCapitalize="none"
@@ -188,8 +188,8 @@ export default function () {
                         )}
                       <View className={`relative`}>
                         <TextInput
-                          style={{ color: textColor }}
-                          className={`border-b mb-4 mt-3 text-lg ${borderColor}`}
+                          style={{ color: textColor, borderColor }}
+                          className={`border-b mb-4 mt-3 text-lg`}
                           placeholder="Enter your new password"
                           placeholderTextColor={textColor}
                           autoCapitalize="none"
@@ -218,8 +218,8 @@ export default function () {
                         )}
                       <View className={`relative`}>
                         <TextInput
-                          style={{ color: textColor }}
-                          className={`border-b mb-4 mt-2  pb-1 text-lg ${borderColor}`}
+                          style={{ color: textColor, borderColor }}
+                          className={`border-b mb-4 mt-2  pb-1 text-lg`}
                           placeholder="Enter your confirm password"
                           placeholderTextColor={textColor}
                           autoCapitalize="none"
