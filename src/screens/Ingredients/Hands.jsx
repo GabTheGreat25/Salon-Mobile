@@ -1,5 +1,11 @@
 import React, { useEffect } from "react";
-import { View, Text, TouchableOpacity, SafeAreaView } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  SafeAreaView,
+  ScrollView,
+} from "react-native";
 import { BackIcon } from "@helpers";
 import { changeColor } from "@utils";
 import { useGetExclusionsQuery } from "../../state/api/reducer";
@@ -86,7 +92,12 @@ export default function () {
           >
             {`Choose any of the following Chemical Solutions that can cause you allergy`}
           </Text>
-          <View className={`flex flex-row gap-x-4`}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            decelerationRate="fast"
+            scrollEventThrottle={1}
+            className={`flex flex-row flex-wrap gap-x-4`}
+          >
             {filteredAllergies?.map((allergy) => (
               <TouchableOpacity
                 key={allergy?._id}
@@ -97,7 +108,7 @@ export default function () {
                   style={{
                     height: 30,
                     width: 30,
-                    borderColor: textColor,
+                    borderColor,
                     backgroundColor: checkedAllergies.some(
                       (item) => item._id === allergy._id
                     )
@@ -127,7 +138,7 @@ export default function () {
                 </View>
               </TouchableOpacity>
             ))}
-          </View>
+          </ScrollView>
         </SafeAreaView>
       )}
     </>
