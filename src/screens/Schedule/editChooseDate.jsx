@@ -23,7 +23,6 @@ import { useIsFocused } from "@react-navigation/native";
 import { LoadingScreen } from "@components";
 
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
 
 export default function ({ route }) {
   const { id } = route.params;
@@ -35,18 +34,12 @@ export default function ({ route }) {
     (state) => state?.transaction?.transactionData?.time
   );
 
-  const { data: appointment, isLoading: appointmentLoading } =
-    useGetAppointmentByIdQuery(id);
-
+  const {
+    data: appointment,
+    isLoading: appointmentLoading,
+    refetch: refetchAppointment,
+  } = useGetAppointmentByIdQuery(id);
   const appointmentData = appointment?.details;
-
-  const { textColor, backgroundColor, colorScheme } = changeColor();
-  const navigation = useNavigation();
-  const isFocused = useIsFocused();
-
-  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDB9E5";
-  const revertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
-  const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
   const {
     data: time,
@@ -57,11 +50,21 @@ export default function ({ route }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (isFocused) refetch();
-      timeRefetch();
+      if (isFocused) {
+        await Promise.all([refetch(), refetchAppointment(), timeRefetch()]);
+      }
     };
     fetchData();
   }, [isFocused]);
+
+  const { textColor, backgroundColor, shadowColor, colorScheme } =
+    changeColor();
+  const navigation = useNavigation();
+  const isFocused = useIsFocused();
+
+  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FFC0CB";
+  const revertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
+  const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
   const currentDate = new Date();
   const next21Days = new Date(currentDate);
@@ -97,7 +100,7 @@ export default function ({ route }) {
         ...prevMarkedDates,
         [selectedDateTime.date]: {
           selected: true,
-          selectedColor: "#F78FB3",
+          selectedColor: "#FF7086",
         },
       }));
     }
@@ -110,7 +113,7 @@ export default function ({ route }) {
     const updatedMarkedDates = {
       [day.dateString]: {
         selected: !markedDates[day.dateString]?.selected,
-        selectedColor: "#F78FB3",
+        selectedColor: "#FF7086",
       },
     };
 
@@ -297,7 +300,7 @@ export default function ({ route }) {
 
   return (
     <>
-      {isLoading || timeLoading ? (
+      {isLoading || timeLoading || appointmentLoading ? (
         <View
           className={`flex-1 justify-center items-center bg-primary-default`}
         >
@@ -329,11 +332,11 @@ export default function ({ route }) {
                   markedDates={markedDates}
                   markingType={"simple"}
                   theme={{
-                    calendarBackground: "#FDB9E5",
-                    monthTextColor: invertTextColor,
-                    textSectionTitleColor: invertTextColor,
-                    todayTextColor: invertTextColor,
-                    arrowColor: invertTextColor,
+                    calendarBackground: "#FFC0CB",
+                    monthTextColor: "black",
+                    textSectionTitleColor: "black",
+                    todayTextColor: "#FF1493",
+                    arrowColor: "black",
                   }}
                   minDate={minDate}
                   maxDate={maxDate}
@@ -356,7 +359,7 @@ export default function ({ route }) {
                 scrollEventThrottle={1}
                 style={{
                   backgroundColor: invertBackgroundColor,
-                  height: windowHeight * 0.175,
+                  height: 90,
                   width: windowWidth * 0.925,
                 }}
                 className={`flex-row rounded mx-1 px-4 pt-4 mb-2`}
@@ -372,10 +375,10 @@ export default function ({ route }) {
                         backgroundColor: selectedDateTime.time.includes(time)
                           ? revertBackgroundColor
                           : backgroundColor,
-                        height: windowHeight * 0.075,
+                        height: 60,
                         width: windowWidth * 0.35,
                       }}
-                      className={`rounded justify-center items-center text-center mr-8 mt-7 mb-2`}
+                      className={`rounded justify-center items-center text-center mr-8`}
                     >
                       <Text
                         style={{
@@ -394,11 +397,12 @@ export default function ({ route }) {
             </ScrollView>
             <View
               style={{
+                shadowColor,
                 backgroundColor,
-                height: windowHeight * 0.1,
+                height: 90,
                 width: windowWidth,
               }}
-              className={`flex-col px-10 py-5`}
+              className={`flex-col px-10 py-5 shadow-2xl`}
             >
               <TouchableOpacity onPress={handlePress}>
                 <View
@@ -409,7 +413,7 @@ export default function ({ route }) {
                 >
                   <Text
                     style={{ color: invertTextColor }}
-                    className={`text-center text-lg font-bold`}
+                    className={`text-center text-xl font-semibold`}
                   >
                     Confirm
                   </Text>
