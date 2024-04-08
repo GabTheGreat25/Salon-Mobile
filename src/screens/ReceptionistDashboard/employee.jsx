@@ -20,11 +20,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { transactionSlice } from "../../state/transaction/transactionReducer";
 import { useRoute } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
+import { useIsFocused } from "@react-navigation/native";
 
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
 
 export default function () {
+  const isFocused = useIsFocused();
   const route = useRoute();
   const selectedAppointment = route.params.selectedAppointment;
 
@@ -36,14 +37,15 @@ export default function () {
     (state) => state?.transaction?.transactionData?.beautician
   );
 
-  const { textColor, backgroundColor, colorScheme } = changeColor();
+  const { textColor, backgroundColor, shadowColor, colorScheme } =
+    changeColor();
   const navigation = useNavigation();
-  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDA7DF";
+  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FFB6C1";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
   const dispatch = useDispatch();
 
-  const { data, isLoading } = useGetUsersQuery();
+  const { data, isLoading, refetch } = useGetUsersQuery();
   const beautician = data?.details || [];
 
   const activeBeautician = beautician.filter(
@@ -51,7 +53,11 @@ export default function () {
       beautician?.roles?.includes("Beautician") && beautician?.active === true
   );
 
-  const { data: allSchedules } = useGetSchedulesQuery();
+  const {
+    data: allSchedules,
+    isLoading: loadingSchedules,
+    refetch: refetchSchedules,
+  } = useGetSchedulesQuery();
   const schedules =
     allSchedules?.details.filter(
       (schedule) =>
@@ -59,6 +65,15 @@ export default function () {
         schedule.status === "absent" ||
         schedule.status === "leave"
     ) || [];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isFocused) {
+        await Promise.all([refetch(), refetchSchedules()]);
+      }
+    };
+    fetchData();
+  }, [isFocused]);
 
   const getAvailableBeauticians = () => {
     return activeBeautician.filter((beautician) => {
@@ -168,7 +183,7 @@ export default function () {
 
   return (
     <>
-      {isLoading ? (
+      {isLoading || loadingSchedules ? (
         <View
           className={`flex-1 justify-center items-center bg-primary-default`}
         >
@@ -189,7 +204,7 @@ export default function () {
                   key={item?._id}
                   style={{
                     backgroundColor: invertBackgroundColor,
-                    height: windowHeight * 0.21,
+                    height: 180,
                     width: windowWidth * 0.925,
                   }}
                   className={`flex-row rounded-lg gap-x-2 px-2 mx-4 mb-3 pt-4`}
@@ -265,11 +280,12 @@ export default function () {
           </View>
           <View
             style={{
+              shadowColor,
               backgroundColor,
-              height: windowHeight * 0.1,
+              height: 90,
               width: windowWidth,
             }}
-            className={`flex-col px-10 py-5`}
+            className={`flex-col px-10 py-5 shadow-2xl`}
           >
             <TouchableOpacity onPress={handlePress}>
               <View
@@ -280,7 +296,7 @@ export default function () {
               >
                 <Text
                   style={{ color: invertTextColor }}
-                  className={`text-center text-lg font-bold`}
+                  className={`text-center text-xl font-semibold`}
                 >
                   Confirm
                 </Text>
