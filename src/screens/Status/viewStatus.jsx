@@ -32,8 +32,7 @@ export default function ({ route }) {
     fetchData();
   }, [isFocused]);
 
-  const { backgroundColor, textColor, colorScheme } = changeColor();
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
+  const { backgroundColor, textColor, borderColor } = changeColor();
 
   return (
     <>
@@ -74,8 +73,9 @@ export default function ({ route }) {
                     Beautician Name
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                     autoCapitalize="none"
                     value={schedule?.beautician?.name}
                     editable={false}
@@ -87,8 +87,9 @@ export default function ({ route }) {
                     Leave Date
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                     autoCapitalize="none"
                     value={
                       schedule?.date
@@ -105,8 +106,9 @@ export default function ({ route }) {
                     Leave Status
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                     autoCapitalize="none"
                     value={schedule?.status}
                     editable={false}
@@ -118,8 +120,9 @@ export default function ({ route }) {
                     Leave Note
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                     autoCapitalize="none"
                     value={
                       schedule?.leaveNote || "The Status Is Currently Absent"
