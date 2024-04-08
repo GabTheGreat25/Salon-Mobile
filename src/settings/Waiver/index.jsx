@@ -76,10 +76,7 @@ export default function () {
           }}
         >
           <View
-            className={`justify-center rounded-lg m-6 px-4 pt-4 pb-10`}
-            style={{
-              backgroundColor: "#FDA7DF",
-            }}
+            className={`justify-center rounded-lg m-6 px-4 pt-4 pb-10 bg-primary-default`}
           >
             <Text
               className={`text-2xl text-center font-semibold py-2`}
@@ -127,7 +124,7 @@ export default function () {
                     onEnd={handleEnd}
                     onOK={handleSignature}
                     onClear={handleClear}
-                    backgroundColor="#FDA7DF"
+                    backgroundColor="#FFB6C1"
                   />
                 </View>
               </Modal>
