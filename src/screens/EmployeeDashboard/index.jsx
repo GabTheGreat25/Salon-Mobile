@@ -6,7 +6,6 @@ import {
   Dimensions,
   TouchableOpacity,
   Modal,
-  Button,
   ScrollView,
   SafeAreaView,
 } from "react-native";
@@ -24,9 +23,9 @@ const itemWidth = (screenWidth - 30) / 2;
 
 export default function () {
   const { user } = useSelector((state) => state.auth);
-  const { backgroundColor, textColor, colorScheme } = changeColor();
+  const { backgroundColor, textColor, borderColor, colorScheme } =
+    changeColor();
 
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
   const {
@@ -151,7 +150,7 @@ export default function () {
   const renderItem = ({ item }) => (
     <TouchableOpacity
       onPress={() => openModal(item)}
-      style={{ backgroundColor: backgroundColor, width: itemWidth }}
+      style={{ backgroundColor, width: itemWidth }}
       className={`rounded-lg p-3 m-1 border`}
     >
       <Text
@@ -221,7 +220,7 @@ export default function () {
           >
             <SafeAreaView
               style={{
-                borderColor: borderColor,
+                borderColor,
               }}
               className={`flex-1 flex-grow border px-1 pb-5 rounded-xl m-4 min-w-[100vw] bg-primary-default`}
             >
@@ -320,7 +319,17 @@ export default function () {
                         ""
                       )}
                     </Text>
-                    <Button title="Close" onPress={closeModal} />
+                    <TouchableOpacity
+                      className={`bg-primary-default rounded-lg`}
+                      onPress={closeModal}
+                    >
+                      <Text
+                        style={{ color: textColor }}
+                        className={`text-center py-2 font-semibold text-xl`}
+                      >
+                        Close
+                      </Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
               </Modal>
