@@ -35,14 +35,16 @@ class PulseAnimation extends React.Component {
     const { opacityValue } = this.state;
 
     return (
-      <Animated.View style={{ opacity: opacityValue }}>
-        {this.props.children}
-      </Animated.View>
+      <>
+        <Animated.View style={{ opacity: opacityValue }}>
+          {this.props.children}
+        </Animated.View>
+      </>
     );
   }
 }
 
-export default function LoadingScreen() {
+export default function () {
   return (
     <>
       <View className={`flex-1 justify-center items-center bg-primary-default`}>
