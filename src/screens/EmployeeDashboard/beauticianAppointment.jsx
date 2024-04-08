@@ -11,12 +11,14 @@ import { LoadingScreen } from "@components";
 import { useNavigation } from "@react-navigation/native";
 import { useGetAppointmentByBeauticianIdQuery } from "../../state/api/reducer";
 import { changeColor } from "@utils";
+import { useIsFocused } from "@react-navigation/native";
 
 const AppointmentItem = ({ item }) => {
   const navigation = useNavigation();
   const { colorScheme } = changeColor();
-  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDB9E5";
+  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FFC0CB";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
+
   const formatDate = (dateString) => {
     const options = {
       year: "numeric",
@@ -206,7 +208,17 @@ const AppointmentItem = ({ item }) => {
 
 export default function ({ route }) {
   const { id } = route.params;
-  const { data, isLoading } = useGetAppointmentByBeauticianIdQuery(id);
+  const isFocused = useIsFocused();
+
+  const { data, isLoading, refetch } = useGetAppointmentByBeauticianIdQuery(id);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isFocused) refetch();
+    };
+    fetchData();
+  }, [isFocused]);
+
   const { backgroundColor } = changeColor();
 
   return (
