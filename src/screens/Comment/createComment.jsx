@@ -28,10 +28,10 @@ export default function () {
 
   const [addComment, { isLoading }] = useAddCommentMutation();
 
-  const { backgroundColor, textColor, colorScheme } = changeColor();
-  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDB9E5";
+  const { backgroundColor, textColor, borderColor, colorScheme } =
+    changeColor();
+  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FFC0CB";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
 
   const [selectedImages, setSelectedImages] = useState([]);
   const transactionId = route.params?.transactionId;
@@ -251,8 +251,9 @@ export default function () {
                         color: textColor,
                         height: 100,
                         textAlignVertical: "top",
+                        borderColor,
                       }}
-                      className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2 ${borderColor}`}
+                      className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2`}
                       placeholder="Add Message Here..."
                       placeholderTextColor={textColor}
                       autoCapitalize="none"
@@ -278,9 +279,11 @@ export default function () {
                       style={{
                         color: textColor,
                         height: 100,
+
                         textAlignVertical: "top",
+                        borderColor,
                       }}
-                      className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2 ${borderColor}`}
+                      className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2`}
                       placeholder="Add Message Here..."
                       placeholderTextColor={textColor}
                       autoCapitalize="none"
@@ -304,7 +307,7 @@ export default function () {
                           style={{
                             height: 35,
                             width: 35,
-                            borderColor: invertTextColor,
+                            borderColor,
                             backgroundColor: invertBackgroundColor,
                           }}
                           className={`flex-row justify-center items-center border-2 rounded mr-2`}
@@ -330,40 +333,40 @@ export default function () {
                     </View>
 
                     <Text
-                      style={{ color: textColor }}
-                      className={`${borderColor} font-semibold text-xl`}
+                      style={{ color: textColor, borderColor }}
+                      className={`font-semibold text-xl`}
                     >
                       Upload Your Image
                     </Text>
                     <View className={`flex-row gap-x-2 mt-2 mb-6`}>
                       <TouchableOpacity onPress={takePicture}>
                         <Text
-                          style={{ color: textColor }}
-                          className={`text-base ${borderColor}`}
+                          style={{ color: textColor, borderColor }}
+                          className={`text-base`}
                         >
                           Take a Picture
                         </Text>
                       </TouchableOpacity>
                       <TouchableOpacity onPress={selectImages}>
                         <Text
-                          style={{ color: textColor }}
-                          className={`text-base ${borderColor}`}
+                          style={{ color: textColor, borderColor }}
+                          className={`text-base`}
                         >
                           Select Images
                         </Text>
                       </TouchableOpacity>
                       {selectedImages?.length > 0 ? (
                         <Text
-                          style={{ color: textColor }}
-                          className={`text-base ${borderColor}`}
+                          style={{ color: textColor, borderColor }}
+                          className={`text-base`}
                         >
                           Add {selectedImages.length} image
                           {selectedImages.length > 1 ? "s" : ""}
                         </Text>
                       ) : (
                         <Text
-                          style={{ color: textColor }}
-                          className={`text-base ${borderColor}`}
+                          style={{ color: textColor, borderColor }}
+                          className={`text-base`}
                         >
                           No Image
                         </Text>
