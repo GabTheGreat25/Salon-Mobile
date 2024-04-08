@@ -20,18 +20,20 @@ import { LoadingScreen } from "@components";
 import Toast from "react-native-toast-message";
 import { DataTable } from "react-native-paper";
 import { Feather } from "@expo/vector-icons";
-import { changeColor, dimensionLayout } from "@utils";
+import { changeColor } from "@utils";
 import { useIsFocused } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
+
+const { width: deviceWidth } = Dimensions.get("window");
 
 export default function () {
   const isFocused = useIsFocused();
   const navigation = useNavigation();
-  const isDimensionLayout = dimensionLayout();
-  const { width: deviceWidth } = Dimensions.get("window");
-  const customWidth = deviceWidth * (isDimensionLayout ? 0.3 : 0.2);
+
+  const customWidth = deviceWidth * 0.3;
 
   const { data, isLoading, refetch } = useGetUsersQuery();
+
   useEffect(() => {
     const fetchData = async () => {
       if (isFocused) refetch();
@@ -40,9 +42,7 @@ export default function () {
   }, [isFocused]);
 
   const auth = useSelector((state) => state.auth);
-  const { backgroundColor, textColor, colorScheme } = changeColor();
-
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
+  const { backgroundColor, textColor, borderColor } = changeColor();
 
   const [page, setPage] = useState(0);
   const itemsPerPage = 5;
@@ -441,7 +441,7 @@ export default function () {
                     title="Previous"
                     onPress={handlePrevPage}
                     disabled={page === 0}
-                    color="#FDA7DF"
+                    color="#FFB6C1"
                   />
                   <Text
                     style={{
@@ -453,7 +453,7 @@ export default function () {
                     title="Next"
                     onPress={handleNextPage}
                     disabled={page === totalPageCount - 1}
-                    color="#FDA7DF"
+                    color="#FFB6C1"
                   />
                 </View>
               ) : null}
