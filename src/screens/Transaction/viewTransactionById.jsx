@@ -31,8 +31,7 @@ export default function ({ route }) {
     fetchData();
   }, [isFocused]);
 
-  const { backgroundColor, textColor, colorScheme } = changeColor();
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
+  const { backgroundColor, textColor, borderColor } = changeColor();
 
   return (
     <>
@@ -73,8 +72,9 @@ export default function ({ route }) {
                     Transaction ID
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                     autoCapitalize="none"
                     value={transaction?._id}
                     editable={false}
@@ -87,8 +87,9 @@ export default function ({ route }) {
                     Appointment Status
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                     autoCapitalize="none"
                     value={transaction?.status}
                     editable={false}
@@ -101,8 +102,9 @@ export default function ({ route }) {
                     Payment
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                     autoCapitalize="none"
                     value={transaction?.payment}
                     editable={false}
@@ -115,8 +117,9 @@ export default function ({ route }) {
                     Appointment Discount
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                     autoCapitalize="none"
                     value={
                       transaction?.hasDiscount ? "Discount" : "No Discount"
@@ -131,8 +134,9 @@ export default function ({ route }) {
                     Customer Type
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                     autoCapitalize="none"
                     value={transaction?.customer_type}
                     editable={false}
