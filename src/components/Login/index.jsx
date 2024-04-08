@@ -34,9 +34,9 @@ export default function ({
   footerLink,
   footerLinkTitle,
 }) {
-  const { backgroundColor, textColor, colorScheme } = changeColor();
+  const { backgroundColor, textColor, borderColor, colorScheme } =
+    changeColor();
   const imageSource = colorScheme === "dark" ? salonLogoWhite : salonLogo;
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
   const [keyboardOpen, setKeyboardOpen] = useState(false);
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
 
@@ -121,7 +121,7 @@ export default function ({
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <SafeAreaView
           style={{ backgroundColor }}
-          className={`relative flex-1 pb-12`}
+          className={`relative flex-1 pt-6`}
         >
           <BackIcon navigateBack={navigateBack} textColor={textColor} />
           <KeyboardAvoidingView
@@ -134,27 +134,27 @@ export default function ({
               scrollEventThrottle={1}
             >
               <View
-                className={`w-[280px] h-[280px] justify-center items-center pt-10`}
+                className={`w-[280px] h-[280px] justify-center items-center`}
               >
                 <Image source={imageSource} resizeMode="contain" />
               </View>
               <View className={`items-center justify-start`}>
                 <Text
                   style={{ color: textColor }}
-                  className={`font-semibold mt-14 text-3xl text-center`}
+                  className={`font-semibold mt-8 text-3xl text-center`}
                 >
                   {title}
                 </Text>
                 <Text
                   style={{ color: textColor }}
-                  className={`my-2 text-xl font-base text-center`}
+                  className={`mb-2 text-xl font-base text-center`}
                 >
                   {description}
                 </Text>
                 <View className={`w-[300px]`}>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-b mt-4 mb-1 pb-1 text-lg ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    className={`border-b mt-4 mb-1 pb-1 text-lg`}
                     placeholder="Enter your email"
                     placeholderTextColor={textColor}
                     autoCapitalize="none"
@@ -168,8 +168,8 @@ export default function ({
                   )}
                   <View className={`relative`}>
                     <TextInput
-                      style={{ color: textColor }}
-                      className={`border-b mt-4 mb-1 pb-1 text-lg ${borderColor}`}
+                      style={{ color: textColor, borderColor }}
+                      className={`border-b mt-4 mb-1 pb-1 text-lg`}
                       placeholder="Enter your password"
                       placeholderTextColor={textColor}
                       autoCapitalize="none"
@@ -229,16 +229,17 @@ export default function ({
                 </View>
                 {showComponent && (
                   <View className={`justify-center items-center`}>
-                    <View className={`flex-row justify-center gap-x-5`}></View>
-                    <View className={`mb-4 mt-16 gap-x-3 flex-row`}>
+                    <View className={`mb-4 mt-6 gap-x-1 flex-row`}>
                       <Text
                         style={{ color: textColor }}
-                        className={`text-base`}
+                        className={`text-lg font-semibold`}
                       >
                         {footerTitle}
                       </Text>
                       <TouchableOpacity onPress={footerLink}>
-                        <Text className={`text-primary-accent text-base`}>
+                        <Text
+                          className={`text-primary-accent text-lg font-semibold`}
+                        >
                           {footerLinkTitle}
                         </Text>
                       </TouchableOpacity>
