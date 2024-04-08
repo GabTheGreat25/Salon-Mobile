@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
-  Image,
   View,
   SafeAreaView,
   Text,
-  TouchableOpacity,
   KeyboardAvoidingView,
   ScrollView,
   TouchableWithoutFeedback,
@@ -34,8 +32,7 @@ export default function ({ route }) {
     fetchData();
   }, [isFocused]);
 
-  const { backgroundColor, textColor, colorScheme } = changeColor();
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
+  const { backgroundColor, textColor, borderColor } = changeColor();
 
   const datePart = appointment?.date
     ? new Date(appointment?.date).toISOString().split("T")[0]
@@ -81,8 +78,9 @@ export default function ({ route }) {
                     Customer's Name
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                     autoCapitalize="none"
                     value={appointment?.customer?.name}
                   />
@@ -93,8 +91,9 @@ export default function ({ route }) {
                     Appointment Date
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                     autoCapitalize="none"
                     value={appointmentDate}
                   />
@@ -105,8 +104,9 @@ export default function ({ route }) {
                     Appointment Time:
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                     autoCapitalize="none"
                     value={
                       Array.isArray(appointment?.time) &&
@@ -128,8 +128,10 @@ export default function ({ route }) {
                       color: textColor,
                       height: 100,
                       textAlignVertical: "top",
+                      borderColor,
                     }}
-                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2 ${borderColor}`}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2`}
                     multiline={true}
                     value={appointment?.rebookReason}
                   />
@@ -144,8 +146,10 @@ export default function ({ route }) {
                       color: textColor,
                       height: 100,
                       textAlignVertical: "top",
+                      borderColor,
                     }}
-                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2 ${borderColor}`}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2`}
                     multiline={true}
                     value={appointment?.messageReason}
                   />
