@@ -39,8 +39,7 @@ export default function ({ route }) {
 
   const [updateBrand, { isLoading }] = useUpdateBrandMutation();
 
-  const { backgroundColor, textColor, colorScheme } = changeColor();
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
+  const { backgroundColor, textColor, borderColor } = changeColor();
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -116,8 +115,8 @@ export default function ({ route }) {
                       Brand Name
                     </Text>
                     <TextInput
-                      style={{ color: textColor }}
-                      className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                      style={{ color: textColor, borderColor }}
+                      className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                       placeholder="Enter your brand name"
                       placeholderTextColor={textColor}
                       autoCapitalize="none"
