@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   Image,
   View,
   SafeAreaView,
   Text,
-  TouchableOpacity,
   KeyboardAvoidingView,
   ScrollView,
   TouchableWithoutFeedback,
@@ -27,20 +26,24 @@ export default function ({ route }) {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
 
-  const { data: brand, isLoading: brandLoading } = useGetBrandsQuery();
   const { data, isLoading, refetch } = useGetProductByIdQuery(id);
-
   const product = data?.details;
+  const {
+    data: brand,
+    isLoading: brandLoading,
+    refetch: refetchBrand,
+  } = useGetBrandsQuery();
 
   useEffect(() => {
     const fetchData = async () => {
-      if (isFocused) refetch();
+      if (isFocused) {
+        await Promise.all([refetch(), refetchBrand()]);
+      }
     };
     fetchData();
   }, [isFocused]);
 
-  const { backgroundColor, textColor, colorScheme } = changeColor();
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
+  const { backgroundColor, textColor, borderColor } = changeColor();
 
   return (
     <>
@@ -101,8 +104,9 @@ export default function ({ route }) {
                     Product Name
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                     autoCapitalize="none"
                     value={product?.product_name}
                     editable={false}
@@ -116,7 +120,8 @@ export default function ({ route }) {
                   </Text>
 
                   <View
-                    className={`border-[1.5px]  font-normal rounded-full my-3 ${borderColor}`}
+                    style={{ borderColor }}
+                    className={`border-[1.5px]  font-normal rounded-full my-3`}
                   >
                     <Picker
                       selectedValue={product?.brand}
@@ -145,8 +150,9 @@ export default function ({ route }) {
                     Product Category
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                     autoCapitalize="none"
                     value={
                       Array.isArray(product?.type)
@@ -166,8 +172,10 @@ export default function ({ route }) {
                       color: textColor,
                       height: 100,
                       textAlignVertical: "top",
+                      borderColor,
                     }}
-                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2 ${borderColor}`}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2`}
                     autoCapitalize="none"
                     multiline={true}
                     value={product?.ingredients}
@@ -181,8 +189,9 @@ export default function ({ route }) {
                     Product Status
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                     autoCapitalize="none"
                     value={product?.isNew ? "New Product" : "Old Product"}
                     editable={false}
