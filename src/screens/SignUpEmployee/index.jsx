@@ -34,8 +34,8 @@ export default function () {
 
   const { data } = useGetHiringsQuery();
   const hiring = data?.details[0];
-  const { backgroundColor, textColor, colorScheme } = changeColor();
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
+  const { backgroundColor, textColor, borderColor } = changeColor();
+
   const [selectedImages, setSelectedImages] = useState([]);
   const [addUser, { isLoading }] = useAddUserMutation();
 
@@ -303,8 +303,8 @@ export default function () {
                 </View>
 
                 <TextInput
-                  style={{ color: textColor }}
-                  className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                  style={{ color: textColor, borderColor }}
+                  className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2`}
                   placeholder="Enter your name"
                   placeholderTextColor={textColor}
                   autoCapitalize="none"
@@ -317,8 +317,8 @@ export default function () {
                 )}
 
                 <TextInput
-                  style={{ color: textColor }}
-                  className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                  style={{ color: textColor, borderColor }}
+                  className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2`}
                   placeholder="Enter age"
                   placeholderTextColor={textColor}
                   keyboardType="numeric"
@@ -331,8 +331,8 @@ export default function () {
                 )}
 
                 <TextInput
-                  style={{ color: textColor }}
-                  className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                  style={{ color: textColor, borderColor }}
+                  className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2`}
                   placeholder="Enter your email"
                   placeholderTextColor={textColor}
                   autoCapitalize="none"
@@ -345,12 +345,12 @@ export default function () {
                 )}
 
                 <TextInputMask
-                  style={{ color: textColor }}
+                  style={{ color: textColor, borderColor }}
                   type={"custom"}
                   options={{
                     mask: "9999 - 999 - 9999",
                   }}
-                  className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                  className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2`}
                   placeholder="09XX - XXX - XXXX"
                   placeholderTextColor={textColor}
                   autoCapitalize="none"
@@ -368,8 +368,8 @@ export default function () {
 
                 <View className={`relative`}>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2`}
                     placeholder="Enter your password"
                     placeholderTextColor={textColor}
                     autoCapitalize="none"
@@ -397,8 +397,8 @@ export default function () {
 
                 <View className={`relative`}>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2`}
                     placeholder="Confirm your password"
                     placeholderTextColor={textColor}
                     autoCapitalize="none"
@@ -426,7 +426,8 @@ export default function () {
                   )}
 
                 <View
-                  className={`border-[1.5px]  font-normal rounded-full my-3 ${borderColor}`}
+                  style={{ borderColor }}
+                  className={`border-[1.5px]  font-normal rounded-full my-3`}
                 >
                   <Picker
                     selectedValue={formik.values.job_type}
@@ -450,40 +451,40 @@ export default function () {
                 )}
 
                 <Text
-                  style={{ color: textColor }}
-                  className={`${borderColor} font-semibold text-xl`}
+                  style={{ color: textColor, borderColor }}
+                  className={`font-semibold text-xl`}
                 >
                   Add Your Image
                 </Text>
                 <View className={`flex-row gap-x-2 mt-2 mb-6`}>
                   <TouchableOpacity onPress={takePicture}>
                     <Text
-                      style={{ color: textColor }}
-                      className={`text-base ${borderColor}`}
+                      style={{ color: textColor, borderColor }}
+                      className={`text-base`}
                     >
                       Take a Picture
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity onPress={selectImages}>
                     <Text
-                      style={{ color: textColor }}
-                      className={`text-base ${borderColor}`}
+                      style={{ color: textColor, borderColor }}
+                      className={`text-base`}
                     >
                       Select Images
                     </Text>
                   </TouchableOpacity>
                   {selectedImages?.length > 0 ? (
                     <Text
-                      style={{ color: textColor }}
-                      className={`text-base ${borderColor}`}
+                      style={{ color: textColor, borderColor }}
+                      className={`text-base`}
                     >
                       Add {selectedImages.length} image
                       {selectedImages.length > 1 ? "s" : ""}
                     </Text>
                   ) : (
                     <Text
-                      style={{ color: textColor }}
-                      className={`text-base ${borderColor}`}
+                      style={{ color: textColor, borderColor }}
+                      className={`text-base`}
                     >
                       No Image
                     </Text>
@@ -491,14 +492,14 @@ export default function () {
                 </View>
 
                 <Text
-                  style={{ color: textColor }}
-                  className={`${borderColor} font-semibold text-xl`}
+                  style={{ color: textColor, borderColor }}
+                  className={`font-semibold text-xl`}
                 >
                   Terms & Conditions
                 </Text>
                 <Text
-                  style={{ color: textColor }}
-                  className={`${borderColor} font-semibold text-base pb-2`}
+                  style={{ color: textColor, borderColor }}
+                  className={`font-semibold text-base pb-2`}
                 >
                   By registering as a beautician on our platform, you
                   acknowledge and agree to the following terms and conditions.
@@ -513,7 +514,7 @@ export default function () {
                       style={{
                         height: 35,
                         width: 35,
-                        borderColor: textColor,
+                        borderColor,
                         backgroundColor,
                       }}
                       className={`flex-row justify-center items-center border-2 rounded mr-2 mt-2`}
