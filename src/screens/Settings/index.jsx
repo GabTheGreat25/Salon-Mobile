@@ -1,3 +1,4 @@
+import React from "react";
 import {
   View,
   Text,
@@ -5,17 +6,13 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from "react-native";
-import {
-  Feather,
-  MaterialIcons,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
-import { changeColor, dimensionLayout } from "@utils";
+import { Feather } from "@expo/vector-icons";
+import { changeColor } from "@utils";
 import { useNavigation } from "@react-navigation/native";
+import { BackIcon } from "@helpers";
 
 export default function () {
-  const { textColor, backgroundColor, shadowColor, colorScheme } =
-    changeColor();
+  const { textColor, backgroundColor } = changeColor();
 
   const navigation = useNavigation();
 
@@ -33,15 +30,19 @@ export default function () {
 
   return (
     <>
-      <ScrollView
-        className={`flex-1`}
-        style={{
-          backgroundColor,
-        }}
-      >
-        <SafeAreaView className={`m-2.5`}>
+      <SafeAreaView style={{ backgroundColor }} className={`flex-1`}>
+        <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          decelerationRate="fast"
+          scrollEventThrottle={1}
+          style={{
+            backgroundColor,
+          }}
+          className={`pt-16 px-4`}
+        >
           <Text
-            className={`text-lg font-bold`}
+            className={`text-2xl font-semibold pb-4`}
             style={{
               color: textColor,
             }}
@@ -52,265 +53,69 @@ export default function () {
             className={`px-4 mb-3 flex-row justify-between items-center w-full `}
           >
             <Text
-              className={`text-sm`}
+              className={`text-lg font-semibold`}
               style={{
                 color: textColor,
               }}
             >
-              My Schedule
+              Terms And Conditions
             </Text>
-            <MaterialCommunityIcons
-              name="greater-than"
-              size={24}
-              color={textColor}
-            />
+            <Feather name="chevron-right" size={40} color={textColor} />
           </TouchableOpacity>
           <TouchableOpacity
             className={`px-4 mb-3 flex-row justify-between items-center w-full `}
           >
             <Text
-              className={`text-sm`}
-              style={{
-                color: textColor,
-              }}
-            >
-              Support Request
-            </Text>
-            <MaterialCommunityIcons
-              name="greater-than"
-              size={24}
-              color={textColor}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            className={`px-4 mb-3 flex-row justify-between items-center w-full `}
-          >
-            <Text
-              className={`text-sm`}
-              style={{
-                color: textColor,
-              }}
-            >
-              My Account
-            </Text>
-            <MaterialCommunityIcons
-              name="greater-than"
-              size={24}
-              color={textColor}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            className={`px-4 mb-3 flex-row justify-between items-center w-full `}
-          >
-            <Text
-              className={`text-sm`}
-              style={{
-                color: textColor,
-              }}
-            >
-              Payment
-            </Text>
-            <MaterialCommunityIcons
-              name="greater-than"
-              size={24}
-              color={textColor}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            className={`px-4 mb-3 flex-row justify-between items-center w-full `}
-          >
-            <Text
-              className={`text-sm`}
-              style={{
-                color: textColor,
-              }}
-            >
-              Get help with my pay
-            </Text>
-            <MaterialCommunityIcons
-              name="greater-than"
-              size={24}
-              color={textColor}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            className={`px-4 mb-3 flex-row justify-between items-center w-full `}
-          >
-            <Text
-              className={`text-sm`}
-              style={{
-                color: textColor,
-              }}
-            >
-              Safety Concerns
-            </Text>
-            <MaterialCommunityIcons
-              name="greater-than"
-              size={24}
-              color={textColor}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            className={`px-4 mb-3 flex-row justify-between items-center w-full `}
-          >
-            <Text
-              className={`text-sm`}
-              style={{
-                color: textColor,
-              }}
-            >
-              How to become a Employee
-            </Text>
-            <MaterialCommunityIcons
-              name="greater-than"
-              size={24}
-              color={textColor}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            className={`px-4 mb-3 flex-row justify-between items-center w-full `}
-          >
-            <Text
-              className={`text-sm`}
-              style={{
-                color: textColor,
-              }}
-            >
-              How to become a Supporter
-            </Text>
-            <MaterialCommunityIcons
-              name="greater-than"
-              size={24}
-              color={textColor}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            className={`px-4 mb-3 flex-row justify-between items-center w-full `}
-            onPress={terms}
-          >
-            <Text
-              className={`text-sm`}
-              style={{
-                color: textColor,
-              }}
-            >
-              Terms & Conditions
-            </Text>
-            <MaterialCommunityIcons
-              name="greater-than"
-              size={24}
-              color={textColor}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            className={`px-4 mb-3 flex-row justify-between items-center w-full `}
-            onPress={policy}
-            style={{
-              color: textColor,
-            }}
-          >
-            <Text
-              className={`text-sm`}
+              className={`text-lg font-semibold`}
               style={{
                 color: textColor,
               }}
             >
               Privacy Policy
             </Text>
-            <MaterialCommunityIcons
-              name="greater-than"
-              size={24}
-              color={textColor}
-            />
+            <Feather name="chevron-right" size={40} color={textColor} />
           </TouchableOpacity>
           <TouchableOpacity
             className={`px-4 mb-3 flex-row justify-between items-center w-full `}
           >
             <Text
-              className={`text-sm`}
+              className={`text-lg font-semibold`}
               style={{
                 color: textColor,
               }}
             >
-              Refund
+              FAQ
             </Text>
-            <MaterialCommunityIcons
-              name="greater-than"
-              size={24}
-              color={textColor}
-            />
+            <Feather name="chevron-right" size={40} color={textColor} />
           </TouchableOpacity>
           <TouchableOpacity
             className={`px-4 mb-3 flex-row justify-between items-center w-full `}
           >
             <Text
-              className={`text-sm`}
+              className={`text-lg font-semibold`}
               style={{
                 color: textColor,
               }}
             >
-              Security
+              About Us
             </Text>
-            <MaterialCommunityIcons
-              name="greater-than"
-              size={24}
-              color={textColor}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            className={`px-4 mb-3 flex-row justify-between items-center w-full `}
-            onPress={feedback}
-          >
-            <Text
-              className={`text-sm`}
-              style={{
-                color: textColor,
-              }}
-            >
-              Feedback
-            </Text>
-            <MaterialCommunityIcons
-              name="greater-than"
-              size={24}
-              color={textColor}
-            />
+            <Feather name="chevron-right" size={40} color={textColor} />
           </TouchableOpacity>
           <TouchableOpacity
             className={`px-4 mb-3 flex-row justify-between items-center w-full `}
           >
             <Text
-              className={`text-sm`}
+              className={`text-lg font-semibold`}
               style={{
                 color: textColor,
               }}
             >
-              My Inquries
+              Add Feedback
             </Text>
-            <MaterialCommunityIcons
-              name="greater-than"
-              size={24}
-              color={textColor}
-            />
+            <Feather name="chevron-right" size={40} color={textColor} />
           </TouchableOpacity>
-          <TouchableOpacity
-            className={`px-4 mb-3 flex-row justify-between items-center w-full `}
-          >
-            <Text
-              className={`text-sm`}
-              style={{
-                color: textColor,
-              }}
-            >
-              Privacy Problem
-            </Text>
-            <MaterialCommunityIcons
-              name="greater-than"
-              size={24}
-              color={textColor}
-            />
-          </TouchableOpacity>
-        </SafeAreaView>
-      </ScrollView>
+        </ScrollView>
+      </SafeAreaView>
     </>
   );
 }
