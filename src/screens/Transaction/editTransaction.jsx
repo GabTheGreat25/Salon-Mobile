@@ -47,8 +47,7 @@ export default function ({ route }) {
 
   const [updateTransaction, { isLoading }] = useUpdateTransactionMutation();
 
-  const { backgroundColor, textColor, colorScheme } = changeColor();
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
+  const { backgroundColor, textColor, borderColor } = changeColor();
 
   const [isOpen, setOpen] = useState(transactions?.hasDiscount || false);
   const [status, setStatus] = useState(transactions?.status || "pending");
@@ -215,8 +214,8 @@ export default function ({ route }) {
                           style={{
                             height: 35,
                             width: 35,
-                            borderColor: textColor,
-                            backgroundColor: backgroundColor,
+                            borderColor,
+                            backgroundColor,
                           }}
                           className={`flex-row justify-center items-center border-2 rounded mr-3`}
                         >
@@ -248,7 +247,8 @@ export default function ({ route }) {
                     Status
                   </Text>
                   <View
-                    className={`border-[1.5px]  font-normal rounded-full my-3 ${borderColor}`}
+                    style={{ borderColor }}
+                    className={`border-[1.5px]  font-normal rounded-full my-3`}
                   >
                     <Picker
                       selectedValue={formik.values.status}
@@ -273,8 +273,9 @@ export default function ({ route }) {
                     >
                       <View className={`mb-2 flex justify-center items-center`}>
                         <View
-                          className={`py-2 rounded-lg bg-primary-accent w-[175px]
-                          } ${!formik.isValid ? "opacity-50" : "opacity-100"}`}
+                          className={`py-2 rounded-lg bg-primary-accent w-[175px] ${
+                            !formik.isValid ? "opacity-50" : "opacity-100"
+                          }`}
                         >
                           <Text
                             className={`font-semibold text-center text-lg`}
