@@ -20,9 +20,7 @@ import Toast from "react-native-toast-message";
 
 export default function () {
   const navigation = useNavigation();
-  const { backgroundColor, textColor, colorScheme } = changeColor();
-
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
+  const { backgroundColor, textColor, borderColor } = changeColor();
 
   const [addExclusion, { isLoading }] = useAddExclusionMutation();
   const formik = useFormik({
@@ -108,8 +106,8 @@ export default function () {
                     Create Exclusion
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2`}
                     placeholder="Enter your exclusion name"
                     placeholderTextColor={textColor}
                     autoCapitalize="none"
@@ -141,8 +139,8 @@ export default function () {
                         style={{
                           height: 35,
                           width: 35,
-                          borderColor: textColor,
-                          backgroundColor: backgroundColor,
+                          borderColor,
+                          backgroundColor,
                         }}
                         className={`flex-row justify-center items-center border-2 rounded`}
                       >
@@ -172,8 +170,8 @@ export default function () {
                         style={{
                           height: 35,
                           width: 35,
-                          borderColor: textColor,
-                          backgroundColor: backgroundColor,
+                          borderColor,
+                          backgroundColor,
                         }}
                         className={`flex-row justify-center items-center border-2 rounded`}
                       >
@@ -203,8 +201,8 @@ export default function () {
                         style={{
                           height: 35,
                           width: 35,
-                          borderColor: textColor,
-                          backgroundColor: backgroundColor,
+                          borderColor,
+                          backgroundColor,
                         }}
                         className={`flex-row justify-center items-center border-2 rounded`}
                       >
@@ -234,8 +232,8 @@ export default function () {
                         style={{
                           height: 35,
                           width: 35,
-                          borderColor: textColor,
-                          backgroundColor: backgroundColor,
+                          borderColor,
+                          backgroundColor,
                         }}
                         className={`flex-row justify-center items-center border-2 rounded`}
                       >
@@ -265,8 +263,8 @@ export default function () {
                         style={{
                           height: 35,
                           width: 35,
-                          borderColor: textColor,
-                          backgroundColor: backgroundColor,
+                          borderColor,
+                          backgroundColor,
                         }}
                         className={`flex-row justify-center items-center border-2 rounded`}
                       >
@@ -296,8 +294,8 @@ export default function () {
                         style={{
                           height: 35,
                           width: 35,
-                          borderColor: textColor,
-                          backgroundColor: backgroundColor,
+                          borderColor,
+                          backgroundColor,
                         }}
                         className={`flex-row justify-center items-center border-2 rounded`}
                       >
@@ -331,8 +329,9 @@ export default function () {
                     >
                       <View className={`mb-2 flex justify-center items-center`}>
                         <View
-                          className={`py-2 rounded-lg bg-primary-accent w-[175px]
-                          } ${!formik.isValid ? "opacity-50" : "opacity-100"}`}
+                          className={`py-2 rounded-lg bg-primary-accent w-[175px] ${
+                            !formik.isValid ? "opacity-50" : "opacity-100"
+                          }`}
                         >
                           <Text
                             className={`font-semibold text-center text-lg`}
