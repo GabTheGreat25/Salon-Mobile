@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   View,
@@ -22,29 +22,59 @@ import { useNavigation } from "@react-navigation/native";
 import { changeColor } from "@utils";
 import { LoadingScreen } from "@components";
 import Autocomplete from "react-native-autocomplete-input";
+import { useIsFocused } from "@react-navigation/native";
 
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
 
 export default function () {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
 
-  const { textColor, backgroundColor, colorScheme } = changeColor();
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
-  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDA7DF";
+  const { textColor, backgroundColor, borderColor, colorScheme } =
+    changeColor();
+
+  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FFB6C1";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
-  const { data, isLoading } = useGetAppointmentsQuery();
+  const { data, isLoading, refetch } = useGetAppointmentsQuery();
   const appointment = data?.details;
-  const { data: timesData, isLoading: timesLoading } = useGetTimesQuery();
+  const {
+    data: timesData,
+    isLoading: timesLoading,
+    refetch: refetchTimes,
+  } = useGetTimesQuery();
   const times = timesData?.details;
-  const { data: user, isLoading: usersLoading } = useGetUsersQuery();
+  const {
+    data: user,
+    isLoading: usersLoading,
+    refetch: refetchUsers,
+  } = useGetUsersQuery();
   const users = user?.details;
-
   const filteredUsers = users?.filter((user) =>
     user?.roles.includes("Customer")
   );
+  const {
+    data: allergies,
+    isLoading: exclusionLoading,
+    refetch: refetchExclusions,
+  } = useGetExclusionsQuery();
+  const exclusions = allergies?.details;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isFocused) {
+        await Promise.all([
+          refetch(),
+          refetchTimes(),
+          refetchUsers(),
+          refetchExclusions(),
+          refetchExclusions(),
+        ]);
+      }
+    };
+    fetchData();
+  }, [isFocused]);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -60,10 +90,6 @@ export default function () {
     setSelectedUser(null);
     setModalVisible(false);
   };
-
-  const { data: allergies, isLoading: exclusionLoading } =
-    useGetExclusionsQuery();
-  const exclusions = allergies?.details;
 
   let filteredExclusions = exclusions
     ?.filter((exclusion) =>
@@ -240,7 +266,7 @@ export default function () {
                   key={item?._id}
                   style={{
                     backgroundColor: invertBackgroundColor,
-                    height: windowHeight * 0.21,
+                    height: 185,
                     width: windowWidth * 0.925,
                   }}
                   className={`flex-row rounded-lg gap-x-2 px-2 mx-4 mb-3 pt-4`}
@@ -399,8 +425,10 @@ export default function () {
                           color: textColor,
                           height: 100,
                           textAlignVertical: "top",
+                          borderColor,
                         }}
-                        className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2 ${borderColor}`}
+                        placeholderTextColor={textColor}
+                        className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2`}
                         autoCapitalize="none"
                         multiline={true}
                         value={filteredExclusions.join(", ")}
@@ -415,8 +443,9 @@ export default function () {
                             Type
                           </Text>
                           <TextInput
-                            style={{ color: textColor }}
-                            className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                            style={{ color: textColor, borderColor }}
+                            placeholderTextColor={textColor}
+                            className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                             autoCapitalize="none"
                             value={othersMessage}
                             editable={false}
