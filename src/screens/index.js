@@ -41,7 +41,6 @@ import ChooseDate from "./CustomerDashboard/chooseDate";
 import PastAppointment from "./PastAppointments";
 import Settings from "./Settings";
 import CheckoutSuccess from "./CustomerDashboard/checkoutSuccess";
-import Receipt from "./CustomerDashboard/receipt";
 import Appointment from "./Appointment";
 import EditAppointment from "./Appointment/editAppointment";
 import Transaction from "./Transaction";
@@ -127,6 +126,8 @@ import ReceptionistCheckout from "./ReceptionistDashboard/checkout";
 import ReceptionistChooseDate from "./ReceptionistDashboard/chooseDate";
 import ReceptionistPaymentOption from "./ReceptionistDashboard/paymentOption";
 import ReceptionistEmployee from "./ReceptionistDashboard/employee";
+import BeauticianSettings from "./Settings/beauticianSettings";
+import ReceptionistSettings from "./Settings/receptionistSettings";
 
 export {
   Home,
@@ -172,7 +173,6 @@ export {
   PastAppointment,
   Settings,
   CheckoutSuccess,
-  Receipt,
   Appointment,
   EditAppointment,
   Transaction,
@@ -258,4 +258,6 @@ export {
   ReceptionistChooseDate,
   ReceptionistPaymentOption,
   ReceptionistEmployee,
+  BeauticianSettings,
+  ReceptionistSettings,
 };
