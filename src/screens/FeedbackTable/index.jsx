@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
-  Image,
   Alert,
   TouchableOpacity,
   ScrollView,
@@ -24,10 +23,12 @@ import { useNavigation } from "@react-navigation/native";
 import { saveDeletedId, getDeletedIds } from "../../helpers/DeleteItem";
 import { useIsFocused } from "@react-navigation/native";
 
+const { width: deviceWidth } = Dimensions.get("window");
+
 export default function () {
   const isFocused = useIsFocused();
   const navigation = useNavigation();
-  const { width: deviceWidth } = Dimensions.get("window");
+
   const customWidth = deviceWidth * 0.3;
 
   const { data, isLoading, refetch } = useGetFeedbacksQuery();
@@ -38,9 +39,7 @@ export default function () {
     fetchData();
   }, [isFocused]);
 
-  const { backgroundColor, textColor, colorScheme } = changeColor();
-
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
+  const { backgroundColor, textColor, borderColor } = changeColor();
 
   const [deleteFeedback, { isLoading: isDeleting }] =
     useDeleteFeedbackMutation();
@@ -352,7 +351,7 @@ export default function () {
                     title="Previous"
                     onPress={handlePrevPage}
                     disabled={page === 0}
-                    color="#FDA7DF"
+                    color="#FFB6C1"
                   />
                   <Text
                     style={{
@@ -364,7 +363,7 @@ export default function () {
                     title="Next"
                     onPress={handleNextPage}
                     disabled={page === totalPageCount - 1}
-                    color="#FDA7DF"
+                    color="#FFB6C1"
                   />
                 </View>
               ) : null}
