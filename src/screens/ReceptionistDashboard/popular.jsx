@@ -20,9 +20,9 @@ import {
 import { LoadingScreen, Sidebar } from "@components";
 import { appointmentSlice } from "../../state/appointment/appointmentReducer";
 import { useSelector, useDispatch } from "react-redux";
+import { useIsFocused } from "@react-navigation/native";
 
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
 
 export default function () {
   const customer = useSelector((state) => state.customer);
@@ -31,12 +31,29 @@ export default function () {
   const route = useRoute();
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const isFocused = useIsFocused();
+
   const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
-  const { data, isLoading } = useGetCommentsQuery();
-
+  const { data, isLoading, refetch } = useGetCommentsQuery();
   const comments = data?.details || [];
+
+  const {
+    data: exclusion,
+    isLoading: exclusionLoading,
+    refetch: refetchExclusions,
+  } = useGetExclusionsQuery();
+  const exclusions = exclusion?.details;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isFocused) {
+        await Promise.all([refetch(), refetchExclusions()]);
+      }
+    };
+    fetchData();
+  }, [isFocused]);
 
   const servicesById = new Map();
 
@@ -76,10 +93,6 @@ export default function () {
   const sortedServices = filteredServices.sort(
     (a, b) => b?.ratings - a?.ratings
   );
-
-  const { data: exclusion, isLoading: exclusionLoading } =
-    useGetExclusionsQuery();
-  const exclusions = exclusion?.details;
 
   const filteredExclusions = exclusions
     ?.filter(
@@ -303,7 +316,7 @@ export default function () {
                       style={{
                         backgroundColor:
                           selectedOption === "ReceptionistRelevance"
-                            ? "#FDA7DF"
+                            ? "#FFB6C1"
                             : invertBackgroundColor,
                       }}
                       className={`rounded-full px-4 py-2`}
@@ -326,7 +339,7 @@ export default function () {
                       style={{
                         backgroundColor:
                           selectedOption === "ReceptionistPopular"
-                            ? "#FDA7DF"
+                            ? "#FFB6C1"
                             : invertBackgroundColor,
                       }}
                       className={`rounded-full px-4 py-2`}
@@ -349,7 +362,7 @@ export default function () {
                       style={{
                         backgroundColor:
                           selectedOption === "ReceptionistMostRecent"
-                            ? "#FDA7DF"
+                            ? "#FFB6C1"
                             : invertBackgroundColor,
                       }}
                       className={`rounded-full px-4 py-2`}
@@ -372,7 +385,7 @@ export default function () {
                       style={{
                         backgroundColor:
                           selectedOption === "ReceptionistBudget"
-                            ? "#FDA7DF"
+                            ? "#FFB6C1"
                             : invertBackgroundColor,
                       }}
                       className={`rounded-full px-4 py-2`}
@@ -426,7 +439,7 @@ export default function () {
                             }}
                             resizeMode="cover"
                             style={{
-                              height: windowHeight * 0.25,
+                              height: 200,
                               width: windowWidth * 0.9,
                               borderRadius: 20,
                             }}
@@ -516,7 +529,7 @@ export default function () {
                             }}
                             resizeMode="cover"
                             style={{
-                              height: windowHeight * 0.25,
+                              height: 200,
                               width: windowWidth * 0.9,
                               borderRadius: 20,
                             }}
