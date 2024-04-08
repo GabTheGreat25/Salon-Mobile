@@ -24,18 +24,16 @@ import Toast from "react-native-toast-message";
 const windowWidth = Dimensions.get("window").width;
 
 export default function () {
-  const { backgroundColor, textColor, colorScheme } = changeColor();
+  const { backgroundColor, textColor, borderColor, colorScheme } =
+    changeColor();
   const navigation = useNavigation();
-
-  const reason = useSelector((state) => state.reason);
 
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
 
   const auth = useSelector((state) => state.auth.user);
 
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
-  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDA7DF";
+  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FFB6C1";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
   const { data, isLoading, refetch } = useGetTransactionsQuery();
@@ -348,10 +346,7 @@ export default function () {
                                 height: 25,
                                 width: 25,
                                 borderWidth: 2,
-                                borderColor:
-                                  formik.values.rebookReason === option.value
-                                    ? invertBackgroundColor
-                                    : backgroundColor,
+                                borderColor,
                                 backgroundColor:
                                   formik.values.rebookReason === option.value
                                     ? backgroundColor
@@ -405,8 +400,9 @@ export default function () {
                           color: textColor,
                           height: 100,
                           textAlignVertical: "top",
+                          borderColor,
                         }}
-                        className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2 ${borderColor}`}
+                        className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2`}
                         placeholder="Tell us about yourself..."
                         placeholderTextColor={textColor}
                         autoCapitalize="none"
