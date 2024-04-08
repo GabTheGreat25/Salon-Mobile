@@ -21,20 +21,48 @@ import { useSelector, useDispatch } from "react-redux";
 import { transactionSlice } from "../../state/transaction/transactionReducer";
 import { useRoute } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
+import { useIsFocused } from "@react-navigation/native";
 
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
 
 export default function ({ route }) {
+  const isFocused = useIsFocused();
   const { id } = route.params;
 
   const appointmentRoute = useRoute();
   const selectedAppointment = appointmentRoute.params.selectedAppointment;
 
-  const { data: appointment, isLoading: appointmentLoading } =
-    useGetAppointmentByIdQuery(id);
-
+  const {
+    data: appointment,
+    isLoading: appointmentLoading,
+    refetch,
+  } = useGetAppointmentByIdQuery(id);
   const appointmentData = appointment?.details;
+
+  const { data, isLoading, refetch: refetchUsers } = useGetUsersQuery();
+  const beautician = data?.details || [];
+
+  const {
+    data: allSchedules,
+    isLoading: loadingSchedules,
+    refetch: refetchSchedules,
+  } = useGetSchedulesQuery();
+  const schedules =
+    allSchedules?.details.filter(
+      (schedule) =>
+        schedule.leaveNoteConfirmed === true ||
+        schedule.status === "absent" ||
+        schedule.status === "leave"
+    ) || [];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isFocused) {
+        await Promise.all([refetch(), refetchUsers(), refetchSchedules()]);
+      }
+    };
+    fetchData();
+  }, [isFocused]);
 
   const selectedDate = useSelector(
     (state) => state?.transaction?.transactionData?.date
@@ -44,29 +72,18 @@ export default function ({ route }) {
     (state) => state?.transaction?.transactionData?.beautician
   );
 
-  const { textColor, backgroundColor, colorScheme } = changeColor();
+  const { textColor, backgroundColor, shadowColor, colorScheme } =
+    changeColor();
   const navigation = useNavigation();
-  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDA7DF";
+  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FFB6C1";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
   const dispatch = useDispatch();
-
-  const { data, isLoading } = useGetUsersQuery();
-  const beautician = data?.details || [];
 
   const activeBeautician = beautician.filter(
     (beautician) =>
       beautician?.roles?.includes("Beautician") && beautician?.active === true
   );
-
-  const { data: allSchedules } = useGetSchedulesQuery();
-  const schedules =
-    allSchedules?.details.filter(
-      (schedule) =>
-        schedule.leaveNoteConfirmed === true ||
-        schedule.status === "absent" ||
-        schedule.status === "leave"
-    ) || [];
 
   const getAvailableBeauticians = () => {
     return activeBeautician.filter((beautician) => {
@@ -182,7 +199,7 @@ export default function ({ route }) {
 
   return (
     <>
-      {isLoading ? (
+      {isLoading || appointmentLoading || loadingSchedules ? (
         <View
           className={`flex-1 justify-center items-center bg-primary-default`}
         >
@@ -203,7 +220,7 @@ export default function ({ route }) {
                   key={item?._id}
                   style={{
                     backgroundColor: invertBackgroundColor,
-                    height: windowHeight * 0.21,
+                    height: 180,
                     width: windowWidth * 0.925,
                   }}
                   className={`flex-row rounded-lg gap-x-2 px-2 mx-4 mb-3 pt-4`}
@@ -279,11 +296,12 @@ export default function ({ route }) {
           </View>
           <View
             style={{
+              shadowColor,
               backgroundColor,
-              height: windowHeight * 0.1,
+              height: 90,
               width: windowWidth,
             }}
-            className={`flex-col px-10 py-5`}
+            className={`flex-col px-10 py-5 shadow-2xl`}
           >
             <TouchableOpacity onPress={handlePress}>
               <View
@@ -294,7 +312,7 @@ export default function ({ route }) {
               >
                 <Text
                   style={{ color: invertTextColor }}
-                  className={`text-center text-lg font-bold`}
+                  className={`text-center text-xl font-semibold`}
                 >
                   Confirm
                 </Text>
