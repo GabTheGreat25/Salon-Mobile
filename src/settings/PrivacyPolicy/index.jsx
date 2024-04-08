@@ -3,10 +3,9 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { changeColor } from "@utils";
 
 export default function () {
-  const { textColor, backgroundColor, shadowColor, colorScheme } =
-    changeColor();
+  const { textColor, backgroundColor, colorScheme } = changeColor();
 
-  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDA7DF";
+  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FFB6C1";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
   return (
