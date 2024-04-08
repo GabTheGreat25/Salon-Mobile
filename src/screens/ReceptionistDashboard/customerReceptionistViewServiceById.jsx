@@ -32,7 +32,6 @@ export default function ({ route }) {
   const isFocused = useIsFocused();
 
   const { data, isLoading, refetch } = useGetServiceByIdQuery(id);
-
   const service = data?.details;
 
   const {
@@ -56,9 +55,9 @@ export default function ({ route }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (isFocused) refetch();
-      commentsRefetch();
-      exclusionsRefetch();
+      if (isFocused) {
+        await Promise.all([refetch(), commentsRefetch(), exclusionsRefetch()]);
+      }
     };
     fetchData();
   }, [isFocused]);
@@ -101,8 +100,8 @@ export default function ({ route }) {
     } else setSelectedOptions([...selectedOptions, optionId]);
   };
 
-  const { backgroundColor, textColor, colorScheme } = changeColor();
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
+  const { backgroundColor, textColor, borderColor, colorScheme } =
+    changeColor();
   const reverseBackgroundColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
@@ -179,10 +178,9 @@ export default function ({ route }) {
             >
               <View
                 style={{
-                  backgroundColor: "#FDA7DF",
                   width: windowWidth * 0.925,
                 }}
-                className={`rounded-2xl p-4 mt-4 mb-2`}
+                className={`rounded-2xl p-4 mt-4 mb-2 bg-primary-default`}
               >
                 <View className={`flex-col`}>
                   <View className={`flex-col pt-4 self-center`}>
@@ -314,12 +312,11 @@ export default function ({ route }) {
                 {filteredOptions.map((option) => (
                   <TouchableOpacity
                     key={option._id}
-                    style={{
-                      backgroundColor: selectedOptions.includes(option._id)
-                        ? "#FDB9E5"
-                        : "#FDA7DF",
-                    }}
-                    className={`rounded-lg mr-3 p-4`}
+                    className={`rounded-lg mr-3 p-4 ${
+                      selectedOptions.includes(option._id)
+                        ? "bg-primary-variant"
+                        : "bg-primary-default"
+                    }`}
                     onPress={() => toggleOption(option._id)}
                   >
                     <View className={`items-center`}>
@@ -379,10 +376,9 @@ export default function ({ route }) {
 
               <View
                 style={{
-                  backgroundColor: "#FDA7DF",
                   width: windowWidth * 0.925,
                 }}
-                className={`rounded-2xl p-4 my-2`}
+                className={`rounded-2xl p-4 my-2 bg-primary-default`}
               >
                 <View className={`px-2`}>
                   <View className={`flex-row items-center justify-between`}>
@@ -409,7 +405,7 @@ export default function ({ route }) {
                     <TouchableOpacity
                       key="all"
                       style={{
-                        borderColor: borderColor,
+                        borderColor,
                         backgroundColor:
                           selectedStars === null
                             ? reverseBackgroundColor
@@ -429,7 +425,7 @@ export default function ({ route }) {
                       <TouchableOpacity
                         key={stars}
                         style={{
-                          borderColor: borderColor,
+                          borderColor,
                           backgroundColor:
                             selectedStars === stars
                               ? reverseBackgroundColor
@@ -555,7 +551,7 @@ export default function ({ route }) {
                                         selectedOption?.image?.length
                                     )
                                   ]?.url
-                                : noPhoto,
+                                : "https://www.nuvali.ph/wp-content/themes/consultix/images/no-image-found-360x250.png",
                           }}
                           style={{ width: 150, height: 150 }}
                           className={`rounded-full`}
