@@ -24,9 +24,10 @@ import { useNavigation } from "@react-navigation/native";
 
 export default function () {
   const navigation = useNavigation();
-  const { backgroundColor, textColor, colorScheme } = changeColor();
+  const { backgroundColor, textColor, borderColor, colorScheme } =
+    changeColor();
+
   const imageSource = colorScheme === "dark" ? salonLogoWhite : salonLogo;
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
   const [keyboardOpen, setKeyboardOpen] = useState(false);
 
   const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
@@ -145,8 +146,8 @@ export default function () {
                   </Text>
                   <View className={`w-[300px]`}>
                     <TextInput
-                      style={{ color: textColor }}
-                      className={`border-b mt-4 pb-1 text-lg ${borderColor}`}
+                      style={{ color: textColor, borderColor }}
+                      className={`border-b mt-4 pb-1 text-lg`}
                       placeholder="Enter your email"
                       placeholderTextColor={textColor}
                       autoCapitalize="none"
