@@ -38,9 +38,7 @@ export default function () {
     fetchData();
   }, [isFocused]);
 
-  const { backgroundColor, textColor, colorScheme } = changeColor();
-
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
+  const { backgroundColor, textColor, borderColor } = changeColor();
 
   const [deleteTransaction, { isLoading: isDeleting }] =
     useDeleteTransactionMutation();
@@ -466,7 +464,7 @@ export default function () {
                     title="Previous"
                     onPress={handlePrevPage}
                     disabled={page === 0}
-                    color="#FDA7DF"
+                    color="#FFB6C1"
                   />
                   <Text
                     style={{
@@ -478,7 +476,7 @@ export default function () {
                     title="Next"
                     onPress={handleNextPage}
                     disabled={page === totalPageCount - 1}
-                    color="#FDA7DF"
+                    color="#FFB6C1"
                   />
                 </View>
               ) : null}
