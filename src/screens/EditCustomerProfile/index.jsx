@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   SafeAreaView,
@@ -23,19 +23,33 @@ import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
 import { useSelector } from "react-redux";
 import { TextInputMask } from "react-native-masked-text";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function () {
   const auth = useSelector((state) => state.auth);
+  const isFocused = useIsFocused();
   const navigation = useNavigation();
 
   const [updateUser, { isLoading }] = useUpdateUserMutation();
 
-  const { data, isLoading: exclusionLoading } = useGetExclusionsQuery();
+  const {
+    data,
+    isLoading: exclusionLoading,
+    refetch,
+  } = useGetExclusionsQuery();
   const exclusions = data?.details;
 
-  const { backgroundColor, textColor, colorScheme } = changeColor();
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isFocused) refetch();
+    };
+    fetchData();
+  }, [isFocused]);
+
+  const { backgroundColor, textColor, borderColor, colorScheme } =
+    changeColor();
   const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
+
   const [selectedImages, setSelectedImages] = useState([]);
 
   const formik = useFormik({
@@ -472,8 +486,8 @@ export default function () {
                     Name
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2`}
                     placeholder="Enter your name"
                     placeholderTextColor={textColor}
                     autoCapitalize="none"
@@ -495,8 +509,8 @@ export default function () {
                     Age
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2`}
                     placeholder="Enter your age"
                     placeholderTextColor={textColor}
                     autoCapitalize="none"
@@ -518,8 +532,8 @@ export default function () {
                     Email
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2`}
                     placeholder="Enter your email"
                     placeholderTextColor={textColor}
                     autoCapitalize="none"
@@ -537,12 +551,12 @@ export default function () {
                     Mobile Number
                   </Text>
                   <TextInputMask
-                    style={{ color: textColor }}
+                    style={{ color: textColor, borderColor }}
                     type={"custom"}
                     options={{
                       mask: "9999 - 999 - 9999",
                     }}
-                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2`}
                     placeholder="09XX - XXX - XXXX"
                     placeholderTextColor={textColor}
                     autoCapitalize="none"
@@ -569,8 +583,9 @@ export default function () {
                       color: textColor,
                       height: 100,
                       textAlignVertical: "top",
+                      borderColor,
                     }}
-                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2 ${borderColor}`}
+                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2`}
                     placeholder="Tell us about yourself..."
                     placeholderTextColor={textColor}
                     autoCapitalize="none"
@@ -601,7 +616,7 @@ export default function () {
                         style={{
                           height: 30,
                           width: 30,
-                          borderColor: textColor,
+                          borderColor,
                           backgroundColor,
                         }}
                         className={`flex-row justify-center items-center border-2 rounded mr-2`}
@@ -635,7 +650,7 @@ export default function () {
                         style={{
                           height: 30,
                           width: 30,
-                          borderColor: textColor,
+                          borderColor,
                           backgroundColor,
                         }}
                         className={`flex-row justify-center items-center border-2 rounded mr-2`}
@@ -677,7 +692,7 @@ export default function () {
                         style={{
                           height: 30,
                           width: 30,
-                          borderColor: textColor,
+                          borderColor,
                           backgroundColor,
                         }}
                         className={`flex-row justify-center items-center border-2 rounded mr-2`}
@@ -711,7 +726,7 @@ export default function () {
                         style={{
                           height: 30,
                           width: 30,
-                          borderColor: textColor,
+                          borderColor,
                           backgroundColor,
                         }}
                         className={`flex-row justify-center items-center border-2 rounded mr-2`}
@@ -745,7 +760,7 @@ export default function () {
                         style={{
                           height: 30,
                           width: 30,
-                          borderColor: textColor,
+                          borderColor,
                           backgroundColor,
                         }}
                         className={`flex-row justify-center items-center border-2 rounded mr-2`}
@@ -787,7 +802,7 @@ export default function () {
                         style={{
                           height: 30,
                           width: 30,
-                          borderColor: textColor,
+                          borderColor,
                           backgroundColor,
                         }}
                         className={`flex-row justify-center items-center border-2 rounded mr-2`}
@@ -821,7 +836,7 @@ export default function () {
                         style={{
                           height: 30,
                           width: 30,
-                          borderColor: textColor,
+                          borderColor,
                           backgroundColor,
                         }}
                         className={`flex-row justify-center items-center border-2 rounded mr-2`}
@@ -855,7 +870,7 @@ export default function () {
                         style={{
                           height: 30,
                           width: 30,
-                          borderColor: textColor,
+                          borderColor,
                           backgroundColor,
                         }}
                         className={`flex-row justify-center items-center border-2 rounded mr-2`}
@@ -897,7 +912,7 @@ export default function () {
                         style={{
                           height: 30,
                           width: 30,
-                          borderColor: textColor,
+                          borderColor,
                           backgroundColor,
                         }}
                         className={`flex-row justify-center items-center border-2 rounded mr-2`}
@@ -931,7 +946,7 @@ export default function () {
                         style={{
                           height: 30,
                           width: 30,
-                          borderColor: textColor,
+                          borderColor,
                           backgroundColor,
                         }}
                         className={`flex-row justify-center items-center border-2 rounded mr-2`}
@@ -965,7 +980,7 @@ export default function () {
                         style={{
                           height: 30,
                           width: 30,
-                          borderColor: textColor,
+                          borderColor,
                           backgroundColor,
                         }}
                         className={`flex-row justify-center items-center border-2 rounded mr-2`}
@@ -993,8 +1008,8 @@ export default function () {
                   </View>
 
                   <Text
-                    style={{ color: textColor }}
-                    className={`${borderColor} font-semibold text-xl pt-2`}
+                    style={{ color: textColor, borderColor }}
+                    className={`font-semibold text-xl pt-2`}
                   >
                     Chemical Solution Category
                   </Text>
@@ -1019,8 +1034,8 @@ export default function () {
                           style={{
                             height: 30,
                             width: 30,
-                            borderColor: textColor,
-                            backgroundColor: backgroundColor,
+                            borderColor,
+                            backgroundColor,
                           }}
                           className={`flex-row justify-center items-center border-2 rounded mr-2`}
                         >
@@ -1068,8 +1083,8 @@ export default function () {
                                   style={{
                                     height: 30,
                                     width: 30,
-                                    borderColor: textColor,
-                                    backgroundColor: backgroundColor,
+                                    borderColor,
+                                    backgroundColor,
                                   }}
                                   className={`flex-row justify-center items-center border-2 rounded mr-2`}
                                 >
@@ -1113,8 +1128,8 @@ export default function () {
                           style={{
                             height: 30,
                             width: 30,
-                            borderColor: textColor,
-                            backgroundColor: backgroundColor,
+                            borderColor,
+                            backgroundColor,
                           }}
                           className={`flex-row justify-center items-center border-2 rounded mr-2`}
                         >
@@ -1150,7 +1165,8 @@ export default function () {
                         Please specify:{" "}
                       </Text>
                       <TextInput
-                        className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                        style={{ borderColor }}
+                        className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2`}
                         value={formik.values.othersMessage}
                         onChangeText={formik.handleChange("othersMessage")}
                         onBlur={formik.handleBlur("othersMessage")}
@@ -1173,7 +1189,7 @@ export default function () {
                               style={{
                                 height: 30,
                                 width: 30,
-                                borderColor: textColor,
+                                borderColor,
                                 backgroundColor: formik.values.allergy.includes(
                                   allergy._id
                                 )
@@ -1210,8 +1226,8 @@ export default function () {
                   )}
 
                   <Text
-                    style={{ color: textColor }}
-                    className={`${borderColor} font-semibold text-xl pt-2`}
+                    style={{ color: textColor, borderColor }}
+                    className={`font-semibold text-xl pt-2`}
                   >
                     Choose When To Receive Sms Ads
                   </Text>
@@ -1231,10 +1247,7 @@ export default function () {
                             width: 20,
                             borderRadius: 10,
                             borderWidth: 2,
-                            borderColor:
-                              formik.values.messageDate === option.value
-                                ? invertBackgroundColor
-                                : backgroundColor,
+                            borderColor,
                             backgroundColor:
                               formik.values.messageDate === option.value
                                 ? backgroundColor
@@ -1272,40 +1285,40 @@ export default function () {
                   </View>
 
                   <Text
-                    style={{ color: textColor }}
-                    className={`${borderColor} font-semibold text-xl`}
+                    style={{ color: textColor, borderColor }}
+                    className={`font-semibold text-xl`}
                   >
                     Update Your Image
                   </Text>
                   <View className={`flex-row gap-x-2 mt-2 mb-6`}>
                     <TouchableOpacity onPress={takePicture}>
                       <Text
-                        style={{ color: textColor }}
-                        className={`text-base ${borderColor}`}
+                        style={{ color: textColor, borderColor }}
+                        className={`text-base`}
                       >
                         Take a Picture
                       </Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={selectImages}>
                       <Text
-                        style={{ color: textColor }}
-                        className={`text-base ${borderColor}`}
+                        style={{ color: textColor, borderColor }}
+                        className={`text-base`}
                       >
                         Select Images
                       </Text>
                     </TouchableOpacity>
                     {selectedImages?.length > 0 ? (
                       <Text
-                        style={{ color: textColor }}
-                        className={`text-base ${borderColor}`}
+                        style={{ color: textColor, borderColor }}
+                        className={`text-base`}
                       >
                         Add {selectedImages.length} image
                         {selectedImages.length > 1 ? "s" : ""}
                       </Text>
                     ) : (
                       <Text
-                        style={{ color: textColor }}
-                        className={`text-base ${borderColor}`}
+                        style={{ color: textColor, borderColor }}
+                        className={`text-base`}
                       >
                         No Image
                       </Text>
