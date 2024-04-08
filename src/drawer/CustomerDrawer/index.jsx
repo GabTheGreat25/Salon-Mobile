@@ -13,8 +13,9 @@ import {
   Settings,
   Schedule,
   CustomerComment,
+  Feedback,
 } from "@screens";
-import { changeColor, dimensionLayout } from "@utils";
+import { changeColor } from "@utils";
 import { RESOURCE } from "@constants";
 import { UserImage } from "@components";
 import { Text, TouchableOpacity, View, ScrollView } from "react-native";
@@ -31,12 +32,8 @@ export default function () {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth?.user);
   const { backgroundColor, textColor, shadowColor } = changeColor();
-  const isDimensionLayout = dimensionLayout();
   const screenWidth = Dimensions.get("window").width;
-  const viewWidth = isDimensionLayout
-    ? screenWidth * RESOURCE.NUMBER.POINT_SEVENTY_FIVE
-    : screenWidth * RESOURCE.NUMBER.POINT_FIVE;
-
+  const viewWidth = screenWidth * RESOURCE.NUMBER.POINT_SEVENTY_FIVE;
   const handleLogout = async () => {
     try {
       AsyncStorage.removeItem("modalShown");
@@ -115,11 +112,11 @@ export default function () {
         }}
         screenOptions={{
           drawerStyle: {
-            backgroundColor: backgroundColor,
+            backgroundColor,
             width: viewWidth,
           },
           headerStyle: {
-            backgroundColor: backgroundColor,
+            backgroundColor,
             shadowColor: shadowColor,
           },
           headerShown: true,
@@ -130,9 +127,9 @@ export default function () {
         <Drawer.Screen
           name="CustomerDashboard"
           options={{
-            drawerActiveBackgroundColor: "#F78FB3",
+            drawerActiveBackgroundColor: "#FF7086",
             drawerActiveTintColor: textColor,
-            drawerInactiveTintColor: "#FDA7DF",
+            drawerInactiveTintColor: "#FFB6C1",
             drawerLabel: () => (
               <Text
                 className={`text-xl font-base`}
@@ -155,9 +152,9 @@ export default function () {
         <Drawer.Screen
           name="EditCustomerProfile"
           options={{
-            drawerActiveBackgroundColor: "#F78FB3",
+            drawerActiveBackgroundColor: "#FF7086",
             drawerActiveTintColor: textColor,
-            drawerInactiveTintColor: "#FDA7DF",
+            drawerInactiveTintColor: "#FFB6C1",
             drawerLabel: () => (
               <Text
                 className={`text-xl font-base`}
@@ -180,9 +177,9 @@ export default function () {
         <Drawer.Screen
           name="Schedule"
           options={{
-            drawerActiveBackgroundColor: "#F78FB3",
+            drawerActiveBackgroundColor: "#FF7086",
             drawerActiveTintColor: textColor,
-            drawerInactiveTintColor: "#FDA7DF",
+            drawerInactiveTintColor: "#FFB6C1",
             drawerLabel: () => (
               <Text
                 className={`text-xl font-base`}
@@ -205,9 +202,9 @@ export default function () {
         <Drawer.Screen
           name="PastAppointment"
           options={{
-            drawerActiveBackgroundColor: "#F78FB3",
+            drawerActiveBackgroundColor: "#FF7086",
             drawerActiveTintColor: textColor,
-            drawerInactiveTintColor: "#FDA7DF",
+            drawerInactiveTintColor: "#FFB6C1",
             drawerLabel: () => (
               <Text
                 className={`text-xl font-base`}
@@ -230,9 +227,9 @@ export default function () {
         <Drawer.Screen
           name="CustomerComment"
           options={{
-            drawerActiveBackgroundColor: "#F78FB3",
+            drawerActiveBackgroundColor: "#FF7086",
             drawerActiveTintColor: textColor,
-            drawerInactiveTintColor: "#FDA7DF",
+            drawerInactiveTintColor: "#FFB6C1",
             drawerLabel: () => (
               <Text
                 className={`text-xl font-base`}
