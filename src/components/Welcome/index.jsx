@@ -22,6 +22,7 @@ export default function ({
   logo,
 }) {
   const { backgroundColor, textColor } = changeColor();
+
   return (
     <>
       <SafeAreaView className={`flex-1 flex-col`} style={{ backgroundColor }}>
@@ -58,7 +59,7 @@ export default function ({
               <View className={`self-start mt-3 w-full`}>
                 <View className={`px-6 py-2 mb-5 rounded-lg bg-primary-accent`}>
                   <Text
-                    className={`text-neutral-light font-semibold text-center text-base`}
+                    className={`font-semibold text-center text-base`}
                     style={{ color: textColor }}
                   >
                     {buttonTitle}
