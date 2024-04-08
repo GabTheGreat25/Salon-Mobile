@@ -32,8 +32,7 @@ export default function ({ route }) {
     fetchData();
   }, [isFocused]);
 
-  const { backgroundColor, textColor, colorScheme } = changeColor();
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
+  const { backgroundColor, textColor, borderColor } = changeColor();
 
   return (
     <>
@@ -74,8 +73,9 @@ export default function ({ route }) {
                     Company Name
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    placeholderTextColor={textColor}
+                    style={{ color: textColor, borderColor }}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                     autoCapitalize="none"
                     value={delivery?.company_name}
                     editable={false}
@@ -88,8 +88,9 @@ export default function ({ route }) {
                     Delivery Date
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                     autoCapitalize="none"
                     value={
                       delivery?.date
@@ -105,8 +106,9 @@ export default function ({ route }) {
                     Delivery Price
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                     autoCapitalize="none"
                     value={`₱${
                       delivery?.price ? delivery.price.toString() : ""
@@ -120,8 +122,9 @@ export default function ({ route }) {
                     Delivery Status
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                     autoCapitalize="none"
                     value={delivery?.status}
                     editable={false}
@@ -138,8 +141,10 @@ export default function ({ route }) {
                       color: textColor,
                       height: 100,
                       textAlignVertical: "top",
+                      borderColor,
                     }}
-                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2 ${borderColor}`}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2`}
                     autoCapitalize="none"
                     multiline={true}
                     value={
@@ -161,8 +166,10 @@ export default function ({ route }) {
                       color: textColor,
                       height: 100,
                       textAlignVertical: "top",
+                      borderColor,
                     }}
-                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2 ${borderColor}`}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2`}
                     autoCapitalize="none"
                     multiline={true}
                     value={delivery?.product
