@@ -23,23 +23,41 @@ import Toast from "react-native-toast-message";
 import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
 import { BackIcon } from "@helpers";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function ({ route }) {
   const { id } = route.params;
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
 
   const {
     data,
     isLoading: isAppointmentLoading,
     refetch,
   } = useGetAppointmentByIdQuery(id);
-  const [updateAppointment, { isLoading }] = useUpdateAppointmentMutation();
-  const { data: services, isLoading: servicesLoading } = useGetServicesQuery();
-  const { data: optionsData } = useGetOptionsQuery();
+  const [updateAppointment] = useUpdateAppointmentMutation();
+  const {
+    data: services,
+    isLoading: servicesLoading,
+    refetch: refetchServices,
+  } = useGetServicesQuery();
+  const {
+    data: optionsData,
+    isLoading,
+    refetch: refetchOptions,
+  } = useGetOptionsQuery();
   const options = optionsData?.details;
 
-  const { backgroundColor, textColor, colorScheme } = changeColor();
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isFocused) {
+        await Promise.all([refetch(), refetchServices(), refetchOptions()]);
+      }
+    };
+    fetchData();
+  }, [isFocused]);
+
+  const { backgroundColor, textColor, borderColor } = changeColor();
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -187,8 +205,8 @@ export default function ({ route }) {
                     Price
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                     placeholder="Enter the price"
                     placeholderTextColor={textColor}
                     keyboardType="numeric"
@@ -220,8 +238,8 @@ export default function ({ route }) {
                           style={{
                             height: 30,
                             width: 30,
-                            borderColor: textColor,
-                            backgroundColor: backgroundColor,
+                            borderColor,
+                            backgroundColor,
                           }}
                           className="flex-row items-center justify-center border-2 rounded"
                         >
@@ -273,8 +291,8 @@ export default function ({ route }) {
                                 style={{
                                   height: 30,
                                   width: 30,
-                                  borderColor: textColor,
-                                  backgroundColor: backgroundColor,
+                                  borderColor,
+                                  backgroundColor,
                                 }}
                                 className="flex-row items-center justify-center border-2 rounded"
                               >
@@ -312,7 +330,7 @@ export default function ({ route }) {
                       <View className={`mb-2 flex justify-center items-center`}>
                         <View
                           className={`py-2 rounded-lg bg-primary-accent w-[175px]
-                          } ${!formik.isValid ? "opacity-50" : "opacity-100"}`}
+                           ${!formik.isValid ? "opacity-50" : "opacity-100"}`}
                         >
                           <Text
                             className={`font-semibold text-center text-lg`}
