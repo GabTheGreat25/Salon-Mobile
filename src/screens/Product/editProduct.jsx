@@ -33,24 +33,30 @@ export default function ({ route }) {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
 
-  const { data: brand, isLoading: brandLoading } = useGetBrandsQuery();
   const {
     data,
     isLoading: isProductLoading,
     refetch,
   } = useGetProductByIdQuery(id);
+  const {
+    data: brand,
+    isLoading: brandLoading,
+    refetch: refetchBrand,
+  } = useGetBrandsQuery();
 
   useEffect(() => {
     const fetchData = async () => {
-      if (isFocused) refetch();
+      if (isFocused) {
+        await Promise.all([refetch(), refetchBrand()]);
+      }
     };
     fetchData();
   }, [isFocused]);
 
   const [updateProduct, { isLoading }] = useUpdateProductMutation();
 
-  const { backgroundColor, textColor, colorScheme } = changeColor();
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
+  const { backgroundColor, textColor, borderColor } = changeColor();
+
   const [selectedImages, setSelectedImages] = useState([]);
 
   const formik = useFormik({
@@ -266,8 +272,8 @@ export default function ({ route }) {
                     Product Name
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                     placeholder="Enter your product name"
                     placeholderTextColor={textColor}
                     autoCapitalize="none"
@@ -290,7 +296,8 @@ export default function ({ route }) {
                   </Text>
 
                   <View
-                    className={`border-[1.5px]  font-normal rounded-full my-3 ${borderColor}`}
+                    style={{ borderColor }}
+                    className={`border-[1.5px]  font-normal rounded-full my-3`}
                   >
                     <Picker
                       selectedValue={formik.values.brand}
@@ -328,7 +335,8 @@ export default function ({ route }) {
                   </Text>
 
                   <View
-                    className={`border-[1.5px]  font-normal rounded-full my-3 ${borderColor}`}
+                    style={{ borderColor }}
+                    className={`border-[1.5px]  font-normal rounded-full my-3`}
                   >
                     <Picker
                       selectedValue={formik.values.type}
@@ -363,8 +371,9 @@ export default function ({ route }) {
                       color: textColor,
                       height: 100,
                       textAlignVertical: "top",
+                      borderColor,
                     }}
-                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2 ${borderColor}`}
+                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2`}
                     placeholder="Add Ingredients Here..."
                     placeholderTextColor={textColor}
                     autoCapitalize="none"
@@ -388,8 +397,8 @@ export default function ({ route }) {
                         style={{
                           height: 35,
                           width: 35,
-                          borderColor: textColor,
-                          backgroundColor: backgroundColor,
+                          borderColor,
+                          backgroundColor,
                         }}
                         className={`flex-row justify-center items-center border-2 rounded mr-3`}
                       >
@@ -417,40 +426,40 @@ export default function ({ route }) {
                   )}
 
                   <Text
-                    style={{ color: textColor }}
-                    className={`${borderColor} font-semibold text-xl`}
+                    style={{ color: textColor, borderColor }}
+                    className={`font-semibold text-xl`}
                   >
                     Update Your Image
                   </Text>
                   <View className={`flex-row gap-x-2 mt-2 mb-6`}>
                     <TouchableOpacity onPress={takePicture}>
                       <Text
-                        style={{ color: textColor }}
-                        className={`text-base ${borderColor}`}
+                        style={{ color: textColor, borderColor }}
+                        className={`text-base`}
                       >
                         Take a Picture
                       </Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={selectImages}>
                       <Text
-                        style={{ color: textColor }}
-                        className={`text-base ${borderColor}`}
+                        style={{ color: textColor, borderColor }}
+                        className={`text-base`}
                       >
                         Select Images
                       </Text>
                     </TouchableOpacity>
                     {selectedImages?.length > 0 ? (
                       <Text
-                        style={{ color: textColor }}
-                        className={`text-base ${borderColor}`}
+                        style={{ color: textColor, borderColor }}
+                        className={`text-base`}
                       >
                         Add {selectedImages.length} image
                         {selectedImages.length > 1 ? "s" : ""}
                       </Text>
                     ) : (
                       <Text
-                        style={{ color: textColor }}
-                        className={`text-base ${borderColor}`}
+                        style={{ color: textColor, borderColor }}
+                        className={`text-base`}
                       >
                         No Image
                       </Text>
