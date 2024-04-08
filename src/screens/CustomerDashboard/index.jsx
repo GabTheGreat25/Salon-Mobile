@@ -27,13 +27,14 @@ import { LoadingScreen } from "@components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSelector, useDispatch } from "react-redux";
 import { appointmentSlice } from "../../state/appointment/appointmentReducer";
+import { useIsFocused } from "@react-navigation/native";
 
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
 
 export default function () {
   const { textColor, backgroundColor, shadowColor, colorScheme } =
     changeColor();
+  const isFocused = useIsFocused();
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
@@ -59,13 +60,32 @@ export default function () {
       })
     );
   };
-  const { data, isLoading } = useGetServicesQuery();
 
+  const { data, isLoading, refetch: refetchService } = useGetServicesQuery();
   const services = data?.details || [];
 
-  const { data: commentsData, isLoading: commentsLoading } =
-    useGetCommentsQuery();
+  const {
+    data: commentsData,
+    isLoading: commentsLoading,
+    refetch,
+  } = useGetCommentsQuery();
   const comments = commentsData?.details || [];
+
+  const {
+    data: exclusionData,
+    isLoading: exclusionLoading,
+    refetch: refetchExclusion,
+  } = useGetExclusionsQuery();
+  const exclusions = exclusionData?.details;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isFocused) {
+        await Promise.all([refetch(), refetchExclusion(), refetchService()]);
+      }
+    };
+    fetchData();
+  }, [isFocused]);
 
   const allServices = services.map((service) => {
     const matchingComments = comments.filter((comment) =>
@@ -85,10 +105,6 @@ export default function () {
       ratings: averageRating,
     };
   });
-
-  const { data: exclusionData, isLoading: exclusionLoading } =
-    useGetExclusionsQuery();
-  const exclusions = exclusionData?.details;
 
   const auth = useSelector((state) => state.auth.user);
 
@@ -248,10 +264,9 @@ export default function () {
                 <View
                   key={latestService?._id}
                   style={{
-                    backgroundColor: "#FDA7DF",
                     width: "85%",
                   }}
-                  className={`rounded-lg p-5 items-center justify-center`}
+                  className={`rounded-lg p-5 items-center justify-center bg-primary-default`}
                 >
                   <TouchableOpacity
                     style={{ position: "absolute", top: 20, right: 20 }}
@@ -333,7 +348,7 @@ export default function () {
                   onPress={() => navigation.navigate("Relevance")}
                   style={{
                     shadowColor,
-                    height: windowHeight * 0.23,
+                    height: 170,
                     width: windowWidth * 0.45,
                   }}
                   className={`rounded flex-col shadow-2xl mx-1 bg-primary-default`}
@@ -359,7 +374,7 @@ export default function () {
                   onPress={() => navigation.navigate("Budget")}
                   style={{
                     shadowColor,
-                    height: windowHeight * 0.23,
+                    height: 170,
                     width: windowWidth * 0.45,
                   }}
                   className={`rounded flex-col shadow-2xl mx-1 bg-primary-default`}
@@ -387,7 +402,7 @@ export default function () {
                   onPress={() => navigation.navigate("MostRecent")}
                   style={{
                     shadowColor,
-                    height: windowHeight * 0.12,
+                    height: 90,
                     width: windowWidth * 0.454,
                   }}
                   className={`rounded flex-row shadow-2xl mx-1 bg-primary-default`}
@@ -412,7 +427,7 @@ export default function () {
                   onPress={() => navigation.navigate("Popular")}
                   style={{
                     shadowColor,
-                    height: windowHeight * 0.12,
+                    height: 90,
                     width: windowWidth * 0.454,
                   }}
                   className={`rounded flex-row shadow-2xl mx-1 bg-primary-default`}
@@ -486,13 +501,16 @@ export default function () {
                           }}
                           resizeMode="cover"
                           style={{
-                            height: windowHeight * 0.25,
+                            height: 200,
                             width: windowWidth * 0.9,
                             borderRadius: 20,
                           }}
                         />
-                        <TouchableOpacity onPress={() => handlePress(item)}>
-                          <View className={`absolute left-[315px] bottom-2`}>
+                        <TouchableOpacity
+                          onPress={() => handlePress(item)}
+                          className={`relative`}
+                        >
+                          <View className={`absolute left-2 bottom-2`}>
                             <Ionicons
                               name="add-circle-sharp"
                               size={50}
@@ -594,13 +612,16 @@ export default function () {
                           }}
                           resizeMode="cover"
                           style={{
-                            height: windowHeight * 0.25,
+                            height: 200,
                             width: windowWidth * 0.9,
                             borderRadius: 20,
                           }}
                         />
-                        <TouchableOpacity onPress={() => handlePress(item)}>
-                          <View className={`absolute left-[315px] bottom-2`}>
+                        <TouchableOpacity
+                          onPress={() => handlePress(item)}
+                          className={`relative`}
+                        >
+                          <View className={`absolute left-2 bottom-2`}>
                             <Ionicons
                               name="add-circle-sharp"
                               size={50}
