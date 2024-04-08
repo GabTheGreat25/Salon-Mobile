@@ -19,20 +19,19 @@ import { useAddHiringMutation } from "../../state/api/reducer";
 import { Picker } from "@react-native-picker/picker";
 
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
 
 export default function () {
-  const { textColor, backgroundColor, colorScheme } = changeColor();
+  const { textColor, backgroundColor, borderColor, shadowColor, colorScheme } =
+    changeColor();
   const navigation = useNavigation();
 
   const hiring = useSelector((state) => state.hiring);
 
   const [addHiring] = useAddHiringMutation();
 
-  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDB9E5";
+  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FFC0CB";
   const revertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
 
   const currentDate = new Date();
   const next21Days = new Date(currentDate);
@@ -60,7 +59,7 @@ export default function () {
       const updatedMarkedDates = {
         [hiring.hiringData.date]: {
           selected: true,
-          selectedColor: "#F78FB3",
+          selectedColor: "#FF7086",
         },
       };
       setMarkedDates(updatedMarkedDates);
@@ -84,7 +83,7 @@ export default function () {
       updatedMarkedDates = {
         [day.dateString]: {
           selected: true,
-          selectedColor: "#F78FB3",
+          selectedColor: "#FF7086",
         },
       };
       updatedSelectedDateTime.date = day.dateString;
@@ -200,18 +199,15 @@ export default function () {
               Select date and time
             </Text>
             <Calendar
-              style={{
-                backgroundColor: invertBackgroundColor,
-              }}
-              className={`mx-1 px-4 py-4 mb-2 rounded`}
+              className={`mx-1 px-4 py-4 mb-2 rounded bg-primary-variant`}
               onDayPress={handleDayPress}
               markedDates={markedDates}
               markingType={"simple"}
               theme={{
-                calendarBackground: "invertBackgroundColor",
+                calendarBackground: "#FFC0CB",
                 monthTextColor: "black",
                 textSectionTitleColor: "black",
-                todayTextColor: "#BE2EDD",
+                todayTextColor: "#FF1493",
                 arrowColor: "black",
               }}
               minDate={minDate}
@@ -234,11 +230,10 @@ export default function () {
             decelerationRate="fast"
             scrollEventThrottle={1}
             style={{
-              backgroundColor: invertBackgroundColor,
-              height: windowHeight * 0.175,
+              height: 100,
               width: windowWidth * 0.925,
             }}
-            className={`flex-row rounded mx-1 px-4 pt-4 mb-2`}
+            className={`flex-row rounded mx-1 px-4 mb-2 bg-primary-variant`}
           >
             {items.map((item, index) => (
               <TouchableOpacity
@@ -252,7 +247,7 @@ export default function () {
                       selectedDateTime.time === item.time
                         ? revertBackgroundColor
                         : backgroundColor,
-                    height: windowHeight * 0.075,
+                    height: 50,
                     width: windowWidth * 0.35,
                   }}
                   className={`rounded justify-center items-center text-center mr-8 mt-7 mb-2`}
@@ -273,7 +268,8 @@ export default function () {
             ))}
           </ScrollView>
           <View
-            className={`border-[1.5px]  font-normal rounded-full my-3 ${borderColor}`}
+            style={{ borderColor }}
+            className={`border-[1.5px]  font-normal rounded-full my-3`}
           >
             <Picker
               selectedValue={formik.values.type}
@@ -300,7 +296,7 @@ export default function () {
                 style={{
                   height: 35,
                   width: 35,
-                  borderColor: invertTextColor,
+                  borderColor,
                   backgroundColor: invertBackgroundColor,
                 }}
                 className={`flex-row justify-center items-center border-2 rounded mr-2`}
@@ -327,11 +323,12 @@ export default function () {
         </ScrollView>
         <View
           style={{
+            shadowColor,
             backgroundColor,
-            height: windowHeight * 0.125,
+            height: 90,
             width: windowWidth,
           }}
-          className={`flex-col px-10 py-5`}
+          className={`flex-col px-10 py-5 shadow-2xl`}
         >
           <TouchableOpacity
             onPress={formik.handleSubmit}
