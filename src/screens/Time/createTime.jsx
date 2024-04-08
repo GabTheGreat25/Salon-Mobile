@@ -21,9 +21,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 
 export default function () {
   const navigation = useNavigation();
-  const { backgroundColor, textColor, colorScheme } = changeColor();
-
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
+  const { backgroundColor, textColor, borderColor } = changeColor();
 
   const [addTime, { isLoading }] = useAddTimeMutation();
   const formik = useFormik({
@@ -77,7 +75,7 @@ export default function () {
     const hours = time.getHours();
     const minutes = time.getMinutes();
     const ampm = hours >= 12 ? "PM" : "AM";
-    const formattedHours = (hours % 12 || 12).toString().padStart(2, "0"); // Ensure two digits for hours
+    const formattedHours = (hours % 12 || 12).toString().padStart(2, "0");
     const formattedMinutes = minutes < 10 ? "0" + minutes : minutes;
 
     const formattedTime = `${formattedHours}:${formattedMinutes} ${ampm}`;
@@ -120,8 +118,8 @@ export default function () {
                   </Text>
 
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2`}
                     placeholder="Enter time"
                     placeholderTextColor={textColor}
                     onFocus={showTimepicker}
@@ -152,8 +150,9 @@ export default function () {
                     >
                       <View className={`mb-2 flex justify-center items-center`}>
                         <View
-                          className={`py-2 rounded-lg bg-primary-accent w-[175px]
-                          } ${!formik.isValid ? "opacity-50" : "opacity-100"}`}
+                          className={`py-2 rounded-lg bg-primary-accent w-[175px] ${
+                            !formik.isValid ? "opacity-50" : "opacity-100"
+                          }`}
                         >
                           <Text
                             className={`font-semibold text-center text-lg`}
