@@ -27,7 +27,7 @@ const windowWidth = Dimensions.get("window").width;
 export default function () {
   const { backgroundColor, colorScheme } = changeColor();
   const navigation = useNavigation();
-  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDA7DF";
+  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FFB6C1";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
   const isFocused = useIsFocused();
