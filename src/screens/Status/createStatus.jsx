@@ -21,16 +21,22 @@ import {
 import { createAbsenceValidation } from "../../validation";
 import Toast from "react-native-toast-message";
 import { Picker } from "@react-native-picker/picker";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function () {
   const navigation = useNavigation();
-  const { backgroundColor, textColor, colorScheme } = changeColor();
+  const isFocused = useIsFocused();
 
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
+  const { backgroundColor, textColor, borderColor } = changeColor();
 
   const [addSchedule, { isLoading }] = useAddScheduleMutation();
-  const { data: user, isLoading: userLoading } = useGetUsersQuery();
+  const { data: user, isLoading: userLoading, refetch } = useGetUsersQuery();
   const beauticianList = user?.details || [];
+  const {
+    data: schedules,
+    isLoading: schedulesLoading,
+    refetch: refetchSchedules,
+  } = useGetSchedulesQuery();
 
   const activeBeauticians = beauticianList.filter(
     (beautician) =>
@@ -39,8 +45,14 @@ export default function () {
       beautician?.active === true
   );
 
-  const { data: schedules, isLoading: schedulesLoading } =
-    useGetSchedulesQuery();
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isFocused) {
+        await Promise.all([refetch(), refetchSchedules()]);
+      }
+    };
+    fetchData();
+  }, [isFocused]);
 
   const formik = useFormik({
     initialValues: {
@@ -135,7 +147,8 @@ export default function () {
                   </Text>
 
                   <View
-                    className={`border-[1.5px]  font-normal rounded-full my-3 ${borderColor}`}
+                    style={{ borderColor }}
+                    className={`border-[1.5px]  font-normal rounded-full my-3`}
                   >
                     <Picker
                       selectedValue={formik.values.beautician}
@@ -169,8 +182,9 @@ export default function () {
                     >
                       <View className={`mb-2 flex justify-center items-center`}>
                         <View
-                          className={`py-2 rounded-lg bg-primary-accent w-[175px]
-                          } ${!formik.isValid ? "opacity-50" : "opacity-100"}`}
+                          className={`py-2 rounded-lg bg-primary-accent w-[175px] ${
+                            !formik.isValid ? "opacity-50" : "opacity-100"
+                          }`}
                         >
                           <Text
                             className={`font-semibold text-center text-lg`}
