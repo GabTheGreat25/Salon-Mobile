@@ -28,7 +28,7 @@ export default function () {
 
   const auth = useSelector((state) => state.auth.user);
 
-  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDA7DF";
+  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FFB6C1";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
   const { data, isLoading, refetch } = useGetTransactionsQuery();
@@ -44,8 +44,7 @@ export default function () {
   useEffect(() => {
     const fetchData = async () => {
       if (isFocused) {
-        refetch();
-        commentRefetch();
+        await Promise.all([refetch(), commentRefetch()]);
       }
     };
     fetchData();
