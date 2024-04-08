@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   Dimensions,
   SafeAreaView,
-  Linking,
   TouchableWithoutFeedback,
 } from "react-native";
 import { changeColor } from "@utils";
@@ -28,7 +27,6 @@ import { LoadingScreen } from "@components";
 import { customerSlice } from "../../state/auth/customerIdReducer";
 
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
 
 export default function () {
   const { textColor, backgroundColor, shadowColor } = changeColor();
@@ -295,7 +293,7 @@ export default function () {
               >
                 <View
                   style={{
-                    height: windowHeight * 0.15,
+                    height: 115,
                     width: windowWidth * 0.925,
                   }}
                   className={`flex-col justify-center px-4 mb-1 bg-primary-default rounded-2xl`}
@@ -356,13 +354,13 @@ export default function () {
                         setSelectedAppointment(newSelectedAppointment);
                       }}
                       style={{
-                        backgroundColor:
-                          selectedAppointment === appointment?.type
-                            ? "#F78FB3"
-                            : "#FDA7DF",
                         width: windowWidth * 0.925,
                       }}
-                      className={`rounded-2xl px-4 pb-4 pt-1 mt-4 mb-2`}
+                      className={`rounded-2xl px-4 pb-4 pt-1 mt-4 mb-2 ${
+                        selectedAppointment === appointment?.type
+                          ? "bg-primary-accent"
+                          : "bg-primary-default"
+                      }`}
                     >
                       <View className={`flex-col`}>
                         <View className={`flex-col pt-4 self-center`}>
@@ -459,11 +457,12 @@ export default function () {
             </ScrollView>
             <View
               style={{
+                shadowColor,
                 backgroundColor,
-                height: windowHeight * 0.25,
+                height: 200,
                 width: windowWidth,
               }}
-              className={`flex-col px-10`}
+              className={`flex-col px-10 shadow-2xl`}
             >
               <View
                 className={`flex-row justify-center items-center pt-4 pb-2`}
@@ -482,7 +481,7 @@ export default function () {
                       >
                         Select Payment Method
                       </Text>
-                      <Feather name="chevron-right" size={25} color="#FDA7DF" />
+                      <Feather name="chevron-right" size={25} color="#FFB6C1" />
                     </View>
                   </TouchableOpacity>
                 </View>
@@ -505,7 +504,7 @@ export default function () {
                       >
                         Select Beautician
                       </Text>
-                      <Feather name="chevron-right" size={25} color="#FDA7DF" />
+                      <Feather name="chevron-right" size={25} color="#FFB6C1" />
                     </View>
                   </TouchableOpacity>
                 </View>
@@ -558,7 +557,7 @@ export default function () {
                 >
                   <Text
                     style={{ color: textColor }}
-                    className={`text-center text-lg font-bold`}
+                    className={`text-center text-xl font-semibold`}
                   >
                     Confirm
                   </Text>
