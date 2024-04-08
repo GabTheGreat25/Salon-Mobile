@@ -19,7 +19,6 @@ import { feeSlice } from "../../state/appointment/hasAppointmentReducer";
 import Toast from "react-native-toast-message";
 
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
 
 export default function () {
   const { textColor, backgroundColor, shadowColor } = changeColor();
@@ -78,10 +77,9 @@ export default function () {
                 <View
                   key={index ?? null}
                   style={{
-                    backgroundColor: "#FDA7DF",
                     width: windowWidth * 0.925,
                   }}
-                  className={`rounded-2xl p-4 mt-4 mb-2`}
+                  className={`rounded-2xl p-4 mt-4 mb- bg-primary-default`}
                 >
                   <View className={`flex-1 flex-col`}>
                     <View className={`flex-row gap-x-2`}>
@@ -205,7 +203,7 @@ export default function () {
           style={{
             shadowColor,
             backgroundColor,
-            height: windowHeight * 0.28,
+            height: 230,
             width: windowWidth,
           }}
           className={`flex-col px-10 shadow-2xl`}
