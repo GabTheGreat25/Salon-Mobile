@@ -16,7 +16,6 @@ import * as ImageManipulator from "expo-image-manipulator";
 import Toast from "react-native-toast-message";
 
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
 
 export default function () {
   const selectedPayment = useSelector(
@@ -30,11 +29,11 @@ export default function () {
   );
 
   const dispatch = useDispatch();
-  const { textColor, backgroundColor, colorScheme } = changeColor();
+  const { textColor, backgroundColor, borderColor, shadowColor, colorScheme } =
+    changeColor();
   const navigation = useNavigation();
-  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDA7DF";
+  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FFB6C1";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
 
   const [isCashChecked, setCashChecked] = useState(
     selectedPayment === "Cash" || false
@@ -237,7 +236,7 @@ export default function () {
         >
           <View
             style={{
-              height: windowHeight * 0.175,
+              height: 150,
               width: windowWidth * 0.925,
             }}
             className={`mx-1 px-4 pt-4 mb-2 bg-primary-default rounded-lg`}
@@ -251,7 +250,7 @@ export default function () {
                   style={{
                     height: 35,
                     width: 35,
-                    borderColor: invertTextColor,
+                    borderColor,
                     backgroundColor: invertBackgroundColor,
                   }}
                   className={`flex-row justify-center items-center border-2 rounded mr-2`}
@@ -293,7 +292,7 @@ export default function () {
                   style={{
                     height: 35,
                     width: 35,
-                    borderColor: invertTextColor,
+                    borderColor,
                     backgroundColor: invertBackgroundColor,
                   }}
                   className={`flex-row justify-center items-center border-2 rounded mr-2`}
@@ -323,7 +322,7 @@ export default function () {
 
           <View
             style={{
-              height: windowHeight * 0.175,
+              height: 150,
               width: windowWidth * 0.925,
             }}
             className={`mx-1 px-4 pt-4 my-2 bg-primary-default rounded-lg`}
@@ -337,7 +336,7 @@ export default function () {
                   style={{
                     height: 35,
                     width: 35,
-                    borderColor: invertTextColor,
+                    borderColor,
                     backgroundColor: invertBackgroundColor,
                   }}
                   className={`flex-row justify-center items-center border-2 rounded mr-2`}
@@ -379,7 +378,7 @@ export default function () {
                   style={{
                     height: 35,
                     width: 35,
-                    borderColor: invertTextColor,
+                    borderColor,
                     backgroundColor: invertBackgroundColor,
                   }}
                   className={`flex-row justify-center items-center border-2 rounded mr-2`}
@@ -411,46 +410,46 @@ export default function () {
             <>
               <View
                 style={{
-                  height: windowHeight * 0.12,
+                  height: 100,
                   width: windowWidth * 0.925,
                 }}
                 className={`mx-1 px-4 pt-4 my-2 bg-primary-default rounded-lg`}
               >
                 <Text
-                  style={{ color: textColor }}
-                  className={`${borderColor} font-semibold text-xl`}
+                  style={{ color: textColor, borderColor }}
+                  className={`font-semibold text-xl`}
                 >
                   Upload Your Image
                 </Text>
                 <View className={`flex-row gap-x-2 mt-2 mb-6`}>
                   <TouchableOpacity onPress={takePicture}>
                     <Text
-                      style={{ color: textColor }}
-                      className={`text-base ${borderColor}`}
+                      style={{ color: textColor, borderColor }}
+                      className={`text-base`}
                     >
                       Take a Picture
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity onPress={selectImages}>
                     <Text
-                      style={{ color: textColor }}
-                      className={`text-base ${borderColor}`}
+                      style={{ color: textColor, borderColor }}
+                      className={`text-base`}
                     >
                       Select Images
                     </Text>
                   </TouchableOpacity>
                   {selectedImages?.length > 0 ? (
                     <Text
-                      style={{ color: textColor }}
-                      className={`text-base ${borderColor}`}
+                      style={{ color: textColor, borderColor }}
+                      className={`text-base`}
                     >
                       Add {selectedImages.length} image
                       {selectedImages.length > 1 ? "s" : ""}
                     </Text>
                   ) : (
                     <Text
-                      style={{ color: textColor }}
-                      className={`text-base ${borderColor}`}
+                      style={{ color: textColor, borderColor }}
+                      className={`text-base`}
                     >
                       No Image
                     </Text>
@@ -462,11 +461,12 @@ export default function () {
         </View>
         <View
           style={{
+            shadowColor,
             backgroundColor,
-            height: windowHeight * 0.1,
+            height: 90,
             width: windowWidth,
           }}
-          className={`flex-col px-10 py-5`}
+          className={`flex-col px-10 py-5 shadow-2xl`}
         >
           <TouchableOpacity onPress={handlePress}>
             <View
