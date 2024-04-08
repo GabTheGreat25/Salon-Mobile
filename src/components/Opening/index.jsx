@@ -24,6 +24,7 @@ export default function ({
 }) {
   const { backgroundColor, textColor, colorScheme } = changeColor();
   const imageSource = colorScheme === "dark" ? salonLogoWhite : salonLogo;
+
   return (
     <>
       <SafeAreaView
@@ -64,7 +65,7 @@ export default function ({
                 >
                   <View className={`px-14 py-2 rounded-3xl bg-primary-accent`}>
                     <Text
-                      className={`text-neutral-light font-normal text-center text-2xl`}
+                      className={`font-normal text-center text-2xl`}
                       style={{ color: textColor }}
                     >
                       {firstButton}
@@ -78,7 +79,7 @@ export default function ({
               >
                 <View className={`px-14 py-2 rounded-3xl bg-primary-accent`}>
                   <Text
-                    className={`text-neutral-light font-normal text-center text-2xl`}
+                    className={`font-normal text-center text-2xl`}
                     style={{ color: textColor }}
                   >
                     {secondButton}
