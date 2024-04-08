@@ -31,22 +31,31 @@ export default function ({ route }) {
   const isFocused = useIsFocused();
 
   const { data, isLoading, refetch } = useGetAppointmentByIdQuery(id);
+  const appointment = data?.details;
+  const {
+    data: user,
+    isLoading: userLoading,
+    refetch: refetchUser,
+  } = useGetUsersQuery();
+  const beauticianList = user?.details || [];
+  const {
+    data: schedules,
+    isLoading: scheduleLoading,
+    refetch: refetchSchedules,
+  } = useGetSchedulesQuery();
+  const scheduleList = schedules?.details || [];
 
   useEffect(() => {
     const fetchData = async () => {
-      if (isFocused) refetch();
+      if (isFocused) {
+        await Promise.all([refetch(), refetchUser(), refetchSchedules()]);
+      }
     };
     fetchData();
   }, [isFocused]);
 
-  const appointment = data?.details;
   const [updateBeauticianAppointment] =
     useUpdateBeauticianAppointmentMutation();
-  const { data: user, isLoading: userLoading } = useGetUsersQuery();
-  const beauticianList = user?.details || [];
-  const { data: schedules, isLoading: scheduleLoading } =
-    useGetSchedulesQuery();
-  const scheduleList = schedules?.details || [];
 
   const today = new Date().toISOString().split("T")[0];
 
@@ -79,8 +88,7 @@ export default function ({ route }) {
     return isMatching && !isAbsentOrOnLeave;
   });
 
-  const { backgroundColor, textColor, colorScheme } = changeColor();
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
+  const { backgroundColor, textColor, borderColor } = changeColor();
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -203,8 +211,9 @@ export default function ({ route }) {
                       Customer Name
                     </Text>
                     <TextInput
-                      style={{ color: textColor }}
-                      className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                      style={{ color: textColor, borderColor }}
+                      placeholderTextColor={textColor}
+                      className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                       value={appointment?.customer?.name}
                       editable={false}
                     />
@@ -215,8 +224,9 @@ export default function ({ route }) {
                       Appointment Services
                     </Text>
                     <TextInput
-                      style={{ color: textColor }}
-                      className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                      style={{ color: textColor, borderColor }}
+                      placeholderTextColor={textColor}
+                      className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                       value={appointment?.service
                         ?.map((s) => s?.service_name)
                         .join(", ")}
@@ -236,8 +246,8 @@ export default function ({ route }) {
                             style={{
                               height: 35,
                               width: 35,
-                              borderColor: textColor,
-                              backgroundColor: backgroundColor,
+                              borderColor,
+                              backgroundColor,
                             }}
                             className={`flex-row justify-center items-center border-2 rounded`}
                           >
@@ -273,8 +283,9 @@ export default function ({ route }) {
                           className={`mb-2 flex justify-center items-center`}
                         >
                           <View
-                            className={`py-2 rounded-lg bg-primary-accent w-[175px]
-                          } ${!formik.isValid ? "opacity-50" : "opacity-100"}`}
+                            className={`py-2 rounded-lg bg-primary-accent w-[175px] ${
+                              !formik.isValid ? "opacity-50" : "opacity-100"
+                            }`}
                           >
                             <Text
                               className={`font-semibold text-center text-lg`}
