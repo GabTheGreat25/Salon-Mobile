@@ -18,18 +18,19 @@ import Toast from "react-native-toast-message";
 import { BackIcon } from "@helpers";
 import { DataTable } from "react-native-paper";
 import { Feather } from "@expo/vector-icons";
-import { changeColor, dimensionLayout } from "@utils";
+import { changeColor } from "@utils";
 import { useNavigation } from "@react-navigation/native";
 import { saveDeletedId, getDeletedIds } from "../../helpers/DeleteItem";
 import { format } from "date-fns";
 import { useIsFocused } from "@react-navigation/native";
 
+const { width: deviceWidth } = Dimensions.get("window");
+
 export default function () {
   const isFocused = useIsFocused();
-  const isDimensionLayout = dimensionLayout();
   const navigation = useNavigation();
-  const { width: deviceWidth } = Dimensions.get("window");
-  const customWidth = deviceWidth * (isDimensionLayout ? 0.3 : 0.2);
+
+  const customWidth = deviceWidth * 0.3;
 
   const { data, isLoading, refetch } = useGetDeliveriesQuery();
   useEffect(() => {
@@ -39,9 +40,9 @@ export default function () {
     fetchData();
   }, [isFocused]);
 
-  const { backgroundColor, textColor, colorScheme } = changeColor();
+  const { backgroundColor, textColor, borderColor, colorScheme } =
+    changeColor();
 
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
   const [deleteDelivery, { isLoading: isDeleting }] =
@@ -149,7 +150,7 @@ export default function () {
             <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
             <View className={`ml-12 mt-[14px] items-start justify-start`}>
               <TouchableOpacity
-                style={{ backgroundColor: borderColor }}
+                style={{ backgroundColor }}
                 className={`py-1 px-3 rounded-md border `}
                 onPress={createDelivery}
               >
@@ -161,11 +162,7 @@ export default function () {
                 </Text>
               </TouchableOpacity>
             </View>
-            <View
-              className={`flex-1 items-center justify-center ${
-                isDimensionLayout ? "mt-10" : "my-7"
-              }`}
-            >
+            <View className={`flex-1 items-center justify-center mt-10`}>
               {paginatedData?.length ? (
                 <ScrollView
                   style={{ backgroundColor }}
@@ -473,7 +470,7 @@ export default function () {
                     title="Previous"
                     onPress={handlePrevPage}
                     disabled={page === 0}
-                    color="#FDA7DF"
+                    color="#FFB6C1"
                   />
                   <Text
                     style={{
@@ -485,7 +482,7 @@ export default function () {
                     title="Next"
                     onPress={handleNextPage}
                     disabled={page === totalPageCount - 1}
-                    color="#FDA7DF"
+                    color="#FFB6C1"
                   />
                 </View>
               ) : null}
