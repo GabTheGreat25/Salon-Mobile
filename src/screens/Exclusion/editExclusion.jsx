@@ -44,8 +44,7 @@ export default function ({ route }) {
 
   const [updateExclusion, { isLoading }] = useUpdateExclusionMutation();
 
-  const { backgroundColor, textColor, colorScheme } = changeColor();
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
+  const { backgroundColor, textColor, borderColor } = changeColor();
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -133,8 +132,8 @@ export default function ({ route }) {
                       Edit Exclusion Details
                     </Text>
                     <TextInput
-                      style={{ color: textColor }}
-                      className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                      style={{ color: textColor, borderColor }}
+                      className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2`}
                       placeholder="Enter your exclusion name"
                       placeholderTextColor={textColor}
                       autoCapitalize="none"
@@ -166,8 +165,8 @@ export default function ({ route }) {
                           style={{
                             height: 35,
                             width: 35,
-                            borderColor: textColor,
-                            backgroundColor: backgroundColor,
+                            borderColor,
+                            backgroundColor,
                           }}
                           className={`flex-row justify-center items-center border-2 rounded`}
                         >
@@ -197,8 +196,8 @@ export default function ({ route }) {
                           style={{
                             height: 35,
                             width: 35,
-                            borderColor: textColor,
-                            backgroundColor: backgroundColor,
+                            borderColor,
+                            backgroundColor,
                           }}
                           className={`flex-row justify-center items-center border-2 rounded`}
                         >
@@ -228,8 +227,8 @@ export default function ({ route }) {
                           style={{
                             height: 35,
                             width: 35,
-                            borderColor: textColor,
-                            backgroundColor: backgroundColor,
+                            borderColor,
+                            backgroundColor,
                           }}
                           className={`flex-row justify-center items-center border-2 rounded`}
                         >
@@ -259,8 +258,8 @@ export default function ({ route }) {
                           style={{
                             height: 35,
                             width: 35,
-                            borderColor: textColor,
-                            backgroundColor: backgroundColor,
+                            borderColor,
+                            backgroundColor,
                           }}
                           className={`flex-row justify-center items-center border-2 rounded`}
                         >
@@ -290,8 +289,8 @@ export default function ({ route }) {
                           style={{
                             height: 35,
                             width: 35,
-                            borderColor: textColor,
-                            backgroundColor: backgroundColor,
+                            borderColor,
+                            backgroundColor,
                           }}
                           className={`flex-row justify-center items-center border-2 rounded`}
                         >
@@ -321,8 +320,8 @@ export default function ({ route }) {
                           style={{
                             height: 35,
                             width: 35,
-                            borderColor: textColor,
-                            backgroundColor: backgroundColor,
+                            borderColor,
+                            backgroundColor,
                           }}
                           className={`flex-row justify-center items-center border-2 rounded`}
                         >
