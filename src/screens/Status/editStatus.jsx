@@ -45,8 +45,7 @@ export default function ({ route }) {
 
   const [updateAbsent, { isLoading }] = useUpdateAbsentMutation();
 
-  const { backgroundColor, textColor, colorScheme } = changeColor();
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
+  const { backgroundColor, textColor, borderColor } = changeColor();
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -140,8 +139,8 @@ export default function ({ route }) {
                     </Text>
 
                     <TextInput
-                      style={{ color: textColor }}
-                      className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                      style={{ color: textColor, borderColor }}
+                      className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                       placeholderTextColor={textColor}
                       autoCapitalize="none"
                       editable={false}
@@ -164,7 +163,8 @@ export default function ({ route }) {
                       Status
                     </Text>
                     <View
-                      className={`border-[1.5px] text-lg font-normal rounded-full my-2 ${borderColor}`}
+                      style={{ borderColor }}
+                      className={`border-[1.5px] text-lg font-normal rounded-full my-2`}
                     >
                       <Picker
                         selectedValue={formik.values.status}
@@ -191,8 +191,9 @@ export default function ({ route }) {
                         color: textColor,
                         height: 100,
                         textAlignVertical: "top",
+                        borderColor,
                       }}
-                      className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2 ${borderColor}`}
+                      className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2`}
                       placeholder="Beautician's Leave Note"
                       placeholderTextColor={textColor}
                       autoCapitalize="none"
