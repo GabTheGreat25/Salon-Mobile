@@ -22,13 +22,14 @@ import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
 import { BackIcon } from "@helpers";
 import { Calendar } from "react-native-calendars";
+import { useIsFocused } from "@react-navigation/native";
 
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
 
 export default function ({ route }) {
   const { id } = route.params;
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
 
   const {
     data,
@@ -36,13 +37,20 @@ export default function ({ route }) {
     refetch,
   } = useGetScheduleByIdQuery(id);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isFocused) refetch();
+    };
+    fetchData();
+  }, [isFocused]);
+
   const [updateSchedule, { isLoading }] = useUpdateScheduleMutation();
 
-  const { backgroundColor, textColor, colorScheme } = changeColor();
+  const { backgroundColor, textColor, borderColor, shadowColor, colorScheme } =
+    changeColor();
 
-  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDB9E5";
+  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FFC0CB";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -90,7 +98,7 @@ export default function ({ route }) {
       updatedMarkedDates = {
         [day.dateString]: {
           selected: true,
-          selectedColor: "#F78FB3",
+          selectedColor: "#FF7086",
         },
       };
       updatedSelectedDateTime.date = day.dateString;
@@ -130,7 +138,7 @@ export default function ({ route }) {
       setMarkedDates({
         [selectedDate]: {
           selected: true,
-          selectedColor: "#F78FB3",
+          selectedColor: "#FF7086",
         },
       });
       setSelectedDateTime({
@@ -188,7 +196,7 @@ export default function ({ route }) {
                       calendarBackground: "invertBackgroundColor",
                       monthTextColor: "black",
                       textSectionTitleColor: "black",
-                      todayTextColor: "#BE2EDD",
+                      todayTextColor: "#FF1493",
                       arrowColor: "black",
                     }}
                     minDate={minDate}
@@ -216,8 +224,9 @@ export default function ({ route }) {
                     color: textColor,
                     height: 100,
                     textAlignVertical: "top",
+                    borderColor,
                   }}
-                  className={`border-[1.5px] pt-2 px-4 text-lg font-normal rounded-lg mt-2 mb-6 ${borderColor}`}
+                  className={`border-[1.5px] pt-2 px-4 text-lg font-normal rounded-lg mt-2 mb-6`}
                   placeholder="Add LeaveNote Here..."
                   placeholderTextColor={textColor}
                   autoCapitalize="none"
@@ -229,11 +238,12 @@ export default function ({ route }) {
               </ScrollView>
               <View
                 style={{
+                  shadowColor,
                   backgroundColor,
-                  height: windowHeight * 0.125,
+                  height: 90,
                   width: windowWidth,
                 }}
-                className={`flex-col px-10 py-5`}
+                className={`flex-col px-10 py-5 shadow-2xl`}
               >
                 <TouchableOpacity
                   onPress={formik.handleSubmit}
