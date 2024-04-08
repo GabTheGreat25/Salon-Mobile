@@ -24,10 +24,12 @@ import { useIsFocused } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { format } from "date-fns";
 
+const { width: deviceWidth } = Dimensions.get("window");
+
 export default function () {
   const isFocused = useIsFocused();
   const navigation = useNavigation();
-  const { width: deviceWidth } = Dimensions.get("window");
+
   const customWidth = deviceWidth * 0.3;
 
   const { user } = useSelector((state) => state.auth);
@@ -40,9 +42,7 @@ export default function () {
     fetchData();
   }, [isFocused]);
 
-  const { backgroundColor, textColor, colorScheme } = changeColor();
-
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
+  const { backgroundColor, textColor, borderColor } = changeColor();
 
   const [deleteSchedule, { isLoading: isDeleting }] =
     useDeleteScheduleMutation();
@@ -299,7 +299,7 @@ export default function () {
                     title="Previous"
                     onPress={handlePrevPage}
                     disabled={page === 0}
-                    color="#FDA7DF"
+                    color="#FFB6C1"
                   />
                   <Text
                     style={{
@@ -311,7 +311,7 @@ export default function () {
                     title="Next"
                     onPress={handleNextPage}
                     disabled={page === totalPageCount - 1}
-                    color="#FDA7DF"
+                    color="#FFB6C1"
                   />
                 </View>
               ) : null}
