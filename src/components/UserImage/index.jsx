@@ -4,6 +4,7 @@ import { changeColor } from "@utils";
 
 export default function ({ viewWidth, imageSource, imageName, imageRole }) {
   const { textColor } = changeColor();
+
   return (
     <>
       <ScrollView showsVerticalScrollIndicator={false}>
