@@ -22,15 +22,25 @@ import { createOptionValidation } from "../../validation";
 import Toast from "react-native-toast-message";
 import * as ImageManipulator from "expo-image-manipulator";
 import * as ImagePicker from "expo-image-picker";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function () {
   const navigation = useNavigation();
-  const { backgroundColor, textColor, colorScheme } = changeColor();
+  const { backgroundColor, textColor, borderColor, colorScheme } =
+    changeColor();
+  const isFocused = useIsFocused();
 
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
   const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
-  const [addOption, { isLoading }] = useAddOptionMutation();
-  const { data: services, isLoading: serviceLoading } = useGetServicesQuery();
+  const [addOption] = useAddOptionMutation();
+  const { data: services, isLoading, refetch } = useGetServicesQuery();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isFocused) refetch();
+    };
+    fetchData();
+  }, [isFocused]);
+
   const [selectedImages, setSelectedImages] = useState([]);
   const [selectedServices, setSelectedServices] = useState([]);
 
@@ -190,7 +200,7 @@ export default function () {
 
   return (
     <>
-      {isLoading || serviceLoading ? (
+      {isLoading ? (
         <View
           className={`flex-1 justify-center items-center bg-primary-default`}
         >
@@ -222,8 +232,8 @@ export default function () {
                   </Text>
 
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2`}
                     placeholder="Enter your option name"
                     placeholderTextColor={textColor}
                     autoCapitalize="none"
@@ -238,8 +248,8 @@ export default function () {
                   )}
 
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2`}
                     placeholder="Enter price"
                     placeholderTextColor={textColor}
                     keyboardType="numeric"
@@ -254,8 +264,8 @@ export default function () {
                   )}
 
                   <Text
-                    style={{ color: textColor }}
-                    className={`${borderColor} font-semibold text-xl`}
+                    style={{ color: textColor, borderColor }}
+                    className={`font-semibold text-xl`}
                   >
                     Services
                   </Text>
@@ -273,10 +283,7 @@ export default function () {
                             width: 20,
                             borderRadius: 10,
                             borderWidth: 2,
-                            borderColor:
-                              formik.values.service === service._id
-                                ? invertBackgroundColor
-                                : backgroundColor,
+                            borderColor,
                             backgroundColor:
                               formik.values.service === service._id
                                 ? backgroundColor
@@ -312,8 +319,9 @@ export default function () {
                       color: textColor,
                       height: 100,
                       textAlignVertical: "top",
+                      borderColor,
                     }}
-                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2 ${borderColor}`}
+                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2`}
                     placeholder="Enter a description"
                     placeholderTextColor={textColor}
                     autoCapitalize="none"
@@ -329,40 +337,40 @@ export default function () {
                   )}
 
                   <Text
-                    style={{ color: textColor }}
-                    className={`${borderColor} font-semibold text-xl`}
+                    style={{ color: textColor, borderColor }}
+                    className={`font-semibold text-xl`}
                   >
                     Add Your Image
                   </Text>
                   <View className={`flex-row gap-x-2 mt-2 mb-6`}>
                     <TouchableOpacity onPress={takePicture}>
                       <Text
-                        style={{ color: textColor }}
-                        className={`text-base ${borderColor}`}
+                        style={{ color: textColor, borderColor }}
+                        className={`text-base`}
                       >
                         Take a Picture
                       </Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={selectImages}>
                       <Text
-                        style={{ color: textColor }}
-                        className={`text-base ${borderColor}`}
+                        style={{ color: textColor, borderColor }}
+                        className={`text-base`}
                       >
                         Select Images
                       </Text>
                     </TouchableOpacity>
                     {selectedImages?.length > 0 ? (
                       <Text
-                        style={{ color: textColor }}
-                        className={`text-base ${borderColor}`}
+                        style={{ color: textColor, borderColor }}
+                        className={`text-base`}
                       >
                         Add {selectedImages.length} image
                         {selectedImages.length > 1 ? "s" : ""}
                       </Text>
                     ) : (
                       <Text
-                        style={{ color: textColor }}
-                        className={`text-base ${borderColor}`}
+                        style={{ color: textColor, borderColor }}
+                        className={`text-base`}
                       >
                         No Image
                       </Text>
@@ -376,8 +384,9 @@ export default function () {
                     >
                       <View className={`mb-2 flex justify-center items-center`}>
                         <View
-                          className={`py-2 rounded-lg bg-primary-accent w-[175px]
-                          } ${!formik.isValid ? "opacity-50" : "opacity-100"}`}
+                          className={`py-2 rounded-lg bg-primary-accent w-[175px] ${
+                            !formik.isValid ? "opacity-50" : "opacity-100"
+                          }`}
                         >
                           <Text
                             className={`font-semibold text-center text-lg`}
