@@ -24,10 +24,12 @@ import { BackIcon } from "@helpers";
 import { Feather } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import * as ImageManipulator from "expo-image-manipulator";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function ({ route }) {
   const { id } = route.params;
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
 
   const {
     data,
@@ -37,10 +39,17 @@ export default function ({ route }) {
 
   const [updateComment, { isLoading }] = useUpdateCommentMutation();
 
-  const { backgroundColor, textColor, colorScheme } = changeColor();
-  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDB9E5";
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isFocused) refetch();
+    };
+    fetchData();
+  }, [isFocused]);
+
+  const { backgroundColor, textColor, borderColor, colorScheme } =
+    changeColor();
+  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FFC0CB";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
 
   const [selectedImages, setSelectedImages] = useState([]);
 
@@ -259,8 +268,9 @@ export default function ({ route }) {
                         color: textColor,
                         height: 100,
                         textAlignVertical: "top",
+                        borderColor,
                       }}
-                      className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2 ${borderColor}`}
+                      className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2`}
                       placeholder="Add Message Here..."
                       placeholderTextColor={textColor}
                       autoCapitalize="none"
@@ -287,8 +297,9 @@ export default function ({ route }) {
                         color: textColor,
                         height: 100,
                         textAlignVertical: "top",
+                        borderColor,
                       }}
-                      className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2 ${borderColor}`}
+                      className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2`}
                       placeholder="Add Message Here..."
                       placeholderTextColor={textColor}
                       autoCapitalize="none"
@@ -312,7 +323,7 @@ export default function ({ route }) {
                           style={{
                             height: 35,
                             width: 35,
-                            borderColor: invertTextColor,
+                            borderColor,
                             backgroundColor: invertBackgroundColor,
                           }}
                           className={`flex-row justify-center items-center border-2 rounded mr-2`}
@@ -338,40 +349,40 @@ export default function ({ route }) {
                     </View>
 
                     <Text
-                      style={{ color: textColor }}
-                      className={`${borderColor} font-semibold text-xl`}
+                      style={{ color: textColor, borderColor }}
+                      className={`font-semibold text-xl`}
                     >
                       Update Your Image
                     </Text>
                     <View className={`flex-row gap-x-2 mt-2 mb-6`}>
                       <TouchableOpacity onPress={takePicture}>
                         <Text
-                          style={{ color: textColor }}
-                          className={`text-base ${borderColor}`}
+                          style={{ color: textColor, borderColor }}
+                          className={`text-base`}
                         >
                           Take a Picture
                         </Text>
                       </TouchableOpacity>
                       <TouchableOpacity onPress={selectImages}>
                         <Text
-                          style={{ color: textColor }}
-                          className={`text-base ${borderColor}`}
+                          style={{ color: textColor, borderColor }}
+                          className={`text-base`}
                         >
                           Select Images
                         </Text>
                       </TouchableOpacity>
                       {selectedImages?.length > 0 ? (
                         <Text
-                          style={{ color: textColor }}
-                          className={`text-base ${borderColor}`}
+                          style={{ color: textColor, borderColor }}
+                          className={`text-base`}
                         >
                           Add {selectedImages.length} image
                           {selectedImages.length > 1 ? "s" : ""}
                         </Text>
                       ) : (
                         <Text
-                          style={{ color: textColor }}
-                          className={`text-base ${borderColor}`}
+                          style={{ color: textColor, borderColor }}
+                          className={`text-base`}
                         >
                           No Image
                         </Text>
