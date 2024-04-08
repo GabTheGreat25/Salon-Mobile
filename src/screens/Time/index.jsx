@@ -24,10 +24,12 @@ import { useNavigation } from "@react-navigation/native";
 import { saveDeletedId, getDeletedIds } from "../../helpers/DeleteItem";
 import { useIsFocused } from "@react-navigation/native";
 
+const { width: deviceWidth } = Dimensions.get("window");
+
 export default function () {
   const isFocused = useIsFocused();
   const navigation = useNavigation();
-  const { width: deviceWidth } = Dimensions.get("window");
+
   const customWidth = deviceWidth * 0.3;
 
   const { data, isLoading, refetch } = useGetTimesQuery();
@@ -38,9 +40,9 @@ export default function () {
     fetchData();
   }, [isFocused]);
 
-  const { backgroundColor, textColor, colorScheme } = changeColor();
+  const { backgroundColor, textColor, borderColor, colorScheme } =
+    changeColor();
 
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
   const [deleteTime, { isLoading: isDeleting }] = useDeleteTimeMutation();
@@ -144,7 +146,7 @@ export default function () {
             <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
             <View className={`ml-12 mt-[14px] items-start justify-start`}>
               <TouchableOpacity
-                style={{ backgroundColor: borderColor }}
+                style={{ backgroundColor }}
                 className={`py-1 px-3 rounded-md border `}
                 onPress={createTime}
               >
@@ -288,7 +290,7 @@ export default function () {
                     title="Previous"
                     onPress={handlePrevPage}
                     disabled={page === 0}
-                    color="#FDA7DF"
+                    color="#FFB6C1"
                   />
                   <Text
                     style={{
@@ -300,7 +302,7 @@ export default function () {
                     title="Next"
                     onPress={handleNextPage}
                     disabled={page === totalPageCount - 1}
-                    color="#FDA7DF"
+                    color="#FFB6C1"
                   />
                 </View>
               ) : null}
