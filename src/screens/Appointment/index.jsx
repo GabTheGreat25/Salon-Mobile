@@ -24,24 +24,28 @@ import { useNavigation } from "@react-navigation/native";
 import { saveDeletedId, getDeletedIds } from "../../helpers/DeleteItem";
 import { useIsFocused } from "@react-navigation/native";
 
+const { width: deviceWidth } = Dimensions.get("window");
+
 export default function () {
   const isFocused = useIsFocused();
   const navigation = useNavigation();
-  const { width: deviceWidth } = Dimensions.get("window");
+
   const customWidth = deviceWidth * 0.3;
 
   const { data, isLoading, refetch } = useGetAppointmentsQuery();
+  const { data: transactions, refetch: refetchTransactions } =
+    useGetTransactionsQuery();
 
   useEffect(() => {
     const fetchData = async () => {
-      if (isFocused) refetch();
+      if (isFocused) {
+        await Promise.all([refetch(), refetchTransactions()]);
+      }
     };
     fetchData();
   }, [isFocused]);
 
-  const { backgroundColor, textColor, colorScheme } = changeColor();
-
-  const { data: transactions } = useGetTransactionsQuery();
+  const { backgroundColor, textColor, borderColor } = changeColor();
 
   const completedTransactions = transactions?.details?.filter(
     (transaction) => transaction?.status === "completed"
@@ -50,8 +54,6 @@ export default function () {
   const completedAppointmentIds = completedTransactions?.map(
     (transaction) => transaction.appointment._id
   );
-
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
 
   const [deleteAppointment, { isLoading: isDeleting }] =
     useDeleteAppointmentMutation();
@@ -454,7 +456,7 @@ export default function () {
                     title="Previous"
                     onPress={handlePrevPage}
                     disabled={page === 0}
-                    color="#FDA7DF"
+                    color="#FFB6C1"
                   />
                   <Text
                     style={{
@@ -466,7 +468,7 @@ export default function () {
                     title="Next"
                     onPress={handleNextPage}
                     disabled={page === totalPageCount - 1}
-                    color="#FDA7DF"
+                    color="#FFB6C1"
                   />
                 </View>
               ) : null}
