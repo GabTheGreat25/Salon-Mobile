@@ -33,8 +33,7 @@ export default function ({ route }) {
     fetchData();
   }, [isFocused]);
 
-  const { backgroundColor, textColor, colorScheme } = changeColor();
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
+  const { backgroundColor, textColor, borderColor } = changeColor();
 
   const datePart = user?.requirement?.date
     ? new Date(user?.requirement?.date).toISOString().split("T")[0]
@@ -101,8 +100,9 @@ export default function ({ route }) {
                     Employee's Name
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                     autoCapitalize="none"
                     value={user?.name}
                   />
@@ -113,8 +113,9 @@ export default function ({ route }) {
                     Employee's Registered Email
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                     autoCapitalize="none"
                     value={user?.email}
                   />
@@ -125,8 +126,9 @@ export default function ({ route }) {
                     Mobile Number
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                     autoCapitalize="none"
                     value={user?.contact_number}
                   />
@@ -138,8 +140,9 @@ export default function ({ route }) {
                     Date
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                     autoCapitalize="none"
                     value={datePart}
                   />
@@ -150,8 +153,9 @@ export default function ({ route }) {
                     Time
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                     autoCapitalize="none"
                     value={timePart}
                   />
@@ -162,8 +166,9 @@ export default function ({ route }) {
                     Employee's Role
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                     autoCapitalize="none"
                     value={user?.roles?.join(", ")}
                   />
@@ -174,8 +179,9 @@ export default function ({ route }) {
                     Employee's Category Service
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                     autoCapitalize="none"
                     value={user?.requirement?.job_type}
                   />
