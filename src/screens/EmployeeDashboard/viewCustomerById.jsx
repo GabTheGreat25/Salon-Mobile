@@ -28,19 +28,23 @@ export default function ({ route }) {
   const { data, isLoading, refetch } = useGetUserByIdQuery(id);
   const user = data?.details;
 
+  const {
+    data: allergies,
+    isLoading: exclusionLoading,
+    refetch: refetchExclusions,
+  } = useGetExclusionsQuery();
+  const exclusions = allergies?.details;
+
   useEffect(() => {
     const fetchData = async () => {
-      if (isFocused) refetch();
+      if (isFocused) {
+        await Promise.all([refetch(), refetchExclusions()]);
+      }
     };
     fetchData();
   }, [isFocused]);
 
-  const { backgroundColor, textColor, colorScheme } = changeColor();
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
-
-  const { data: allergies, isLoading: exclusionLoading } =
-    useGetExclusionsQuery();
-  const exclusions = allergies?.details;
+  const { backgroundColor, textColor, borderColor } = changeColor();
 
   let filteredExclusions = exclusions
     ?.filter((exclusion) => user?.information?.allergy?.includes(exclusion._id))
@@ -119,8 +123,9 @@ export default function ({ route }) {
                     User Name
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                     autoCapitalize="none"
                     value={user?.name}
                     editable={false}
@@ -132,8 +137,9 @@ export default function ({ route }) {
                     Age
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                     autoCapitalize="none"
                     value={user?.age.toString()}
                     editable={false}
@@ -145,8 +151,9 @@ export default function ({ route }) {
                     Email
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                     autoCapitalize="none"
                     value={user?.email}
                     editable={false}
@@ -158,8 +165,9 @@ export default function ({ route }) {
                     Mobile Number
                   </Text>
                   <TextInput
-                    style={{ color: textColor }}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                    style={{ color: textColor, borderColor }}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                     autoCapitalize="none"
                     value={user?.contact_number}
                     editable={false}
@@ -175,8 +183,10 @@ export default function ({ route }) {
                       color: textColor,
                       height: 100,
                       textAlignVertical: "top",
+                      borderColor,
                     }}
-                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2 ${borderColor}`}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2`}
                     autoCapitalize="none"
                     multiline={true}
                     value={filteredExclusions.join(", ")}
@@ -191,8 +201,9 @@ export default function ({ route }) {
                         Type
                       </Text>
                       <TextInput
-                        style={{ color: textColor }}
-                        className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                        style={{ color: textColor, borderColor }}
+                        placeholderTextColor={textColor}
+                        className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                         autoCapitalize="none"
                         value={othersMessage}
                         editable={false}
