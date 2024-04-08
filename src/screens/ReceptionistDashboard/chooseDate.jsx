@@ -22,7 +22,6 @@ import { useIsFocused } from "@react-navigation/native";
 import { LoadingScreen } from "@components";
 
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
 
 export default function () {
   const appointment = useSelector((state) => state?.appointment);
@@ -35,11 +34,12 @@ export default function () {
 
   const appointmentData = appointment?.appointmentData;
 
-  const { textColor, backgroundColor, colorScheme } = changeColor();
+  const { textColor, backgroundColor, shadowColor, colorScheme } =
+    changeColor();
   const navigation = useNavigation();
   const isFocused = useIsFocused();
 
-  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDB9E5";
+  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FFC0CB";
   const revertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
@@ -52,8 +52,9 @@ export default function () {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (isFocused) refetch();
-      timeRefetch();
+      if (isFocused) {
+        await Promise.all([refetch(), timeRefetch()]);
+      }
     };
     fetchData();
   }, [isFocused]);
@@ -86,7 +87,7 @@ export default function () {
         ...prevMarkedDates,
         [selectedDateTime.date]: {
           selected: true,
-          selectedColor: "#F78FB3",
+          selectedColor: "#FF7086",
         },
       }));
     }
@@ -98,7 +99,7 @@ export default function () {
     const updatedMarkedDates = {
       [day.dateString]: {
         selected: !markedDates[day.dateString]?.selected,
-        selectedColor: "#F78FB3",
+        selectedColor: "#FF7086",
       },
     };
 
@@ -301,11 +302,11 @@ export default function () {
                   markedDates={markedDates}
                   markingType={"simple"}
                   theme={{
-                    calendarBackground: "#FDB9E5",
-                    monthTextColor: invertTextColor,
-                    textSectionTitleColor: invertTextColor,
-                    todayTextColor: invertTextColor,
-                    arrowColor: invertTextColor,
+                    calendarBackground: "#FFC0CB",
+                    monthTextColor: "black",
+                    textSectionTitleColor: "black",
+                    todayTextColor: "#FF1493",
+                    arrowColor: "black",
                   }}
                   minDate={minDate}
                   maxDate={maxDate}
@@ -327,11 +328,10 @@ export default function () {
                 decelerationRate="fast"
                 scrollEventThrottle={1}
                 style={{
-                  backgroundColor: invertBackgroundColor,
-                  height: windowHeight * 0.175,
+                  height: 90,
                   width: windowWidth * 0.925,
                 }}
-                className={`flex-row rounded mx-1 px-4 pt-4 mb-2`}
+                className={`flex-row rounded mx-1 px-4 pt-4 mb-2 bg-primary-variant`}
               >
                 {time?.details?.map(({ _id, time }) => (
                   <TouchableOpacity
@@ -344,10 +344,10 @@ export default function () {
                         backgroundColor: selectedDateTime.time.includes(time)
                           ? revertBackgroundColor
                           : backgroundColor,
-                        height: windowHeight * 0.075,
+                        height: 60,
                         width: windowWidth * 0.35,
                       }}
-                      className={`rounded justify-center items-center text-center mr-8 mt-7 mb-2`}
+                      className={`rounded justify-center items-center text-center mr-8`}
                     >
                       <Text
                         style={{
@@ -366,11 +366,12 @@ export default function () {
             </ScrollView>
             <View
               style={{
+                shadowColor,
                 backgroundColor,
-                height: windowHeight * 0.1,
+                height: 90,
                 width: windowWidth,
               }}
-              className={`flex-col px-10 py-5`}
+              className={`flex-col px-10 py-5 shadow-2xl`}
             >
               <TouchableOpacity onPress={handlePress}>
                 <View
@@ -381,7 +382,7 @@ export default function () {
                 >
                   <Text
                     style={{ color: invertTextColor }}
-                    className={`text-center text-lg font-bold`}
+                    className={`text-center text-xl font-semibold`}
                   >
                     Confirm
                   </Text>
