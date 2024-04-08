@@ -17,23 +17,28 @@ import { LoadingScreen } from "@components";
 import { useFormik } from "formik";
 import {
   useAddDeliveryMutation,
-  useGetDeliveriesQuery,
   useGetProductsQuery,
 } from "../../state/api/reducer";
 import { createDeliveryValidation } from "../../validation";
 import Toast from "react-native-toast-message";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function () {
   const navigation = useNavigation();
-  const { backgroundColor, textColor, colorScheme } = changeColor();
+  const { backgroundColor, textColor, borderColor } = changeColor();
+  const isFocused = useIsFocused();
 
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
+  const { data: products, isLoading, refetch } = useGetProductsQuery();
 
-  const { refetch: refetchDeliveries } = useGetDeliveriesQuery();
-  const { data: products } = useGetProductsQuery();
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isFocused) refetch();
+    };
+    fetchData();
+  }, [isFocused]);
 
-  const [addDelivery, { isLoading }] = useAddDeliveryMutation();
+  const [addDelivery] = useAddDeliveryMutation();
 
   const formik = useFormik({
     initialValues: {
@@ -50,7 +55,6 @@ export default function () {
       addDelivery(values)
         .unwrap()
         .then((response) => {
-          refetchDeliveries();
           navigation.navigate("Delivery");
           formik.resetForm();
           Toast.show({
@@ -184,8 +188,8 @@ export default function () {
                   Create Delivery
                 </Text>
                 <TextInput
-                  style={{ color: textColor }}
-                  className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                  style={{ color: textColor, borderColor }}
+                  className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2`}
                   placeholder="Enter your product name"
                   placeholderTextColor={textColor}
                   autoCapitalize="none"
@@ -200,8 +204,8 @@ export default function () {
                 )}
 
                 <TextInput
-                  style={{ color: textColor }}
-                  className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                  style={{ color: textColor, borderColor }}
+                  className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2`}
                   placeholder="Enter date"
                   placeholderTextColor={textColor}
                   onFocus={showDatepicker}
@@ -221,8 +225,8 @@ export default function () {
                 )}
 
                 <TextInput
-                  style={{ color: textColor }}
-                  className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                  style={{ color: textColor, borderColor }}
+                  className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2`}
                   placeholder="Enter the price"
                   placeholderTextColor={textColor}
                   keyboardType="numeric"
@@ -236,8 +240,8 @@ export default function () {
                 )}
 
                 <TextInput
-                  style={{ color: textColor }}
-                  className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2 ${borderColor}`}
+                  style={{ color: textColor, borderColor }}
+                  className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2`}
                   placeholder="Enter the quantity"
                   placeholderTextColor={textColor}
                   keyboardType="numeric"
@@ -267,8 +271,8 @@ export default function () {
                       style={{
                         height: 35,
                         width: 35,
-                        borderColor: textColor,
-                        backgroundColor: backgroundColor,
+                        borderColor,
+                        backgroundColor,
                       }}
                       className={`flex-row justify-center items-center border-2 rounded`}
                     >
@@ -298,8 +302,8 @@ export default function () {
                       style={{
                         height: 35,
                         width: 35,
-                        borderColor: textColor,
-                        backgroundColor: backgroundColor,
+                        borderColor,
+                        backgroundColor,
                       }}
                       className={`flex-row justify-center items-center border-2 rounded`}
                     >
@@ -329,8 +333,8 @@ export default function () {
                       style={{
                         height: 35,
                         width: 35,
-                        borderColor: textColor,
-                        backgroundColor: backgroundColor,
+                        borderColor,
+                        backgroundColor,
                       }}
                       className={`flex-row justify-center items-center border-2 rounded`}
                     >
@@ -360,8 +364,8 @@ export default function () {
                       style={{
                         height: 35,
                         width: 35,
-                        borderColor: textColor,
-                        backgroundColor: backgroundColor,
+                        borderColor,
+                        backgroundColor,
                       }}
                       className={`flex-row justify-center items-center border-2 rounded`}
                     >
@@ -391,8 +395,8 @@ export default function () {
                       style={{
                         height: 35,
                         width: 35,
-                        borderColor: textColor,
-                        backgroundColor: backgroundColor,
+                        borderColor,
+                        backgroundColor,
                       }}
                       className={`flex-row justify-center items-center border-2 rounded`}
                     >
@@ -422,8 +426,8 @@ export default function () {
                       style={{
                         height: 35,
                         width: 35,
-                        borderColor: textColor,
-                        backgroundColor: backgroundColor,
+                        borderColor,
+                        backgroundColor,
                       }}
                       className={`flex-row justify-center items-center border-2 rounded`}
                     >
@@ -471,8 +475,8 @@ export default function () {
                             style={{
                               height: 30,
                               width: 30,
-                              borderColor: textColor,
-                              backgroundColor: backgroundColor,
+                              borderColor,
+                              backgroundColor,
                             }}
                             className={`flex-row justify-center items-center border-2 rounded`}
                           >
@@ -522,8 +526,8 @@ export default function () {
                             style={{
                               height: 30,
                               width: 30,
-                              borderColor: textColor,
-                              backgroundColor: backgroundColor,
+                              borderColor,
+                              backgroundColor,
                             }}
                             className={`flex-row justify-center items-center border-2 rounded`}
                           >
@@ -573,8 +577,8 @@ export default function () {
                             style={{
                               height: 30,
                               width: 30,
-                              borderColor: textColor,
-                              backgroundColor: backgroundColor,
+                              borderColor,
+                              backgroundColor,
                             }}
                             className={`flex-row justify-center items-center border-2 rounded`}
                           >
@@ -624,8 +628,8 @@ export default function () {
                             style={{
                               height: 30,
                               width: 30,
-                              borderColor: textColor,
-                              backgroundColor: backgroundColor,
+                              borderColor,
+                              backgroundColor,
                             }}
                             className={`flex-row justify-center items-center border-2 rounded`}
                           >
@@ -675,8 +679,8 @@ export default function () {
                             style={{
                               height: 30,
                               width: 30,
-                              borderColor: textColor,
-                              backgroundColor: backgroundColor,
+                              borderColor,
+                              backgroundColor,
                             }}
                             className={`flex-row justify-center items-center border-2 rounded`}
                           >
@@ -726,8 +730,8 @@ export default function () {
                             style={{
                               height: 30,
                               width: 30,
-                              borderColor: textColor,
-                              backgroundColor: backgroundColor,
+                              borderColor,
+                              backgroundColor,
                             }}
                             className={`flex-row justify-center items-center border-2 rounded`}
                           >
@@ -767,8 +771,9 @@ export default function () {
                   >
                     <View className={`mb-2 flex justify-center items-center`}>
                       <View
-                        className={`py-2 rounded-lg bg-primary-accent w-[175px]
-                          } ${!formik.isValid ? "opacity-50" : "opacity-100"}`}
+                        className={`py-2 rounded-lg bg-primary-accent w-[175px] ${
+                          !formik.isValid ? "opacity-50" : "opacity-100"
+                        }`}
                       >
                         <Text
                           className={`font-semibold text-center text-lg`}
