@@ -34,7 +34,6 @@ import {
   Employee,
   ChooseDate,
   CheckoutSuccess,
-  Receipt,
   Appointment,
   EditAppointment,
   Transaction,
@@ -105,11 +104,13 @@ import {
   ReceptionistChooseDate,
   ReceptionistPaymentOption,
   ReceptionistEmployee,
+  Settings,
+  BeauticianSettings,
+  ReceptionistSettings,
 } from "@screens";
 import {
   TermsConditions,
   PrivacyPolicy,
-  Feedback,
   BeauticianRegisterTermsCondition,
   CustomerTermsCondition,
   Waiver,
@@ -181,7 +182,6 @@ export default function () {
                   />
                   <Stack.Screen name="Employee" component={Employee} />
                   <Stack.Screen name="ChooseDate" component={ChooseDate} />
-                  <Stack.Screen name="Receipt" component={Receipt} />
                   <Stack.Screen
                     name="CheckoutSuccess"
                     component={CheckoutSuccess}
