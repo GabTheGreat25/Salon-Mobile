@@ -23,20 +23,40 @@ import Calendar from "./Calendar";
 import { notificationSlice } from "../../state/notification/notificationReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
+import { useIsFocused } from "@react-navigation/native";
+
+const { width: deviceWidth } = Dimensions.get("window");
 
 export default function () {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { width: deviceWidth } = Dimensions.get("window");
+  const isFocused = useIsFocused();
+
   const customWidth = deviceWidth * 0.525;
 
   const { backgroundColor, textColor, colorScheme } = changeColor();
 
-  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FDA7DF";
+  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FFB6C1";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
-  const { data, isLoading } = useGetUsersQuery();
+  const { data, isLoading, refetch } = useGetUsersQuery();
   const users = data?.details ?? [];
+
+  const {
+    data: transac,
+    isLoading: loadingTransac,
+    refetch: refetchTransac,
+  } = useGetTransactionsQuery();
+  const transaction = transac?.details;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isFocused) {
+        await Promise.all([refetch(), refetchTransac()]);
+      }
+    };
+    fetchData();
+  }, [isFocused]);
 
   const usersAll = users?.filter((user) => user?.active === true);
   const userCount = usersAll.length;
@@ -69,9 +89,6 @@ export default function () {
   const customerCount = customers.length;
 
   const dropdownRef = useRef(null);
-
-  const { data: transac } = useGetTransactionsQuery();
-  const transaction = transac?.details;
 
   const clickedIds = useSelector((state) => state.notification.clickedIds);
 
@@ -112,7 +129,7 @@ export default function () {
 
   return (
     <>
-      {isLoading ? (
+      {isLoading || loadingTransac ? (
         <View
           className={`flex-1 justify-center items-center bg-primary-default`}
         >
