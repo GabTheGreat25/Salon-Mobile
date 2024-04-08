@@ -17,32 +17,37 @@ import { DataTable } from "react-native-paper";
 import { changeColor } from "@utils";
 import { useIsFocused } from "@react-navigation/native";
 
+const { width: deviceWidth } = Dimensions.get("window");
+
 export default function () {
   const isFocused = useIsFocused();
-  const { width: deviceWidth } = Dimensions.get("window");
+
   const customWidth = deviceWidth * 0.3;
 
   const { data, isLoading, refetch } = useGetUsersQuery();
+  const {
+    data: exclusion,
+    isLoading: exclusionLoading,
+    refetch: refetchExclusion,
+  } = useGetExclusionsQuery();
+  const exclusions = exclusion?.details;
+
   useEffect(() => {
     const fetchData = async () => {
-      if (isFocused) refetch();
+      if (isFocused) {
+        await Promise.all([refetch(), refetchExclusion()]);
+      }
     };
     fetchData();
   }, [isFocused]);
 
   const users = data?.details;
-  const { backgroundColor, textColor, colorScheme } = changeColor();
-
-  const borderColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
+  const { backgroundColor, textColor, borderColor } = changeColor();
 
   const [page, setPage] = useState(0);
   const itemsPerPage = 6;
 
   const filteredUser = users?.filter((user) => user.roles.includes("Customer"));
-
-  const { data: exclusion, isLoading: exclusionLoading } =
-    useGetExclusionsQuery();
-  const exclusions = exclusion?.details;
 
   const filteredExclusions = exclusions?.flatMap((exclusion) => ({
     _id: exclusion._id,
@@ -334,7 +339,7 @@ export default function () {
                     title="Previous"
                     onPress={handlePrevPage}
                     disabled={page === 0}
-                    color="#FDA7DF"
+                    color="#FFB6C1"
                   />
                   <Text
                     style={{
@@ -346,7 +351,7 @@ export default function () {
                     title="Next"
                     onPress={handleNextPage}
                     disabled={page === totalPageCount - 1}
-                    color="#FDA7DF"
+                    color="#FFB6C1"
                   />
                 </View>
               ) : null}
