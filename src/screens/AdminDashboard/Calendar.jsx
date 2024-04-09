@@ -15,11 +15,14 @@ import {
 import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
 import { Feather } from "@expo/vector-icons";
+import { useIsFocused } from "@react-navigation/native";
 
 const screenWidth = Dimensions.get("window").width;
 const itemWidth = (screenWidth - 30) / 2;
 
 export default function () {
+  const isFocused = useIsFocused();
+
   const { backgroundColor, textColor, borderColor, colorScheme } =
     changeColor();
 
@@ -36,6 +39,15 @@ export default function () {
     isLoading: scheduleLoading,
     refetch: scheduleRefetch,
   } = useGetSchedulesQuery();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isFocused) {
+        await Promise.all([transactionRefetch(), scheduleRefetch()]);
+      }
+    };
+    fetchData();
+  }, [isFocused]);
 
   const [currentMonthYear, setCurrentMonthYear] = useState("");
   const [currentMonthYearText, setCurrentMonthYearText] = useState("");
