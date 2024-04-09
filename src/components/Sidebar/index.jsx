@@ -16,7 +16,8 @@ const { width: deviceWidth } = Dimensions.get("window");
 
 export default function ({ isOpen, onClose, setFilters }) {
   const customWidth = deviceWidth * 0.75;
-  const { textColor, backgroundColor, colorScheme } = changeColor();
+  const { textColor, backgroundColor, borderColor, colorScheme } =
+    changeColor();
   const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
