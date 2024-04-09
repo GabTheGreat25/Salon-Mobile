@@ -502,7 +502,7 @@ export default function () {
                       <Text
                         className={`text-base font-medium text-primary-default`}
                       >
-                        Select Beautician
+                        Add Beautician
                       </Text>
                       <Feather name="chevron-right" size={25} color="#FFB6C1" />
                     </View>
