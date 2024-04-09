@@ -208,6 +208,19 @@ export default function () {
     setShowModal(false);
   };
 
+  const handleViewService = (serviceId) => {
+    setShowModal(false);
+    navigation.navigate("customerViewServiceById", {
+      id: serviceId,
+    });
+  };
+
+  useEffect(() => {
+    return () => {
+      setShowModal(false);
+    };
+  }, []);
+
   useEffect(() => {
     const getModalShownFromStorage = async () => {
       try {
@@ -315,11 +328,7 @@ export default function () {
                           Terms and Conditions apply. Book your appointment now!
                         </Text>
                         <TouchableOpacity
-                          onPress={() =>
-                            navigation.navigate("customerViewServiceById", {
-                              id: latestService._id,
-                            })
-                          }
+                          onPress={() => handleViewService(latestService?._id)}
                           style={{
                             backgroundColor: invertBackgroundColor,
                           }}
