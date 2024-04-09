@@ -13,7 +13,6 @@ import {
   Settings,
   Schedule,
   CustomerComment,
-  Feedback,
 } from "@screens";
 import { changeColor } from "@utils";
 import { RESOURCE } from "@constants";
@@ -248,6 +247,31 @@ export default function () {
             ),
           }}
           component={CustomerComment}
+        />
+        <Drawer.Screen
+          name="Settings"
+          options={{
+            drawerActiveBackgroundColor: "#FF7086",
+            drawerActiveTintColor: textColor,
+            drawerInactiveTintColor: "#FFB6C1",
+            drawerLabel: () => (
+              <Text
+                className={`text-xl font-base`}
+                style={{ color: textColor }}
+              >
+                Settings
+              </Text>
+            ),
+            title: "Settings",
+            drawerIcon: () => (
+              <Feather
+                name="settings"
+                size={RESOURCE.NUMBER.THIRTY}
+                color={textColor}
+              />
+            ),
+          }}
+          component={Settings}
         />
       </Drawer.Navigator>
     </>

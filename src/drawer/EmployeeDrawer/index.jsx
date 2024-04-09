@@ -13,6 +13,7 @@ import {
   GetAllLeaveDate,
   BeauticianAppointment,
   BeauticianAppointmentHistory,
+  BeauticianSettings,
 } from "@screens";
 import { changeColor } from "@utils";
 import { RESOURCE } from "@constants";
@@ -268,6 +269,31 @@ export default function () {
           }}
           initialParams={{ id: user?._id }}
           component={BeauticianAppointmentHistory}
+        />
+        <Drawer.Screen
+          name="BeauticianSettings"
+          options={{
+            drawerActiveBackgroundColor: "#FF7086",
+            drawerActiveTintColor: textColor,
+            drawerInactiveTintColor: "#FFB6C1",
+            drawerLabel: () => (
+              <Text
+                className={`text-xl font-base`}
+                style={{ color: textColor }}
+              >
+                Settings
+              </Text>
+            ),
+            title: "BeauticianSettings",
+            drawerIcon: () => (
+              <Feather
+                name="settings"
+                size={RESOURCE.NUMBER.THIRTY}
+                color={textColor}
+              />
+            ),
+          }}
+          component={BeauticianSettings}
         />
       </Drawer.Navigator>
     </>
