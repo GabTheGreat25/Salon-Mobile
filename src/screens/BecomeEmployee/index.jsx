@@ -1,13 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Welcome } from "@components";
 import logo2 from "@assets/lhanlee-hiring.png";
 import { useNavigation } from "@react-navigation/native";
 import { useGetHiringsQuery } from "../../state/api/reducer";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function () {
   const navigation = useNavigation();
-  const { data } = useGetHiringsQuery();
+
+  const isFocused = useIsFocused();
+
+  const { data, refetch } = useGetHiringsQuery();
   const hiring = data?.details[0];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isFocused) refetch();
+    };
+    fetchData();
+  }, [isFocused]);
 
   const defaultTitle = `Become a Lhanlee  Employee!`;
   const hiringTitle = `${"Were Hiring A\n" + hiring?.type + " Apply now!"}`;
