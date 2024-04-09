@@ -195,7 +195,7 @@ export default function ({
                       {formik.errors.password}
                     </Text>
                   )}
-                  <View className={`items-center flex-col justify-start`}>
+                  <View className={`items-center flex-col justify-start pt-4`}>
                     <TouchableOpacity
                       onPress={formik.handleSubmit}
                       disabled={!formik.isValid}
