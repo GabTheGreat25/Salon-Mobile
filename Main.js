@@ -104,9 +104,6 @@ import {
   ReceptionistChooseDate,
   ReceptionistPaymentOption,
   ReceptionistEmployee,
-  Settings,
-  BeauticianSettings,
-  ReceptionistSettings,
 } from "@screens";
 import {
   TermsConditions,
