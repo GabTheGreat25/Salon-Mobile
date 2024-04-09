@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ScrollView,
   View,
@@ -340,7 +340,7 @@ export default function ({ route }) {
                       <Text
                         className={`text-base font-medium text-primary-default`}
                       >
-                        Select Beautician
+                        Add Beautician
                       </Text>
                       <Feather name="chevron-right" size={25} color="#FFB6C1" />
                     </View>
