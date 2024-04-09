@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ScrollView,
   View,
@@ -10,7 +10,6 @@ import {
 import { changeColor } from "@utils";
 import { useNavigation } from "@react-navigation/native";
 import { BackIcon } from "@helpers";
-import { Calendar } from "react-native-calendars";
 import { useDispatch, useSelector } from "react-redux";
 import { transactionSlice } from "../../state/transaction/transactionReducer";
 import {
@@ -25,9 +24,7 @@ const windowWidth = Dimensions.get("window").width;
 
 export default function () {
   const appointment = useSelector((state) => state?.appointment);
-  const selectedDate = useSelector(
-    (state) => state?.transaction?.transactionData?.date
-  );
+
   const selectedTime = useSelector(
     (state) => state?.transaction?.transactionData?.time
   );
@@ -44,11 +41,12 @@ export default function () {
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
   const {
-    data: time,
+    data: times,
     isLoading: timeLoading,
     refetch: timeRefetch,
   } = useGetTimesQuery();
   const { data, isLoading, refetch } = useGetAppointmentsQuery();
+  const appointments = data.details;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -59,152 +57,112 @@ export default function () {
     fetchData();
   }, [isFocused]);
 
-  const currentDate = new Date();
-  const next21Days = new Date(currentDate);
-  next21Days.setDate(currentDate.getDate() + 21);
+  const today = new Date();
+  const utcOffset = 8 * 60;
+  const phTime = new Date(today.getTime() + utcOffset * 60000);
+  //! Uncomment the line below if you want to test the time
+  // const phTime = new Date(
+  //   today.getTime() + utcOffset * 60000 + 9 * 60 * 60 * 1000
+  // );
 
-  const nextday = new Date(currentDate);
-  nextday.setDate(currentDate.getDate() + 1);
+  const formattedDateWithTime = phTime.toISOString();
+  const currentTime = formattedDateWithTime.slice(11, 19);
+  const formattedDate = phTime.toISOString().split("T")[0];
 
-  const minDate = useMemo(() => {
-    return nextday.toISOString().split("T")[0];
-  }, [nextday]);
+  const appointmentToday = appointments?.filter((a) => {
+    const appointmentDate = new Date(a?.date).toISOString().split("T")[0];
+    return appointmentDate === formattedDate;
+  });
 
-  const maxDate = useMemo(() => {
-    return next21Days.toISOString().split("T")[0];
-  }, [next21Days]);
+  const appointmentTimes = appointmentToday?.flatMap((a) => a.time);
+  const availableTimes = times?.details?.filter(
+    (t) => !appointmentTimes?.includes(t.time)
+  );
 
-  const [selectedDateTime, setSelectedDateTime] = useState({
-    date: selectedDate || null,
+  const filteredTimes = availableTimes?.filter((time) => {
+    const appointmentTime = time?.time;
+    const timeParts = appointmentTime.split(" ");
+    const [hour, minute] = timeParts[0].split(":");
+    const isPM = timeParts[1] === "PM";
+    let hour24 = parseInt(hour, 10);
+
+    if (isPM && hour24 !== 12) {
+      hour24 += 12;
+    } else if (!isPM && hour24 === 12) {
+      hour24 = 0;
+    }
+
+    const currentHour24 = parseInt(currentTime.slice(0, 2), 10);
+    const currentMinute = parseInt(currentTime.slice(3, 5), 10);
+
+    return (
+      hour24 > currentHour24 ||
+      (hour24 === currentHour24 && parseInt(minute, 10) >= currentMinute)
+    );
+  });
+
+  const [selectedCustomerTime, setSelectedCustomerTime] = useState({
     time: selectedTime || [],
   });
 
-  const [markedDates, setMarkedDates] = useState({});
-
-  useEffect(() => {
-    if (selectedDateTime.date) {
-      setMarkedDates((prevMarkedDates) => ({
-        ...prevMarkedDates,
-        [selectedDateTime.date]: {
-          selected: true,
-          selectedColor: "#FF7086",
-        },
-      }));
-    }
-  }, [selectedDateTime.date]);
-
   const dispatch = useDispatch();
 
-  const handleDayPress = (day) => {
-    const updatedMarkedDates = {
-      [day.dateString]: {
-        selected: !markedDates[day.dateString]?.selected,
-        selectedColor: "#FF7086",
-      },
-    };
-
-    if (!markedDates[day.dateString]?.selected) {
-      setSelectedDateTime({ date: day.dateString, time: [] });
-    } else {
-      setSelectedDateTime({ date: null, time: [] });
-    }
-
-    setMarkedDates(updatedMarkedDates);
-  };
-
   const handleTimePress = (time) => {
-    if (!selectedDateTime.date) {
-      Toast.show({
-        type: "error",
-        position: "top",
-        text1: "Warning",
-        text2: "Please select a date first",
-        visibilityTime: 3000,
-        autoHide: true,
-      });
-      return;
-    }
+    setSelectedCustomerTime((prev) => {
+      const isSelected = prev.time.includes(time);
 
-    const isSelected = selectedDateTime.time.includes(time);
+      const totalDuration = appointmentData.reduce((total, service) => {
+        const durationParts = service?.duration.split(" ");
+        const minDuration = parseInt(durationParts[2]) || 0;
 
-    const conflict = data?.details?.some((appointment) => {
-      const formDate = new Date(selectedDateTime.date)
-        .toISOString()
-        .split("T")[0];
-      const existingDate = new Date(appointment.date)
-        .toISOString()
-        .split("T")[0];
+        const isMinutes = durationParts.includes("minutes");
+        const durationInHours = isMinutes ? minDuration / 60 : minDuration;
 
-      if (existingDate !== formDate) {
-        return false;
-      }
+        return total + (isNaN(durationInHours) ? 0 : durationInHours);
+      }, 0);
 
-      return appointment.time.includes(time);
-    });
+      let updatedTimes;
 
-    if (conflict) {
-      Toast.show({
-        type: "error",
-        position: "top",
-        text1: "Warning",
-        text2: "Appointment slot is already booked by another customer.",
-        visibilityTime: 5000,
-        autoHide: true,
-      });
-      return;
-    }
+      if (isSelected) {
+        updatedTimes = prev.time.filter((t) => t !== time);
+      } else {
+        const currentTime = prev.time || [];
 
-    const totalDuration = appointmentData.reduce((total, service) => {
-      const durationParts = service?.duration.split(" ");
-      const minDuration = parseInt(durationParts[2]) || 0;
+        const totalRoundedUp = Math.ceil(totalDuration);
+        const hourText = totalRoundedUp === 1 ? "hour" : "hours";
 
-      const isMinutes = durationParts.includes("minutes");
-      const durationInHours = isMinutes ? minDuration / 60 : minDuration;
+        if (currentTime.length + 1 <= totalRoundedUp) {
+          const isConsecutive =
+            currentTime.length === 0 || checkConsecutive(currentTime, time);
 
-      return total + (isNaN(durationInHours) ? 0 : durationInHours);
-    }, 0);
+          if (!isConsecutive) {
+            Toast.show({
+              type: "error",
+              position: "top",
+              text1: "Warning",
+              text2: "Please select consecutive time slots",
+              visibilityTime: 3000,
+              autoHide: true,
+            });
+            return prev;
+          }
 
-    let updatedTimes;
-
-    if (isSelected) {
-      updatedTimes = selectedDateTime.time.filter((t) => t !== time);
-    } else {
-      const currentTime = selectedDateTime.time || [];
-
-      const totalRoundedUp = Math.ceil(totalDuration);
-      const hourText = totalRoundedUp === 1 ? "hour" : "hours";
-
-      if (currentTime.length + 1 <= totalRoundedUp) {
-        const isConsecutive =
-          currentTime.length === 0 || checkConsecutive(currentTime, time);
-
-        if (!isConsecutive) {
+          updatedTimes = [...currentTime, time];
+        } else {
           Toast.show({
             type: "error",
             position: "top",
             text1: "Warning",
-            text2: "Please select consecutive time slots",
+            text2: `Cannot select more than ${totalRoundedUp} ${hourText}`,
             visibilityTime: 3000,
             autoHide: true,
           });
-          return;
+          return prev;
         }
-
-        updatedTimes = [...currentTime, time];
-      } else {
-        Toast.show({
-          type: "error",
-          position: "top",
-          text1: "Warning",
-          text2: `Cannot select more than ${totalRoundedUp} ${hourText}`,
-          visibilityTime: 3000,
-          autoHide: true,
-        });
-        return;
       }
-    }
 
-    setSelectedDateTime((prev) => ({ ...prev, time: updatedTimes }));
+      return { ...prev, time: updatedTimes };
+    });
   };
 
   const checkConsecutive = (times, newTime) => {
@@ -224,15 +182,13 @@ export default function () {
     return newTimeHour === lastTimeHour + 1;
   };
 
-  const hideArrows = currentDate.getMonth() === next21Days.getMonth();
-
   const handlePress = () => {
-    if (!selectedDateTime.date || selectedDateTime.time.length === 0) {
+    if (selectedCustomerTime.time.length === 0) {
       Toast.show({
         type: "error",
         position: "top",
         text1: "Warning",
-        text2: "Please select a date and time",
+        text2: "Please select a time",
         visibilityTime: 3000,
         autoHide: true,
       });
@@ -252,7 +208,7 @@ export default function () {
     const totalRoundedUp = Math.ceil(totalDuration);
     const hourText = totalRoundedUp === 1 ? "hour" : "hours";
 
-    if (selectedDateTime.time.length !== totalRoundedUp) {
+    if (selectedCustomerTime.time.length !== totalRoundedUp) {
       Toast.show({
         type: "error",
         position: "top",
@@ -264,7 +220,7 @@ export default function () {
       return;
     }
 
-    dispatch(transactionSlice.actions.setDateTime(selectedDateTime));
+    dispatch(transactionSlice.actions.setDateTime(selectedCustomerTime));
     navigation.navigate("ReceptionistCheckout");
   };
 
@@ -289,33 +245,12 @@ export default function () {
               }}
               className={`px-3 flex-col pt-12`}
             >
-              <View>
-                <Text
-                  style={{ color: textColor }}
-                  className={`text-2xl text-center pb-4 font-semibold`}
-                >
-                  Select date and time
-                </Text>
-                <Calendar
-                  className={`mx-1 px-4 py-4 mb-2 rounded-xl bg-primary-default`}
-                  onDayPress={handleDayPress}
-                  markedDates={markedDates}
-                  markingType={"simple"}
-                  theme={{
-                    calendarBackground: "#FFC0CB",
-                    monthTextColor: "black",
-                    textSectionTitleColor: "black",
-                    todayTextColor: "#FF1493",
-                    arrowColor: "black",
-                  }}
-                  minDate={minDate}
-                  maxDate={maxDate}
-                  hideExtraDays={true}
-                  hideArrows={hideArrows ? true : false}
-                  horizontal={true}
-                  pagingEnabled={true}
-                />
-              </View>
+              <Text
+                style={{ color: textColor }}
+                className={`text-2xl text-center pb-4 font-semibold`}
+              >
+                Select time
+              </Text>
               <Text
                 style={{ color: textColor }}
                 className={`text-2xl text-center pb-4 font-semibold`}
@@ -333,35 +268,48 @@ export default function () {
                 }}
                 className={`flex-row rounded mx-1 px-4 pt-4 mb-2 bg-primary-variant`}
               >
-                {time?.details?.map(({ _id, time }) => (
-                  <TouchableOpacity
-                    key={_id}
-                    onPress={() => handleTimePress(time)}
-                    activeOpacity={1}
-                  >
-                    <View
-                      style={{
-                        backgroundColor: selectedDateTime.time.includes(time)
-                          ? revertBackgroundColor
-                          : backgroundColor,
-                        height: 60,
-                        width: windowWidth * 0.35,
-                      }}
-                      className={`rounded justify-center items-center text-center mr-8`}
-                    >
-                      <Text
-                        style={{
-                          color: selectedDateTime.time.includes(time)
-                            ? invertTextColor
-                            : textColor,
-                        }}
-                        className={`text-lg text-center font-semibold`}
+                {filteredTimes?.length > 0 ? (
+                  <React.Fragment>
+                    {filteredTimes?.map(({ _id, time }) => (
+                      <TouchableOpacity
+                        key={_id}
+                        onPress={() => handleTimePress(time)}
+                        activeOpacity={1}
                       >
-                        {time}
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                ))}
+                        <View
+                          style={{
+                            backgroundColor: selectedCustomerTime.time.includes(
+                              time
+                            )
+                              ? revertBackgroundColor
+                              : backgroundColor,
+                            height: 60,
+                            width: windowWidth * 0.35,
+                          }}
+                          className={`rounded justify-center items-center text-center mr-8`}
+                        >
+                          <Text
+                            style={{
+                              color: selectedCustomerTime.time.includes(time)
+                                ? invertTextColor
+                                : textColor,
+                            }}
+                            className={`text-lg text-center font-semibold`}
+                          >
+                            {time}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                    ))}
+                  </React.Fragment>
+                ) : (
+                  <Text
+                    style={{ color: invertTextColor }}
+                    className={`text-center text-2xl font-semibold`}
+                  >
+                    All Slots Are Occupied For Today
+                  </Text>
+                )}
               </ScrollView>
             </ScrollView>
             <View
