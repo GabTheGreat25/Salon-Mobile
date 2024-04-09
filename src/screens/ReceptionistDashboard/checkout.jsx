@@ -54,10 +54,6 @@ export default function () {
     (state) => state?.transaction?.transactionData?.beautician
   );
 
-  const selectedDate = useSelector(
-    (state) => state?.transaction?.transactionData?.date
-  );
-
   const selectedTime = useSelector(
     (state) => state?.transaction?.transactionData?.time
   );
@@ -82,6 +78,12 @@ export default function () {
     ?.map((appointment) => appointment?.extraFee)
     ?.reduce((total, amount) => total + amount, 0);
 
+  const today = new Date();
+  const utcOffset = 8 * 60;
+  const phTime = new Date(today.getTime() + utcOffset * 60000);
+
+  const formattedDate = phTime.toISOString().split("T")[0];
+
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -97,7 +99,7 @@ export default function () {
       hasAppointmentFee: hasAppointmentFee || false,
       status: "pending",
       beautician: selectedBeautician || [],
-      date: selectedDate || "",
+      date: formattedDate || "",
       time: selectedTime || [],
       payment: selectedPayment || "",
       image: selectedImage || [],
@@ -221,7 +223,7 @@ export default function () {
   });
 
   const handlePayment = () => {
-    if (!selectedDate || !selectedTime || selectedTime.length === 0) {
+    if (!selectedTime || selectedTime.length === 0) {
       Toast.show({
         type: "error",
         position: "top",
@@ -309,7 +311,7 @@ export default function () {
                       style={{ color: textColor }}
                       className={`text-base font-semibold`}
                     >
-                      {selectedDate ? selectedDate : "Add Date"} |{" "}
+                      {formattedDate} |{" "}
                       {selectedTime && selectedTime.length > 0
                         ? selectedTime.length > 1
                           ? `${selectedTime[0]} to ${
