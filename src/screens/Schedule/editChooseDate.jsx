@@ -104,7 +104,6 @@ export default function ({ route }) {
         },
       }));
     }
-    console.log(selectedDateTime.date);
   }, [selectedDateTime.date]);
 
   const dispatch = useDispatch();

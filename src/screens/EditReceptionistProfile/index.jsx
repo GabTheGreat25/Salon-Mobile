@@ -81,9 +81,6 @@ export default function () {
           navigation.navigate("ReceptionistDashboard");
         })
         .catch((error) => {
-          console.log("error", error);
-          console.log("error", error?.data);
-          console.log("error", error?.data?.error?.message);
           Toast.show({
             type: "error",
             position: "top",

@@ -79,7 +79,6 @@ export default function ({ route }) {
           const imageName = image.uri.split("/").pop();
           const imageType = "image/" + imageName.split(".").pop();
 
-          console.log("Appending Image:", image.uri, imageName, imageType);
           formData.append("image", {
             uri: image.uri,
             name: imageName,

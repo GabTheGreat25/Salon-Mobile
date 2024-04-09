@@ -71,7 +71,6 @@ export default function () {
         );
 
         if (existingSchedule) {
-          console.log("existingSchedule", existingSchedule);
           Toast.show({
             type: "error",
             position: "top",

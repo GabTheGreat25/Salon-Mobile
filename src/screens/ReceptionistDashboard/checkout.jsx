@@ -156,7 +156,6 @@ export default function () {
       addAppointment(formData)
         .unwrap()
         .then((response) => {
-          console.log(response);
           dispatch(customerSlice.actions.resetId());
           dispatch(clearAppointmentData());
           dispatch(clearTransactionData());

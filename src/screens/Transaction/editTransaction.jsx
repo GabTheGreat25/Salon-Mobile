@@ -82,7 +82,6 @@ export default function ({ route }) {
           }
         })
         .catch((error) => {
-          console.log(error?.data?.error?.message);
           Toast.show({
             type: "error",
             position: "top",
