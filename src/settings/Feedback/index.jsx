@@ -1,4 +1,4 @@
-import React from "react";
+import {React, useState, useEffect} from "react";
 import {
   View,
   Text,
@@ -13,9 +13,17 @@ import { changeColor } from "@utils";
 import { BackIcon } from "@helpers";
 import { useNavigation } from "@react-navigation/native";
 import { TextInputMask } from "react-native-masked-text";
+import { LoadingScreen } from "@components";
+import { useSelector } from "react-redux";
+import { useFormik } from "formik";
+import Toast from "react-native-toast-message";
+import { useAddFeedbackMutation } from "../../state/api/reducer";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function () {
   const navigation = useNavigation();
+  const user = useSelector((state) => state.auth?.user);
+  const isFocused = useIsFocused();
 
   const { textColor, backgroundColor, borderColor, colorScheme } =
     changeColor();
@@ -29,112 +37,179 @@ export default function () {
     // formik.setFieldValue("contact_number", phoneNumber);
   };
 
+  const[addFeedback, { isLoading }] = useAddFeedbackMutation();
+
+  const formik = useFormik({
+    initialValues:{
+      name: user?.name,
+      email: user?.email,
+      contact_number: user?.contact_number,
+      description:"",
+      isAnonymous: false,
+    },
+    onSubmit: (values) => {
+      addFeedback(values)
+        .unwrap()
+        .then((response) => {
+          navigation.navigate("Feedback");
+          formik.resetForm();
+          Toast.show({
+            type: "success",
+            position: "top",
+            text1: "Your Feedback was Successfully Submitted",
+            text2: `${response?.message}`,
+            visibilityTime: 3000,
+            autoHide: true,
+          });
+        })
+        .catch((error) => {
+          Toast.show({
+            type: "error",
+            position: "top",
+            text1: "Error Creating Submitting Feedback",
+            text2: `${error?.data?.error?.message}`,
+            visibilityTime: 3000,
+            autoHide: true,
+          });
+        });
+    },
+  })
+
+  const [isHidden, setHidden] = useState(false);
+  const handleCheckBoxToggle = () => {
+    const newValue = !isHidden;
+    setHidden(newValue);
+    formik.setFieldValue("isAnonymous", newValue);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isFocused) refetch();
+    };
+    fetchData();
+  }, [isFocused]);
+
+
   return (
     <>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <SafeAreaView style={{ backgroundColor }} className={`flex-1`}>
-          <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            decelerationRate="fast"
-            scrollEventThrottle={1}
-            className={`py-12`}
-          >
-            <View
-              className={`justify-center rounded-lg m-8 p-4`}
-              style={{
-                backgroundColor: invertBackgroundColor,
-              }}
+      {isLoading ? (
+        <View
+          className={`flex-1 justify-center items-center bg-primary-default`}
+        >
+          <LoadingScreen />
+        </View>
+      ) : (
+        <>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <SafeAreaView
+              style={{ backgroundColor }}
+              className={`relative flex-1`}
             >
-              <Text
-                className={`mb-3 text-2xl font-semibold`}
-                style={{
-                  color: invertTextColor,
-                }}
-              >
-                Let's Talk!
-              </Text>
-              <Text
-                className={`text-lg font-semibold mb-2`}
-                style={{
-                  color: invertTextColor,
-                }}
-              >
-                Full name
-              </Text>
-              <TextInput
-                style={{ borderColor, backgroundColor, color: textColor }}
-                className={`h-8 border-1 mb-4 p-2 rounded-lg`}
-                placeholder="Your name"
-                placeholderTextColor={textColor}
+              <BackIcon
+                navigateBack={navigation.goBack}
+                textColor={textColor}
               />
-              <Text
-                className={`text-lg font-semibold mb-2`}
-                style={{
-                  color: invertTextColor,
-                }}
-              >
-                Email address:
-              </Text>
-              <TextInput
-                style={{ borderColor, backgroundColor, color: textColor }}
-                className={`h-8 border-1 mb-4 p-2 rounded-lg`}
-                placeholder="Your email address"
-                placeholderTextColor={textColor}
-              />
-              <Text
-                className={`text-lg font-semibold mb-2`}
-                style={{
-                  color: invertTextColor,
-                }}
-              >
-                Mobile Number
-              </Text>
-              <TextInputMask
-                style={{ borderColor, backgroundColor, color: textColor }}
-                type={"custom"}
-                options={{
-                  mask: "9999 - 999 - 9999",
-                }}
-                className={`h-8 border-1 mb-4 p-2 rounded-lg`}
-                placeholder="09XX - XXX - XXXX"
-                placeholderTextColor={textColor}
-                autoCapitalize="none"
-                onChange={handlePhoneNumberChange}
-                // onBlur={formik.handleBlur("contact_number")}
-                // value={formik.values.contact_number}
-                keyboardType="numeric"
-              />
-              <Text
-                className={`text-lg font-semibold mb-2`}
-                style={{
-                  color: invertTextColor,
-                }}
-              >
-                What would you like to discuss?
-              </Text>
-              <TextInput
-                style={{ borderColor, backgroundColor, color: textColor }}
-                className={`h-32 resize-none border-1 mb-4 px-2 pt-2 rounded-lg`}
-                placeholder="Add Your feedback here"
-                textAlignVertical="top"
-                multiline
-                placeholderTextColor={textColor}
-              />
-              <TouchableOpacity
-                className={`rounded-md bg-primary-accent w-full justify-center items-center`}
-              >
-                <Text
-                  style={{ color: textColor }}
-                  className={`text-xl font-semibold py-1`}
+              <View className={`relative flex-1 pt-12`}>
+                <ScrollView
+                  showsVerticalScrollIndicator={false}
+                  decelerationRate="fast"
+                  scrollEventThrottle={1}
+                  className={`px-6`}
                 >
-                  Submit
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </ScrollView>
-        </SafeAreaView>
-      </TouchableWithoutFeedback>
+                  <Text
+                      style={{ color: textColor }}
+                      className={`font-semibold text-lg`}
+                    >
+                     Feedback Description
+                    </Text>
+                    <TextInput
+                      style={{
+                        color: textColor,
+                        height: 100,
+                        textAlignVertical: "top",
+                        borderColor,
+                      }}
+                      className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2`}
+                      placeholder="Add Message Here..."
+                      placeholderTextColor={textColor}
+                      autoCapitalize="none"
+                      multiline={true}
+                      onChangeText={formik.handleChange("description")}
+                      onBlur={formik.handleBlur("description")}
+                      value={formik.values.description}
+                    />
+                    {formik.touched.description &&
+                      formik.errors.description && (
+                        <Text style={{ color: "red" }}>
+                          {formik.errors.description}
+                        </Text>
+                      )}  
+
+                  <View className={`flex flex-row`}>
+                    <TouchableOpacity
+                      onPress={() => handleCheckBoxToggle()}
+                      className={`flex-row py-2`}
+                    >
+                      <View
+                        style={{
+                          height: 35,
+                          width: 35,
+                          borderColor,
+                          backgroundColor,
+                        }}
+                        className={`flex-row justify-center items-center border-2 rounded mr-3`}
+                      >
+                        {isHidden && (
+                          <Text
+                            style={{ color: textColor }}
+                            className={`text-2xl`}
+                          >
+                            ✓
+                          </Text>
+                        )}
+                      </View>
+                    </TouchableOpacity>
+                    <View className={`pt-2 pb-6`}>
+                      <Text
+                        style={{ color: textColor }}
+                        className={`text-2xl font-semibold`}
+                      >
+                       Make myself Anonymous?
+                      </Text>
+                    </View>
+                  </View>
+                  {formik.touched.isAnonymous && formik.errors.isAnonymous && (
+                    <Text style={{ color: "red" }}>{formik.errors.isAnonymous}</Text>
+                  )}
+
+
+                  <View className={`my-4 items-center justify-center flex-col`}>
+                    <TouchableOpacity
+                      onPress={formik.handleSubmit}
+                      disabled={!formik.isValid}
+                    >
+                      <View className={`mb-2 flex justify-center items-center`}>
+                        <View
+                          className={`py-2 rounded-lg bg-primary-accent w-[175px] ${
+                            !formik.isValid ? "opacity-50" : "opacity-100"
+                          }`}
+                        >
+                          <Text
+                            className={`font-semibold text-center text-lg`}
+                            style={{ color: textColor }}
+                          >
+                            Submit
+                          </Text>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                </ScrollView>
+              </View>
+            </SafeAreaView>
+          </TouchableWithoutFeedback>
+        </>
+      )}
     </>
   );
 }
