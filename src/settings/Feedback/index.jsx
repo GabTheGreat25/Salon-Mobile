@@ -8,6 +8,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   SafeAreaView,
+  Image,
 } from "react-native";
 import { changeColor } from "@utils";
 import { BackIcon } from "@helpers";
@@ -19,6 +20,7 @@ import { useFormik } from "formik";
 import Toast from "react-native-toast-message";
 import { useAddFeedbackMutation } from "../../state/api/reducer";
 import { useIsFocused } from "@react-navigation/native";
+import LogoImage from "@assets/salon-logo.png";
 
 export default function () {
   const navigation = useNavigation();
@@ -116,6 +118,7 @@ export default function () {
                   scrollEventThrottle={1}
                   className={`px-6`}
                 >
+                   <Image source={LogoImage} />
                   <Text
                       style={{ color: textColor }}
                       className={`font-semibold text-lg`}
