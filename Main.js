@@ -104,6 +104,7 @@ import {
   ReceptionistChooseDate,
   ReceptionistPaymentOption,
   ReceptionistEmployee,
+  FeedbackScreen,
 } from "@screens";
 import {
   TermsConditions,
@@ -218,15 +219,8 @@ export default function () {
                     name="CustomerTermsCondition"
                     component={CustomerTermsCondition}
                   />
-                   <Stack.Screen
-                    name="AboutUs"
-                    component={AboutUs}
-                  />
-                   <Stack.Screen
-                    name="Feedback"
-                    component={Feedback}
-                  />
-                  
+                  <Stack.Screen name="AboutUs" component={AboutUs} />
+                  <Stack.Screen name="Feedback" component={Feedback} />
                 </Stack.Navigator>
               ) : userRoles.includes("Beautician") ? (
                 <Stack.Navigator
@@ -255,7 +249,7 @@ export default function () {
                     name="ViewCustomerById"
                     component={ViewCustomerById}
                   />
-                    <Stack.Screen
+                  <Stack.Screen
                     name="BeauticianAccepted"
                     component={BeauticianAccepted}
                   />
@@ -263,8 +257,6 @@ export default function () {
                     name="BeauticianPrivacy"
                     component={BeauticianPrivacy}
                   />
-
-                
                 </Stack.Navigator>
               ) : userRoles.includes("Receptionist") ? (
                 <Stack.Navigator
@@ -326,7 +318,6 @@ export default function () {
                     name="ReceptionistEmployee"
                     component={ReceptionistEmployee}
                   />
-                  
                 </Stack.Navigator>
               ) : userRoles.includes("Admin") ? (
                 <Stack.Navigator
@@ -485,6 +476,11 @@ export default function () {
                 <Stack.Screen
                   name="ReceptionistRegisterTermsCondition"
                   component={ReceptionistRegisterTermsCondition}
+                />
+
+                <Stack.Screen
+                  name="FeedbackScreen"
+                  component={FeedbackScreen}
                 />
 
                 <Stack.Screen name="Hands" component={Hands} />
