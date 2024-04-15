@@ -128,6 +128,7 @@ import ReceptionistPaymentOption from "./ReceptionistDashboard/paymentOption";
 import ReceptionistEmployee from "./ReceptionistDashboard/employee";
 import BeauticianSettings from "./Settings/beauticianSettings";
 import ReceptionistSettings from "./Settings/receptionistSettings";
+import FeedbackScreen from "./FeedbackScreen";
 
 export {
   Home,
@@ -260,4 +261,5 @@ export {
   ReceptionistEmployee,
   BeauticianSettings,
   ReceptionistSettings,
+  FeedbackScreen,
 };
