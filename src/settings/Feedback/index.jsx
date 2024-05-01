@@ -39,7 +39,7 @@ export default function () {
     // formik.setFieldValue("contact_number", phoneNumber);
   };
 
-  const[addFeedback, { isLoading }] = useAddFeedbackMutation();
+  const[addFeedback, { isLoading }, refetch] = useAddFeedbackMutation();
 
   const formik = useFormik({
     initialValues:{
@@ -121,7 +121,7 @@ export default function () {
                    <Image source={LogoImage} />
                   <Text
                       style={{ color: textColor }}
-                      className={`font-semibold text-lg`}
+                      className={`font-semibold text-lg pt-12`}
                     >
                      Feedback Description
                     </Text>
@@ -172,7 +172,7 @@ export default function () {
                         )}
                       </View>
                     </TouchableOpacity>
-                    <View className={`pt-2 pb-6`}>
+                    <View className={`flex-row justify-center items-center `}>
                       <Text
                         style={{ color: textColor }}
                         className={`text-2xl font-semibold`}
