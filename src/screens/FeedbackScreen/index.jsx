@@ -77,7 +77,7 @@ export default function () {
         numberOfLines={4}
         ellipsizeMode="tail"
       >
-        Customer Name: {item?.isAnonymous ?  maskName(item?.name) : item?.name}
+        Customer Name: {item?.isAnonymous ? maskName(item?.name) : item?.name}
       </Text>
       <Text
         style={{ color: textColor }}
@@ -101,19 +101,12 @@ export default function () {
           <SafeAreaView
             style={{
               flex: 1,
-              borderColor: borderColor,
               backgroundColor: invertBackgroundColor,
             }}
-            className={`flex-1 flex-grow border px-1 pb-5 rounded-xl min-w-[100vw]`}
+            className={`flex-1 flex-grow px-1 pb-5 rounded-xl min-w-[100vw]`}
           >
             <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-                marginBottom: 20,
-              }}
-              className={`flex-row items-center justify-between mb-4`}
+              className={`flex-row items-center justify-between mb-4 pt-10`}
             >
               <TouchableOpacity>
                 <Feather
@@ -168,7 +161,10 @@ export default function () {
                     numberOfLines={8}
                     ellipsizeMode="tail"
                   >
-                    Customer Name :{selectedItem?.name}
+                    Customer Name: 
+                    {selectedItem?.isAnonymous
+                      ? maskName(selectedItem?.name)
+                      : selectedItem?.name}
                   </Text>
                   <Text
                     style={{ color: textColor }}
