@@ -163,7 +163,7 @@ export default function ({ route }) {
                       style={{ color: invertTextColor }}
                       className={`text-lg font-semibold`}
                     >
-                      - ₱ 150
+                      {Math.round(TotalFee * 0.3)}
                     </Text>
                   </View>
                 ) : null}
@@ -206,7 +206,7 @@ export default function ({ route }) {
                       ? (
                           TotalFee -
                           (hasDiscount ? TotalFee * 0.2 : 0) -
-                          150
+                          Math.round(TotalFee * 0.3)
                         ).toFixed(0)
                       : (TotalFee - (hasDiscount ? TotalFee * 0.2 : 0)).toFixed(
                           0
