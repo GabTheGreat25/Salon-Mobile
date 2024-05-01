@@ -149,7 +149,7 @@ export default function () {
 
   return (
     <>
-      {/* {isLoading ? (
+      {isLoading ? (
         <>
           <LoadingScreen />
         </>
@@ -497,37 +497,9 @@ export default function () {
               name={icon}
               color={textColor}
             />
-            <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
-            <Stack.Screen name="ResetPassword" component={ResetPassword} />
-            <Stack.Screen name="ChooseRole" component={ChooseRole} />
-            <Stack.Screen name="UserPick" component={UserPick} />
-            <Stack.Screen name="BecomeCustomer" component={BecomeCustomer} />
-            <Stack.Screen name="BecomeEmployee" component={BecomeEmployee} />
-            <Stack.Screen
-              name="BeauticianRegisterTermsCondition"
-              component={BeauticianRegisterTermsCondition}
-            />
-            <Stack.Screen
-              name="ReceptionistRegisterTermsCondition"
-              component={ReceptionistRegisterTermsCondition}
-            />
-            <Stack.Screen
-              name="CustomerTermsCondition"
-              component={CustomerTermsCondition}
-            />
-            <Stack.Screen name="Hands" component={Hands} />
-            <Stack.Screen name="Hair" component={Hair} />
-            <Stack.Screen name="Facial" component={Facial} />
-            <Stack.Screen name="Body" component={Body} />
-            <Stack.Screen name="Feet" component={Feet} />
-            <Stack.Screen name="Eyelash" component={Eyelash} />
-            <Stack.Screen name="Waiver" component={Waiver} />
-          </Stack.Navigator>
-        )}
-        <DarkMode toggle={toggleColorScheme} name={icon} color={textColor} />
-      </NavigationContainer>
-      {/* </>
-      )} */}
+          </NavigationContainer>
+        </>
+      )}
     </>
   );
 }
