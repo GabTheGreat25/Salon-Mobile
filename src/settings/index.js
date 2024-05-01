@@ -5,7 +5,10 @@ import BeauticianRegisterTermsCondition from "../settings/TermsConditions/Beauti
 import CustomerTermsCondition from "./TermsConditions/CustomerTermsCondition";
 import Waiver from "./Waiver";
 import ReceptionistRegisterTermsCondition from "./TermsConditions/ReceptionistRegisterTermsCondition";
-
+import CustomerPrivacy from "./PrivacyPolicy/CustomerPrivacy";
+import AboutUs from "./AboutUs";
+import BeauticianAccepted from "./TermsConditions/BeauticianAccepted";
+import BeauticianPrivacy from "./PrivacyPolicy/BeauticianPrivacy";
 export {
   TermsConditions,
   PrivacyPolicy,
@@ -14,4 +17,8 @@ export {
   CustomerTermsCondition,
   Waiver,
   ReceptionistRegisterTermsCondition,
+  CustomerPrivacy,
+  AboutUs,
+  BeauticianAccepted,
+  BeauticianPrivacy,
 };

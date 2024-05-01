@@ -13,8 +13,9 @@ export default function () {
         description={`${"Ready to experience the ultimate in beauty and relaxation? Discover a haven of luxury and indulgence at Lhanlee Beauty Lounge. Step into a world of exquisite treatments and personalized care tailored just for you."}`}
         buttonTitle="Learn More"
         leftArrow={true}
-        rightArrow={false}
+        rightArrow={true}
         navigateLeft={() => navigation.navigate("BecomeEmployee")}
+        navigateRight={() => navigation.navigate("FeedbackScreen")}
         navigateTo={() => navigation.navigate("ChooseRole")}
         logo={logo3}
       />

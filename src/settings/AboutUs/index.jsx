@@ -35,7 +35,7 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-              Terms And Conditions
+              About Lhanlee Beauty Lounge
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}
@@ -43,7 +43,7 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-              By registering as a customer, you agree to the following terms:
+             Nestled in the vibrant community of Taguig City, Lhanlee Beauty Lounge invites you to experience a haven of beauty and relaxation. Conveniently located at 22 Calleja St., Central Signal Village, our salon is dedicated to providing an unparalleled pampering experience tailored to your unique needs.
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}
@@ -51,7 +51,7 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-             To secure your appointment, a non-refundable reservation fee of 30% from total price of your checkouts must be paid through Maya, other online banks by scanning the QR code, or in cash at the salon.
+             Since 2019, Lhanlee Beauty Lounge has been a trusted destination for those seeking top-tier beauty services. Our team of skilled professionals specializes in hair styling, coloring, skincare, and massage therapies, ensuring that each visit leaves you feeling rejuvenated and radiant.
 
             </Text>
             <Text
@@ -60,9 +60,8 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-              Ensure the payment of the reservation fee is completed at least
-              one hour before your scheduled appointment time to avoid
-              cancellation.
+              At Lhanlee Beauty Lounge, we prioritize quality and excellence in everything we do. From our carefully curated selection of premium products to our personalized approach to client care, we are committed to exceeding your expectations and helping you achieve your beauty goals.
+
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}
@@ -70,31 +69,7 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-              The reservation fee is non-refundable, even in the case of
-              appointment cancellation, though you may reschedule based on
-              availability.
-            </Text>
-            <Text
-              className={`text-xl font-semibold text-justify py-2`}
-              style={{
-                color: invertTextColor,
-              }}
-            >
-              Please adhere to salon policies during your appointment, as
-              failure to comply may result in termination without refund. These
-              terms may be modified, and continued use of the system constitutes
-              acceptance of updated terms.
-            </Text>
-            <Text
-              className={`text-xl font-semibold text-justify py-2`}
-              style={{
-                color: invertTextColor,
-              }}
-            >
-              By Agreeing the Terms & Condition of Lhanlee Beauty Lounge, you
-              confirm that you have read and agree to the Salon Appointment
-              Terms and Conditions and understand the non-refundable nature of
-              the reservation fee.
+              Step into our welcoming space, where relaxation meets sophistication, and let our team of experts pamper you with the utmost care and attention. Whether you're preparing for a special occasion or simply treating yourself to some self-care, Lhanlee Beauty Lounge is here to elevate your beauty experience.
             </Text>
           </View>
         </ScrollView>

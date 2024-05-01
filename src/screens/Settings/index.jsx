@@ -10,16 +10,21 @@ export default function () {
   const navigation = useNavigation();
 
   const terms = () => {
-    navigation.navigate("TermsCondition");
+    navigation.navigate("CustomerTermsCondition");
   };
 
   const policy = () => {
-    navigation.navigate("PrivacyPolicy");
+    navigation.navigate("CustomerPrivacy");
   };
 
   const feedback = () => {
     navigation.navigate("Feedback");
   };
+
+  const about = () => {
+    navigation.navigate("AboutUs");
+  };
+
 
   return (
     <>
@@ -39,9 +44,10 @@ export default function () {
               color: textColor,
             }}
           >
-            How can we help?
+            How can we help? 
           </Text>
           <TouchableOpacity
+          onPress={terms}
             className={`px-4 mb-3 flex-row justify-between items-center w-full `}
           >
             <Text
@@ -55,6 +61,7 @@ export default function () {
             <Feather name="chevron-right" size={40} color={textColor} />
           </TouchableOpacity>
           <TouchableOpacity
+           onPress={policy}
             className={`px-4 mb-3 flex-row justify-between items-center w-full `}
           >
             <Text
@@ -81,6 +88,7 @@ export default function () {
             <Feather name="chevron-right" size={40} color={textColor} />
           </TouchableOpacity>
           <TouchableOpacity
+          onPress={about}
             className={`px-4 mb-3 flex-row justify-between items-center w-full `}
           >
             <Text
@@ -94,6 +102,7 @@ export default function () {
             <Feather name="chevron-right" size={40} color={textColor} />
           </TouchableOpacity>
           <TouchableOpacity
+          onPress={feedback}
             className={`px-4 mb-3 flex-row justify-between items-center w-full `}
           >
             <Text

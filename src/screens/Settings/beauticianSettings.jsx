@@ -10,15 +10,11 @@ export default function () {
   const navigation = useNavigation();
 
   const terms = () => {
-    navigation.navigate("TermsCondition");
+    navigation.navigate("BeauticianAccepted");
   };
 
   const policy = () => {
-    navigation.navigate("PrivacyPolicy");
-  };
-
-  const feedback = () => {
-    navigation.navigate("Feedback");
+    navigation.navigate("BeauticianPrivacy");
   };
 
   return (
@@ -42,6 +38,7 @@ export default function () {
             How can we help?
           </Text>
           <TouchableOpacity
+          onPress={terms}
             className={`px-4 mb-3 flex-row justify-between items-center w-full `}
           >
             <Text
@@ -55,6 +52,7 @@ export default function () {
             <Feather name="chevron-right" size={40} color={textColor} />
           </TouchableOpacity>
           <TouchableOpacity
+          onPress={policy}
             className={`px-4 mb-3 flex-row justify-between items-center w-full `}
           >
             <Text

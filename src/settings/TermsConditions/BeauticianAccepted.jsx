@@ -43,7 +43,7 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-              By registering as a customer, you agree to the following terms:
+              Upon acceptance into Lhanlee Lounge Salon, I, as a beautician,
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}
@@ -51,7 +51,23 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-             To secure your appointment, a non-refundable reservation fee of 30% from total price of your checkouts must be paid through Maya, other online banks by scanning the QR code, or in cash at the salon.
+             willingly commit to upholding the terms and conditions outlined for my membership.
+            </Text>
+            <Text
+              className={`text-xl font-semibold text-justify py-2`}
+              style={{
+                color: invertTextColor,
+              }}
+            >
+               Recognizing the importance of confidentiality, I pledge to safeguard all proprietary and confidential information pertaining to the salon's business practices, client details, and trade secrets.
+            </Text>
+            <Text
+              className={`text-xl font-semibold text-justify py-2`}
+              style={{
+                color: invertTextColor,
+              }}
+            >
+               Furthermore, I acknowledge that any intellectual property generated during my affiliation with the salon, be it individually or collaboratively, remains the exclusive property of the salon, encompassing branding, marketing materials, and unique service methodologies.
 
             </Text>
             <Text
@@ -60,9 +76,7 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-              Ensure the payment of the reservation fee is completed at least
-              one hour before your scheduled appointment time to avoid
-              cancellation.
+             I am cognizant that any breach of these terms and conditions, violation of confidentiality, unprofessional conduct, or actions deemed detrimental to the salon's reputation may result in the termination of my association with Lhanlee Lounge Salon.
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}
@@ -70,9 +84,7 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-              The reservation fee is non-refundable, even in the case of
-              appointment cancellation, though you may reschedule based on
-              availability.
+             Lhanlee Lounge Salon reserves the right to modify these terms and conditions, with notification of any changes provided. 
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}
@@ -80,10 +92,7 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-              Please adhere to salon policies during your appointment, as
-              failure to comply may result in termination without refund. These
-              terms may be modified, and continued use of the system constitutes
-              acceptance of updated terms.
+              My continued affiliation with the salon implies acceptance of any updated terms.
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}
@@ -91,10 +100,18 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-              By Agreeing the Terms & Condition of Lhanlee Beauty Lounge, you
-              confirm that you have read and agree to the Salon Appointment
-              Terms and Conditions and understand the non-refundable nature of
-              the reservation fee.
+              By endorsing my continued association with Lhanlee Lounge Salon, I affirm that I have read, understood, and agree to abide by these Beautician Membership Terms and Conditions.
+
+            </Text>
+            <Text
+              className={`text-xl font-semibold text-justify py-2`}
+              style={{
+                color: invertTextColor,
+              }}
+            >
+              The salon also reserves the right to modify these terms, and
+              continued use of the platform constitutes acceptance of any
+              updated terms.
             </Text>
           </View>
         </ScrollView>

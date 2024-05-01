@@ -104,6 +104,7 @@ import {
   ReceptionistChooseDate,
   ReceptionistPaymentOption,
   ReceptionistEmployee,
+  FeedbackScreen,
 } from "@screens";
 import {
   TermsConditions,
@@ -112,6 +113,11 @@ import {
   CustomerTermsCondition,
   Waiver,
   ReceptionistRegisterTermsCondition,
+  CustomerPrivacy,
+  AboutUs,
+  Feedback,
+  BeauticianAccepted,
+  BeauticianPrivacy,
 } from "@settings";
 import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
@@ -205,6 +211,16 @@ export default function () {
                     name="EditBeautician"
                     component={EditBeautician}
                   />
+                  <Stack.Screen
+                    name="CustomerPrivacy"
+                    component={CustomerPrivacy}
+                  />
+                  <Stack.Screen
+                    name="CustomerTermsCondition"
+                    component={CustomerTermsCondition}
+                  />
+                  <Stack.Screen name="AboutUs" component={AboutUs} />
+                  <Stack.Screen name="Feedback" component={Feedback} />
                 </Stack.Navigator>
               ) : userRoles.includes("Beautician") ? (
                 <Stack.Navigator
@@ -232,6 +248,14 @@ export default function () {
                   <Stack.Screen
                     name="ViewCustomerById"
                     component={ViewCustomerById}
+                  />
+                  <Stack.Screen
+                    name="BeauticianAccepted"
+                    component={BeauticianAccepted}
+                  />
+                  <Stack.Screen
+                    name="BeauticianPrivacy"
+                    component={BeauticianPrivacy}
                   />
                 </Stack.Navigator>
               ) : userRoles.includes("Receptionist") ? (
@@ -453,10 +477,12 @@ export default function () {
                   name="ReceptionistRegisterTermsCondition"
                   component={ReceptionistRegisterTermsCondition}
                 />
+
                 <Stack.Screen
-                  name="CustomerTermsCondition"
-                  component={CustomerTermsCondition}
+                  name="FeedbackScreen"
+                  component={FeedbackScreen}
                 />
+
                 <Stack.Screen name="Hands" component={Hands} />
                 <Stack.Screen name="Hair" component={Hair} />
                 <Stack.Screen name="Facial" component={Facial} />
