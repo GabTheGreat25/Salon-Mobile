@@ -51,11 +51,8 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-              To secure your appointment, a non-refundable reservation fee of
-              150 pesos must be paid through Maya or in cash at the salon. Upon
-              successful payment, you will receive a unique QR code containing
-              your appointment details, which must be presented for
-              verification.
+             To secure your appointment, a non-refundable reservation fee of 30% from total price of your checkouts must be paid through Maya, other online banks by scanning the QR code, or in cash at the salon.
+
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}
