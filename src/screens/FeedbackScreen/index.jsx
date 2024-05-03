@@ -114,7 +114,7 @@ export default function () {
               >
                 <Feather
                   name="chevron-left"
-                  size={RESOURCE.NUMBER.FIFTY}
+                  size={40}
                   color={textColor}
                 />
               </TouchableOpacity>
@@ -136,6 +136,7 @@ export default function () {
               renderItem={renderItem}
               keyExtractor={(item, index) => index.toString()}
               numColumns={2}
+              showsVerticalScrollIndicator={false}
             />
             <Modal visible={modalVisible} transparent animationType="slide">
               <View
