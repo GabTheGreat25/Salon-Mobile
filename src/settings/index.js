@@ -9,6 +9,8 @@ import CustomerPrivacy from "./PrivacyPolicy/CustomerPrivacy";
 import AboutUs from "./AboutUs";
 import BeauticianAccepted from "./TermsConditions/BeauticianAccepted";
 import BeauticianPrivacy from "./PrivacyPolicy/BeauticianPrivacy";
+import FrequentlyAskedQuestion from "./FAQ";
+
 export {
   TermsConditions,
   PrivacyPolicy,
@@ -21,4 +23,5 @@ export {
   AboutUs,
   BeauticianAccepted,
   BeauticianPrivacy,
+  FrequentlyAskedQuestion,
 };

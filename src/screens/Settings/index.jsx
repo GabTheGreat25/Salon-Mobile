@@ -25,6 +25,10 @@ export default function () {
     navigation.navigate("AboutUs");
   };
 
+  const faq = () => {
+    navigation.navigate("FrequentlyAskedQuestion")
+  }
+
 
   return (
     <>
@@ -76,6 +80,7 @@ export default function () {
           </TouchableOpacity>
           <TouchableOpacity
             className={`px-4 mb-3 flex-row justify-between items-center w-full `}
+            onPress={faq}
           >
             <Text
               className={`text-lg font-semibold`}

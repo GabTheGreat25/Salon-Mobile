@@ -42,7 +42,7 @@ export default function () {
   const { backgroundColor, textColor, borderColor, colorScheme } =
     changeColor();
 
-  const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
+  const invertTextColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
 
   const [deleteBrand, { isLoading: isDeleting }] = useDeleteBrandMutation();
 

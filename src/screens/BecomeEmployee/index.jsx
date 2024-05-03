@@ -37,8 +37,8 @@ export default function () {
     "\nBring a Valid ID, Bring Your Own Resume with Updated: contact information, education, and relevant work experience."
   }`;
 
-  const title = hiring?.isHiring === false ? defaultTitle : hiringTitle;
-  const info = hiring?.isHiring === false ? msg : hiringMsg;
+  const title = hiring?.isHiring  ? hiringTitle : defaultTitle;
+  const info = hiring?.isHiring  ?  hiringMsg : msg;
 
   return (
     <>

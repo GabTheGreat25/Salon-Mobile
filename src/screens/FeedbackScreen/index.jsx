@@ -13,9 +13,13 @@ import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
 import { Feather } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
+import { RESOURCE } from "@constants";
 
 export default function () {
   const isFocused = useIsFocused();
+  const navigation = useNavigation();
+
 
   const screenWidth = Dimensions.get("window").width;
   const itemWidth = (screenWidth - 30) / 2;
@@ -49,6 +53,10 @@ export default function () {
     setModalVisible(false);
   };
 
+  const handleBack = ()=>{
+    navigation.goBack();
+  }
+
   const maskName = (name) => {
     if (!name) return "Hidden";
 
@@ -65,9 +73,6 @@ export default function () {
       style={{
         backgroundColor,
         width: itemWidth,
-        padding: 10,
-        margin: 5,
-        borderRadius: 8,
       }}
       className={`rounded-lg p-3 m-1 border`}
     >
@@ -100,55 +105,41 @@ export default function () {
         <>
           <SafeAreaView
             style={{
-              flex: 1,
               backgroundColor: invertBackgroundColor,
             }}
             className={`flex-1 flex-grow px-1 pb-5 rounded-xl min-w-[100vw]`}
           >
-            <View
-              className={`flex-row items-center justify-between mb-4 pt-10`}
-            >
-              <TouchableOpacity>
+            <TouchableOpacity
+                onPress={handleBack}
+              >
                 <Feather
                   name="chevron-left"
                   size={40}
-                  color={invertTextColor}
+                  color={textColor}
                 />
               </TouchableOpacity>
+            <View
+              className={`flex-row items-center justify-center mb-4 pt-5`}
+            >
               <Text
                 style={{
                   color: invertTextColor,
-                  textAlign: "center",
-                  fontSize: 24,
-                  fontWeight: "bold",
-                  marginVertical: 5,
                 }}
                 className={`text-center text-2xl font-semibold my-5`}
               >
                 Lhanlee Salon Feedback
               </Text>
-              <TouchableOpacity>
-                <Feather
-                  name="chevron-right"
-                  size={40}
-                  color={invertTextColor}
-                />
-              </TouchableOpacity>
             </View>
+
             <FlatList
               data={feedbacks}
               renderItem={renderItem}
               keyExtractor={(item, index) => index.toString()}
-              numColumns={3}
+              numColumns={2}
+              showsVerticalScrollIndicator={false}
             />
             <Modal visible={modalVisible} transparent animationType="slide">
               <View
-                style={{
-                  flex: 1,
-                  backgroundColor: "rgba(0, 0, 0, 0.5)",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
                 className={`flex-1 justify-center items-center `}
               >
                 <View

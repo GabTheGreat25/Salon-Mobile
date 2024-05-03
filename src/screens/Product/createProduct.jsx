@@ -49,6 +49,8 @@ export default function () {
       product_name: "",
       type: "",
       ingredients: "",
+      product_volume: "",
+      product_consume: "",
       isNew: false,
     },
     validationSchema: createProductValidation,
@@ -71,6 +73,8 @@ export default function () {
       formData.append("product_name", values?.product_name);
       formData.append("type", values?.type);
       formData.append("ingredients", values?.ingredients);
+      formData.append("product_volume", values?.product_volume);
+      formData.append("product_consume", values?.product_consume);
       formData.append("isNew", values?.isNew);
       addProduct(formData)
         .unwrap()
@@ -324,6 +328,44 @@ export default function () {
                       {formik.errors.ingredients}
                     </Text>
                   )}
+
+                  <TextInput
+                    style={{ color: textColor, borderColor }}
+                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2`}
+                    placeholder="Enter Product's Volume"
+                    placeholderTextColor={textColor}
+                    keyboardType="numeric"
+                    onChangeText={(value) =>
+                      formik.handleChange("product_volume")(value.toString())
+                    }
+                    onBlur={formik.handleBlur("product_volume")}
+                    value={formik.values.product_volume.toString()}
+                  />
+                  {formik.touched.product_volume &&
+                    formik.errors.product_volume && (
+                      <Text style={{ color: "red" }}>
+                        {formik.errors.product_volume}
+                      </Text>
+                    )}
+
+                  <TextInput
+                    style={{ color: textColor, borderColor }}
+                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2`}
+                    placeholder="Enter Product's Consume per session measure"
+                    placeholderTextColor={textColor}
+                    keyboardType="numeric"
+                    onChangeText={(value) =>
+                      formik.handleChange("product_consume")(value.toString())
+                    }
+                    onBlur={formik.handleBlur("product_consume")}
+                    value={formik.values.product_consume.toString()}
+                  />
+                  {formik.touched.product_consume &&
+                    formik.errors.product_consume && (
+                      <Text style={{ color: "red" }}>
+                        {formik.errors.product_consume}
+                      </Text>
+                    )}
 
                   <View className={`flex flex-row`}>
                     <TouchableOpacity

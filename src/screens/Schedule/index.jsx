@@ -34,7 +34,7 @@ export default function () {
   const auth = useSelector((state) => state.auth.user);
 
   const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FFB6C1";
-  const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
+  const invertTextColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
 
   const { data, isLoading, refetch } = useGetTransactionsQuery();
   const transactions = data?.details || [];
