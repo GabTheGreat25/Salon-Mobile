@@ -43,7 +43,7 @@ export default function () {
   const { backgroundColor, textColor, borderColor, colorScheme } =
     changeColor();
 
-  const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
+  const invertTextColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
 
   const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
 
@@ -235,6 +235,30 @@ export default function () {
                             width: customWidth,
                           }}
                         >
+                          <Text style={{ color: textColor }}>
+                            Product Consume
+                          </Text>
+                        </DataTable.Title>
+                        <DataTable.Title
+                          style={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: 10,
+                            width: customWidth,
+                          }}
+                        >
+                          <Text style={{ color: textColor }}>
+                            Product Volume
+                          </Text>
+                        </DataTable.Title>
+                        <DataTable.Title
+                          style={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: 10,
+                            width: customWidth,
+                          }}
+                        >
                           <Text style={{ color: textColor }}>New</Text>
                         </DataTable.Title>
                         <DataTable.Title
@@ -345,6 +369,38 @@ export default function () {
                               ellipsizeMode="tail"
                             >
                               {item?.ingredients}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
+                          >
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {item?.product_consume}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
+                          >
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {item?.product_volume}
                             </Text>
                           </DataTable.Cell>
                           <DataTable.Cell
