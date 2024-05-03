@@ -222,8 +222,6 @@ export default function () {
                   />
                   <Stack.Screen name="AboutUs" component={AboutUs} />
                   <Stack.Screen name="Feedback" component={Feedback} />
-                  <Stack.Screen name="FrequentlyAskedQuestion" component={FrequentlyAskedQuestion}/>
-
                 </Stack.Navigator>
               ) : userRoles.includes("Beautician") ? (
                 <Stack.Navigator
