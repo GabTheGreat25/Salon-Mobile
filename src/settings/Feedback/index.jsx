@@ -84,12 +84,12 @@ export default function () {
     formik.setFieldValue("isAnonymous", newValue);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (isFocused) refetch();
-    };
-    fetchData();
-  }, [isFocused]);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     if (isFocused) refetch();
+  //   };
+  //   fetchData();
+  // }, [isFocused]);
 
 
   return (
