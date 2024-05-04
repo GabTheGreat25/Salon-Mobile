@@ -251,6 +251,18 @@ export default function () {
                             Product Volume
                           </Text>
                         </DataTable.Title>
+                         <DataTable.Title
+                          style={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: 10,
+                            width: customWidth,
+                          }}
+                        >
+                          <Text style={{ color: textColor }}>
+                           Quantity
+                          </Text>
+                        </DataTable.Title>
                         <DataTable.Title
                           style={{
                             justifyContent: "center",
@@ -401,6 +413,22 @@ export default function () {
                               ellipsizeMode="tail"
                             >
                               {item?.product_volume}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
+                          >
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {item?.quantity}
                             </Text>
                           </DataTable.Cell>
                           <DataTable.Cell
