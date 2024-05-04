@@ -190,7 +190,7 @@ export default function () {
                 <TextInput
                   style={{ color: textColor, borderColor }}
                   className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2`}
-                  placeholder="Enter your product name"
+                  placeholder="Enter Company Name"
                   placeholderTextColor={textColor}
                   autoCapitalize="none"
                   onChangeText={formik.handleChange("company_name")}
