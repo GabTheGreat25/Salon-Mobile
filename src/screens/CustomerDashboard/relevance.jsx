@@ -67,7 +67,12 @@ export default function () {
     fetchData();
   }, [isFocused]);
 
-  const allServices = services.map((service) => {
+  const filteredServiceProduct = services?.filter((service) =>
+    service.product?.every((product) => product.quantity !== 0)
+  );
+
+
+  const allServices = filteredServiceProduct?.map((service) => {
     const matchingComments = comments.filter((comment) =>
       comment.transaction?.appointment?.service.some(
         (s) => s._id === service._id
