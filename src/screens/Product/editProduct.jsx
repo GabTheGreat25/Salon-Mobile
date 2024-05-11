@@ -394,14 +394,12 @@ export default function ({ route }) {
                   <TextInput
                     style={{ color: textColor, borderColor }}
                     className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2`}
-                    placeholder="Enter Product's Volume"
+                    placeholder="Enter the Volume"
                     placeholderTextColor={textColor}
                     keyboardType="numeric"
-                    onChangeText={(value) =>
-                      formik.handleChange("product_volume")(value.toString())
-                    }
+                    onChangeText={formik.handleChange("product_volume")}
                     onBlur={formik.handleBlur("product_volume")}
-                    value={formik.values.product_volume.toString()}
+                    value={formik.values.product_volume}
                   />
                   {formik.touched.product_volume &&
                     formik.errors.product_volume && (
@@ -413,14 +411,12 @@ export default function ({ route }) {
                   <TextInput
                     style={{ color: textColor, borderColor }}
                     className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2`}
-                    placeholder="Enter Product's Consume per session measure"
+                    placeholder="Enter Consume"
                     placeholderTextColor={textColor}
                     keyboardType="numeric"
-                    onChangeText={(value) =>
-                      formik.handleChange("product_consume")(value.toString())
-                    }
+                    onChangeText={formik.handleChange("product_consume")}
                     onBlur={formik.handleBlur("product_consume")}
-                    value={formik.values.product_consume.toString()}
+                    value={formik.values.product_consume}
                   />
                   {formik.touched.product_consume &&
                     formik.errors.product_consume && (
