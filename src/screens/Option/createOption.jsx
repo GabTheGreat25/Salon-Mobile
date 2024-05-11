@@ -9,6 +9,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
+import { Picker } from "@react-native-picker/picker";
 import { changeColor } from "@utils";
 import { BackIcon } from "@helpers";
 import { useNavigation } from "@react-navigation/native";
@@ -49,6 +50,7 @@ export default function () {
       option_name: "",
       description: "",
       extraFee: "",
+      type: "",
       service: [],
     },
     validationSchema: createOptionValidation,
@@ -70,6 +72,7 @@ export default function () {
       formData.append("option_name", values?.option_name);
       formData.append("description", values?.description);
       formData.append("extraFee", values?.extraFee);
+      formData.append("type", values?.type);
       if (Array.isArray(values?.service)) {
         values.service.forEach((item) => formData.append("service[]", item));
       } else formData.append("service", values?.service);
@@ -100,6 +103,11 @@ export default function () {
         });
     },
   });
+
+  const serviceOptions = services?.details || [];
+  const filteredServices = serviceOptions?.filter((service) =>
+    service.type.includes(`${formik?.values?.type}`)
+  );
 
   const takePicture = async () => {
     const result = await ImagePicker.launchCameraAsync({
@@ -263,6 +271,31 @@ export default function () {
                     </Text>
                   )}
 
+                  <View
+                    style={{ borderColor }}
+                    className={`border-[1.5px]  font-normal rounded-full my-3`}
+                  >
+                    <Picker
+                      selectedValue={formik.values.type}
+                      style={{ color: textColor }}
+                      dropdownIconColor={textColor}
+                      onValueChange={(itemValue) =>
+                        formik.setFieldValue("type", itemValue)
+                      }
+                    >
+                      <Picker.Item label="Select Type" value="" />
+                      <Picker.Item label="Hands" value="Hands" />
+                      <Picker.Item label="Hair" value="Hair" />
+                      <Picker.Item label="Feet" value="Feet" />
+                      <Picker.Item label="Facial" value="Facial" />
+                      <Picker.Item label="Body" value="Body" />
+                      <Picker.Item label="Eyelash" value="Eyelash" />
+                    </Picker>
+                  </View>
+                  {formik.touched.type && formik.errors.type && (
+                    <Text style={{ color: "red" }}>{formik.errors.type}</Text>
+                  )}
+
                   <Text
                     style={{ color: textColor, borderColor }}
                     className={`font-semibold text-xl`}
@@ -271,7 +304,7 @@ export default function () {
                   </Text>
 
                   <View className="flex flex-row flex-wrap justify-start gap-x-4">
-                    {services?.details?.map((service) => (
+                    {filteredServices?.map((service) => (
                       <TouchableOpacity
                         key={service._id}
                         onPress={() => handleServicePress(service._id)}
