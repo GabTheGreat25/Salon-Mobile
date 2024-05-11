@@ -64,6 +64,10 @@ export default function () {
   const { data, isLoading, refetch: refetchService } = useGetServicesQuery();
   const services = data?.details || [];
 
+  const filteredServiceProduct = services?.filter((service) =>
+    service.product?.every((product) => product.quantity !== 0)
+  );
+
   const {
     data: commentsData,
     isLoading: commentsLoading,
@@ -87,7 +91,7 @@ export default function () {
     fetchData();
   }, [isFocused]);
 
-  const allServices = services.map((service) => {
+  const allServices = filteredServiceProduct?.map((service) => {
     const matchingComments = comments.filter((comment) =>
       comment.transaction?.appointment?.service?.some(
         (s) => s._id === service._id
