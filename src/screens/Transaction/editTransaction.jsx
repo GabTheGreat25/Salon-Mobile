@@ -177,7 +177,7 @@ export default function ({ route }) {
                     style={{ color: textColor }}
                     className={`pb-6 font-semibold text-center text-3xl`}
                   >
-                    Edit Transaction Details
+                    Transaction Details
                   </Text>
 
                   {transactions?.image?.length > 0 && (

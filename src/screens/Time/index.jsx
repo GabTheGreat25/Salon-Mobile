@@ -173,16 +173,7 @@ export default function () {
                           borderBottomColor: borderColor,
                         }}
                       >
-                        <DataTable.Title
-                          style={{
-                            justifyContent: "center",
-                            alignItems: "center",
-                            padding: 10,
-                            width: customWidth,
-                          }}
-                        >
-                          <Text style={{ color: textColor }}>ID</Text>
-                        </DataTable.Title>
+                      
                         <DataTable.Title
                           style={{
                             justifyContent: "center",
@@ -213,22 +204,6 @@ export default function () {
                             borderBottomColor: borderColor,
                           }}
                         >
-                          <DataTable.Cell
-                            style={{
-                              justifyContent: "center",
-                              alignItems: "center",
-                              padding: 10,
-                              width: customWidth,
-                            }}
-                          >
-                            <Text
-                              style={{ color: textColor }}
-                              numberOfLines={1}
-                              ellipsizeMode="tail"
-                            >
-                              {item?._id}
-                            </Text>
-                          </DataTable.Cell>
                           <DataTable.Cell
                             style={{
                               justifyContent: "center",

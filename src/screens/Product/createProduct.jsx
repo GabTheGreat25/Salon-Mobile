@@ -51,6 +51,7 @@ export default function () {
       ingredients: "",
       product_volume: "",
       product_consume: "",
+      volume_description: "",
       isNew: false,
     },
     validationSchema: createProductValidation,
@@ -75,6 +76,7 @@ export default function () {
       formData.append("ingredients", values?.ingredients);
       formData.append("product_volume", values?.product_volume);
       formData.append("product_consume", values?.product_consume);
+      formData.append("volume_description", values?.volume_description);
       formData.append("isNew", values?.isNew);
       addProduct(formData)
         .unwrap()
@@ -332,14 +334,12 @@ export default function () {
                   <TextInput
                     style={{ color: textColor, borderColor }}
                     className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2`}
-                    placeholder="Enter Product's Volume"
+                    placeholder="Enter the Volume"
                     placeholderTextColor={textColor}
                     keyboardType="numeric"
-                    onChangeText={(value) =>
-                      formik.handleChange("product_volume")(value.toString())
-                    }
+                    onChangeText={formik.handleChange("product_volume")}
                     onBlur={formik.handleBlur("product_volume")}
-                    value={formik.values.product_volume.toString()}
+                    value={formik.values.product_volume}
                   />
                   {formik.touched.product_volume &&
                     formik.errors.product_volume && (
@@ -351,19 +351,40 @@ export default function () {
                   <TextInput
                     style={{ color: textColor, borderColor }}
                     className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2`}
-                    placeholder="Enter Product's Consume per session measure"
+                    placeholder="Enter Consume"
                     placeholderTextColor={textColor}
                     keyboardType="numeric"
-                    onChangeText={(value) =>
-                      formik.handleChange("product_consume")(value.toString())
-                    }
+                    onChangeText={formik.handleChange("product_consume")}
                     onBlur={formik.handleBlur("product_consume")}
-                    value={formik.values.product_consume.toString()}
+                    value={formik.values.product_consume}
                   />
-                  {formik.touched.product_consume &&
-                    formik.errors.product_consume && (
+                  {formik.touched.product_consume && formik.errors.product_consume && (
+                    <Text style={{ color: "red" }}>
+                      {formik.errors.product_consume}
+                    </Text>
+                  )}
+
+                  <View
+                    style={{ borderColor }}
+                    className={`border-[1.5px]  font-normal rounded-full my-3`}
+                  >
+                    <Picker
+                      selectedValue={formik.values.volume_description}
+                      style={{ color: textColor }}
+                      dropdownIconColor={textColor}
+                      onValueChange={(itemValue) =>
+                        formik.setFieldValue("volume_description", itemValue)
+                      }
+                    >
+                      <Picker.Item label="Volume Description" value="" />
+                      <Picker.Item label="Milliliter" value="Milliliter" />
+                      <Picker.Item label="Pieces" value="Pieces" />
+                    </Picker>
+                  </View>
+                  {formik.touched.volume_description &&
+                    formik.errors.volume_description && (
                       <Text style={{ color: "red" }}>
-                        {formik.errors.product_consume}
+                        {formik.errors.volume_description}
                       </Text>
                     )}
 
