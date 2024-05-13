@@ -91,9 +91,7 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-              Ensure the payment of the reservation fee is completed at least
-              one hour before your scheduled appointment time to avoid
-              cancellation.
+              If the reservation fee will be paid using Maya, it should be paid on the same day the appointment is made, if not, admin will delete the appointment, While if the reservation is cash, It must be completed 30 mins before your scheduled appointment time to avoid cancellation.
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}

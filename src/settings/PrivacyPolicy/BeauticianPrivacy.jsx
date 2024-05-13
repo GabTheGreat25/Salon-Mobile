@@ -32,6 +32,7 @@ export default function () {
           >
             Privacy Policy
           </Text>
+          
           <Text
             className={`text-lg font-semibold text-center`}
             style={{
@@ -41,6 +42,7 @@ export default function () {
             By registering as a beautician, you agree to the Lhanlee Beauty
             Lounge's Privacy Policy:{" "}
           </Text>
+
           <Text
             className={`text-lg font-semibold text-center`}
             style={{
@@ -52,6 +54,7 @@ export default function () {
             necessary for the registration process. This may include your name,
             contact details, and other relevant information.{" "}
           </Text>
+
           <Text
             className={`text-lg font-semibold text-center`}
             style={{
@@ -62,6 +65,7 @@ export default function () {
             transaction details if applicable, such as for administrative
             purposes.
           </Text>
+
           <Text
             className={`text-lg font-semibold text-center`}
             style={{
@@ -75,6 +79,7 @@ export default function () {
             other relevant communications related to the beautician registration
             and management process.
           </Text>
+
           <Text
             className={`text-lg font-semibold text-center`}
             style={{
@@ -85,6 +90,7 @@ export default function () {
             alteration, and destruction, we implement industry-standard security
             measures.{" "}
           </Text>
+
           <Text
             className={`text-lg font-semibold text-center`}
             style={{
@@ -96,8 +102,9 @@ export default function () {
             Lounge Salon’s Beautician Registration and Management System
             constitutes acceptance of the updated policy.
           </Text>
-        </View>
-      </ScrollView>
+
+          </ScrollView>
+        </SafeAreaView>
     </>
   );
 }

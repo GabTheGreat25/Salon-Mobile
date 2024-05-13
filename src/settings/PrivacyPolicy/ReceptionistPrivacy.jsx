@@ -1,8 +1,12 @@
 import { View, Text, ScrollView, SafeAreaView } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { changeColor } from "@utils";
+import { BackIcon } from "@helpers";
+import { useNavigation } from "@react-navigation/native";
 
 export default function () {
+  const navigation = useNavigation();
+
   const { textColor, backgroundColor, colorScheme } = changeColor();
 
   const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FFB6C1";
@@ -17,7 +21,8 @@ export default function () {
         }}
       >
         <SafeAreaView className={`flex-row items-center p-1.5`}>
-          <FontAwesome5 name="less-than" size={24} color={textColor} />
+          <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
+
           <Text
             className={`m-1.5 text-xl`}
             style={{

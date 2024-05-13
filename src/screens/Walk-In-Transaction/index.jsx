@@ -10,8 +10,9 @@ import {
   Button,
 } from "react-native";
 import {
-  useGetDeliveriesQuery,
-  useDeleteDeliveryMutation,
+  useGetAppointmentsQuery,
+  useDeleteAppointmentMutation,
+  useGetTransactionsQuery,
 } from "../../state/api/reducer";
 import { LoadingScreen } from "@components";
 import Toast from "react-native-toast-message";
@@ -21,7 +22,6 @@ import { Feather } from "@expo/vector-icons";
 import { changeColor } from "@utils";
 import { useNavigation } from "@react-navigation/native";
 import { saveDeletedId, getDeletedIds } from "../../helpers/DeleteItem";
-import { format } from "date-fns";
 import { useIsFocused } from "@react-navigation/native";
 
 const { width: deviceWidth } = Dimensions.get("window");
@@ -32,21 +32,45 @@ export default function () {
 
   const customWidth = deviceWidth * 0.3;
 
-  const { data, isLoading, refetch } = useGetDeliveriesQuery();
+  const { data, isLoading, refetch } = useGetAppointmentsQuery();
+  const { data: transactions, refetch: refetchTransactions } =
+    useGetTransactionsQuery();
+
+  const appointments = data?.details;
+  
+  const today = new Date();
+  const walkins = appointments?.filter((a) => {
+    const appointmentDate = new Date(a?.date);
+
+    return (
+      appointmentDate.getDate() === today.getDate() &&
+      appointmentDate.getMonth() === today.getMonth() &&
+      appointmentDate.getFullYear() === today.getFullYear() ||
+      a?.transaction?.hasAppointmentFee === false
+    );
+  });
+
   useEffect(() => {
     const fetchData = async () => {
-      if (isFocused) refetch();
+      if (isFocused) {
+        await Promise.all([refetch(), refetchTransactions()]);
+      }
     };
     fetchData();
   }, [isFocused]);
 
-  const { backgroundColor, textColor, borderColor, colorScheme } =
-    changeColor();
+  const { backgroundColor, textColor, borderColor } = changeColor();
 
-  const invertTextColor = colorScheme === "dark" ? "#e5e5e5" : "#212B36";
+  const completedTransactions = transactions?.details?.filter(
+    (transaction) => transaction?.status === "completed"
+  );
 
-  const [deleteDelivery, { isLoading: isDeleting }] =
-    useDeleteDeliveryMutation();
+  const completedAppointmentIds = completedTransactions?.map(
+    (transaction) => transaction.appointment._id
+  );
+
+  const [deleteAppointment, { isLoading: isDeleting }] =
+    useDeleteAppointmentMutation();
 
   const [deletedIds, setDeletedIds] = useState([]);
   const [page, setPage] = useState(0);
@@ -61,14 +85,18 @@ export default function () {
     fetchDeletedIds();
   }, []);
 
-  const handleEditDelivery = (id) => {
-    navigation.navigate("EditDelivery", { id });
+  const handleEditAppointment = (id) => {
+    if (completedAppointmentIds.includes(id)) {
+      Alert.alert("Edit not allowed", "This appointment has been completed.");
+      return;
+    }
+    navigation.navigate("EditAppointment", { id });
   };
 
-  const handleDeleteDelivery = async (id) => {
+  const handleDeleteAppointment = async (id) => {
     Alert.alert(
-      "Delete Delivery",
-      "Are you sure you want to delete this delivery?",
+      "Delete Appointment",
+      "Are you sure you want to delete this appointment?",
       [
         {
           text: "Cancel",
@@ -78,23 +106,24 @@ export default function () {
           text: "Delete",
           onPress: async () => {
             try {
-              const response = await deleteDelivery(id).unwrap();
+              const response = await deleteAppointment(id).unwrap();
               await saveDeletedId(id);
               setDeletedIds((prevIds) => [...prevIds, id]);
               refetch();
               Toast.show({
                 type: "success",
                 position: "top",
-                text1: "Delivery Successfully Deleted",
+                text1: "Appointment Successfully Deleted",
                 text2: `${response?.message}`,
                 visibilityTime: 3000,
                 autoHide: true,
               });
+              if (paginatedData.length === 1) setPage(0);
             } catch (error) {
               Toast.show({
                 type: "error",
                 position: "top",
-                text1: "Error Deleting Delivery",
+                text1: "Error Deleting Appointment",
                 text2: `${error?.data?.error?.message}`,
                 visibilityTime: 3000,
                 autoHide: true,
@@ -106,10 +135,7 @@ export default function () {
     );
   };
 
-  const createDelivery = () => navigation.navigate("CreateDelivery");
-
-  const filteredData =
-    data?.details?.filter((item) => !deletedIds.includes(item?._id)) || [];
+  const filteredData = walkins?.filter((item) => !deletedIds.includes(item?._id)).sort((a, b) => new Date(a.date) - new Date(b.date)) || [];
 
   const totalPageCount = Math.ceil(filteredData.length / itemsPerPage);
   const paginatedData = filteredData.slice(
@@ -129,8 +155,8 @@ export default function () {
     }
   };
 
-  const handleViewDelivery = (id) => {
-    navigation.navigate("ViewDelivery", { id });
+  const handleViewAppointment = (id) => {
+    navigation.navigate("ViewAppointment", { id });
   };
 
   return (
@@ -148,21 +174,7 @@ export default function () {
             className={`relative flex-1`}
           >
             <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
-            <View className={`ml-12 mt-[14px] items-start justify-start`}>
-              <TouchableOpacity
-                style={{ backgroundColor }}
-                className={`py-1 px-3 rounded-md border `}
-                onPress={createDelivery}
-              >
-                <Text
-                  style={{ color: invertTextColor }}
-                  className={`text-lg font-semibold`}
-                >
-                  Create Delivery
-                </Text>
-              </TouchableOpacity>
-            </View>
-            <View className={`flex-1 items-center justify-center mt-10`}>
+            <View className={`flex-1 items-center justify-center pt-10`}>
               {paginatedData?.length ? (
                 <ScrollView
                   style={{ backgroundColor }}
@@ -185,17 +197,9 @@ export default function () {
                             width: customWidth,
                           }}
                         >
-                          <Text style={{ color: textColor }}>Company Name</Text>
-                        </DataTable.Title>
-                        <DataTable.Title
-                          style={{
-                            justifyContent: "center",
-                            alignItems: "center",
-                            padding: 10,
-                            width: customWidth,
-                          }}
-                        >
-                          <Text style={{ color: textColor }}>Date</Text>
+                          <Text style={{ color: textColor }}>
+                            Appointment Day
+                          </Text>
                         </DataTable.Title>
                         <DataTable.Title
                           style={{
@@ -215,7 +219,7 @@ export default function () {
                             width: customWidth,
                           }}
                         >
-                          <Text style={{ color: textColor }}>Status</Text>
+                          <Text style={{ color: textColor }}>Service Name</Text>
                         </DataTable.Title>
                         <DataTable.Title
                           style={{
@@ -225,7 +229,7 @@ export default function () {
                             width: customWidth,
                           }}
                         >
-                          <Text style={{ color: textColor }}>Quantity</Text>
+                          <Text style={{ color: textColor }}>Add Ons</Text>
                         </DataTable.Title>
                         <DataTable.Title
                           style={{
@@ -235,7 +239,7 @@ export default function () {
                             width: customWidth,
                           }}
                         >
-                          <Text style={{ color: textColor }}>Product Type</Text>
+                          <Text style={{ color: textColor }}>Beautician</Text>
                         </DataTable.Title>
                         <DataTable.Title
                           style={{
@@ -245,7 +249,7 @@ export default function () {
                             width: customWidth,
                           }}
                         >
-                          <Text style={{ color: textColor }}>Product Name</Text>
+                          <Text style={{ color: textColor }}>Customer</Text>
                         </DataTable.Title>
                         <DataTable.Title
                           style={{
@@ -280,7 +284,21 @@ export default function () {
                               numberOfLines={1}
                               ellipsizeMode="tail"
                             >
-                              {item?.company_name}
+                              {item.date && item.time
+                                ? item.time.length === 1
+                                  ? `${
+                                      new Date(item.date)
+                                        .toISOString()
+                                        .split("T")[0]
+                                    } ${item.time[0]}`
+                                  : `${
+                                      new Date(item.date)
+                                        .toISOString()
+                                        .split("T")[0]
+                                    } ${item.time[0]} to ${
+                                      item.time[item.time.length - 1]
+                                    }`
+                                : ""}
                             </Text>
                           </DataTable.Cell>
                           <DataTable.Cell
@@ -296,7 +314,7 @@ export default function () {
                               numberOfLines={1}
                               ellipsizeMode="tail"
                             >
-                              {format(new Date(item?.date), "yyyy-MM-dd")}
+                              ₱{item?.price.toFixed(0)}
                             </Text>
                           </DataTable.Cell>
                           <DataTable.Cell
@@ -312,77 +330,67 @@ export default function () {
                               numberOfLines={1}
                               ellipsizeMode="tail"
                             >
-                              ₱{item?.price}
-                            </Text>
-                          </DataTable.Cell>
-                          <DataTable.Cell
-                            style={{
-                              justifyContent: "center",
-                              alignItems: "center",
-                              padding: 10,
-                              width: customWidth,
-                            }}
-                          >
-                            <Text
-                              style={{ color: textColor }}
-                              numberOfLines={1}
-                              ellipsizeMode="tail"
-                            >
-                              {item?.status}
-                            </Text>
-                          </DataTable.Cell>
-                          <DataTable.Cell
-                            style={{
-                              justifyContent: "center",
-                              alignItems: "center",
-                              padding: 10,
-                              width: customWidth,
-                            }}
-                          >
-                            <Text
-                              style={{ color: textColor }}
-                              numberOfLines={1}
-                              ellipsizeMode="tail"
-                            >
-                              {item?.quantity}
-                            </Text>
-                          </DataTable.Cell>
-                          <DataTable.Cell
-                            style={{
-                              justifyContent: "center",
-                              alignItems: "center",
-                              padding: 10,
-                              width: customWidth,
-                            }}
-                          >
-                            <Text
-                              style={{ color: textColor }}
-                              numberOfLines={1}
-                              ellipsizeMode="tail"
-                            >
-                              {Array.isArray(item?.type)
-                                ? item.type.join(", ")
-                                : item?.type}
-                            </Text>
-                          </DataTable.Cell>
-                          <DataTable.Cell
-                            style={{
-                              justifyContent: "center",
-                              alignItems: "center",
-                              padding: 10,
-                              width: customWidth,
-                            }}
-                          >
-                            <Text
-                              style={{ color: textColor }}
-                              numberOfLines={1}
-                              ellipsizeMode="tail"
-                            >
-                              {Array.isArray(item.product)
-                                ? item.product
-                                    .map((item) => item.product_name)
+                              {Array.isArray(item?.service)
+                                ? item?.service
+                                    ?.map((item) => item?.service_name)
                                     .join(", ")
-                                : item.product?.product_name}
+                                : item?.service?.service_name}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
+                          >
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {Array.isArray(item?.option)
+                                ? item?.option
+                                    ?.map((item) => item?.option_name)
+                                    .join(", ") || "None"
+                                : item?.option?.option_name || "None"}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
+                          >
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {Array.isArray(item?.beautician)
+                                ? item?.beautician
+                                    ?.map((item) => item?.name)
+                                    .join(", ")
+                                : item?.beautician?.name}
+                            </Text>
+                          </DataTable.Cell>
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
+                          >
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {item?.customer?.name}
                             </Text>
                           </DataTable.Cell>
                           <DataTable.Cell
@@ -394,43 +402,22 @@ export default function () {
                             }}
                           >
                             <TouchableOpacity
-                              onPress={() => handleViewDelivery(item?._id)}
+                              onPress={() => handleViewAppointment(item?._id)}
                             >
+                              {/* <TouchableOpacity
+                            onPress={() => handleEditAppointment(item?._id)}
+                          >
+                            <Feather name="edit" size={24} color="blue" />
+                          </TouchableOpacity>
+                          <View style={{ width: 10 }} /> */}
+
                               <Feather name="eye" size={24} color="green" />
                             </TouchableOpacity>
+
                             <View style={{ width: 10 }} />
+
                             <TouchableOpacity
-                              onPress={() => {
-                                if (item.status === "cancelled") {
-                                  Alert.alert(
-                                    "Edit not allowed",
-                                    "This delivery has been cancelled."
-                                  );
-                                } else if (item.status !== "completed") {
-                                  handleEditDelivery(item?._id);
-                                } else {
-                                  Alert.alert(
-                                    "Edit not allowed",
-                                    "This delivery has been completed."
-                                  );
-                                }
-                              }}
-                            >
-                              <Feather
-                                name="edit"
-                                size={24}
-                                color={
-                                  item.status === "cancelled"
-                                    ? "gray" 
-                                    : item.status !== "completed"
-                                    ? "blue"
-                                    : "gray"
-                                }
-                              />
-                            </TouchableOpacity>
-                            <View style={{ width: 10 }} />
-                            <TouchableOpacity
-                              onPress={() => handleDeleteDelivery(item?._id)}
+                              onPress={() => handleDeleteAppointment(item?._id)}
                             >
                               <Feather name="delete" size={24} color="red" />
                             </TouchableOpacity>

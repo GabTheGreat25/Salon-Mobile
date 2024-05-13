@@ -129,6 +129,7 @@ import ReceptionistEmployee from "./ReceptionistDashboard/employee";
 import BeauticianSettings from "./Settings/beauticianSettings";
 import ReceptionistSettings from "./Settings/receptionistSettings";
 import FeedbackScreen from "./FeedbackScreen";
+import WalkInAppointment from "./Walk-In-Transaction";
 
 export {
   Home,
@@ -262,4 +263,5 @@ export {
   BeauticianSettings,
   ReceptionistSettings,
   FeedbackScreen,
+  WalkInAppointment,
 };

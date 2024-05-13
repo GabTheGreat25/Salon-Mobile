@@ -105,6 +105,7 @@ import {
   ReceptionistPaymentOption,
   ReceptionistEmployee,
   FeedbackScreen,
+  WalkInAppointment,
 } from "@screens";
 import {
   TermsConditions,
@@ -265,6 +266,7 @@ export default function () {
                     component={BeauticianPrivacy}
                   />
                 </Stack.Navigator>
+
               ) : userRoles.includes("Receptionist") ? (
                 <Stack.Navigator
                   initialRouteName="ReceptionistDrawer"
@@ -272,6 +274,15 @@ export default function () {
                     headerShown: false,
                   }}
                 >
+                  <Stack.Screen
+                    name=" WalkInAppointment"
+                    component={WalkInAppointment}
+                  />
+
+                  <Stack.Screen
+                    name="ViewAppointment"
+                    component={ViewAppointment}
+                  />
                   <Stack.Screen
                     name="ReceptionistDrawer"
                     component={ReceptionistDrawer}

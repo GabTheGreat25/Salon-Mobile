@@ -110,21 +110,14 @@ export default function ({ route }) {
                         </Text>
                       </View>
                     ))}
-
-                    <View className={`items-center justify-center`}>
-                      <Image
-                        source={{ uri: data?.details?.qrCode }}
-                        style={{ width: 150, height: 150 }}
-                      />
-                      <Text
-                        style={{ color: invertTextColor }}
-                        className={`pt-1 text-base`}
-                      >
-                        Subtotal ({appointment?.service?.length}{" "}
-                        {appointment?.service?.length === 1 ? "item" : "items"})
-                      </Text>
-                    </View>
                   </View>
+                </View>
+
+                <View className={`items-center justify-center`}>
+                  <Image
+                    source={{ uri: data?.details?.qrCode }}
+                    style={{ width: 150, height: 150 }}
+                  />
                 </View>
 
                 <View className={`flex-row justify-between`}>
