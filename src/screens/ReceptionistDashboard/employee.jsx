@@ -229,7 +229,7 @@ export default function () {
                       }}
                       className={`text-lg font-semibold`}
                     >
-                      Name:{" "}
+                      Names:{" "}
                       {item?.name.length > 13
                         ? `${item?.name.substring(0, 13)}...`
                         : item?.name}

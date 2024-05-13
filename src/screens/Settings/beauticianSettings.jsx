@@ -38,7 +38,7 @@ export default function () {
             How can we help?
           </Text>
           <TouchableOpacity
-          onPress={terms}
+            onPress={terms}
             className={`px-4 mb-3 flex-row justify-between items-center w-full `}
           >
             <Text
@@ -52,7 +52,7 @@ export default function () {
             <Feather name="chevron-right" size={40} color={textColor} />
           </TouchableOpacity>
           <TouchableOpacity
-          onPress={policy}
+            onPress={policy}
             className={`px-4 mb-3 flex-row justify-between items-center w-full `}
           >
             <Text

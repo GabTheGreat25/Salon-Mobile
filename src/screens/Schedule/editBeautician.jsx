@@ -28,7 +28,6 @@ const windowWidth = Dimensions.get("window").width;
 export default function ({ route }) {
   const isFocused = useIsFocused();
   const { id } = route.params;
-
   const appointmentRoute = useRoute();
   const selectedAppointment = appointmentRoute.params.selectedAppointment;
 
@@ -118,7 +117,7 @@ export default function ({ route }) {
   );
 
   const [pickedBeauticians, setPickedBeauticians] = useState(
-    selectedBeautician || beauticianIds || []
+    selectedBeautician.length > 0 ? selectedBeautician : beauticianIds || []
   );
 
   const handlePickBeautician = (beautician) => {

@@ -51,7 +51,8 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-             willingly commit to upholding the terms and conditions outlined for my membership.
+              willingly commit to upholding the terms and conditions outlined
+              for my membership.
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}
@@ -59,7 +60,10 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-               Recognizing the importance of confidentiality, I pledge to safeguard all proprietary and confidential information pertaining to the salon's business practices, client details, and trade secrets.
+              Recognizing the importance of confidentiality, I pledge to
+              safeguard all proprietary and confidential information pertaining
+              to the salon's business practices, client details, and trade
+              secrets.
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}
@@ -67,8 +71,11 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-               Furthermore, I acknowledge that any intellectual property generated during my affiliation with the salon, be it individually or collaboratively, remains the exclusive property of the salon, encompassing branding, marketing materials, and unique service methodologies.
-
+              Furthermore, I acknowledge that any intellectual property
+              generated during my affiliation with the salon, be it individually
+              or collaboratively, remains the exclusive property of the salon,
+              encompassing branding, marketing materials, and unique service
+              methodologies.
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}
@@ -76,7 +83,10 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-             I am cognizant that any breach of these terms and conditions, violation of confidentiality, unprofessional conduct, or actions deemed detrimental to the salon's reputation may result in the termination of my association with Lhanlee Lounge Salon.
+              I am cognizant that any breach of these terms and conditions,
+              violation of confidentiality, unprofessional conduct, or actions
+              deemed detrimental to the salon's reputation may result in the
+              termination of my association with Lhanlee Lounge Salon.
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}
@@ -84,7 +94,8 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-             Lhanlee Lounge Salon reserves the right to modify these terms and conditions, with notification of any changes provided. 
+              Lhanlee Lounge Salon reserves the right to modify these terms and
+              conditions, with notification of any changes provided.
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}
@@ -92,7 +103,8 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-              My continued affiliation with the salon implies acceptance of any updated terms.
+              My continued affiliation with the salon implies acceptance of any
+              updated terms.
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}
@@ -100,8 +112,9 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-              By endorsing my continued association with Lhanlee Lounge Salon, I affirm that I have read, understood, and agree to abide by these Beautician Membership Terms and Conditions.
-
+              By endorsing my continued association with Lhanlee Lounge Salon, I
+              affirm that I have read, understood, and agree to abide by these
+              Beautician Membership Terms and Conditions.
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}

@@ -314,7 +314,7 @@ export default function ({ route }) {
                     key={option._id}
                     className={`rounded-lg mr-3 p-4 ${
                       selectedOptions.includes(option._id)
-                        ? "bg-primary-variant"
+                        ? "bg-secondary-variant"
                         : "bg-primary-default"
                     }`}
                     onPress={() => toggleOption(option._id)}

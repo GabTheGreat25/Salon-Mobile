@@ -18,7 +18,7 @@ import { useIsFocused } from "@react-navigation/native";
 
 export default function () {
   const isFocused = useIsFocused();
-  const { backgroundColor, textColor } = changeColor();
+  const { backgroundColor, textColor, borderColor } = changeColor();
 
   const checkedAllergies = useSelector(
     (state) => state.ingredient.ingredientData.allergy || []

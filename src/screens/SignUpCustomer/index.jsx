@@ -105,7 +105,7 @@ export default function () {
           Toast.show({
             type: "success",
             position: "top",
-            text1: "Employee Successfully Created",
+            text1: "Customer Successfully Created",
             text2: `${response?.message}`,
             visibilityTime: 3000,
             autoHide: true,
@@ -239,10 +239,10 @@ export default function () {
     navigation.navigate("CustomerTermsCondition");
   };
 
-  const [gender, setGender] = useState("");
-  const [hairLength, setHairLength] = useState("");
-  const [skinTone, setSkinTone] = useState("");
-  const [height, setHeight] = useState("");
+  const [gender, setGender] = useState(formik.values.gender || "");
+  const [hairLength, setHairLength] = useState(formik.values.hairLength || "");
+  const [skinTone, setSkinTone] = useState(formik.values.skinTone || "");
+  const [height, setHeight] = useState(formik.values.height || "");
 
   const toggleDescriptionValue = (currentValue, newValue) => {
     let updatedDescription = formik.values.description;
@@ -1221,25 +1221,24 @@ export default function () {
                   )}
                 </View>
 
-                {selectedImages.length > 0 &&
-                  waiver?.waiverData?.eSignature === "" && (
-                    <View className={`items-start justify-start py-2`}>
-                      <TouchableOpacity onPress={handleWaiver}>
-                        <View className={`w-full mb-2`}>
-                          <View
-                            className={`py-2 px-6 rounded-lg bg-primary-accent`}
+                {waiver?.waiverData?.eSignature === "" && (
+                  <View className={`items-start justify-start py-2`}>
+                    <TouchableOpacity onPress={handleWaiver}>
+                      <View className={`w-full mb-2`}>
+                        <View
+                          className={`py-2 px-6 rounded-lg bg-primary-accent`}
+                        >
+                          <Text
+                            className={`font-semibold text-center text-lg`}
+                            style={{ color: textColor }}
                           >
-                            <Text
-                              className={`font-semibold text-center text-lg`}
-                              style={{ color: textColor }}
-                            >
-                              Add Waiver
-                            </Text>
-                          </View>
+                            Add Waiver
+                          </Text>
                         </View>
-                      </TouchableOpacity>
-                    </View>
-                  )}
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                )}
 
                 <Text
                   style={{ color: textColor, borderColor }}

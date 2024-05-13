@@ -14,20 +14,17 @@ import { changeColor } from "@utils";
 import { Feather } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
-import { RESOURCE } from "@constants";
+import { BackIcon } from "@helpers";
 
 export default function () {
   const isFocused = useIsFocused();
   const navigation = useNavigation();
 
-
   const screenWidth = Dimensions.get("window").width;
   const itemWidth = (screenWidth - 30) / 2;
 
-  const { backgroundColor, textColor, borderColor, colorScheme } =
-    changeColor();
+  const { backgroundColor, textColor, colorScheme } = changeColor();
 
-  const invertBackgroundColor = colorScheme === "dark" ? "#e5e5e5" : "#FFB6C1";
   const invertTextColor = colorScheme === "dark" ? "#212B36" : "#e5e5e5";
 
   const { data: feedbackData, isLoading: feedbackLoading } =
@@ -40,7 +37,6 @@ export default function () {
     }
   }, [isFocused]);
 
-  const [currentMonthYearText, setCurrentMonthYearText] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
@@ -53,16 +49,12 @@ export default function () {
     setModalVisible(false);
   };
 
-  const handleBack = ()=>{
-    navigation.goBack();
-  }
-
   const maskName = (name) => {
     if (!name) return "Hidden";
 
-    const maskedLength = Math.max(name.length - 2, 0); // Keep the first and last character visible
+    const maskedLength = Math.max(name.length - 2, 0);
     const maskedPart = "*".repeat(maskedLength);
-    const maskedName = name[0] + maskedPart + name[name.length - 1]; // Keep the first and last character visible
+    const maskedName = name[0] + maskedPart + name[name.length - 1];
 
     return maskedName;
   };
@@ -98,29 +90,18 @@ export default function () {
   return (
     <>
       {feedbackLoading ? (
-        <View style={{ flex: 1, backgroundColor: "#000" }}>
+        <View
+          className={`flex-1 justify-center items-center bg-primary-default`}
+        >
           <LoadingScreen />
         </View>
       ) : (
         <>
           <SafeAreaView
-            style={{
-              backgroundColor: invertBackgroundColor,
-            }}
-            className={`flex-1 flex-grow px-1 pb-5 rounded-xl min-w-[100vw]`}
+            className={`flex-1 flex-grow px-1 pb-5 bg-primary-default`}
           >
-            <TouchableOpacity
-                onPress={handleBack}
-              >
-                <Feather
-                  name="chevron-left"
-                  size={40}
-                  color={textColor}
-                />
-              </TouchableOpacity>
-            <View
-              className={`flex-row items-center justify-center mb-4 pt-5`}
-            >
+            <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
+            <View className={`flex-row items-center justify-center mb-4 pt-5`}>
               <Text
                 style={{
                   color: invertTextColor,
@@ -139,9 +120,7 @@ export default function () {
               showsVerticalScrollIndicator={false}
             />
             <Modal visible={modalVisible} transparent animationType="slide">
-              <View
-                className={`flex-1 justify-center items-center `}
-              >
+              <View className={`flex-1 justify-center items-center `}>
                 <View
                   style={{ backgroundColor: backgroundColor }}
                   className={`p-10 rounded-lg border-1 w-[80%]`}
@@ -152,7 +131,7 @@ export default function () {
                     numberOfLines={8}
                     ellipsizeMode="tail"
                   >
-                    Customer Name: 
+                    Customer Name:
                     {selectedItem?.isAnonymous
                       ? maskName(selectedItem?.name)
                       : selectedItem?.name}

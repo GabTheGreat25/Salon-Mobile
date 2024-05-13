@@ -50,7 +50,7 @@ export default function () {
 
   const [deletedIds, setDeletedIds] = useState([]);
   const [page, setPage] = useState(0);
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
 
   useEffect(() => {
     const fetchDeletedIds = async () => {
@@ -155,7 +155,7 @@ export default function () {
                 onPress={createDelivery}
               >
                 <Text
-                style={{color: invertTextColor}}
+                  style={{ color: invertTextColor }}
                   className={`text-lg font-semibold`}
                 >
                   Create Delivery
@@ -177,7 +177,6 @@ export default function () {
                           borderBottomColor: borderColor,
                         }}
                       >
-                       
                         <DataTable.Title
                           style={{
                             justifyContent: "center",
@@ -268,7 +267,6 @@ export default function () {
                             borderBottomColor: borderColor,
                           }}
                         >
-                         
                           <DataTable.Cell
                             style={{
                               justifyContent: "center",
