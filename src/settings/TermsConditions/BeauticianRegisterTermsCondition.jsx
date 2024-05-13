@@ -35,7 +35,7 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-              Terms And Conditions
+              Beautician Terms And Conditions
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}
@@ -43,7 +43,8 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-              By registering as a beautician, you agree to the following terms:
+              By registering as a beautician, you agree to the following
+              terms:
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}
@@ -52,26 +53,11 @@ export default function () {
               }}
             >
               To initiate the process, you must complete the registration on our
-              website, providing accurate and up-to-date information.
-            </Text>
-            <Text
-              className={`text-xl font-semibold text-justify py-2`}
-              style={{
-                color: invertTextColor,
-              }}
-            >
-              During registration, you will select available dates, specifically
-              Mondays, for a face-to-face meeting with the salon owner.
-            </Text>
-            <Text
-              className={`text-xl font-semibold text-justify py-2`}
-              style={{
-                color: invertTextColor,
-              }}
-            >
-              It is your responsibility to be physically present at the salon
-              for the scheduled meeting on the selected Monday, and failure to
-              attend may result in the rejection of your hiring process.
+              website, providing accurate and up-to-date information.After
+              Registration , It is your responsibility to be physically present
+              at the salon for the scheduled meeting on the selected day and
+              failure to attend may result in the rejection of your hiring
+              process.
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}
@@ -81,9 +67,7 @@ export default function () {
             >
               Following the face-to-face meeting, the salon owner will review
               your application within 24 hours. If accepted, you will be
-              notified via SMS, and you can proceed with the hiring process. In
-              case of rejection, your registration may be deleted by the
-              administrator or automatically removed after 7 days.
+              notified via SMS, and you can proceed with the hiring process.
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}
@@ -97,17 +81,6 @@ export default function () {
               registration and hiring process at any stage if inaccurate
               information is provided or if there is a violation of salon
               policies, with termination occurring without notice.
-            </Text>
-            <Text
-              className={`text-xl font-semibold text-justify py-2`}
-              style={{
-                color: invertTextColor,
-              }}
-            >
-              The salon reserves the right to terminate the registration and
-              hiring process at any stage if inaccurate information is provided
-              or if there is a violation of salon policies, with termination
-              occurring without notice.
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}
