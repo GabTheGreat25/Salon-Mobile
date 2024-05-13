@@ -10,15 +10,11 @@ export default function () {
   const navigation = useNavigation();
 
   const terms = () => {
-    navigation.navigate("TermsCondition");
+    navigation.navigate("ReceptionistAccepted");
   };
 
   const policy = () => {
-    navigation.navigate("PrivacyPolicy");
-  };
-
-  const feedback = () => {
-    navigation.navigate("Feedback");
+    navigation.navigate("ReceptionistPrivacy");
   };
 
   return (
@@ -43,6 +39,7 @@ export default function () {
           </Text>
           <TouchableOpacity
             className={`px-4 mb-3 flex-row justify-between items-center w-full `}
+            onPress={terms}
           >
             <Text
               className={`text-lg font-semibold`}
@@ -56,6 +53,7 @@ export default function () {
           </TouchableOpacity>
           <TouchableOpacity
             className={`px-4 mb-3 flex-row justify-between items-center w-full `}
+            onPress={policy}
           >
             <Text
               className={`text-lg font-semibold`}
