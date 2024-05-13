@@ -23,6 +23,7 @@ import { Feather } from "@expo/vector-icons";
 import { changeColor } from "@utils";
 import { useIsFocused } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
+import { saveDeletedId, getDeletedIds } from "../../helpers/DeleteItem";
 
 const { width: deviceWidth } = Dimensions.get("window");
 
@@ -44,8 +45,18 @@ export default function () {
   const auth = useSelector((state) => state.auth);
   const { backgroundColor, textColor, borderColor } = changeColor();
 
+  const [deletedIds, setDeletedIds] = useState([]);
   const [page, setPage] = useState(0);
   const itemsPerPage = 5;
+
+  useEffect(() => {
+    const fetchDeletedIds = async () => {
+      const ids = await getDeletedIds();
+      setDeletedIds(ids);
+    };
+
+    fetchDeletedIds();
+  }, []);
 
   const filteredBeauticians = data?.details?.filter(
     (user) =>
@@ -55,8 +66,12 @@ export default function () {
       user?._id !== auth?.user?._id
   );
 
+  const filteredData =
+    filteredBeauticians?.filter((item) => !deletedIds.includes(item?._id)) ||
+    [];
+
   const totalPageCount = Math.ceil(filteredBeauticians.length / itemsPerPage);
-  const paginatedData = filteredBeauticians.slice(
+  const paginatedData = filteredData.slice(
     page * itemsPerPage,
     (page + 1) * itemsPerPage
   );
@@ -77,40 +92,45 @@ export default function () {
   const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
 
   const handleConfirmUser = async (id) => {
-    Alert.alert("Confirm User", "Are you sure you want to confirm this user?", [
-      {
-        text: "Cancel",
-        style: "cancel",
-      },
-      {
-        text: "Confirm",
-        onPress: async () => {
-          try {
-            const response = await confirmUser({ id });
-            Toast.show({
-              type: "success",
-              position: "top",
-              text1: "Employee Successfully Confirmed",
-              text2: `${response?.data?.message}`,
-              visibilityTime: 3000,
-              autoHide: true,
-            });
-          } catch (error) {
-            Toast.show({
-              type: "error",
-              position: "top",
-              text1: "Error Confirming Employee",
-              text2: `${error?.data?.error?.message}`,
-              visibilityTime: 3000,
-              autoHide: true,
-            });
-          }
+    Alert.alert(
+      "Confirm Employee",
+      "Are you sure you want to accept this Employee?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
         },
-      },
-    ]);
+        {
+          text: "Confirm",
+          onPress: async () => {
+            try {
+              const response = await confirmUser({ id });
+              refetch();
+              Toast.show({
+                type: "success",
+                position: "top",
+                text1: "Employee Successfully Confirmed",
+                text2: `${response?.data?.message}`,
+                visibilityTime: 3000,
+                autoHide: true,
+              });
+            } catch (error) {
+              Toast.show({
+                type: "error",
+                position: "top",
+                text1: "Error Confirming Employee",
+                text2: `${error?.data?.error?.message}`,
+                visibilityTime: 3000,
+                autoHide: true,
+              });
+            }
+          },
+        },
+      ]
+    );
   };
 
-  const handleDeleteUser = (id) => {
+  const handleDeleteUser = async (id) => {
     Alert.alert("Delete User", "Are you sure you want to delete this user?", [
       {
         text: "Cancel",
@@ -118,29 +138,31 @@ export default function () {
       },
       {
         text: "Delete",
-        onPress: () => {
-          deleteUser(id)
-            .unwrap()
-            .then((response) => {
-              Toast.show({
-                type: "success",
-                position: "top",
-                text1: "Employee Successfully Deleted",
-                text2: `${response?.message}`,
-                visibilityTime: 3000,
-                autoHide: true,
-              });
-            })
-            .catch((error) => {
-              Toast.show({
-                type: "error",
-                position: "top",
-                text1: "Error Deleting Employee",
-                text2: `${error?.data?.error?.message}`,
-                visibilityTime: 3000,
-                autoHide: true,
-              });
+        onPress: async () => {
+          try {
+            const response = await deleteUser(id).unwrap();
+            await saveDeletedId(id);
+            setDeletedIds((prevIds) => [...prevIds, id]);
+            refetch();
+            Toast.show({
+              type: "success",
+              position: "top",
+              text1: "Employee Successfully Deleted",
+              text2: `${response?.message}`,
+              visibilityTime: 3000,
+              autoHide: true,
             });
+            if (paginatedData.length === 1) setPage(0);
+          } catch (error) {
+            Toast.show({
+              type: "error",
+              position: "top",
+              text1: "Error Deleting Employee",
+              text2: `${error?.data?.error?.message}`,
+              visibilityTime: 3000,
+              autoHide: true,
+            });
+          }
         },
       },
     ]);
@@ -179,7 +201,6 @@ export default function () {
                           borderBottomColor: borderColor,
                         }}
                       >
-                        
                         <DataTable.Title
                           style={{
                             justifyContent: "center",
@@ -262,7 +283,6 @@ export default function () {
                             borderBottomColor: borderColor,
                           }}
                         >
-                         
                           <DataTable.Cell
                             style={{
                               justifyContent: "center",

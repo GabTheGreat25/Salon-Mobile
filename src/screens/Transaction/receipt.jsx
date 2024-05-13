@@ -61,52 +61,56 @@ export default function ({ route }) {
               >
                 <View className={`pb-4`}>
                   <View className={`flex-row justify-between`}>
-                    <View className={`flex-col`}>
-                      <Text
-                        style={{ color: invertTextColor }}
-                        className={`text-2xl font-semibold`}
-                      >
-                        Order Summary
-                      </Text>
-                      <Text
-                        style={{ color: invertTextColor }}
-                        className={`text-lg font-base`}
-                      >
-                        Service:{" "}
-                        {appointment?.service?.map(
-                          (service, index) =>
-                            (service?.service_name.length > 15
-                              ? service?.service_name.slice(0, 15) + "..."
-                              : service?.service_name) +
-                            (index < appointment.service?.length - 1
-                              ? ", "
-                              : "")
-                        )}
-                      </Text>
-                      <Text
-                        style={{ color: invertTextColor }}
-                        className={`text-lg font-base`}
-                      >
-                        Add Ons:
-                        {appointment?.option
-                          ?.filter((option) =>
+                    {appointment?.service?.map((service, index) => (
+                      <View className={`flex-col`} key={index}>
+                        <Text
+                          style={{ color: invertTextColor }}
+                          className={`text-2xl font-semibold`}
+                        >
+                          Order Summary
+                        </Text>
+                        <Text
+                          style={{ color: invertTextColor }}
+                          className={`text-lg font-base`}
+                        >
+                          Service:{" "}
+                          {appointment?.service?.map(
+                            (service, index) =>
+                              (service?.service_name.length > 15
+                                ? service?.service_name.slice(0, 15) + "..."
+                                : service?.service_name) +
+                              (index < appointment.service?.length - 1
+                                ? ", "
+                                : "")
+                          )}
+                        </Text>
+                        <Text
+                          style={{ color: invertTextColor }}
+                          className={`text-lg font-base`}
+                        >
+                          Add Ons:
+                          {appointment?.option
+                            ?.filter((option) =>
+                              option.service.some(
+                                (serv) => serv._id === service._id
+                              )
+                            )
+                            .map((optionData, optionIndex, array) => (
+                              <Text key={optionIndex} style={{ marginLeft: 2 }}>
+                                {optionData.option_name} - ₱{" "}
+                                {optionData.extraFee}
+                                {optionIndex !== array.length - 1 && ","}
+                              </Text>
+                            ))}
+                          {appointment?.option?.filter((option) =>
                             option.service.some(
                               (serv) => serv._id === service._id
                             )
-                          )
-                          .map((optionData, optionIndex, array) => (
-                            <span key={optionIndex} className="ml-2">
-                              {optionData.option_name} - ₱ {optionData.extraFee}
-                              {optionIndex !== array.length - 1 && ","}
-                            </span>
-                          ))}
-                        {appointment?.option?.filter((option) =>
-                          option.service.some(
-                            (serv) => serv._id === service._id
-                          )
-                        ).length === 0 && " None"}
-                      </Text>
-                    </View>
+                          ).length === 0 && " None"}
+                        </Text>
+                      </View>
+                    ))}
+
                     <View className={`items-center justify-center`}>
                       <Image
                         source={{ uri: data?.details?.qrCode }}

@@ -21,6 +21,10 @@ import { loginUserValidation } from "../../validation";
 import { useFormik } from "formik";
 import Toast from "react-native-toast-message";
 import { Feather } from "@expo/vector-icons";
+import { locationSlice } from "../../state/auth/locationReducer";
+import { waiverSlice } from "../../state/waiver/waiverReducer";
+import { ingredientSlice } from "../../state/ingredient/ingredientReducer";
+import { useDispatch } from "react-redux";
 
 export default function ({
   title,
@@ -34,6 +38,8 @@ export default function ({
   footerLink,
   footerLinkTitle,
 }) {
+  const dispatch = useDispatch();
+
   const { backgroundColor, textColor, borderColor, colorScheme } =
     changeColor();
   const imageSource = colorScheme === "dark" ? salonLogoWhite : salonLogo;
@@ -53,6 +59,9 @@ export default function ({
         .unwrap()
         .then((response) => {
           formik.resetForm();
+          dispatch(locationSlice.actions.clearFormData());
+          dispatch(ingredientSlice.actions.resetReason());
+          dispatch(waiverSlice.actions.resetWaiver());
           Toast.show({
             type: "success",
             position: "top",

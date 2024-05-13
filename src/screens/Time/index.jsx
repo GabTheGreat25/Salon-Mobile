@@ -30,7 +30,7 @@ export default function () {
   const isFocused = useIsFocused();
   const navigation = useNavigation();
 
-  const customWidth = deviceWidth * 0.3;
+  const customWidth = deviceWidth * 0.5;
 
   const { data, isLoading, refetch } = useGetTimesQuery();
   useEffect(() => {
@@ -173,7 +173,6 @@ export default function () {
                           borderBottomColor: borderColor,
                         }}
                       >
-                      
                         <DataTable.Title
                           style={{
                             justifyContent: "center",

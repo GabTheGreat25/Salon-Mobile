@@ -102,7 +102,8 @@ export default function ({ route }) {
         visibilityTime: 3000,
         autoHide: true,
       });
-    } else navigation.navigate("EditBeautician", { selectedAppointment });
+    } else
+      navigation.navigate("EditBeautician", { selectedAppointment, id: id });
   };
 
   const formik = useFormik({

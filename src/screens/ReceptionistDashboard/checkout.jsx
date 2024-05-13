@@ -164,7 +164,7 @@ export default function () {
             type: "success",
             position: "top",
             text1: "Transaction Successfully Created",
-            text2: `${response?.message}`,
+            text2: `Please pay the amount needed to proceed.`,
             visibilityTime: 3000,
             autoHide: true,
           });

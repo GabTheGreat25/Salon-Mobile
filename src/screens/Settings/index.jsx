@@ -26,9 +26,8 @@ export default function () {
   };
 
   const faq = () => {
-    navigation.navigate("FrequentlyAskedQuestion")
-  }
-
+    navigation.navigate("FrequentlyAskedQuestion");
+  };
 
   return (
     <>
@@ -48,10 +47,10 @@ export default function () {
               color: textColor,
             }}
           >
-            How can we help? 
+            How can we help?
           </Text>
           <TouchableOpacity
-          onPress={terms}
+            onPress={terms}
             className={`px-4 mb-3 flex-row justify-between items-center w-full `}
           >
             <Text
@@ -65,7 +64,7 @@ export default function () {
             <Feather name="chevron-right" size={40} color={textColor} />
           </TouchableOpacity>
           <TouchableOpacity
-           onPress={policy}
+            onPress={policy}
             className={`px-4 mb-3 flex-row justify-between items-center w-full `}
           >
             <Text
@@ -93,7 +92,7 @@ export default function () {
             <Feather name="chevron-right" size={40} color={textColor} />
           </TouchableOpacity>
           <TouchableOpacity
-          onPress={about}
+            onPress={about}
             className={`px-4 mb-3 flex-row justify-between items-center w-full `}
           >
             <Text
@@ -107,7 +106,7 @@ export default function () {
             <Feather name="chevron-right" size={40} color={textColor} />
           </TouchableOpacity>
           <TouchableOpacity
-          onPress={feedback}
+            onPress={feedback}
             className={`px-4 mb-3 flex-row justify-between items-center w-full `}
           >
             <Text

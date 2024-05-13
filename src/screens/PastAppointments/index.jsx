@@ -187,11 +187,11 @@ export default function () {
                           AddOns:{" "}
                           {transaction?.appointment?.option?.length > 0
                             ? transaction.appointment.option.map(
-                                (addon, index) => (
-                                  <React.Fragment key={addon._id}>
-                                    {addon.option_name.length > 15
-                                      ? addon.option_name.slice(0, 15) + "..."
-                                      : addon.option_name}
+                                (service, index) => (
+                                  <React.Fragment key={index}>
+                                    {service.option_name.length > 15
+                                      ? service.option_name.slice(0, 15) + "..."
+                                      : service.option_name}
                                     {index <
                                     transaction.appointment.option.length - 1
                                       ? ", "
