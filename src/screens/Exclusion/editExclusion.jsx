@@ -263,7 +263,7 @@ export default function ({ route }) {
                           }}
                           className={`flex-row justify-center items-center border-2 rounded`}
                         >
-                          {selectedTypes.includes("Face") && (
+                          {selectedTypes.includes("Facial") && (
                             <Text
                               style={{ color: textColor }}
                               className={`text-2xl`}
@@ -278,7 +278,7 @@ export default function ({ route }) {
                           style={{ color: textColor }}
                           className={`text-2xl font-semibold`}
                         >
-                          Face
+                          Facial
                         </Text>
                       </View>
                       <TouchableOpacity
