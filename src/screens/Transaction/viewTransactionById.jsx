@@ -69,14 +69,75 @@ export default function ({ route }) {
                     style={{ color: textColor }}
                     className={`font-semibold text-base`}
                   >
-                    Transaction ID
+                    Customer Type
                   </Text>
                   <TextInput
                     style={{ color: textColor, borderColor }}
                     placeholderTextColor={textColor}
                     className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
                     autoCapitalize="none"
-                    value={transaction?._id}
+                    value={transaction?.customer_type}
+                    editable={false}
+                  />
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-base`}
+                  >
+                    Assigned Beauticians
+                  </Text>
+                  <TextInput
+                    style={{ color: textColor, borderColor }}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
+                    autoCapitalize="none"
+                    value={
+                      transaction?.appointment?.beautician
+                        ? transaction.appointment.beautician
+                            .map((beautician) => beautician.name)
+                            .join(", ")
+                        : ""
+                    }
+                    editable={false}
+                  />
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-base`}
+                  >
+                    Appointment Date
+                  </Text>
+                  <TextInput
+                    style={{ color: textColor, borderColor }}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
+                    autoCapitalize="none"
+                    value={
+                      new Date(transaction?.appointment?.date)
+                        .toISOString()
+                        .split("T")[0]
+                    }
+                    editable={false}
+                  />
+                  <Text
+                    style={{ color: textColor }}
+                    className={`font-semibold text-base`}
+                  >
+                    Appointment Time
+                  </Text>
+                  <TextInput
+                    style={{ color: textColor, borderColor }}
+                    placeholderTextColor={textColor}
+                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
+                    autoCapitalize="none"
+                    value={
+                      Array.isArray(transaction?.appointment?.time) &&
+                      transaction?.appointment.time.length === 1
+                        ? transaction?.appointment?.time[0]
+                        : `${transaction?.appointment?.time?.[0]} to ${
+                            transaction?.appointment?.time?.[
+                              transaction?.appointment?.time?.length - 1
+                            ]
+                          }`
+                    }
                     editable={false}
                   />
 
