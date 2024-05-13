@@ -56,7 +56,7 @@ export default function ({ isOpen, onClose, setFilters }) {
         if (prevCategories.includes("All")) {
           return [];
         } else {
-          return ["All", "Hands", "Hair", "Feet", "Face", "Body", "Eyelash"];
+          return ["All", "Hands", "Hair", "Feet", "Facial", "Body", "Eyelash"];
         }
       });
     } else {
@@ -208,7 +208,7 @@ export default function ({ isOpen, onClose, setFilters }) {
                   "Hands",
                   "Hair",
                   "Feet",
-                  "Face",
+                  "Facial",
                   "Body",
                   "Eyelash",
                 ].map((category) => (
