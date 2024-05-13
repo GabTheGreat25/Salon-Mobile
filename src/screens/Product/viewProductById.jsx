@@ -28,6 +28,7 @@ export default function ({ route }) {
 
   const { data, isLoading, refetch } = useGetProductByIdQuery(id);
   const product = data?.details;
+
   const {
     data: brand,
     isLoading: brandLoading,
@@ -58,146 +59,168 @@ export default function ({ route }) {
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <SafeAreaView
               style={{ backgroundColor }}
-              className={`relative flex-1 pt-12`}
+              className={`relative flex-1 pt-12 w-full`}
             >
               <BackIcon
                 navigateBack={navigation.goBack}
                 textColor={textColor}
               />
-              <KeyboardAvoidingView behavior="height">
-                <ScrollView
-                  showsVerticalScrollIndicator={false}
-                  decelerationRate="fast"
-                  scrollEventThrottle={1}
-                  className={`px-6`}
-                >
-                  <View className="items-center justify-center pb-6">
-                    <Image
-                      key={
-                        data?.details?.image[
-                          Math.floor(
-                            Math.random() * data?.details?.image?.length
-                          )
-                        ]?.public_id
-                      }
-                      source={{
-                        uri: data?.details?.image[
-                          Math.floor(
-                            Math.random() * data?.details?.image?.length
-                          )
-                        ]?.url,
-                      }}
-                      className={`rounded-full w-60 h-60`}
-                      resizeMode="cover"
-                    />
-                  </View>
-                  <Text
-                    style={{ color: textColor }}
-                    className={`font-semibold text-center pb-6 text-3xl`}
-                  >
-                    View Product Details
-                  </Text>
-                  <Text
-                    style={{ color: textColor }}
-                    className={`font-semibold text-base`}
-                  >
-                    Product Name
-                  </Text>
-                  <TextInput
-                    style={{ color: textColor, borderColor }}
-                    placeholderTextColor={textColor}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
-                    autoCapitalize="none"
-                    value={product?.product_name}
-                    editable={false}
-                  />
-
-                  <Text
-                    style={{ color: textColor }}
-                    className={`font-semibold text-base`}
-                  >
-                    Product Brand
-                  </Text>
-
-                  <View
-                    style={{ borderColor }}
-                    className={`border-[1.5px]  font-normal rounded-full my-3`}
-                  >
-                    <Picker
-                      selectedValue={product?.brand}
-                      style={{ color: textColor }}
-                      dropdownIconColor={textColor}
-                      enabled={false}
-                    >
-                      <Picker.Item label="Select Brand" value="" />
-                      {brand?.details
-                        ?.filter((b) => b._id === product?.brand)
-                        .map((b) => (
-                          <Picker.Item
-                            key={b?._id}
-                            label={b?.brand_name}
-                            value={b?._id}
-                            color={textColor}
-                          />
-                        ))}
-                    </Picker>
-                  </View>
-
-                  <Text
-                    style={{ color: textColor }}
-                    className={`font-semibold text-base`}
-                  >
-                    Product Category
-                  </Text>
-                  <TextInput
-                    style={{ color: textColor, borderColor }}
-                    placeholderTextColor={textColor}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
-                    autoCapitalize="none"
-                    value={
-                      Array.isArray(product?.type)
-                        ? product?.type.join(", ")
-                        : product?.type
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                className={`m-2`}
+              >
+                <View className="items-center justify-center pb-6">
+                  <Image
+                    key={
+                      data?.details?.image[
+                        Math.floor(Math.random() * data?.details?.image?.length)
+                      ]?.public_id
                     }
-                    editable={false}
-                  />
-                  <Text
-                    style={{ color: textColor }}
-                    className={`font-semibold text-base`}
-                  >
-                    Add ingredients of the product
-                  </Text>
-                  <TextInput
-                    style={{
-                      color: textColor,
-                      height: 100,
-                      textAlignVertical: "top",
-                      borderColor,
+                    source={{
+                      uri: data?.details?.image[
+                        Math.floor(Math.random() * data?.details?.image?.length)
+                      ]?.url,
                     }}
-                    placeholderTextColor={textColor}
-                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2`}
-                    autoCapitalize="none"
-                    multiline={true}
-                    value={product?.ingredients}
-                    editable={false}
+                    className={`rounded-full w-60 h-60`}
+                    resizeMode="cover"
                   />
+                </View>
+                <Text
+                  style={{ color: textColor }}
+                  className={`font-semibold text-center pb-6 text-3xl`}
+                >
+                  View Product Details
+                </Text>
+                <Text
+                  style={{ color: textColor }}
+                  className={`font-semibold text-base`}
+                >
+                  Product Name
+                </Text>
+                <TextInput
+                  style={{ color: textColor, borderColor }}
+                  placeholderTextColor={textColor}
+                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
+                  autoCapitalize="none"
+                  value={product?.product_name}
+                  editable={false}
+                />
 
-                  <Text
+                <Text
+                  style={{ color: textColor }}
+                  className={`font-semibold text-base`}
+                >
+                  Product Brand
+                </Text>
+
+                <View
+                  style={{ borderColor }}
+                  className={`border-[1.5px]  font-normal rounded-full my-3`}
+                >
+                  <Picker
+                    selectedValue={product?.brand}
                     style={{ color: textColor }}
-                    className={`font-semibold text-base`}
+                    dropdownIconColor={textColor}
+                    enabled={false}
                   >
-                    Product Status
-                  </Text>
-                  <TextInput
-                    style={{ color: textColor, borderColor }}
-                    placeholderTextColor={textColor}
-                    className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
-                    autoCapitalize="none"
-                    value={product?.isNew ? "New Product" : "Old Product"}
-                    editable={false}
-                  />
-                </ScrollView>
-              </KeyboardAvoidingView>
+                    <Picker.Item label="Select Brand" value="" />
+                    {brand?.details
+                      ?.filter((b) => b._id === product?.brand)
+                      .map((b) => (
+                        <Picker.Item
+                          key={b?._id}
+                          label={b?.brand_name}
+                          value={b?._id}
+                          color={textColor}
+                        />
+                      ))}
+                  </Picker>
+                </View>
+
+                <Text
+                  style={{ color: textColor }}
+                  className={`font-semibold text-base`}
+                >
+                  Product Category
+                </Text>
+                <TextInput
+                  style={{ color: textColor, borderColor }}
+                  placeholderTextColor={textColor}
+                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
+                  autoCapitalize="none"
+                  value={
+                    Array.isArray(product?.type)
+                      ? product?.type.join(", ")
+                      : product?.type
+                  }
+                  editable={false}
+                />
+                <Text
+                  style={{ color: textColor }}
+                  className={`font-semibold text-base`}
+                >
+                  Add ingredients of the product
+                </Text>
+                <TextInput
+                  style={{
+                    color: textColor,
+                    height: 100,
+                    textAlignVertical: "top",
+                    borderColor,
+                  }}
+                  placeholderTextColor={textColor}
+                  className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2`}
+                  autoCapitalize="none"
+                  multiline={true}
+                  value={product?.ingredients}
+                  editable={false}
+                />
+
+                <Text
+                  style={{ color: textColor }}
+                  className={`font-semibold text-base`}
+                >
+                  Product Status
+                </Text>
+                <TextInput
+                  style={{ color: textColor, borderColor }}
+                  placeholderTextColor={textColor}
+                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
+                  autoCapitalize="none"
+                  value={product?.isNew ? "New Product" : "Old Product"}
+                  editable={false}
+                />
+                <Text
+                  style={{ color: textColor }}
+                  className={`font-semibold text-base`}
+                >
+                  Product Volume
+                </Text>
+                <TextInput
+                  style={{ color: textColor, borderColor }}
+                  placeholderTextColor={textColor}
+                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
+                  autoCapitalize="none"
+                  keyboardType="numeric"
+                  value={product?.product_volume.toString()}
+                  editable={false}
+                />
+                <Text
+                  style={{ color: textColor }}
+                  className={`font-semibold text-base`}
+                >
+                  Product Consume
+                </Text>
+                <TextInput
+                  style={{ color: textColor, borderColor }}
+                  placeholderTextColor={textColor}
+                  className={`border-[1.5px] py-2 pl-4 text-lg font-normal rounded-full my-2`}
+                  autoCapitalize="none"
+                  keyboardType="numeric"
+                  value={product?.product_consume.toString()}
+                  editable={false}
+                />
+              </ScrollView>
             </SafeAreaView>
           </TouchableWithoutFeedback>
         </>
