@@ -34,20 +34,12 @@ export default function () {
           }}
         >
           <Text
-              className={`text-3xl font-semibold text-center py-2`}
-              style={{
-                color: invertTextColor,
-              }}
-            >
-              Privacy Policy
-            </Text>
-          <Text
-            className={`text-lg font-semibold text-center`}
+            className={`text-3xl font-semibold text-center py-2`}
             style={{
               color: invertTextColor,
             }}
           >
-           When you register and use the Lhanlee Lounge Salon’s Beautician Registration and Management System, we collect personal information necessary for the registration process.
+            Privacy Policy
           </Text>
           <Text
             className={`text-lg font-semibold text-center`}
@@ -55,7 +47,8 @@ export default function () {
               color: invertTextColor,
             }}
           >
-            Recognizing the importance of confidentiality, I pledge to safeguard all proprietary and confidential information pertaining to the salon's business practices, client details, and trade secrets.
+            By registering as a beautician, you agree to the Lhanlee Beauty
+            Lounge's Privacy Policy:{" "}
           </Text>
           <Text
             className={`text-lg font-semibold text-center`}
@@ -63,8 +56,10 @@ export default function () {
               color: invertTextColor,
             }}
           >
-            Furthermore, I acknowledge that any intellectual property generated during my affiliation with the salon, be it individually or collaboratively, remains the exclusive property of the salon, encompassing branding, marketing materials, and unique service methodologies.
-
+            When you register and use the Lhanlee Lounge Salon’s Beautician
+            Registration and Management System, we collect personal information
+            necessary for the registration process. This may include your name,
+            contact details, and other relevant information.{" "}
           </Text>
           <Text
             className={`text-lg font-semibold text-center`}
@@ -72,7 +67,9 @@ export default function () {
               color: invertTextColor,
             }}
           >
-          I am cognizant that any breach of these terms and conditions, violation of confidentiality, unprofessional conduct, or actions deemed detrimental to the salon's reputation may result in the termination of my association with Lhanlee Lounge Salon.
+            For the purpose of maintaining accurate records, we may also record
+            transaction details if applicable, such as for administrative
+            purposes.
           </Text>
           <Text
             className={`text-lg font-semibold text-center`}
@@ -80,7 +77,12 @@ export default function () {
               color: invertTextColor,
             }}
           >
-            Lhanlee Lounge Salon reserves the right to modify these terms and conditions, with notification of any changes provided.
+            The collected information is solely used to facilitate the
+            beautician registration process, manage scheduling, and maintain
+            essential records. We may use your contact information to
+            communicate essential details such as appointment confirmations and
+            other relevant communications related to the beautician registration
+            and management process.
           </Text>
           <Text
             className={`text-lg font-semibold text-center`}
@@ -88,7 +90,9 @@ export default function () {
               color: invertTextColor,
             }}
           >
-           My continued affiliation with the salon implies acceptance of any updated terms. 
+            To safeguard your information from unauthorized access, disclosure,
+            alteration, and destruction, we implement industry-standard security
+            measures.{" "}
           </Text>
           <Text
             className={`text-lg font-semibold text-center`}
@@ -96,8 +100,10 @@ export default function () {
               color: invertTextColor,
             }}
           >
-            By endorsing my continued association with Lhanlee Lounge Salon, I affirm that I have read, understood, and agree to abide by these Beautician Membership Terms and Conditions.
-
+            This Privacy Policy may be updated periodically, and users will be
+            notified of any significant changes. Continued use of the Lhanlee
+            Lounge Salon’s Beautician Registration and Management System
+            constitutes acceptance of the updated policy.
           </Text>
         </View>
       </ScrollView>
