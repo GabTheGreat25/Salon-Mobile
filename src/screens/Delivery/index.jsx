@@ -401,20 +401,30 @@ export default function () {
                             <View style={{ width: 10 }} />
                             <TouchableOpacity
                               onPress={() => {
-                                if (item.status !== "completed") {
+                                if (item.status === "cancelled") {
+                                  Alert.alert(
+                                    "Edit not allowed",
+                                    "This delivery has been cancelled."
+                                  );
+                                } else if (item.status !== "completed") {
                                   handleEditDelivery(item?._id);
-                                } else
+                                } else {
                                   Alert.alert(
                                     "Edit not allowed",
                                     "This delivery has been completed."
                                   );
+                                }
                               }}
                             >
                               <Feather
                                 name="edit"
                                 size={24}
                                 color={
-                                  item.status !== "completed" ? "blue" : "gray"
+                                  item.status === "cancelled"
+                                    ? "gray" 
+                                    : item.status !== "completed"
+                                    ? "blue"
+                                    : "gray"
                                 }
                               />
                             </TouchableOpacity>
