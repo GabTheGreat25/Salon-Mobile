@@ -53,12 +53,10 @@ export default function ({ route }) {
                 navigateBack={navigation.goBack}
                 textColor={textColor}
               />
-              <KeyboardAvoidingView behavior="height">
                 <ScrollView
                   showsVerticalScrollIndicator={false}
-                  decelerationRate="fast"
-                  scrollEventThrottle={1}
-                  className={`px-6`}
+                  
+                  className={`m-2`}
                 >
                   <Text
                     style={{ color: textColor }}
@@ -187,7 +185,6 @@ export default function ({ route }) {
                     editable={false}
                   />
                 </ScrollView>
-              </KeyboardAvoidingView>
             </SafeAreaView>
           </TouchableWithoutFeedback>
         </>

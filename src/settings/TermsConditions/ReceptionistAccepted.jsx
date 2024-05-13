@@ -35,7 +35,7 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-              Beautician Terms And Conditions
+             Receptionist Terms And Conditions
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}
@@ -43,8 +43,7 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-              By registering as a beautician, you agree to the following
-              terms:
+              Upon acceptance into Lhanlee Lounge Salon, I, as a receptionist,
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}
@@ -52,12 +51,8 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-              To initiate the process, you must complete the registration on our
-              website, providing accurate and up-to-date information.After
-              Registration , It is your responsibility to be physically present
-              at the salon for the scheduled meeting on the selected day and
-              failure to attend may result in the rejection of your hiring
-              process.
+              willingly commit to upholding the terms and conditions outlined
+              for my membership.
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}
@@ -65,9 +60,10 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-              Following the face-to-face meeting, the salon owner will review
-              your application within 24 hours. If accepted, you will be
-              notified via SMS, and you can proceed with the hiring process.
+              Recognizing the importance of confidentiality, I pledge to
+              safeguard all proprietary and confidential information pertaining
+              to the salon's business practices, client details, and trade
+              secrets.
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}
@@ -75,12 +71,11 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-              The availability of dates for face-to-face meetings is not
-              guaranteed and may be subject to rescheduling or cancellation by
-              the salon owner. The salon reserves the right to terminate the
-              registration and hiring process at any stage if inaccurate
-              information is provided or if there is a violation of salon
-              policies, with termination occurring without notice.
+              Furthermore, I acknowledge that any intellectual property
+              generated during my affiliation with the salon, be it individually
+              or collaboratively, remains the exclusive property of the salon,
+              encompassing branding, marketing materials, and unique service
+              methodologies.
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}
@@ -88,8 +83,38 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-              Completion of the registration process confirms that you have read
-              and agreed to these terms and conditions.
+              I am cognizant that any breach of these terms and conditions,
+              violation of confidentiality, unprofessional conduct, or actions
+              deemed detrimental to the salon's reputation may result in the
+              termination of my association with Lhanlee Lounge Salon.
+            </Text>
+            <Text
+              className={`text-xl font-semibold text-justify py-2`}
+              style={{
+                color: invertTextColor,
+              }}
+            >
+              Lhanlee Lounge Salon reserves the right to modify these terms and
+              conditions, with notification of any changes provided.
+            </Text>
+            <Text
+              className={`text-xl font-semibold text-justify py-2`}
+              style={{
+                color: invertTextColor,
+              }}
+            >
+              My continued affiliation with the salon implies acceptance of any
+              updated terms.
+            </Text>
+            <Text
+              className={`text-xl font-semibold text-justify py-2`}
+              style={{
+                color: invertTextColor,
+              }}
+            >
+              By endorsing my continued association with Lhanlee Lounge Salon, I
+              affirm that I have read, understood, and agree to abide by these
+              Beautician Membership Terms and Conditions.
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}

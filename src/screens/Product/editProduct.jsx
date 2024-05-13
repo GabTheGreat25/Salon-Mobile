@@ -394,7 +394,7 @@ export default function ({ route }) {
                   <TextInput
                     style={{ color: textColor, borderColor }}
                     className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2`}
-                    placeholder="Enter the Volume"
+                    placeholder={product?.product_volume.toString()}
                     placeholderTextColor={textColor}
                     keyboardType="numeric"
                     onChangeText={formik.handleChange("product_volume")}
@@ -411,7 +411,7 @@ export default function ({ route }) {
                   <TextInput
                     style={{ color: textColor, borderColor }}
                     className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-full my-2`}
-                    placeholder="Enter Consume"
+                    placeholder={product?.product_consume.toString()}
                     placeholderTextColor={textColor}
                     keyboardType="numeric"
                     onChangeText={formik.handleChange("product_consume")}

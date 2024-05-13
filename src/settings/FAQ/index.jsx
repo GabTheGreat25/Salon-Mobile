@@ -91,7 +91,7 @@ export default function () {
               }}
             >
               We Offer top tier services to work with your hands, hair feet,
-              face body and eyelashes.
+              facial body and eyelashes.
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}

@@ -43,7 +43,10 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-              By registering as a customer, you agree to the following terms:
+              Please adhere to salon policies during your appointment, as
+              failure to comply may result in termination without refund. These
+              terms may be modified, and continued use of the system constitutes
+              acceptance of updated terms.
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}
@@ -52,9 +55,35 @@ export default function () {
               }}
             >
               To secure your appointment, a non-refundable reservation fee of
-              30% from total price of your checkouts must be paid through Maya,
-              other online banks by scanning the QR code, or in cash at the
-              salon.
+              30% from total price of your checkouts must be paid through Maya
+              or in cash at the salon.
+            </Text>
+
+            <Text
+              className={`text-xl font-semibold text-justify py-2`}
+              style={{
+                color: invertTextColor,
+              }}
+            >
+              Upon successful payment, you will recieve an sms notification
+              regarding your successful appointment, which must be presented for
+              verification.
+            </Text>
+
+            <Text
+              className={`text-xl font-semibold text-justify py-2`}
+              style={{
+                color: invertTextColor,
+              }}
+            >
+              The reservation fee is non-refundable, even in the case of
+              appointment cancellation. If you wish to reschedule your
+              appointment, your original appointment must be scheduled at least
+              3 days in advance. We allow one rescheduling without any
+              additional charges. The new appointment date must be close to your
+              previous appointment date; for example, rescheduling is allowed if
+              the booked appointment is set within 3 days before your actual
+              appointment.
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}
@@ -72,9 +101,11 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-              The reservation fee is non-refundable, even in the case of
-              appointment cancellation, though you may reschedule based on
-              availability.
+              Every service provided by our salon comes with a warranty period
+              in terms of hours and days, depending on the service. This
+              warranty ensures the quality and satisfaction of the service you
+              receive. The specific warranty period for each service will be
+              included in their descriptions.
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}
@@ -82,10 +113,12 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-              Please adhere to salon policies during your appointment, as
-              failure to comply may result in termination without refund. These
-              terms may be modified, and continued use of the system constitutes
-              acceptance of updated terms.
+              For online & walk-in appointments, please arrive at the salon at
+              least 30 minutes before your scheduled appointment to ensure a
+              smooth and timely experience. Walk-in appointments are accepted on
+              a first-come, first-served basis without the requirement of a
+              reservation fee. Appointments are subject to availability, and we
+              cannot guarantee immediate service during peak hours.
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}
@@ -93,10 +126,19 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-              By Agreeing the Terms & Condition of Lhanlee Beauty Lounge, you
-              confirm that you have read and agree to the Salon Appointment
-              Terms and Conditions and understand the non-refundable nature of
-              the reservation fee.
+              In adherence to health and safety guidelines, all clients are
+              required to wear masks during their salon visit. Please sanitize
+              your hands upon entering the salon premises.
+            </Text>
+            <Text
+              className={`text-xl font-semibold text-justify py-2`}
+              style={{
+                color: invertTextColor,
+              }}
+            >
+              By booking an appointment with our salon, you agree to abide by
+              these terms and conditions. We appreciate your cooperation and
+              look forward to providing you with exceptional service.
             </Text>
           </View>
         </ScrollView>

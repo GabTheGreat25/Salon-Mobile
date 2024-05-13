@@ -10,6 +10,8 @@ import AboutUs from "./AboutUs";
 import BeauticianAccepted from "./TermsConditions/BeauticianAccepted";
 import BeauticianPrivacy from "./PrivacyPolicy/BeauticianPrivacy";
 import FrequentlyAskedQuestion from "./FAQ";
+import ReceptionistAccepted from "./TermsConditions/ReceptionistAccepted";
+import ReceptionistPrivacy from "./PrivacyPolicy/ReceptionistPrivacy";
 
 export {
   TermsConditions,
@@ -24,4 +26,6 @@ export {
   BeauticianAccepted,
   BeauticianPrivacy,
   FrequentlyAskedQuestion,
+  ReceptionistAccepted,
+  ReceptionistPrivacy,
 };
