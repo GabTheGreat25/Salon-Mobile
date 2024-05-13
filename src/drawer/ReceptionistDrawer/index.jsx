@@ -12,6 +12,7 @@ import {
   ReceptionistLeaveDate,
   ReceptionistGetAllLeaveDate,
   ReceptionistSettings,
+  WalkInAppointment,
 } from "@screens";
 import { changeColor } from "@utils";
 import { RESOURCE } from "@constants";
@@ -222,6 +223,33 @@ export default function () {
           }}
           component={ReceptionistGetAllLeaveDate}
         />
+        
+        <Drawer.Screen
+          name="WalkInAppointment"
+          options={{
+            drawerActiveBackgroundColor: "#FF7086",
+            drawerActiveTintColor: textColor,
+            drawerInactiveTintColor: "#FFB6C1",
+            drawerLabel: () => (
+              <Text
+                className={`text-xl font-base`}
+                style={{ color: textColor }}
+              >
+               Walk In Appointments
+              </Text>
+            ),
+            title: "WalkInAppointment",
+            drawerIcon: () => (
+              <Feather
+                name="settings"
+                size={RESOURCE.NUMBER.THIRTY}
+                color={textColor}
+              />
+            ),
+          }}
+          component={WalkInAppointment}
+        />
+
         <Drawer.Screen
           name="ReceptionistSettings"
           options={{
