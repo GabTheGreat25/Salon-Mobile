@@ -119,6 +119,8 @@ import {
   BeauticianAccepted,
   BeauticianPrivacy,
   FrequentlyAskedQuestion,
+  ReceptionistAccepted,
+  ReceptionistPrivacy,
 } from "@settings";
 import { LoadingScreen } from "@components";
 import { changeColor } from "@utils";
@@ -273,6 +275,14 @@ export default function () {
                   <Stack.Screen
                     name="ReceptionistDrawer"
                     component={ReceptionistDrawer}
+                  />
+                  <Stack.Screen
+                    name="ReceptionistAccepted"
+                    component={ReceptionistAccepted}
+                  />
+                  <Stack.Screen
+                    name="ReceptionistPrivacy"
+                    component={ReceptionistPrivacy}
                   />
                   <Stack.Screen
                     name="UpdateUserPassword"
@@ -481,6 +491,10 @@ export default function () {
                 <Stack.Screen
                   name="ReceptionistRegisterTermsCondition"
                   component={ReceptionistRegisterTermsCondition}
+                />
+                <Stack.Screen
+                  name="CustomerTermsCondition"
+                  component={CustomerTermsCondition}
                 />
 
                 <Stack.Screen
