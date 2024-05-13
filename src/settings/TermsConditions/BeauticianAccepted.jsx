@@ -82,11 +82,7 @@ export default function () {
               I am cognizant that any breach of these terms and conditions,
               violation of confidentiality, unprofessional conduct, or actions
               deemed detrimental to the salon's reputation may result in the
-              termination of my association with Lhanlee Lounge Salon. Lhanlee
-              Lounge Salon reserves the right to modify these terms and
-              conditions, with notification of any changes provided. My
-              continued affiliation with the salon implies acceptance of any
-              updated terms.
+              termination of my association with Lhanlee Lounge Salon.
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}
@@ -94,8 +90,8 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-              Lhanlee Lounge Salon reserves the right to modify these
-              terms and conditions, with notification of any changes provided.
+              Lhanlee Lounge Salon reserves the right to modify these terms and
+              conditions, with notification of any changes provided.
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}

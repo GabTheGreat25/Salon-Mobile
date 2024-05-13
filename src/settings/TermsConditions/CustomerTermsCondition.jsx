@@ -48,6 +48,19 @@ export default function () {
               terms may be modified, and continued use of the system constitutes
               acceptance of updated terms.
             </Text>
+
+            <Text
+              className={`text-xl font-semibold text-justify py-2`}
+              style={{
+                color: invertTextColor,
+              }}
+            >
+              We are only accepting customers aged 13 years old and above by
+              booking an appointment with our salon, you agree to abide by these
+              terms and conditions. We appreciate your cooperation and look
+              forward to providing you with exceptional service.
+            </Text>
+
             <Text
               className={`text-xl font-semibold text-justify py-2`}
               style={{
@@ -91,7 +104,11 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-              If the reservation fee will be paid using Maya, it should be paid on the same day the appointment is made, if not, admin will delete the appointment, While if the reservation is cash, It must be completed 30 mins before your scheduled appointment time to avoid cancellation.
+              If the reservation fee will be paid using Maya, it should be paid
+              on the same day the appointment is made, if not, admin will delete
+              the appointment, While if the reservation is cash, It must be
+              completed 30 mins before your scheduled appointment time to avoid
+              cancellation.
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}

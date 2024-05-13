@@ -35,7 +35,7 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-               Terms And Conditions
+              Terms And Conditions
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}
@@ -80,7 +80,7 @@ export default function () {
               the salon owner. The salon reserves the right to terminate the
               registration and hiring process at any stage if inaccurate
               information is provided or if there is a violation of salon
-              policies, with termination occurring without notice.{" "}
+              policies, with termination occurring without notice.
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}
@@ -90,15 +90,6 @@ export default function () {
             >
               Completion of the registration process confirms that you have read
               and agreed to these terms and conditions.
-            </Text>
-            <Text
-              className={`text-xl font-semibold text-justify py-2`}
-              style={{
-                color: invertTextColor,
-              }}
-            >
-              Completion of the registration process confirms that you have read
-              and agreed to these terms and conditions.{" "}
             </Text>
           </View>
         </ScrollView>
