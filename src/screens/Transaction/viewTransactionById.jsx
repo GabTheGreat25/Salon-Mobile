@@ -8,6 +8,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   TextInput,
+  Image,
 } from "react-native";
 import { useGetTransactionByIdQuery } from "../../state/api/reducer";
 import { useNavigation } from "@react-navigation/native";
@@ -59,12 +60,29 @@ export default function ({ route }) {
                   scrollEventThrottle={1}
                   className={`px-6`}
                 >
+                   <View className="items-center justify-center pb-6">
+                  <Image
+                    key={
+                      data?.details?.image[
+                        Math.floor(Math.random() * data?.details?.image?.length)
+                      ]?.public_id
+                    }
+                    source={{
+                      uri: data?.details?.image[
+                        Math.floor(Math.random() * data?.details?.image?.length)
+                      ]?.url,
+                    }}
+                    className={`rounded-full w-60 h-60`}
+                    resizeMode="cover"
+                  />
+                </View> 
                   <Text
                     style={{ color: textColor }}
                     className={`font-semibold text-center pb-6 text-3xl`}
                   >
                     View Transaction Details
                   </Text>
+
                   <Text
                     style={{ color: textColor }}
                     className={`font-semibold text-base`}
