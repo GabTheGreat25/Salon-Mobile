@@ -54,13 +54,10 @@ export default function ({ route }) {
                 navigateBack={navigation.goBack}
                 textColor={textColor}
               />
-              <KeyboardAvoidingView behavior="height">
-                <ScrollView
-                  showsVerticalScrollIndicator={false}
-                  decelerationRate="fast"
-                  scrollEventThrottle={1}
-                  className={`px-6`}
-                >
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                className={`m-2`}
+              >
                   <View className="items-center justify-center pb-6">
                     <Image
                       key={
@@ -185,14 +182,13 @@ export default function ({ route }) {
                       borderColor,
                     }}
                     placeholderTextColor={textColor}
-                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2`}
+                    className={`border-[1.5px] py-2 px-4 text-lg font-normal rounded-lg my-2 mb-5`}
                     placeholder="Add Ingredients Here..."
                     multiline={true}
                     value={service?.description}
                     editable={false}
                   />
                 </ScrollView>
-              </KeyboardAvoidingView>
             </SafeAreaView>
           </TouchableWithoutFeedback>
         </>
