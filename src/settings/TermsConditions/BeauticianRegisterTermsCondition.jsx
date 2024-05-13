@@ -35,7 +35,7 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-              Beautician Terms And Conditions
+               Terms And Conditions
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}
@@ -43,8 +43,8 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-              By registering as a beautician, you agree to the following
-              terms:
+              By registering as a beautician on our platform, you acknowledge
+              and agree to the following terms and conditions.{" "}
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}
@@ -53,7 +53,7 @@ export default function () {
               }}
             >
               To initiate the process, you must complete the registration on our
-              website, providing accurate and up-to-date information.After
+              website, providing accurate and up-to-date information. After
               Registration , It is your responsibility to be physically present
               at the salon for the scheduled meeting on the selected day and
               failure to attend may result in the rejection of your hiring
@@ -80,7 +80,7 @@ export default function () {
               the salon owner. The salon reserves the right to terminate the
               registration and hiring process at any stage if inaccurate
               information is provided or if there is a violation of salon
-              policies, with termination occurring without notice.
+              policies, with termination occurring without notice.{" "}
             </Text>
             <Text
               className={`text-xl font-semibold text-justify py-2`}
@@ -97,9 +97,8 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-              The salon also reserves the right to modify these terms, and
-              continued use of the platform constitutes acceptance of any
-              updated terms.
+              Completion of the registration process confirms that you have read
+              and agreed to these terms and conditions.{" "}
             </Text>
           </View>
         </ScrollView>
