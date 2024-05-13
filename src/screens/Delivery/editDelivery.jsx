@@ -281,6 +281,8 @@ export default function ({ route }) {
                       >
                         <Picker.Item label="pending" value="pending" />
                         <Picker.Item label="completed" value="completed" />
+                        <Picker.Item label="cancelled" value="cancelled" />
+
                       </Picker>
                     </View>
 
