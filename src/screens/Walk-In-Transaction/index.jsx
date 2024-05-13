@@ -16,7 +16,6 @@ import {
 } from "../../state/api/reducer";
 import { LoadingScreen } from "@components";
 import Toast from "react-native-toast-message";
-import { BackIcon } from "@helpers";
 import { DataTable } from "react-native-paper";
 import { Feather } from "@expo/vector-icons";
 import { changeColor } from "@utils";
@@ -37,15 +36,17 @@ export default function () {
     useGetTransactionsQuery();
 
   const appointments = data?.details;
-  
+
   const today = new Date();
+  const phTime = new Date(today.getTime() + 8 * 60 * 60 * 1000);
+
   const walkins = appointments?.filter((a) => {
     const appointmentDate = new Date(a?.date);
 
     return (
-      appointmentDate.getDate() === today.getDate() &&
-      appointmentDate.getMonth() === today.getMonth() &&
-      appointmentDate.getFullYear() === today.getFullYear() ||
+      (appointmentDate.getDate() === phTime.getDate() &&
+        appointmentDate.getMonth() === phTime.getMonth() &&
+        appointmentDate.getFullYear() === phTime.getFullYear()) ||
       a?.transaction?.hasAppointmentFee === false
     );
   });
@@ -135,7 +136,10 @@ export default function () {
     );
   };
 
-  const filteredData = walkins?.filter((item) => !deletedIds.includes(item?._id)).sort((a, b) => new Date(a.date) - new Date(b.date)) || [];
+  const filteredData =
+    walkins
+      ?.filter((item) => !deletedIds.includes(item?._id))
+      .sort((a, b) => new Date(a.date) - new Date(b.date)) || [];
 
   const totalPageCount = Math.ceil(filteredData.length / itemsPerPage);
   const paginatedData = filteredData.slice(
@@ -173,8 +177,7 @@ export default function () {
             style={{ backgroundColor }}
             className={`relative flex-1`}
           >
-            <BackIcon navigateBack={navigation.goBack} textColor={textColor} />
-            <View className={`flex-1 items-center justify-center pt-10`}>
+            <View className={`flex-1 items-center justify-center`}>
               {paginatedData?.length ? (
                 <ScrollView
                   style={{ backgroundColor }}
