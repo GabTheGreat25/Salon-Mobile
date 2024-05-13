@@ -1,5 +1,5 @@
 import React from "react";
-import { Feather, FontAwesome5 } from "@expo/vector-icons";
+import { Feather, FontAwesome5, Entypo } from "@expo/vector-icons";
 import { Dimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
@@ -223,7 +223,7 @@ export default function () {
           }}
           component={ReceptionistGetAllLeaveDate}
         />
-        
+
         <Drawer.Screen
           name="WalkInAppointment"
           options={{
@@ -235,13 +235,13 @@ export default function () {
                 className={`text-xl font-base`}
                 style={{ color: textColor }}
               >
-               Walk In Appointments
+                Walk In Appointments
               </Text>
             ),
             title: "WalkInAppointment",
             drawerIcon: () => (
-              <Feather
-                name="list"
+              <Entypo
+                name="time-slot"
                 size={RESOURCE.NUMBER.THIRTY}
                 color={textColor}
               />
