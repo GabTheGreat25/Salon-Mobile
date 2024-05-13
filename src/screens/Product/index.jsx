@@ -177,7 +177,6 @@ export default function () {
                           borderBottomColor: borderColor,
                         }}
                       >
-                       
                         <DataTable.Title
                           style={{
                             justifyContent: "center",
@@ -226,6 +225,16 @@ export default function () {
                             width: customWidth,
                           }}
                         >
+                          <Text style={{ color: textColor }}>Availability</Text>
+                        </DataTable.Title>
+                        <DataTable.Title
+                          style={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: 10,
+                            width: customWidth,
+                          }}
+                        >
                           <Text style={{ color: textColor }}>
                             Product Consume
                           </Text>
@@ -238,11 +247,9 @@ export default function () {
                             width: customWidth,
                           }}
                         >
-                          <Text style={{ color: textColor }}>
-                            Product Volume
-                          </Text>
+                          <Text style={{ color: textColor }}>Remaining</Text>
                         </DataTable.Title>
-                         <DataTable.Title
+                        <DataTable.Title
                           style={{
                             justifyContent: "center",
                             alignItems: "center",
@@ -250,9 +257,7 @@ export default function () {
                             width: customWidth,
                           }}
                         >
-                          <Text style={{ color: textColor }}>
-                           Quantity
-                          </Text>
+                          <Text style={{ color: textColor }}>Quantity</Text>
                         </DataTable.Title>
                         <DataTable.Title
                           style={{
@@ -294,7 +299,6 @@ export default function () {
                             borderBottomColor: borderColor,
                           }}
                         >
-                         
                           <DataTable.Cell
                             style={{
                               justifyContent: "center",
@@ -372,7 +376,10 @@ export default function () {
                               numberOfLines={1}
                               ellipsizeMode="tail"
                             >
-                              {item?.product_consume}
+                              {item?.product_volume}{" "}
+                              {item?.volume_description === "Pieces"
+                                ? "pcs"
+                                : "ml"}
                             </Text>
                           </DataTable.Cell>
                           <DataTable.Cell
@@ -388,9 +395,33 @@ export default function () {
                               numberOfLines={1}
                               ellipsizeMode="tail"
                             >
-                              {item?.product_volume}
+                              {item?.product_consume}{" "}
+                              {item?.volume_description === "Pieces"
+                                ? "pcs"
+                                : "ml"}
                             </Text>
                           </DataTable.Cell>
+
+                          <DataTable.Cell
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 10,
+                              width: customWidth,
+                            }}
+                          >
+                            <Text
+                              style={{ color: textColor }}
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                            >
+                              {item?.remaining_volume}{" "}
+                              {item?.volume_description === "Pieces"
+                                ? "pcs"
+                                : "ml"}
+                            </Text>
+                          </DataTable.Cell>
+
                           <DataTable.Cell
                             style={{
                               justifyContent: "center",
