@@ -241,7 +241,7 @@ export default function () {
             title: "WalkInAppointment",
             drawerIcon: () => (
               <Feather
-                name="settings"
+                name="list"
                 size={RESOURCE.NUMBER.THIRTY}
                 color={textColor}
               />
