@@ -140,8 +140,8 @@ export default function () {
                 color: invertTextColor,
               }}
             >
-              You can email us at:alexijiopeja@gmail.com or contact us through
-              phone +639 956 802 8031
+              You can email us at: alexijiopeja@gmail.com or contact us through
+              phone +63 956 802 8031
             </Text>
           </View>
         </ScrollView>
