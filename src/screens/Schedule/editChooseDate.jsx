@@ -398,10 +398,10 @@ export default function ({ route }) {
               style={{
                 shadowColor,
                 backgroundColor,
-                height: 90,
+                height: 70,
                 width: windowWidth,
               }}
-              className={`flex-col px-10 py-5 shadow-2xl`}
+              className={`flex-col px-10 py-3 shadow-2xl`}
             >
               <TouchableOpacity onPress={handlePress}>
                 <View

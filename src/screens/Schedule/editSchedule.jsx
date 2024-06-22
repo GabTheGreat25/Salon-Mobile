@@ -326,7 +326,7 @@ export default function ({ route }) {
               className={`flex-col pt-2 px-10 shadow-2xl`}
             >
               <View
-                className={`flex-row gap-x-1 justify-center items-center pb-4`}
+                className={`flex-row gap-x-1 justify-center items-center pb-2`}
               >
                 <Feather name="user" size={25} color={textColor} />
                 <Text
@@ -339,7 +339,7 @@ export default function ({ route }) {
                   <TouchableOpacity onPress={handleEmployee}>
                     <View className={`flex-row`}>
                       <Text
-                        className={`text-base font-medium text-primary-default`}
+                        className={`text-sm font-medium text-primary-default pt-[2px]`}
                       >
                         Add Beautician
                       </Text>

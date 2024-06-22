@@ -453,7 +453,7 @@ export default function ({ route }) {
                     }}
                     className={`rounded-lg p-4`}
                   >
-                    <View className={`flex-row gap-x-4`}>
+                    <View className={`flex-row gap-x-2`}>
                       <Image
                         source={{
                           uri:
@@ -465,7 +465,7 @@ export default function ({ route }) {
                                 ]?.url
                               : "https://www.nuvali.ph/wp-content/themes/consultix/images/no-image-found-360x250.png",
                         }}
-                        style={{ width: 128, height: 128 }}
+                        style={{ width: 120, height: 120 }}
                         className={`rounded-xl`}
                       />
                       <View>

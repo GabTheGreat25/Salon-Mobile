@@ -159,7 +159,6 @@ export default function () {
                           borderBottomColor: borderColor,
                         }}
                       >
-                       
                         <DataTable.Title
                           style={{
                             justifyContent: "center",
@@ -232,7 +231,6 @@ export default function () {
                             borderBottomColor: borderColor,
                           }}
                         >
-                        
                           <DataTable.Cell
                             style={{
                               justifyContent: "center",

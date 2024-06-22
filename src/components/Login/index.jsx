@@ -135,16 +135,14 @@ export default function ({
           <BackIcon navigateBack={navigateBack} textColor={textColor} />
           <KeyboardAvoidingView
             behavior="height"
-            className={`flex-1 justify-center items-center flex-col`}
+            className={`justify-center items-center flex-col`}
           >
             <ScrollView
               showsVerticalScrollIndicator={false}
               decelerationRate="fast"
               scrollEventThrottle={1}
             >
-              <View
-                className={`w-[280px] h-[280px] justify-center items-center`}
-              >
+              <View className={`justify-center items-center`}>
                 <Image source={imageSource} resizeMode="contain" />
               </View>
               <View className={`items-center justify-start`}>

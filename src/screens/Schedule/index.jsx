@@ -163,7 +163,13 @@ export default function () {
                       {transaction.appointment.service.map((service) =>
                         service.image.map(() => (
                           <Image
-                            key={service.public_id}
+                            key={
+                              service[
+                                Math.floor(
+                                  Math.random() * service.image?.length
+                                )
+                              ]?.public_id
+                            }
                             source={{
                               uri: service.image[
                                 Math.floor(Math.random() * service.image.length)
@@ -291,7 +297,7 @@ export default function () {
                               >
                                 {transaction?.appointment?.isRescheduled ===
                                 true
-                                  ? "Already Rescheduled"
+                                  ? "Rescheduled"
                                   : "Reschedule"}
                               </Text>
                             ) : (

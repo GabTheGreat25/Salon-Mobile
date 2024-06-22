@@ -145,24 +145,18 @@ export default function () {
                       </Text>
                     </View>
                     <View className={`flex-1 flex-col`}>
-                      <View className={`flex-row`}>
-                        <Text
-                          style={{ color: invertTextColor }}
-                          className={`text-center text-lg font-semibold capitalize`}
-                        >
-                          Status: {transaction.status}
-                        </Text>
-                        <View
-                          className={`flex-1 flex-row justify-end items-start`}
-                        >
-                          <Text
-                            style={{ color: invertTextColor }}
-                            className={`text-center text-lg font-semibold`}
-                          >
-                            ₱{transaction?.appointment?.price.toFixed(0)}
-                          </Text>
-                        </View>
-                      </View>
+                      <Text
+                        style={{ color: invertTextColor }}
+                        className={`text-lg font-semibold capitalize`}
+                      >
+                        Status: {transaction.status}
+                      </Text>
+                      <Text
+                        style={{ color: invertTextColor }}
+                        className={`text-lg font-semibold`}
+                      >
+                        Price: ₱{transaction?.appointment?.price.toFixed(0)}
+                      </Text>
                       <View className={`pt-1`}>
                         <Text
                           style={{ color: invertTextColor }}

@@ -222,35 +222,37 @@ export default function () {
                     }}
                     resizeMode="contain"
                   />
-                  <View className={`flex-col justify-start items-start`}>
-                    <Text
-                      style={{
-                        color: invertTextColor,
-                      }}
-                      className={`text-lg font-semibold`}
-                    >
-                      Names:{" "}
-                      {item?.name.length > 13
-                        ? `${item?.name.substring(0, 13)}...`
-                        : item?.name}
-                    </Text>
-                    <Text
-                      style={{
-                        color: invertTextColor,
-                      }}
-                      className={`text-lg font-semibold`}
-                    >
-                      Contact: {item?.contact_number}
-                    </Text>
-                    <Text
-                      style={{
-                        color: invertTextColor,
-                      }}
-                      className={`text-lg font-semibold`}
-                    >
-                      Works On: {item?.requirement?.job_type}
-                    </Text>
-                    <View className={`self-end`}>
+                  <View className={`flex-col`}>
+                    <View className={`justify-start items-start`}>
+                      <Text
+                        style={{
+                          color: invertTextColor,
+                        }}
+                        className={`text-lg font-semibold`}
+                      >
+                        Name:{" "}
+                        {item?.name.length > 13
+                          ? `${item?.name.substring(0, 13)}...`
+                          : item?.name}
+                      </Text>
+                      <Text
+                        style={{
+                          color: invertTextColor,
+                        }}
+                        className={`text-lg font-semibold`}
+                      >
+                        Contact: {item?.contact_number}
+                      </Text>
+                      <Text
+                        style={{
+                          color: invertTextColor,
+                        }}
+                        className={`text-lg font-semibold`}
+                      >
+                        Works On: {item?.requirement?.job_type}
+                      </Text>
+                    </View>
+                    <View className={`items-start justify-start`}>
                       <TouchableOpacity
                         onPress={() => handlePickBeautician(item)}
                       >

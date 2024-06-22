@@ -250,7 +250,7 @@ export default function () {
                               : "")}
                         </Text>
                       </View>
-                      <View className={`mt-6 gap-x-2 flex-row mx-1`}>
+                      <View className={`mt-6 gap-x-2 flex-row`}>
                         <TouchableOpacity
                           className={`px-4 py-2 rounded-lg bg-primary-accent`}
                           onPress={() => {
@@ -259,7 +259,7 @@ export default function () {
                         >
                           <Text
                             style={{ color: invertTextColor }}
-                            className={`text-lg font-semibold`}
+                            className={`text-base font-semibold`}
                           >
                             Edit Comment
                           </Text>
@@ -270,7 +270,7 @@ export default function () {
                         >
                           <Text
                             style={{ color: invertTextColor }}
-                            className={`text-lg font-semibold`}
+                            className={`text-base font-semibold`}
                           >
                             Delete Comment
                           </Text>
